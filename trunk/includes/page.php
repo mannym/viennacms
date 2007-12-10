@@ -250,12 +250,13 @@ class page {
 		_setlocale(LC_ALL, $language);
 	
 		// Specify location of translation tables
-		_bindtextdomain("viennaCMS", ROOT_PATH . "locale");
+		_bindtextdomain("viennacms", ROOT_PATH . "locale");
 	
 		// Choose domain
-		_textdomain("viennaCMS");
+		_textdomain("viennacms");
 
-		// Translation is looking for in ./locale/$language/LC_MESSAGES/viennaCMS.mo now
+		// Translation is looking for in 
+./locale/$language/LC_MESSAGES/viennacms.mo now
 		return $this_site;
 	}
 	
