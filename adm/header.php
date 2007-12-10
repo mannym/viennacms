@@ -1,5 +1,5 @@
 <?php
-if(!defined('IN_viennaCMS')) {
+if(!defined('IN_VIENNACMS')) {
 		die('Hacking attempt!');
 }
 /*$query_string 	= preg_replace('#(&|\?)tab=(.*)#', '', $_SERVER['query_string']);

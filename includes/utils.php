@@ -11,7 +11,7 @@
 * @ignore
 */
 
-if (!defined('IN_viennaCMS')) {
+if (!defined('IN_VIENNACMS')) {
 	exit;
 }
 
