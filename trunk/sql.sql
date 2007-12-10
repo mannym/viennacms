@@ -7,16 +7,16 @@
 -- Server versie: 5.0.27
 -- PHP Versie: 5.2.0
 -- 
--- Database: `bascms_dev`
+-- Database: `viennacms_dev`
 -- 
 
 -- --------------------------------------------------------
 
 -- 
--- Tabel structuur voor tabel `svcms_node_options`
+-- Tabel structuur voor tabel `viennacms_node_options`
 -- 
 
-CREATE TABLE `svcms_node_options` (
+CREATE TABLE `viennacms_node_options` (
   `option_id` int(11) NOT NULL auto_increment,
   `node_id` int(11) NOT NULL,
   `option_name` varchar(255) collate latin1_general_ci NOT NULL,
@@ -25,20 +25,20 @@ CREATE TABLE `svcms_node_options` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=2 ;
 
 -- 
--- Gegevens worden uitgevoerd voor tabel `svcms_node_options`
+-- Gegevens worden uitgevoerd voor tabel `viennacms_node_options`
 -- 
 
-INSERT INTO `svcms_node_options` (`option_id`, `node_id`, `option_name`, `option_value`) VALUES 
+INSERT INTO `viennacms_node_options` (`option_id`, `node_id`, `option_name`, `option_value`) VALUES 
 (1, 1, 'hostname', 'localhost');
 
 
 -- --------------------------------------------------------
 
 -- 
--- Tabel structuur voor tabel `svcms_node_revisions`
+-- Tabel structuur voor tabel `viennacms_node_revisions`
 -- 
 
-CREATE TABLE `svcms_node_revisions` (
+CREATE TABLE `viennacms_node_revisions` (
   `revision_id` int(11) NOT NULL auto_increment,
   `node_id` int(11) NOT NULL,
   `revision_number` int(11) NOT NULL,
@@ -48,20 +48,20 @@ CREATE TABLE `svcms_node_revisions` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=9 ;
 
 -- 
--- Gegevens worden uitgevoerd voor tabel `svcms_node_revisions`
+-- Gegevens worden uitgevoerd voor tabel `viennacms_node_revisions`
 -- 
 
-INSERT INTO `svcms_node_revisions` (`revision_id`, `node_id`, `revision_number`, `node_content`, `revision_date`) VALUES 
+INSERT INTO `viennacms_node_revisions` (`revision_id`, `node_id`, `revision_number`, `node_content`, `revision_date`) VALUES 
 (1, 2, 1, 'The testing revision :)', 1195144352),
 (8, 11, 1, 'The content of this nice third child node :D', 1195152668);
 
 -- --------------------------------------------------------
 
 -- 
--- Tabel structuur voor tabel `svcms_nodes`
+-- Tabel structuur voor tabel `viennacms_nodes`
 -- 
 
-CREATE TABLE `svcms_nodes` (
+CREATE TABLE `viennacms_nodes` (
   `node_id` int(11) NOT NULL auto_increment,
   `title` varchar(255) collate latin1_general_ci NOT NULL,
   `title_clean` varchar(255) collate latin1_general_ci NOT NULL,
@@ -77,10 +77,10 @@ CREATE TABLE `svcms_nodes` (
 
 
 -- 
--- Gegevens worden uitgevoerd voor tabel `svcms_nodes`
+-- Gegevens worden uitgevoerd voor tabel `viennacms_nodes`
 -- 
 
-INSERT INTO `svcms_nodes` (`node_id`, `title`, title_clean, `description`, `created`, `type`, `parent_id`, `revision_number`) VALUES 
+INSERT INTO `viennacms_nodes` (`node_id`, `title`, title_clean, `description`, `created`, `type`, `parent_id`, `revision_number`) VALUES 
 (1, 'The one root node', 'root-node', 'The root of all nodes', 1195133281, 'site', 0, 0),
 (2, 'Child node 1', 'child-node-1', 'An node under the root node.', 1195133299, 'page', 1, 1),
 (3, 'Child node 2', 'child-node-2', 'Another node under the root node.', 1195133313, 'page', 1, 0),
@@ -91,10 +91,10 @@ INSERT INTO `svcms_nodes` (`node_id`, `title`, title_clean, `description`, `crea
 -- --------------------------------------------------------
 
 --
--- Tabel structuur voor tabel `svcms_users`
+-- Tabel structuur voor tabel `viennacms_users`
 --
 
-CREATE TABLE `svcms_users` (
+CREATE TABLE `viennacms_users` (
   `userid` mediumint(10) NOT NULL auto_increment,
   `username` varchar(20) NOT NULL,
   `password` varchar(32) NOT NULL,
@@ -104,19 +104,19 @@ CREATE TABLE `svcms_users` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
--- Gegevens worden uitgevoerd voor tabel `svcms_users`
+-- Gegevens worden uitgevoerd voor tabel `viennacms_users`
 --
 
-INSERT INTO `svcms_users` (`userid`, `username`, `password`, `email`) VALUES
+INSERT INTO `viennacms_users` (`userid`, `username`, `password`, `email`) VALUES
 (1, 'admin', '200ceb26807d6bf99fd6f4f0d1ca54d4', 'foo@bar.com');
 -- Standaard gebruiker, gebruikersnaam: admin, wachtwoord: administrator
 
 --
--- Tabel structuur voor tabel `svcms_uploads`
+-- Tabel structuur voor tabel `viennacms_uploads`
 --
 
 
-CREATE TABLE `svcms_uploads` (
+CREATE TABLE `viennacms_uploads` (
   `upload_id` bigint(20) NOT NULL auto_increment,
   `filename` varchar(120) NOT NULL,
   `md5` varchar(32) NOT NULL,
@@ -128,10 +128,10 @@ CREATE TABLE `svcms_uploads` (
 
 
 --
--- Tabel structuur voor tabel `svcms_downloads`
+-- Tabel structuur voor tabel `viennacms_downloads`
 --
 
-CREATE TABLE `svcms_downloads` (
+CREATE TABLE `viennacms_downloads` (
   `download_id` tinyint(15) NOT NULL auto_increment,
   `file_id` tinyint(15) NOT NULL,
   `ip` varchar(15) NOT NULL,
