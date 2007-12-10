@@ -255,8 +255,7 @@ class page {
 		// Choose domain
 		_textdomain("viennacms");
 
-		// Translation is looking for in 
-./locale/$language/LC_MESSAGES/viennacms.mo now
+		// Translation is looking for in ./locale/$language/LC_MESSAGES/viennacms.mo now
 		return $this_site;
 	}
 	
