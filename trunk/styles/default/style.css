@@ -1,0 +1,272 @@
+/* Basis: wit, grijs en zwart :) */
+
+body {
+	font-family: Arial, sans-serif;
+	font-size: 12px;
+	background-color: #ffffff;
+	margin: 0px;
+}
+
+/*#page {
+	width: 80%;
+	margin-right: auto;
+	background-image: none;
+	background-color: #ffffff;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+}*/
+
+.header {
+	width: 100%;
+	height: 93px;
+	margin-top: 0px;
+	margin-bottom: 20px;
+	background-color: #DADADA;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+.maintext {
+/*	width: 69%;*/
+	text-align: justify; /* Toch altijd mooi? :) */
+	background-color: inherit;
+	position: absolute;
+	right: 10px;
+	top: 103px;
+	left: 250px;
+}
+
+.header h1 {
+	background-color: #dadada;
+	vertical-align: middle;
+	font-size: 290%;
+	text-align: center;
+}
+
+/* content */
+
+h1 {
+	background-color: #dadada;
+	font-variant: small-caps;
+	display: block;
+	margin-top: 12px;
+	margin-bottom: 6px;
+	font-size: 125%;
+}
+
+h2 {
+	font-weight: bold;
+	font-size: 12px;
+	margin-bottom: 0px;
+	margin-top: 14px;
+}
+
+p {
+	padding: 0px;
+	margin: 0px;
+}
+
+a {
+	color: #7B7B7B !important;
+	text-decoration: none !important;
+}
+
+a:hover {
+	color: #A5A5A5 !important;
+}
+
+/* this needs to be placed here, to override the default h2 style */
+
+.header h2 {
+	display: inline;
+	position: absolute;
+	text-align: right;
+	font-size: 120%;
+	top: 5px;
+	left: 5px;
+	margin: 0px;
+	padding: 0px;
+}
+
+/* menu */
+
+.menu {
+/*	float: left;
+	width: 30%;*/
+	background-color: inherit;
+	position: absolute;
+	top: 103px;
+	left: 10px;
+	width: 230px;
+}
+
+.menu div.menu_block {
+	border: 1px solid #cbcbcb;
+}
+
+.menu div.menu_block h1 {
+	font-size: 110%;
+	display: block;
+	background-color: #dadada;
+	font-variant: small-caps;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.menu div.menu_block a {
+	display: block;
+	width: 100%;
+	font-variant: small-caps;
+}
+.menu div.menu_block a:hover {
+	background-color: #DEDEDE;
+	width: 100%;
+	display: block;
+}
+
+.menu {
+/*	float: left;
+	width: 30%;*/
+	background-color: inherit;
+	position: absolute;
+	top: 103px;
+	left: 10px;
+	width: 230px;
+}
+
+div.kader_block {
+	border: 1px solid #cbcbcb;
+}
+
+div.kader_block h1 {
+	font-size: 110%;
+	display: block;
+	background-color: #dadada;
+	font-variant: small-caps;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+p.introtext {
+	font-weight: bold;
+	padding-bottom: 12px;
+}
+
+#footer {
+	clear: both;
+}
+
+div.menu_block ul {
+	margin: 0px;
+	padding: 0px;
+	list-style-type: none;
+}
+/* Top Navigation */
+
+#navcontainer
+{
+margin: 0;
+padding: 0;
+height: 22px;
+font: 11px Verdana, sans-serif;
+width: 100%;
+/*border-bottom: 1px solid #bbb;*/
+list-style-type: none;
+background: #dadada;
+position: absolute;
+top: 71px;
+left: 0px;
+}
+
+#navlist {
+display: inline;
+}
+
+#navlist li
+{
+float: left;
+margin: 0;
+padding: 0;
+width: auto;
+display: block;
+}
+
+#navlist li a, #navlist li a:link
+{
+background: #dadada;
+color: #000 !important;
+text-decoration: none;
+padding: 3px 5px 3px 5px;
+display: block;
+}
+
+#navlist li a:hover
+{
+color: #aaa;
+/*border-bottom: 3px solid #bbb;*/
+cursor: pointer;
+background: #eee;
+}
+
+#navlist li a#current, #navlist li a#current:link
+{
+color: #000 !important;
+cursor: default;
+font-weight: bold;
+border-bottom: 3px solid #999;
+}
+
+#navlist li a#current:hover
+{
+border-bottom: 3px solid #f90;
+background: #eee;
+}
+
+/* New.News stuff, ported to bs3orange, modified for bs3bow */
+
+.nn_posttitle {
+	background-color: #dadada;
+	display: block;
+	font-variant: normal;
+	margin-top: 12px;
+	margin-bottom: 6px;
+	font-size: 125%;	
+	border-bottom: 4px solid #cbcbcb;
+}
+
+.nn_posttitle .datum {
+	font-size: 10px;
+	display: inline;
+	color: #000000;
+	padding-bottom: 4px;
+	float: right;
+	margin-top: -19px;
+	margin-right: 5px;
+}
+
+.nn_divider {
+	border-top: 1px dashed #dadada;
+	height: 0px;
+	width: 100%;
+}
+
+.nn_postedby {
+	font-size: 10px;
+}
+
+.header h2 a {
+	color: #000 !important;
+}
+
+h1.nn_posttitle a {
+	color: #000 !important;
+}
+
+p.copyright {
+	color: #444444;
+	clear: both;
+	font-size: 10px;
+	text-align: center;
+}
