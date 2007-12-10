@@ -7,7 +7,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-define('IN_viennaCMS', true);
+define('IN_VIENNACMS', true);
 include('../start.php');
 $user = user::getnew();
 $user->checkacpauth();

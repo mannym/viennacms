@@ -1,5 +1,5 @@
 <?php
-define('IN_viennaCMS', true);
+define('IN_VIENNACMS', true);
 include('../start.php');
 utils::load_all_exts();
 $mode = isset($_GET['mode']) ? $_GET['mode'] : '';

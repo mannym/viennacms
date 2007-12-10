@@ -7,7 +7,7 @@
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License 
 */
 
-if (!defined('IN_viennaCMS')) {
+if (!defined('IN_VIENNACMS')) {
 	exit;
 }
 
