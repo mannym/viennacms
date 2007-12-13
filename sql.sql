@@ -29,7 +29,7 @@ CREATE TABLE `viennacms_node_options` (
 -- 
 
 INSERT INTO `viennacms_node_options` (`option_id`, `node_id`, `option_name`, `option_value`) VALUES 
-(1, 1, 'hostname', 'localhost');
+(1, 1, 'hostname', '');
 
 
 -- --------------------------------------------------------
