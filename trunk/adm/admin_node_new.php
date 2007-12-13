@@ -14,32 +14,45 @@ $user->checkacpauth();
 
 $display_admin_tree = (empty($_GET['display_admin_tree']) ) ?  1 : 0;
 $mode = isset($_GET['mode']) ? $_GET['mode'] : 'form';
-$parent = new CMS_Node();
-$parent->node_id = $_GET['node'];
-$parent->read();
-$node = CMS_Node::getnew();
+$do = isset($_REQUEST['do']) ? $_REQUEST['do'] : 'new';
+if ($do == 'new') {
+	$parent = new CMS_Node();
+	$parent->node_id = $_GET['node'];
+	$parent->read();
+	$node = CMS_Node::getnew();
+	$node_id = $parent->node_id;
+} else if ($do == 'edit') {
+	$node_id = (isset($_GET['node'])) ? $_GET['node'] : $_POST['node_id'];
+	$node = new CMS_Node();
+	$node->node_id = $node_id;
+	$node->read();
+}
 
 switch($mode) {
 	case 'save':
-		$post_vars = array('node_id', 'type', 'title', 'description', 'title_clean', 'parentdir', 'extension');
+		$post_vars = array('node_id', 'title', 'description', 'title_clean', 'parentdir', 'extension');
+		if ($do == 'new') {
+			$post_vars[] = 'type';
+		}
 		foreach($post_vars as $postvar) {
-		if(empty($_POST[$postvar]) && $postvar != ('parentdir' || 'extension')) {
+			if(empty($_POST[$postvar]) && !in_array($postvar, array('parentdir', 'extension', 'title_clean'))) {
 				trigger_error(__($postvar . '  not given!'), E_USER_ERROR);
 				return;
 			}
 			$var = 'newnode_' . $postvar;
 			$$var = $db->sql_escape($_POST[$postvar]); 
 		}
-		$node->parent_id = ($newnode_type == 'site' ? 0 : $newnode_node_id);
-		$node->type = ($newnode_type == '--' . __('Select') . '--') ? 'page' : $newnode_type;
+		if ($do == 'new') {
+			$node->parent_id = ($newnode_type == 'site' ? 0 : $newnode_node_id);
+			$node->type = ($newnode_type == '--' . __('Select') . '--') ? 'page' : $newnode_type;
+		}
 		$node->created = time();
 		$node->title = $newnode_title;
 		$node->extension = $newnode_extension;
 		$node->description = $newnode_description;
 		$node->parentdir = $newnode_parentdir;
-		$node->title_clean = utils::clean_title($node_title_clean);
+		$node->title_clean = (empty($newnode_title_clean)) ? utils::clean_title($newnode_title) : $newnode_title_clean;
 		$node->write();
-		$new_id = mysql_insert_id();
 		header('Location: ' . utils::base() . 'admin_node.php?node=' . $node->node_id);		
 	break;
 		
@@ -52,8 +65,16 @@ switch($mode) {
 		$type_options	= utils::run_hook_all('list_types');
 		$page_title		= __('viennaCMS ACP - Add a new node');
 		include('./header.php');
+		if ($do == 'new') {
 		?>
-		<h1><?php echo sprintf(__('Add a new node under %s'), $parent->title); ?></h1>
+			<h1><?php echo sprintf(__('Add a new node under %s'), $parent->title); ?></h1>
+		<?php
+		} else {
+			?>
+			<h1><?php echo sprintf(__('Edit the node %s'), $node->title); ?></h1>
+			<?php
+		}
+		?>
 		<form action="?mode=save" method="post">
 			<table>
 				<?php
@@ -76,13 +97,16 @@ switch($mode) {
 				<tr>
 					<td>
 						<strong><?php echo __('Type') ?>:</strong><br />
-						<?php echo __('Specify the type of the new node'); ?>
+						<?php echo __('Specify the type of the node'); ?>
 					</td>
 					<td>
-						<select name="type">
+						<select name="type"<?php echo ($do == 'edit') ? ' disabled="disabled"' : '' ?>>
 							<option name="">--<?php echo __('Select') ?>--</option>
 							<?php foreach($type_options as $type) {
-								?><option name="<?php echo $type; ?>"><?php echo $type; ?></option><?php
+								if ($type == $node->type) {
+									$selected = ' selected="selected"';
+								}
+								?><option value="<?php echo $type; ?>"<?php echo $selected ?>><?php echo $type; ?></option><?php
 							} ?></select>
 					</td>
 				</tr>
@@ -90,10 +114,10 @@ switch($mode) {
 				<tr>
 					<td>
 						<strong> <?php echo __('Title'); ?></strong><br />
-						<?php echo __('Enter the title for the new node. This title will be automatically cleaned.') ?>
+						<?php echo __('Enter the title for the node. This title will be automatically cleaned.') ?>
 					</td>
 					<td>
-						<input type="text" name="title" id="title" />
+						<input type="text" name="title" id="title" value="<?php echo $node->title ?>" />
 					</td>
 				</tr>
 				<tr>
@@ -102,19 +126,19 @@ switch($mode) {
 						<?php echo __('The clean title for the node. If empty, this will be automatically generated. Also, when changing the title, this will also be generated.') ?>
 					</td>
 					<td>
-						<input type="text" name="title_clean" id="title_clean" />
+						<input type="text" name="title_clean" id="title_clean" value="<?php echo $node->title_clean ?>" />
 					</td>
 				</tr>
 				
 				<tr>
 					<td>
 						<strong><?php echo __('Parent dir'); ?></strong><br />
-						<?php echo __('The parent dir for the new node. This is not required.') ?><br />
+						<?php echo __('The parent dir for the node. This is not required.') ?><br />
 						<a href="#" onclick="showParentDirExample();"><?php echo __("Show example") ?></a>
 					</td>
 					
 					<td>
-						<input type="text" name="parentdir" value="<?php echo $node_info['parentdir'] ?>" />
+						<input type="text" name="parentdir" value="<?php echo $node->parentdir ?>" />
 					</td>
 				</tr>
 				
@@ -125,23 +149,24 @@ switch($mode) {
 					</td>
 					
 					<td>
-						<input type="text" name="extension" value="<?php echo $node_info['extension'] ?>" />
+						<input type="text" name="extension" value="<?php echo $node->extension ?>" />
 					</td>
 				</tr>
 					
 				<tr>
 					<td>
 						<strong><?php echo __('Description'); ?></strong><br />
-						<?php echo __('Enter the description for the new node') ?>
+						<?php echo __('Enter the description for the node') ?>
 					</td>
 					<td>
-						<textarea rows="3" cols="28" name="description"></textarea>
+						<textarea rows="3" cols="28" name="description"><?php echo $node->description ?></textarea>
 					</td>
 				</tr>
 								
 				<tr>
 					<td colspan="2">
-						<input type="hidden" name="node_id" value="<?php echo $parent->node_id; ?>" />
+						<input type="hidden" name="node_id" value="<?php echo $node_id; ?>" />
+						<input type="hidden" name="do" value="<?php echo $do ?>" />
 						<input type="submit" name="submit" value="<?php echo __('Save') ?>" />
 					</td>
 				</tr>

@@ -1,4 +1,5 @@
 <?php
+die('obsolete');
  /**
  * Edit a node
  *  
