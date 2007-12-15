@@ -22,6 +22,7 @@ define('ROOT_PATH', dirname(__FILE__) . '/');
 */
 include(ROOT_PATH . 'includes/gettext.php');
 include(ROOT_PATH . 'includes/db/mysql.php');
+include(ROOT_PATH . 'includes/acm_file.php');
 include(ROOT_PATH . 'includes/utils.php');
 include(ROOT_PATH . 'includes/template.php');
 include(ROOT_PATH . 'includes/nodetree.php');
@@ -37,7 +38,7 @@ set_error_handler(array('utils', 'handle_error'));
 /**
 * And load everything :) 
 */
-
+$cache = new acm();
 $db = database::getnew();
 $template = template::getnew();
 

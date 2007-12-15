@@ -40,12 +40,7 @@ class CMS_Node {
 		return $return;
 	}
 	
-	public function read($what = NODE_SINGLE) {
-		global $nodecache;
-		if (!isset($nodecache)) {
-			$nodecache = array();
-		}
-		
+	public function read($what = NODE_SINGLE, $use_cache = true) {
 		$db = database::getnew();
 		$row = array();
 			
@@ -75,13 +70,8 @@ class CMS_Node {
 		}
 		
 		$sql = 'SELECT * FROM ' . NODES_TABLE . ' WHERE ' . $sql_where;
-		if (isset($nodecache[md5($sql)])) {
-			$rowset = $nodecache[md5($sql)];
-		} else {
-			$result = $db->sql_query($sql);
-			$rowset = $db->sql_fetchrowset($result);
-			$nodecache[md5($sql)] = $rowset;
-		}
+		$result = $db->sql_query($sql);
+		$rowset = $db->sql_fetchrowset($result);	
 		
 		if (count($rowset) == 1 && $what == NODE_SINGLE) {
 			$row = $rowset[0];
@@ -106,14 +96,9 @@ class CMS_Node {
 			$sql  = 'SELECT * FROM ' . NODE_OPTIONS_TABLE;
 			$sql .= ' WHERE node_id = ' . intval($this->node_id);
 			
-			if (isset($nodecache[md5($sql)])) {
-				$orowset = $nodecache[md5($sql)];
-			} else {
-				$result = $db->sql_query($sql);
-				$orowset = $db->sql_fetchrowset($result);
-				$nodecache[md5($sql)] = $orowset;
-			}
-			
+			$result = $db->sql_query($sql);
+			$orowset = $db->sql_fetchrowset($result);
+						
 			foreach ($orowset as $orow) {
 				$this->options[$orow['option_name']] = $orow['option_value'];
 			}
@@ -147,13 +132,8 @@ class CMS_Node {
 				$sql  = 'SELECT * FROM ' . NODE_OPTIONS_TABLE;
 				$sql .= ' WHERE node_id = ' . intval($return[$i]->node_id);
 				
-				if (isset($nodecache[md5($sql)])) {
-					$orowset = $nodecache[md5($sql)];
-				} else {
-					$result = $db->sql_query($sql);
-					$orowset = $db->sql_fetchrowset($result);
-					$nodecache[md5($sql)] = $orowset;
-				}
+				$result = $db->sql_query($sql);
+				$orowset = $db->sql_fetchrowset($result);
 				
 				foreach ($orowset as $orow) {
 					$return[$i]->options[$orow['option_name']] = $orow['option_value'];
@@ -246,7 +226,7 @@ class CMS_Node {
 	}
 	
 	public function get_children() {
-		return $this->read(NODE_CHILDREN);
+		return $this->read(NODE_CHILDREN, false);
 	}
 	
 	public function get_siblings() {
