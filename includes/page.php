@@ -220,7 +220,7 @@ class page {
 				continue;
 			}
 			
-			if ($site->options['hostname'] == $_SERVER['HTTP_HOST']) {
+			if ($site->options['hostname'] == $_SERVER['HTTP_HOST'] ||  empty($site->options['hostname']))  {
 				$this_site = $site;
 				break;
 			}
@@ -236,7 +236,7 @@ class page {
 		}
 		
 		if ($this_site === false) { // gracefully die
-			trigger_error('No site node found.', E_USER_ERROR);
+			trigger_error(__('No site node found.'), E_USER_ERROR);
 		}
 		
 		// Now set the language
