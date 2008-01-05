@@ -63,6 +63,25 @@ class utils {
 	}
 	
 	/**
+	* Adds CSS to the header.
+	*/
+	
+	static function add_css($type = 'file', $data) {
+		global $Header;
+	
+		switch ($type) {
+			case 'file':
+				$Header .= '<link rel="stylesheet" href="' . $data . '" type="text/css" />' . "\n";
+			break;
+			case 'inline':
+				$Header .= '<style type="text/css">' . "\r\n";
+				$Header .= $data;
+				$Header .= "\r\n" . '</style>' . "\r\n";
+			break;
+		}
+	}
+	
+	/**
 	* Removes a selected value from an array. 
 	*/
 

@@ -11,13 +11,14 @@ define('IN_VIENNACMS', true);
 include('../start.php');
 $user = user::getnew();
 $user->checkacpauth();
+$page = page::getnew(false);
 
 $display_admin_tree = (empty($_GET['display_admin_tree']) ) ?  1 : 0;
 $mode = isset($_GET['mode']) ? $_GET['mode'] : 'form';
 $do = isset($_REQUEST['do']) ? $_REQUEST['do'] : 'new';
 if ($do == 'new') {
 	$parent = new CMS_Node();
-	$parent->node_id = $_GET['node'];
+	$parent->node_id = (isset($_GET['node'])) ? $_GET['node'] : $_POST['node_id'];
 	$parent->read();
 	$node = CMS_Node::getnew();
 	$node_id = $parent->node_id;
@@ -26,6 +27,8 @@ if ($do == 'new') {
 	$node = new CMS_Node();
 	$node->node_id = $node_id;
 	$node->read();
+	$parents = $node->get_parent();
+	$parent = $parents[0];
 }
 
 switch($mode) {
@@ -46,6 +49,18 @@ switch($mode) {
 			$node->parent_id = ($newnode_type == 'site' ? 0 : $newnode_node_id);
 			$node->type = ($newnode_type == '--' . __('Select') . '--') ? 'page' : $newnode_type;
 		}
+		
+		$parents = $page->get_parents($parent);
+		$newnode_parentdir = '';
+		foreach ($parents as $par) {
+			$newnode_parentdir .= $par->title_clean . '/';
+		}
+
+		// hard way to strip first dir off
+		$newnode_parentdir = substr($newnode_parentdir, strlen($parents[0]->title_clean . '/'));
+		// strip trailing slash
+		$newnode_parentdir = substr($newnode_parentdir, 0, -1);
+		
 		$node->created = time();
 		$node->title = $newnode_title;
 		$node->extension = $newnode_extension;
@@ -129,7 +144,7 @@ switch($mode) {
 						<input type="text" name="title_clean" id="title_clean" value="<?php echo $node->title_clean ?>" />
 					</td>
 				</tr>
-				
+				<?php /*
 				<tr>
 					<td>
 						<strong><?php echo __('Parent dir'); ?></strong><br />
@@ -141,7 +156,7 @@ switch($mode) {
 						<input type="text" name="parentdir" value="<?php echo $node->parentdir ?>" />
 					</td>
 				</tr>
-				
+				*/ ?>
 				<tr>
 					<td>
 						<strong><?php echo __('Extension'); ?></strong><br />

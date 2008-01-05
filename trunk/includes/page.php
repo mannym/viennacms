@@ -31,12 +31,14 @@ class page {
 	/**
 	* Return an instance of page.
 	*/
-	static function getnew() {
+	static function getnew($init = true) {
 		if (!isset(self::$instance)) {
 			self::$instance = new page;
-			if (method_exists(self::$instance, 'initialize'))
-			{
-				self::$instance->initialize();
+			if ($init) {
+				if (method_exists(self::$instance, 'initialize'))
+				{
+					self::$instance->initialize();
+				}
 			}
 		}
 		return self::$instance;

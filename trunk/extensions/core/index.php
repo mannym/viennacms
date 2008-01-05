@@ -43,10 +43,7 @@ class extension_core {
 	
 	function module_sitemap($args) {
 		$page = page::getnew();
-		?>
-		<style type="text/css">
-		
-
+		utils::add_css('inline', "
 .treeview, .treeview ul { 
 	padding: 0;
 	margin: 0;
@@ -89,7 +86,8 @@ class extension_core {
 .treeview .last { background-image: url(adm/images/tv-item-last.gif); }
 .treeview .lastCollapsable { background-image: url(adm/images/tv-collapsable-last.gif); }
 .treeview .lastExpandable { background-image: url(adm/images/tv-expandable-last.gif); }
-		</style>
+");
+		?>
 		<div style="background-color: #333;">
 		<?php
 		echo '<ul class="treeview">';

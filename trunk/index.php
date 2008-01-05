@@ -13,7 +13,7 @@ include('./start.php');
 $page = page::getnew();
 $page->assign_nav();
 
-$head = '<base href="' . utils::base() . '" />';
+$Header = '<base href="' . utils::base() . '" />' . "\r\n";
 
 $template->set_filename('main', 'index.php');
 
@@ -24,7 +24,7 @@ $template->assign_vars(array(
 	'right' => $page->get_loc('right'),
 	'middle' => $page->get_loc('middle'),
 	'left' => $page->get_loc('left'),
-	'head' => $head,
+	'head' => $Header,
 ));
 	
 $template->display('main');
