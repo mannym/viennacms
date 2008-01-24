@@ -37,7 +37,9 @@ class utils {
 		@include(ROOT_PATH . 'config.php');
 		
 		if (!defined('CMS_INSTALLED')) {
-			exit(__('You need to install viennaCMS first.'));
+			header('Location: install/');
+			exit;
+			//exit(__('You need to install viennaCMS first.'));
 		}
 		
 		$db->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname);
