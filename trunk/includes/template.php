@@ -26,7 +26,7 @@ class template {
 	static private $instance;
 	
 	private $name; 
-	private $root;
+	public $root;
 	
 	private $handles;
 	private $vars;

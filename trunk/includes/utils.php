@@ -28,6 +28,10 @@ class utils {
 	*/
 	
 	static function connect_db() {
+		if (defined('IN_INSTALL')) {
+			return;
+		}
+		
 		$db = database::getnew(); // need some error checking so using this when
 								  // the database class is not loaded we don't loop :)
 		@include(ROOT_PATH . 'config.php');
@@ -331,6 +335,22 @@ class utils {
 		
 		$list .= '</li>';
 		return $list;
+	}
+	
+	static function write_config($dbhost, $dbuser, $dbpasswd, $dbname, $prefix) {
+		$config = <<<CONFIG
+<?php
+\$dbhost = '$dbhost';
+\$dbuser = '$dbuser';
+\$dbpasswd = '$dbpasswd';
+\$dbname = '$dbname';
+
+\$table_prefix = '$prefix';
+
+define('CMS_INSTALLED', true);
+?>
+CONFIG;
+		file_put_contents(ROOT_PATH . 'config.php', $config);
 	}
 }
 ?>
