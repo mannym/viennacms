@@ -3,16 +3,22 @@
 <head>
 <title><?php echo __('Installation wizard') ?> / <?php echo __('Step') . ' ' . $step ?></title>
 <link rel="stylesheet" href="install.css" type="text/css" />
+<script type="text/javascript">
+	function langify(form) {
+		var index = form.langselect.selectedIndex;
+		location.href = 'index.php?language=' + form.langselect.options[index].value;
+	}
+</script>
 </head>
 
 <body>
 <form action="index.php" method="post">
 <table align="center" width="600" cellpadding="0" cellspacing="0">
-<tr><th><?php echo __('viennaCMS installation wizard!') ?> - <?php echo $stepname ?></th></tr>
+<tr><th colspan="2"><?php echo __('viennaCMS installation wizard!') ?> - <?php echo $stepname ?></th></tr>
 
-<tr><td class="row3"><?php echo sprintf(__('Step %s of %s'), $step, $total_step); ?></td></tr>
+<tr><td colspan="2" class="row3"><?php echo sprintf(__('Step %s of %s'), $step, $total_step); ?></td></tr>
 
-<tr><td class="row2">
+<tr><td colspan="2" class="row2">
 <?php if (isset($ierr)) : ?>
 	<?php echo $ierr ?><br />
 <?php endif; ?>
@@ -79,7 +85,17 @@
 <?php if ($step == 3) : ?>
 	Installation_complete_message
 <?php endif; ?>
+</td></tr>
 <tr>
+<th style="text-align: left;">
+	<select name="langselect" onchange="langify(this.form);">
+		<option value="english">Select</option>
+		<option value="english">en_US</option>
+		<?php foreach ($languages as $language) { ?>
+			<option value="<?php echo $language ?>"><?php echo $language ?></option>
+		<?php } ?>
+	</select>
+</th>
 <th style="text-align:right;">
 <input type="button" onclick="history.back(1);" value="&laquo; <?php echo __('Back'); ?>" />
 <input type="button" onclick="location.href='index.php?step=1'" value="<?php echo __('Restart') ?>" />
