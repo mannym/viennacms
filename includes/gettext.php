@@ -126,8 +126,8 @@ function _setlocale($category, $locale) {
             return _setlocale($category, $CURRENTLOCALE);
     } else {
         $ret = 0;
-/*        if (function_exists('setlocale')) // I don't know if this ever happens ;)
-           $ret = setlocale($category, $locale);*/
+        if (function_exists('setlocale')) // I don't know if this ever happens ;)
+           $ret = setlocale($category, $locale);
         if (($ret and $locale == '') or ($ret == $locale)) {
             $EMULATEGETTEXT = 0;
             $CURRENTLOCALE = $ret;
