@@ -3,7 +3,7 @@ msgstr ""
 "Plural-Forms: s\n"
 "Project-Id-Version: SVCMS\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-01-24 14:31+0100\n"
+"PO-Revision-Date: 2008-01-24 14:48+0100\n"
 "Last-Translator: Salomon <salomon@salomonv.nl>\n"
 "Language-Team: salomon <salomon@salomonv.nl>\n"
 "MIME-Version: 1.0\n"
@@ -513,7 +513,7 @@ msgstr "Stap %s van %s"
 
 #: /var/www/viennacms/install/tpl/install.php:21
 msgid "Welcome to the viennaCMS installation wizard. placeholder"
-msgstr "Welkom bij de (tijdelijke) viennaCMS installatie wizard."
+msgstr "Welkom bij de viennaCMS installatie wizard. -- Hier komt nog meer --"
 
 #: /var/www/viennacms/install/tpl/install.php:25
 msgid "File rights"
