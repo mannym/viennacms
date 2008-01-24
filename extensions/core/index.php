@@ -32,7 +32,7 @@ class extension_core {
 	}
 	
 	function module_html_content($args) {
-		echo nl2br(stripslashes($args['content']));
+		echo nl2br(utils::handle_text(stripslashes($args['content'])));
 	}
 
 	function args_sitemap() {

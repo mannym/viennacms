@@ -331,5 +331,18 @@ class page {
 		
 		$_GET['id'] = $node->node_id;
 	}
+	
+	public function get_correct_link($matches) {
+		global $pages, $fixed_url;
+		$node = new CMS_Node();
+		$node->node_id = $matches[1];
+		$node->read();
+		
+		$link = $this->get_link($node);
+		
+		$replacement = str_replace('{node:' . $matches[1] . '}', $link, $matches[0]);
+		
+		return $replacement;
+	}
 }
 ?>

@@ -224,6 +224,14 @@
 					current.addClass("selected").parents("ul, li").add( current.next() ).show();
 				}
 				break;
+			case "all":
+				var current = this.find("a").filter(function() {
+					return true;
+				});
+				if ( current.length ) {
+					current.addClass("selected").parents("ul, li").add( current.next() ).show();
+				}
+				break;
 			}
 			
 			branches.applyClasses(settings, toggler);
