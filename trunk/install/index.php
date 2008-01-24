@@ -2,6 +2,34 @@
 define('IN_VIENNACMS', true);
 define('IN_INSTALL', true);
 include('../start.php');
+
+// check language
+if (isset($_GET['language'])) {
+	setcookie('language', $_GET['language'], time() + 3600, '/', '');
+}
+
+if (isset($_COOKIE['language']) || isset($_GET['language'])) {
+	$language = (isset($_GET['language'])) ? $_GET['language'] : $_COOKIE['language'];
+
+	if ($language != 'english') {
+		// Set language to $language
+		_setlocale(LC_ALL, $language);
+		// Specify location of translation tables
+		_bindtextdomain("viennaCMS", ROOT_PATH . "locale");
+		// Choose domain
+		_textdomain("viennaCMS");
+	}
+}
+
+$dir = scandir(ROOT_PATH . 'locale');
+$languages = array();
+
+foreach ($dir as $file) {
+	if (file_exists(ROOT_PATH . 'locale/' . $file . '/LC_MESSAGES')) {
+		$languages[] = $file;
+	}
+}
+
 if (!file_exists(ROOT_PATH . 'config.php') && is_writeable(ROOT_PATH)) {
 	@fclose(@fopen(ROOT_PATH . 'config.php','w'));
 }
@@ -28,6 +56,7 @@ $template->assign_vars(array(
 	//Template vars
 	'stepname' => $steps[$step],
 	'total_step' => (count($steps)),
+	'languages' => $languages
 ));
 
 switch ($step) {
@@ -106,7 +135,16 @@ switch ($step) {
 		if($installed){
 			install_die(__('viennaCMS is already installed there. Please try another database or table prefix.'));
 		}
-		$sql[] = "UPDATE ".USER_TABLE." SET username = '$name2', password = '$ww2'";		
+		
+		$language = '';
+		
+		if (isset($_COOKIE['language'])) {
+			if ($_COOKIE['language'] != 'english') {
+				$language = addslashes($_COOKIE['language']);
+			}
+		}
+		
+		$sql[] = "UPDATE ".USER_TABLE." SET username = '$name2', password = '$ww2', lang = '$language'";		
 
 		foreach ($sql as $query) {
 			if(!$db->sql_query($query)){
