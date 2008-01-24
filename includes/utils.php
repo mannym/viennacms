@@ -86,6 +86,25 @@ class utils {
 			break;
 		}
 	}
+
+	/**
+	* Adds JavaScript to the header.
+	*/
+	
+	static function add_js($type = 'file', $data) {
+		global $Header;
+	
+		switch ($type) {
+			case 'file':
+				$Header .= '<script type="text/javascript" src="' . $data . '"></script>' . "\n";
+			break;
+			case 'inline':
+				$Header .= '<script type="text/javascript">' . "\r\n";
+				$Header .= $data;
+				$Header .= "\r\n" . '</script>' . "\r\n";
+			break;
+		}
+	}
 	
 	/**
 	* Removes a selected value from an array. 

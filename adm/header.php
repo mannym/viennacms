@@ -183,6 +183,14 @@ $h_node	 		= $query_string . 'node';*/
 				});
 			});
 		</script>
+		<script language="javascript" type="text/javascript" src="../includes/js/tinymce/tiny_mce.js"></script>
+<script language="javascript" type="text/javascript">
+	tinyMCE.init({
+		mode : "textareas",
+		theme : "advanced",
+		editor_selector : "wysiwyg"
+	});
+</script>
 	</head>
 	<body>
 		<div id="wrap">
