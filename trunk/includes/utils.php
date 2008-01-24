@@ -107,6 +107,28 @@ class utils {
 	}
 	
 	/**
+	* Generates a node selector.
+	*/
+	
+	static function node_select($name) {
+		$node = new CMS_Node();
+		$node->node_id = 0;
+		$text = '<ul class="nodes">';
+		$text .= self::_get_select_tree($node, '', $name);
+		$text .= '</ul>';
+		$text .= '<input type="hidden" name="' . $name . '" id="' . $name . '" />';
+		
+		return $text;
+	}
+	
+	static function handle_text($text) {
+		$text = urldecode($text);
+		$page = page::getnew();
+		$text = preg_replace_callback('@href="\{node\:([0-9]+)\}"@', array(&$page, 'get_correct_link'), $text);
+		return $text;
+	}
+	
+	/**
 	* Removes a selected value from an array. 
 	*/
 
@@ -350,6 +372,25 @@ class utils {
 			$list .= '<ul>';
 			foreach ($nodes as $node) {
 				$list = self::_get_admin_tree($node, $list);
+			}
+			$list .= '</ul>';
+		}
+		
+		$list .= '</li>';
+		return $list;
+	}
+
+	static function _get_select_tree($node, $list = '', $name = '') {
+		if ($node->node_id != 0) {
+			$list .= '<li id="' . $name . '-' . $node->node_id . '"><a href="javascript:void()" onclick="select_node(\'' . $name . '\', ' . $node->node_id . '); return false;" class="' . $node->type . '">' . $node->title . '</a>' . "\r\n";			
+		}
+		
+		$nodes = $node->get_children();
+		
+		if ($nodes) {
+			$list .= '<ul>';
+			foreach ($nodes as $node) {
+				$list = self::_get_select_tree($node, $list, $name);
 			}
 			$list .= '</ul>';
 		}

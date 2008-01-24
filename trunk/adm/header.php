@@ -110,15 +110,19 @@ $h_node	 		= $query_string . 'node';*/
 			.treeview .lastCollapsable { background-image: url(images/tv-collapsable-last.gif); }
 			.treeview .lastExpandable { background-image: url(images/tv-expandable-last.gif); }
 		
-			#nodes {
+			.nodes {
 				margin-top: 15px;
 				margin-left: 10px;
 			}
 	
-			#nodes a { padding-left: 19px; display: block; height: 16px; text-decoration: none; color: #0066ff; }
-			#nodes a:visited { color: #0066ff; }
-			#nodes a.site { background: url(images/site.png) 0 0 no-repeat; }
-			#nodes a.page { background: url(images/page.png) 0 0 no-repeat; }
+			.nodes a { padding-left: 19px; display: block; height: 16px; text-decoration: none; color: #0066ff; }
+			.nodes a:visited { color: #0066ff; }
+			.nodes a.site { background: url(images/site.png) 0 0 no-repeat; }
+			.nodes a.page { background: url(images/page.png) 0 0 no-repeat; }
+			.nodes .selected > a {
+				text-decoration: underline;
+				background-color: #eee;
+			}
 	
 			p.icon_p {
 				clear: left;
@@ -174,21 +178,35 @@ $h_node	 		= $query_string . 'node';*/
 		<script src="js/jquery.js" type="text/javascript"></script>
 		<script src="js/jquery.cookie.js" type="text/javascript"></script>
 		<script src="js/jquery.treeview.js" type="text/javascript"></script>
+		<script src="js/selectnode.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			$(document).ready(function() {
-				$("#nodes").treeview({
+				$(".nodes").treeview({
+				<?php
+				if (!defined('LIGHT_ADMIN')) {
+				?>
 				persist: "location",
+				<?php
+				} else {
+				?>
+				persist: "all",
+				<?php } ?>
 				collapsed: true,
 				unique: true
 				});
 			});
 		</script>
+		<?php
+		if (defined('LIGHT_ADMIN')) { return; }
+		?>
 		<script language="javascript" type="text/javascript" src="../includes/js/tinymce/tiny_mce.js"></script>
 <script language="javascript" type="text/javascript">
 	tinyMCE.init({
 		mode : "textareas",
 		theme : "advanced",
-		editor_selector : "wysiwyg"
+		editor_selector : "wysiwyg",
+		plugins : "nodelink",
+		theme_advanced_buttons3_add_before : "nodelink"
 	});
 </script>
 	</head>
@@ -213,7 +231,7 @@ $h_node	 		= $query_string . 'node';*/
 				</div>
 			</div>
 			<div id="left">
-				<ul id="nodes">
+				<ul class="nodes">
 					<?php
 					if (isset($display_admin_tree) && $display_admin_tree) {
 						//FIXME: add display_admin_tree value in query string.  
