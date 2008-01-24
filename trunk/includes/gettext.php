@@ -126,18 +126,19 @@ function _setlocale($category, $locale) {
             return _setlocale($category, $CURRENTLOCALE);
     } else {
         $ret = 0;
-        if (function_exists('setlocale')) // I don't know if this ever happens ;)
+/*        if (function_exists('setlocale')) // I don't know if this ever happens ;)
            $ret = setlocale($category, $locale);
-        if (($ret and $locale == '') or ($ret == $locale)) {
+        if (($ret and $locale == '') or ($ret == $locale)) {*/
             $EMULATEGETTEXT = 0;
-            $CURRENTLOCALE = $ret;
-        } else {
+            //$CURRENTLOCALE = $ret;
+			$CURRENTLOCALE = $locale;
+        /*} else {
   	    if ($locale == '') // emulate variable support
  	        $CURRENTLOCALE = getenv('LANG');
 	    else
 	        $CURRENTLOCALE = $locale;
-            $EMULATEGETTEXT = 1;
-        }
+            $EMULATEGETTEXT = 0;
+        }*/
         return $CURRENTLOCALE;
     }
 }
