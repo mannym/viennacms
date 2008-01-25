@@ -227,6 +227,9 @@ $h_node	 		= $query_string . 'node';*/
 						<li>
 							<a href="admin_files.php"><?php echo __("Files"); ?></a>
 						</li>
+						<li>
+							<a href="login.php?mode=logout"><?php echo __("Log out"); ?></a>
+						</li>						
 					</ul>
 				</div>
 			</div>
