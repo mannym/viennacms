@@ -27,6 +27,7 @@ class page {
 	public $node;
 	public $sitenode;
 	public $parents;
+	public $prefix;
 	
 	/**
 	* Return an instance of page.
@@ -70,12 +71,65 @@ class page {
 				$node->revision->revision_id = 0;
 				$node->revision->revision_number = $_GET['revision'];
 				$node->revision->read();
+				
+				$this->get_revision_nav($node);
 			}
 		}
 		
 		$this->node = $node;
 		$this->parents = $this->get_parents($this->node);
 		$this->get_template();
+	}
+	
+	/**
+	* Get revision navigation
+	*/
+	
+	private function get_revision_nav($node) {
+		$db = database::getnew();
+	
+		$html = sprintf(__('You are currently viewing revision %d of this node, which was made on %s.'), $node->revision->revision_number, date('d-m-Y G:i:s', $node->revision->revision_date));
+		$next = $node->revision->revision_number + 1;
+		$prev = $next - 2;
+		$nextfound = $prevfound = false;
+		
+		$sql = 'SELECT * FROM ' . NODE_REVISIONS_TABLE . ' WHERE node_id = ' . $node->node_id . ' AND (revision_number = ' . $next . ' OR revision_number = ' . $prev . ') ORDER BY revision_date DESC';
+		$result = $db->sql_query($sql);
+		$rowset = $db->sql_fetchrowset($result);
+		
+		var_dump($rowset);
+		var_dump($next);
+		var_dump($prev);
+		
+		foreach ($rowset as $row) {
+			if ($row['revision_number'] == $next) {
+				$nextrow = $row;
+				$nextfound = true;
+			} else if ($row['revision_number'] == $prev) {
+				$prevrow = $row;
+				$prevfound = true;
+			}
+		}
+		
+		$html .= '<br /><br />';
+		
+		if ($prevfound) {
+			$html .= '<div style="width: 49%; float: left;">';
+			$html .= '<a href="' . $this->get_link($node, 'revision/' . $prevrow['revision_number'] . '/') . '">';
+			$html .= sprintf(__('&laquo; Previous (revision %d)'), $prevrow['revision_number']);
+			$html .= '</a></div>' . "\r\n";
+		}
+		
+		if ($nextfound) {
+			$html .= '<div style="width: 49%; float: right; text-align: right;">';
+			$html .= '<a href="' . $this->get_link($node, 'revision/' . $nextrow['revision_number'] . '/') . '">';
+			$html .= sprintf(__('Next (revision %d) &raquo;'), $nextrow['revision_number']);
+			$html .= '</a></div>' . "\r\n";
+		}
+		
+		$html .= '<br style="clear: both;" />';
+				
+		$this->prefix['middle'] = $html;
 	}
 	
 	/**
@@ -139,13 +193,16 @@ class page {
 	* Get a link to a node. 
 	*/
 
-	function get_link($node) {
+	function get_link($node, $extra_params = '') {
 		if ($node->type == 'site') {
 			$link = utils::basepath();
 		} else if ($this->sitenode->options['rewrite']) {
-			$link = (empty($node->parentdir) ? '' :  $node->parentdir . '/') . $node->title_clean . ( (empty($node->extension) ? '' : '.' . $node->extension));
+			$link = $extra_params;
+			$link .= (empty($node->parentdir) ? '' :  $node->parentdir . '/') . $node->title_clean . ( (empty($node->extension) ? '' : '.' . $node->extension));
 		} else {
-			$link = 'index.php?id=' .  $node->node_id;
+			//$link = 'index.php?id=' .  $node->node_id;
+			$link = 'index.php/' . $extra_params;
+			$link .= (empty($node->parentdir) ? '' :  $node->parentdir . '/') . $node->title_clean . ( (empty($node->extension) ? '' : '.' . $node->extension));
 		}
 		return $link;
 	}
@@ -265,8 +322,12 @@ class page {
 	* Gets a module location. 
 	*/
 	public function get_loc($location) {
-		$template = template::getnew();
 		$return = '';
+		if (isset($this->prefix[$location])) {
+			$return .= $this->prefix[$location];
+		}
+	
+		$template = template::getnew();
 		foreach ($this->node->revision->modules[$location] as $module) {
 			$module_function = 'module_' . $module['module'];
 			$ext = utils::load_extension($module['extension']);
@@ -308,6 +369,13 @@ class page {
 		if (!preg_match('/(.*\/)(.+?)(\..+)*$/', $uri, $uri_parts)) {
 			return;
 		}
+		
+		// get revision parameter
+		if (preg_match('#/revision/([0-9]+)#', $uri_parts[1], $regs)) {
+			$uri_parts[1] = str_replace($regs[0], '', $uri_parts[1]);
+			$_GET['revision'] = $regs[1];
+		}
+		
 		// Parent dir
 		if(empty($uri_parts[1])) {
 			$parentdir = '';

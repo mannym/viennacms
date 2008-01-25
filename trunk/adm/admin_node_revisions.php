@@ -23,6 +23,7 @@ $node_id = (isset($_GET['node'])) ? intval($_GET['node']) : intval($_POST['node'
 $node = new CMS_Node();
 $node->node_id = $node_id;
 $node->read();
+$page = page::getnew(false);
 $mode = (isset($_GET['mode'])) ? $_GET['mode'] : 'list';
 $page_title = __("viennaCMS ACP - Node revisions");
 
@@ -30,6 +31,8 @@ switch ($mode) {
 	case 'list':
 	default:
 		include('./header.php');
+		
+		$page->sitenode = $page->get_this_site();
 		
 		$db = database::getnew();
 		$sql = 'SELECT * FROM ' . NODE_REVISIONS_TABLE . ' WHERE node_id = ' . $node->node_id . ' ORDER BY revision_date DESC';
@@ -40,9 +43,10 @@ switch ($mode) {
 		<ul>
 		<?php
 		foreach ($rowset as $row) {
-			echo '<li><a href="../index.php?id=' . $node->node_id . '&amp;revision=' . $row['revision_number'] . '">';
+			//echo '<li><a href="../index.php?id=' . $node->node_id . '&amp;revision=' . $row['revision_number'] . '">';
+			echo '<li><a href="../' . $page->get_link($node, 'revision/' . $row['revision_number'] . '/') . '">';
 			echo 'Revision ' . $row['revision_number'] . ' (' . date('d-m-Y G:i:s', $row['revision_date']) . ' )';
-			echo '</li>' . "\r\n";
+			echo '</a></li>' . "\r\n";
 		}
 		?>
 		</ul>
