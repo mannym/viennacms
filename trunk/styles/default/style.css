@@ -93,22 +93,23 @@ a:hover {
 	padding-left: 20px;
 }
 
-#content h1 {
-	font-size: 25px;
+#content h1#pagetitle {
+	font-size: 23px;
 	font-weight: normal;
-	line-height: 26px;
+	line-height: 24px;
 	margin: 0px;
 	margin-top: 5px;
 	margin-bottom: 5px;
 	color: #b50000;
+	width: 39%;
 	float: left;
-	width: 69%;
 }
 
 #content .breadcrumbs {
 	font-size: 11px;
+	width: 59%;
+	display: block;
 	float: right;
-	width: 29%;
 	text-align: right;
 }
 
@@ -118,7 +119,7 @@ a:hover {
 	padding-left: 10px;
 }
 
-#sidebar h1 {
+#sidebar h1, #content h1 {
 	font-size: 14px;
 	color: #b50000;
 	margin: 0px;
