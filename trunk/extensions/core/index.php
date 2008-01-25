@@ -48,7 +48,7 @@ class extension_core {
 	padding: 0;
 	margin: 0;
 	list-style: none;
-	color: #EEE;
+	color: #000;
 }
 
 .treeview div.hitarea {
@@ -87,13 +87,9 @@ class extension_core {
 .treeview .lastCollapsable { background-image: url(adm/images/tv-collapsable-last.gif); }
 .treeview .lastExpandable { background-image: url(adm/images/tv-expandable-last.gif); }
 ");
-		?>
-		<div style="background-color: #333;">
-		<?php
 		echo '<ul class="treeview">';
 		echo $this->_get_map_tree($page->sitenode);
 		echo '</ul>';
-		?></div><?php
 	}
 	
 
