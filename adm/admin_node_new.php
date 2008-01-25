@@ -49,17 +49,19 @@ switch($mode) {
 			$node->parent_id = ($newnode_type == 'site' ? 0 : $newnode_node_id);
 			$node->type = ($newnode_type == '--' . __('Select') . '--') ? 'page' : $newnode_type;
 		}
-		
-		$parents = $page->get_parents($parent);
-		$newnode_parentdir = '';
-		foreach ($parents as $par) {
-			$newnode_parentdir .= $par->title_clean . '/';
-		}
 
-		// hard way to strip first dir off
-		$newnode_parentdir = substr($newnode_parentdir, strlen($parents[0]->title_clean . '/'));
-		// strip trailing slash
-		$newnode_parentdir = substr($newnode_parentdir, 0, -1);
+		if ($parent) {
+			$parents = $page->get_parents($parent);
+			$newnode_parentdir = '';
+			foreach ($parents as $par) {
+				$newnode_parentdir .= $par->title_clean . '/';
+			}
+
+			// hard way to strip first dir off
+			$newnode_parentdir = substr($newnode_parentdir, strlen($parents[0]->title_clean . '/'));
+			// strip trailing slash
+			$newnode_parentdir = substr($newnode_parentdir, 0, -1);
+		}
 		
 		$node->created = time();
 		$node->title = $newnode_title;
