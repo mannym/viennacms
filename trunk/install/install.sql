@@ -45,15 +45,7 @@ CREATE TABLE `viennacms_node_revisions` (
   `node_content` longtext collate latin1_general_ci NOT NULL,
   `revision_date` int(11) NOT NULL,
   PRIMARY KEY  (`revision_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=9 ;
-
--- 
--- Gegevens worden uitgevoerd voor tabel `viennacms_node_revisions`
--- 
-
-INSERT INTO `viennacms_node_revisions` (`revision_id`, `node_id`, `revision_number`, `node_content`, `revision_date`) VALUES 
-(1, 2, 1, 'The testing revision :)', 1195144352),
-(8, 11, 1, 'The content of this nice third child node :D', 1195152668);
+) ENGINE=MyISAM;
 
 -- --------------------------------------------------------
 
@@ -73,7 +65,7 @@ CREATE TABLE `viennacms_nodes` (
   `parent_id` int(11) NOT NULL,
   `revision_number` int(11) NOT NULL,
   PRIMARY KEY  (`node_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=24 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=2 ;
 
 
 -- 
@@ -81,11 +73,7 @@ CREATE TABLE `viennacms_nodes` (
 -- 
 
 INSERT INTO `viennacms_nodes` (`node_id`, `title`, title_clean, `description`, `created`, `type`, `parent_id`, `revision_number`) VALUES 
-(1, 'The one root node', 'root-node', 'The root of all nodes', 1195133281, 'site', 0, 0),
-(2, 'Child node 1', 'child-node-1', 'An node under the root node.', 1195133299, 'page', 1, 1),
-(3, 'Child node 2', 'child-node-2', 'Another node under the root node.', 1195133313, 'page', 1, 0),
-(4, 'Sub-sub node', 'sub-sub-node', 'An node under a child node', 1195133332, 'page', 3, 0),
-(11, 'Third child node', 'third-child-node', 'An third child node :)', 1195152668, 'page', 1, 1);
+(1, 'viennaCMS default site name', 'root-node', 'The root of all nodes', 1195133281, 'site', 0, 0);
 
 
 -- --------------------------------------------------------

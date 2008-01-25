@@ -24,7 +24,7 @@
 <?php endif; ?>
 <input type="hidden" name="step" value="<?php echo $step + 1 ?>" />
 <?php if ($step == 1) : ?>
-	<?php echo __('Welcome to the viennaCMS installation wizard. placeholder') ?>
+	<?php echo __('Welcome to the viennaCMS installation wizard.') ?>
 	<?php echo $message ?>
 	<table border="0" width="100%">
 	<tr><th colspan="2" class="row1">
@@ -40,7 +40,7 @@
 				</tr>
 				<?php } ?>
 			</table>
-	<?php echo __('message about not being writable or so') ?>
+	<?php echo __('If one or more of these files are not writable, you cannot install viennaCMS.') ?>
 <?php endif; ?>
 <?php if ($step == 2) : ?>
   <table width="100%" border="0">
@@ -48,21 +48,21 @@
       <th colspan="2"><?php echo __('Database login data') ?></th>
     </tr>
 		<tr>
-			<td>{L_DB_HOST}</td>
+			<td><?php echo __('Database server (mostly localhost)') ?></td>
 			<td><input type="text" value="localhost" name="host"></td>
 
 		</tr>
 		<tr>
-			<td>{L_DB_UNAME}</td>
+			<td><?php echo __('Database user name') ?></td>
 			<td><input type="text" value="" name="username"></td>
 		</tr>
 		<tr>
-			<td>{L_DB_PASS}</td>
+			<td><?php echo __('Database password') ?></td>
 			<td><input type="password" value="" name="password"></td>
 
 		</tr>
 		<tr>
-			<td>{L_DB_NAME}</td>
+			<td><?php echo __('Database name') ?></td>
 			<td><input type="text" value="" name="database"></td>
 		</tr>
 		<tr>
@@ -83,7 +83,7 @@
 	</table>
 <?php endif; ?>
 <?php if ($step == 3) : ?>
-	Installation_complete_message
+	<?php echo __('The installation of viennaCMS is now complete. Click Next to go to your new site.'); ?>
 <?php endif; ?>
 </td></tr>
 <tr>
