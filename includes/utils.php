@@ -177,7 +177,11 @@ class utils {
 	}
 	
 	static function basepath() {
-		return dirname($_SERVER['SCRIPT_NAME']) . '/';		
+		$url = dirname($_SERVER['SCRIPT_NAME']);
+		if (dirname($_SERVER['SCRIPT_NAME']) != '/') {
+			$url .= '/';
+		}		
+		return $url;		
 	}
 	
 	static function remove_accents($string) {
