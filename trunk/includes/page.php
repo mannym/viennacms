@@ -355,7 +355,7 @@ class page {
 		
 		if (strpos($_SERVER['REQUEST_URI'], '.php') === false
 			&& $uri_no_qs != utils::basepath(true)) {
-			$uri = '/' . str_replace(utils::basepath(), '', $uri_no_qs);
+			$uri = '/' . preg_replace('@^' . preg_quote(utils::basepath(), '@') . '@', '', $uri_no_qs);
 		} else if (isset($_SERVER['PATH_INFO']) && !empty($_SERVER['PATH_INFO'])) {
 			$uri = $_SERVER['PATH_INFO'];
 		} else {
