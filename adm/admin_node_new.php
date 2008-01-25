@@ -43,7 +43,7 @@ switch($mode) {
 				return;
 			}
 			$var = 'newnode_' . $postvar;
-			$$var = $db->sql_escape($_POST[$postvar]); 
+			$$var = $_POST[$postvar]; 
 		}
 		if ($do == 'new') {
 			$node->parent_id = ($newnode_type == 'site' ? 0 : $newnode_node_id);
