@@ -170,7 +170,9 @@ class utils {
 		$url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';
 		$url .= '://' . $_SERVER['HTTP_HOST'];
 		$url .= dirname($_SERVER['SCRIPT_NAME']);
-		$url .= '/';
+		if (dirname($_SERVER['SCRIPT_NAME']) != '/') {
+			$url .= '/';
+		}
 		return $url;		
 	}
 	
