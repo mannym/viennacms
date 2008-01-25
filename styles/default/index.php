@@ -25,15 +25,19 @@
 		<?php echo $middle ?>
 	</div>
 	<div id="sidebar">
-			<?php if ($nav_level2) : ?>
-				<h1><?php echo __('Navigation') ?></h1>
-				<ul>
-					<?php echo $nav_level2 ?>
-				</ul>
-				<br />
-			<?php endif; ?>
-			<?php if ($right) : ?><?php echo $right ?><?php endif; ?>
-		</div>
+		<?php if ($nav_level2) : ?>
+			<h1><?php echo __('Navigation') ?></h1>
+			<ul>
+				<?php echo $nav_level2 ?>
+			</ul>
+			<br />
+		<?php endif; ?>
+		<?php if ($right) : ?><?php echo $right ?><?php endif; ?>
+	</div>
+	<div id="footer">
+		Powered by <a href="http://viennainfo.nl/">viennaCMS</a>
+	</div>
+	</div>	
 		<?php echo $footer ?>
 	</body>
 </html>
