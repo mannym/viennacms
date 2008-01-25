@@ -1,595 +1,634 @@
 msgid ""
 msgstr ""
-"Plural-Forms: s\n"
-"Project-Id-Version: SVCMS\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-01-24 14:48+0100\n"
-"Last-Translator: Salomon <salomon@salomonv.nl>\n"
-"Language-Team: salomon <salomon@salomonv.nl>\n"
+"Project-Id-Version: viennaCMS\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-01-25 18:17+0100\n"
+"PO-Revision-Date: 2008-01-25 18:20+0100\n"
+"Last-Translator: Bas Timmer <bas@dotbas.net>\n"
+"Language-Team: viennaCMS developers <developers@viennainfo.nl>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: s\n"
 "X-Poedit-Language: Dutch\n"
 "X-Poedit-Country: NETHERLANDS\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: /var/www/viennacms\n"
+"X-Poedit-SearchPath-1: E:\\xampp\\xampplite\\htdocs\\vienna\n"
 
-#: /var/www/viennacms/adm/admin_node_modules.php:20
-msgid "viennaCMS ACP - Edit the node modules"
-msgstr "viennaCMS Beheerderspaneel - Wijzig de modules van deze node."
+#: E:\xampp\xampplite\htdocs\vienna/extensions/files/index.php:22
+#: E:\xampp\xampplite\htdocs\vienna/install/tpl/install.php:33
+msgid "File"
+msgstr "Bestand"
 
-#: /var/www/viennacms/adm/admin_node_modules.php:117
-#: /var/www/viennacms/adm/admin_node_new.php:131
-#: /var/www/viennacms/adm/admin_node_edit.php:99
-msgid "Title"
-msgstr "Titel"
+#: E:\xampp\xampplite\htdocs\vienna/extensions/files/index.php:23
+msgid "The file that should be uploaded"
+msgstr "Het bestandstype dat gebruikt moet worden."
 
-#: /var/www/viennacms/adm/admin_node_modules.php:118
-msgid "Enter the title to display"
-msgstr "Geef de titel die weergegeven moet worden op."
+#: E:\xampp\xampplite\htdocs\vienna/extensions/files/index.php:24
+msgid "Upload"
+msgstr "Upload"
 
-#: /var/www/viennacms/adm/admin_node_modules.php:128
-#: /var/www/viennacms/adm/admin_node_new.php:185
-#: /var/www/viennacms/adm/admin_node_options.php:80
-#: /var/www/viennacms/adm/admin_node_edit.php:153
-msgid "Save"
-msgstr "Opslaan"
+#: E:\xampp\xampplite\htdocs\vienna/extensions/files/index.php:108
+msgid "We need a valid mime content type"
+msgstr "We hebben een geldig mime content type nodig."
 
-#: /var/www/viennacms/adm/admin_node_modules.php:132
-msgid "Delete"
-msgstr "Verwijder"
+#: E:\xampp\xampplite\htdocs\vienna/extensions/files/index.php:139
+msgid "No valid file id given!"
+msgstr "Geen geldig bestands id gegeven!"
 
-#: /var/www/viennacms/adm/admin_node_modules.php:155
-msgid "Select module type"
-msgstr "Selecteer het type module"
+#: E:\xampp\xampplite\htdocs\vienna/extensions/files/index.php:218
+msgid "Files extension"
+msgstr "Bestands extensie"
 
-#: /var/www/viennacms/adm/admin_node_modules.php:165
-msgid "Continue"
-msgstr "Doorgaan"
+#: E:\xampp\xampplite\htdocs\vienna/extensions/files/index.php:219
+msgid "Extension for uploading and downloading files"
+msgstr "Extensie om bestanden te downloaden en uploaden."
 
-#: /var/www/viennacms/adm/admin_node_modules.php:176
-msgid "Left"
-msgstr "Links"
+#: E:\xampp\xampplite\htdocs\vienna/extensions/form/index.php:92
+msgid "Subject"
+msgstr "Onderwerp"
 
-#: /var/www/viennacms/adm/admin_node_modules.php:180
-msgid "Middle"
-msgstr "Midden"
+#: E:\xampp\xampplite\htdocs\vienna/extensions/form/index.php:93
+msgid "Give the subject."
+msgstr "Geef het onderwerp"
 
-#: /var/www/viennacms/adm/admin_node_modules.php:184
-msgid "Right"
-msgstr "Rechts"
+#: E:\xampp\xampplite\htdocs\vienna/extensions/form/index.php:100
+msgid "Your email address:"
+msgstr "Uw email adres:"
 
-#: /var/www/viennacms/adm/admin_node_modules.php:204
-msgid "Add"
-msgstr "Voeg toe"
+#: E:\xampp\xampplite\htdocs\vienna/extensions/form/index.php:101
+msgid "Give your email address. This will be used to answer your message."
+msgstr "Geef uw email adres. Dit wordt gebruikt om uw bericht te beantwoorden."
 
-#: /var/www/viennacms/adm/login.php:25
-#: /var/www/viennacms/adm/login.php:102
-msgid "Login"
-msgstr "Login"
+#: E:\xampp\xampplite\htdocs\vienna/extensions/form/index.php:108
+msgid "Message"
+msgstr "Bericht"
 
-#: /var/www/viennacms/adm/login.php:87
-#: /var/www/viennacms/adm/header.php:216
-msgid "View site"
-msgstr "Bekijk de site"
+#: E:\xampp\xampplite\htdocs\vienna/extensions/form/index.php:109
+msgid "Give the message to send."
+msgstr "Geef het te verzenden bericht."
 
-#: /var/www/viennacms/adm/login.php:88
-#: /var/www/viennacms/adm/index.php:16
-#: /var/www/viennacms/adm/admin_node.php:15
-#: /var/www/viennacms/adm/header.php:217
+#: E:\xampp\xampplite\htdocs\vienna/extensions/form/index.php:118
+msgid "Send"
+msgstr "Verzend"
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/form/index.php:213
+msgid "Form extension"
+msgstr "Formulier extensie"
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/form/index.php:214
+msgid "This extension provides a form API to other extensions."
+msgstr "Deze extensie wordt gebruikt om formulieren van andere extensies te genereren."
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/core/index.php:28
+msgid "Content"
+msgstr "Inhoud"
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/core/index.php:40
+msgid "Options for sitemap"
+msgstr "Opties voor sitemap"
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/core/index.php:126
+msgid "Hostname"
+msgstr "Website adres"
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/core/index.php:127
+msgid "The hostname where this site node should be displayed."
+msgstr "Het website adres waar men deze site moet zien."
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/core/index.php:130
+msgid "Rewrite"
+msgstr "Herschrijf"
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/core/index.php:131
+msgid "Use mod_rewrite for this site? Leave empty to disable, else type \"on\"."
+msgstr "Gebruik de mod_rewrite (website adres herschrijvingsfunctie)? Laat dit leeg als u dit niet wilt, als u het wel wilt typt u hier \"on\" in."
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/core/index.php:144
+msgid "Core extension"
+msgstr "Basis extensie"
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/core/index.php:145
+msgid "The core extension provides some basic modules."
+msgstr "De basis extensie geeft een paar basis functies."
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/contact/class.phpmailer.php:646
+msgid "You must provide at least one recipient email address."
+msgstr "Er moet tenmiste &eacute;&eacute;n ontvanger emailadres opgegeven worden."
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/contact/class.phpmailer.php:647
+msgid " mailer is not supported."
+msgstr " mailer wordt niet ondersteund."
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/contact/class.phpmailer.php:648
+msgid "Could not execute: "
+msgstr "Kon niet uitvoeren:"
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/contact/class.phpmailer.php:649
+msgid "Could not instantiate mail function."
+msgstr "Kon mail functie niet initialiseren."
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/contact/class.phpmailer.php:650
+msgid "SMTP Error: Could not authenticate."
+msgstr "SMTP Fout: authenticatie mislukt."
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/contact/class.phpmailer.php:651
+msgid "The following From address failed: "
+msgstr "De volgende afzender adressen zijn mislukt: "
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/contact/class.phpmailer.php:652
+msgid "SMTP Error: The following recipients failed: "
+msgstr "SMTP Fout: De volgende ontvangers zijn mislukt"
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/contact/class.phpmailer.php:653
+msgid "SMTP Error: Data not accepted."
+msgstr "SMTP Fout: Data niet geaccepteerd."
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/contact/class.phpmailer.php:654
+msgid "SMTP Error: Could not connect to SMTP host."
+msgstr "SMTP Fout: Kon niet verbinden met SMTP host."
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/contact/class.phpmailer.php:655
+msgid "Could not access file: "
+msgstr "Kreeg geen toegang tot bestand: "
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/contact/class.phpmailer.php:656
+msgid "File Error: Could not open file: "
+msgstr "Bestandsfout: Kon bestand niet openen: "
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/contact/class.phpmailer.php:657
+msgid "Unknown encoding: "
+msgstr "Onbekende codering: "
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/contact/index.php:25
+msgid "Send the e-mail to"
+msgstr "Verzend de email naar"
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/contact/index.php:72
+msgid "Please fill in all fields."
+msgstr "Vul alstublieft alle velden in."
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/contact/index.php:138
+msgid "Your e-mail has been successfully sent."
+msgstr "Uw email is succesvol verzonden."
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/contact/index.php:140
+msgid "Your e-mail could not be sent. Please try again later."
+msgstr "Uw email kon niet worden verzonden. Probeer het later nog eens."
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/contact/index.php:150
+msgid "Contact extension"
+msgstr "Contact extensie"
+
+#: E:\xampp\xampplite\htdocs\vienna/extensions/contact/index.php:151
+msgid "Contact extension for sending emails"
+msgstr "Contact extensie om emails te verzenden."
+
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node.php:15
+#: E:\xampp\xampplite\htdocs\vienna/adm/index.php:16
+#: E:\xampp\xampplite\htdocs\vienna/adm/login.php:88
+#: E:\xampp\xampplite\htdocs\vienna/adm/header.php:217
 msgid "viennaCMS ACP"
 msgstr "viennaCMS Beheerderspaneel"
 
-#: /var/www/viennacms/adm/login.php:94
-#: /var/www/viennacms/install/tpl/install.php:70
-msgid "Username"
-msgstr "Gebruikersnaam"
-
-#: /var/www/viennacms/adm/login.php:98
-#: /var/www/viennacms/install/tpl/install.php:74
-msgid "Password"
-msgstr "Wachtwoord"
-
-#: /var/www/viennacms/adm/admin_node_new.php:42
-#: /var/www/viennacms/adm/admin_node_edit.php:27
-#: /var/www/viennacms/adm/admin_node_delete.php:25
-msgid "  not given!"
-msgstr "  niet gegeven!"
-
-#: /var/www/viennacms/adm/admin_node_new.php:50
-#: /var/www/viennacms/adm/admin_node_new.php:119
-#: /var/www/viennacms/adm/admin_node_edit.php:90
-msgid "Select"
-msgstr "Selecteer"
-
-#: /var/www/viennacms/adm/admin_node_new.php:81
-msgid "viennaCMS ACP - Add a new node"
-msgstr "viennaCMS Beheerderspaneel - Voeg een nieuwe node toe"
-
-#: /var/www/viennacms/adm/admin_node_new.php:85
-#, php-format
-msgid "Add a new node under %s"
-msgstr "Voeg een nieuwe node toe onder %s"
-
-#: /var/www/viennacms/adm/admin_node_new.php:89
-#: /var/www/viennacms/adm/admin_node_edit.php:63
-#, php-format
-msgid "Edit the node %s"
-msgstr "Wijzig de node %s"
-
-#: /var/www/viennacms/adm/admin_node_new.php:114
-#: /var/www/viennacms/adm/admin_node_edit.php:85
-msgid "Type"
-msgstr "Type"
-
-#: /var/www/viennacms/adm/admin_node_new.php:115
-#: /var/www/viennacms/adm/admin_node_edit.php:86
-msgid "Specify the type of the node"
-msgstr "Selecteer het type van deze node."
-
-#: /var/www/viennacms/adm/admin_node_new.php:132
-#: /var/www/viennacms/adm/admin_node_edit.php:100
-msgid "Enter the title for the node. This title will be automatically cleaned."
-msgstr "Geef de titel van deze node. Deze zal automatisch schoongemaakt worden."
-
-#: /var/www/viennacms/adm/admin_node_new.php:140
-#: /var/www/viennacms/adm/admin_node_edit.php:108
-msgid "Clean Title"
-msgstr "Opgeschoonde titel"
-
-#: /var/www/viennacms/adm/admin_node_new.php:141
-#: /var/www/viennacms/adm/admin_node_edit.php:109
-msgid "The clean title for the node. If empty, this will be automatically generated. Also, when changing the title, this will also be generated."
-msgstr "Opgeschoonde titel. Als dit leeg is, zal dit automatisch gegenereerd worden, wat ook gebeurd als de titel wordt veranderd."
-
-#: /var/www/viennacms/adm/admin_node_new.php:162
-#: /var/www/viennacms/adm/admin_node_edit.php:130
-msgid "Extension"
-msgstr "Extensie"
-
-#: /var/www/viennacms/adm/admin_node_new.php:163
-#: /var/www/viennacms/adm/admin_node_edit.php:131
-msgid "Enter the extension. By example, html. Don't put a dot ('.') at the begin of the extension!."
-msgstr "Geef de bestandsextensie, bijvoorbeeld: html. Voeg geen punt ('.') toe aan het begin!"
-
-#: /var/www/viennacms/adm/admin_node_new.php:173
-#: /var/www/viennacms/adm/admin_node_edit.php:141
-msgid "Description"
-msgstr "Beschrijving"
-
-#: /var/www/viennacms/adm/admin_node_new.php:174
-#: /var/www/viennacms/adm/admin_node_edit.php:142
-msgid "Enter the description for the node"
-msgstr "Geef de beschrijving voor deze node."
-
-#: /var/www/viennacms/adm/admin_node_revisions.php:27
-msgid "viennaCMS ACP - Node revisions"
-msgstr "viennaCMS Beheerderspaneel - Node revisies"
-
-#: /var/www/viennacms/adm/admin_node_revisions.php:39
-#, php-format
-msgid "View older versions of %s"
-msgstr "Bekijk de oudere versies van %s"
-
-#: /var/www/viennacms/adm/admin_node_options.php:30
-msgid "Template"
-msgstr "Template"
-
-#: /var/www/viennacms/adm/admin_node_options.php:31
-msgid "The template that will be used for this node, and child nodes. Leave empty to use the parent's template."
-msgstr "De template die voor deze node, en de aftakkingen daarvan, moet worden gebruikt. Laat leeg om de template van de ouder te gebruiken"
-
-#: /var/www/viennacms/adm/admin_node_options.php:35
-msgid "viennaCMS ACP - Node options"
-msgstr "viennaCMS Beheerderspaneel - Node opties"
-
-#: /var/www/viennacms/adm/admin_node_options.php:59
-#, php-format
-msgid "Edit options for %s"
-msgstr "Wijzig de opties voor %s"
-
-#: /var/www/viennacms/adm/admin_node.php:22
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node.php:22
 #, php-format
 msgid "Actions for %s"
 msgstr "Acties voor %s"
 
-#: /var/www/viennacms/adm/admin_node.php:24
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node.php:24
 msgid "Add new child node"
 msgstr "Voeg hieronder een nieuwe node toe"
 
-#: /var/www/viennacms/adm/admin_node.php:24
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node.php:24
 msgid "Add a new child node to this node."
 msgstr "Voeg een nieuwe node onder deze node toe."
 
-#: /var/www/viennacms/adm/admin_node.php:25
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node.php:25
 msgid "Edit modules"
 msgstr "Wijzig modules."
 
-#: /var/www/viennacms/adm/admin_node.php:25
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node.php:25
 msgid "Add or edit the modules (content) in this node."
 msgstr "Voeg modules (inhoud) toe of wijzig de modules van deze node."
 
-#: /var/www/viennacms/adm/admin_node.php:26
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node.php:26
 msgid "Edit options"
 msgstr "Wijzig opties"
 
-#: /var/www/viennacms/adm/admin_node.php:26
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node.php:26
 msgid "Configure options in this node."
 msgstr "Configureer de opties van deze node."
 
-#: /var/www/viennacms/adm/admin_node.php:27
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node.php:27
 msgid "Older versions"
 msgstr "Oudere versies"
 
-#: /var/www/viennacms/adm/admin_node.php:27
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node.php:27
 msgid "View older versions of this node."
 msgstr "Bekijk de oudere versies van deze node."
 
-#: /var/www/viennacms/adm/admin_node.php:28
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node.php:28
 msgid "Edit node details"
 msgstr "Wijzig de details van deze node."
 
-#: /var/www/viennacms/adm/admin_node.php:28
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node.php:28
 msgid "Edit the node details like title and description."
 msgstr "Wijzig de node details zoals de titel en de beschrijving."
 
-#: /var/www/viennacms/adm/admin_node.php:29
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node.php:29
 msgid "Delete node"
 msgstr "Verwijder de node"
 
-#: /var/www/viennacms/adm/admin_node.php:29
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node.php:29
 msgid "Delete this node."
 msgstr "Verwijder deze node."
 
-#: /var/www/viennacms/adm/admin_node_edit.php:60
-msgid "viennaCMS ACP - Edit this node"
-msgstr "viennaCMS Beheerderspaneel - Wijzig deze node."
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_revisions.php:28
+msgid "viennaCMS ACP - Node revisions"
+msgstr "viennaCMS Beheerderspaneel - Node revisies"
 
-#: /var/www/viennacms/adm/admin_node_edit.php:118
-msgid "Parent dir"
-msgstr "Ouder"
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_revisions.php:42
+#, php-format
+msgid "View older versions of %s"
+msgstr "Bekijk de oudere versies van %s"
 
-#: /var/www/viennacms/adm/admin_node_edit.php:119
-msgid "The parent dir for the new node. This is not required."
-msgstr "Stam van deze node. Dit is niet verplicht."
-
-#: /var/www/viennacms/adm/admin_node_edit.php:120
-msgid "Show example"
-msgstr "Laat voorbeeld zien"
-
-#: /var/www/viennacms/adm/header.php:228
-msgid "Files"
-msgstr "Bestand"
-
-#: /var/www/viennacms/adm/header.php:241
-msgid "Hide the admin node tree"
-msgstr "Verberg de boom."
-
-#: /var/www/viennacms/adm/header.php:241
-msgid "Display the admin node tree"
-msgstr "Laat de boom zien"
-
-#: /var/www/viennacms/adm/admin_node_delete.php:18
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_delete.php:18
 msgid "viennaCMS ACP - Delete a node"
 msgstr "viennaCMS ACP - Verwijder een node"
 
-#: /var/www/viennacms/adm/admin_node_delete.php:33
-#: /var/www/viennacms/adm/admin_node_delete.php:37
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_delete.php:25
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_edit.php:27
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_new.php:42
+msgid "  not given!"
+msgstr "  niet gegeven!"
+
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_delete.php:33
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_delete.php:37
 msgid "Can't delete the node. Are you trying to delete a site?"
 msgstr "Kan deze node niet verwijderen. Probeert u misschien een site te verwijderen?"
 
-#: /var/www/viennacms/adm/admin_node_delete.php:47
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_delete.php:47
 msgid "Are you sure you want to delete this node? This will not remove any data."
 msgstr "Weet je zeker dat u deze node wilt verwijderen? Dit zal geen data verwijderen."
 
-#: /var/www/viennacms/adm/admin_node_delete.php:49
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_delete.php:49
 msgid "Submit"
 msgstr "Bevestig"
 
-#: /var/www/viennacms/extensions/contact/class.phpmailer.php:646
-msgid "You must provide at least one recipient email address."
-msgstr "Er moet tenmiste &eacute;&eacute;n ontvanger emailadres opgegeven worden."
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_edit.php:60
+msgid "viennaCMS ACP - Edit this node"
+msgstr "viennaCMS Beheerderspaneel - Wijzig deze node."
 
-#: /var/www/viennacms/extensions/contact/class.phpmailer.php:647
-msgid " mailer is not supported."
-msgstr " mailer wordt niet ondersteund."
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_edit.php:63
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_new.php:91
+#, php-format
+msgid "Edit the node %s"
+msgstr "Wijzig de node %s"
 
-#: /var/www/viennacms/extensions/contact/class.phpmailer.php:648
-msgid "Could not execute: "
-msgstr "Kon niet uitvoeren:"
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_edit.php:85
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_new.php:116
+msgid "Type"
+msgstr "Type"
 
-#: /var/www/viennacms/extensions/contact/class.phpmailer.php:649
-msgid "Could not instantiate mail function."
-msgstr "Kon mail functie niet initialiseren."
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_edit.php:86
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_new.php:117
+msgid "Specify the type of the node"
+msgstr "Selecteer het type van deze node."
 
-#: /var/www/viennacms/extensions/contact/class.phpmailer.php:650
-msgid "SMTP Error: Could not authenticate."
-msgstr "SMTP Fout: authenticatie mislukt."
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_edit.php:90
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_new.php:50
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_new.php:121
+msgid "Select"
+msgstr "Selecteer"
 
-#: /var/www/viennacms/extensions/contact/class.phpmailer.php:651
-msgid "The following From address failed: "
-msgstr "De volgende afzender adressen zijn mislukt: "
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_edit.php:99
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_modules.php:117
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_new.php:133
+msgid "Title"
+msgstr "Titel"
 
-#: /var/www/viennacms/extensions/contact/class.phpmailer.php:652
-msgid "SMTP Error: The following recipients failed: "
-msgstr "SMTP Fout: De volgende ontvangers zijn mislukt"
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_edit.php:100
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_new.php:134
+msgid "Enter the title for the node. This title will be automatically cleaned."
+msgstr "Geef de titel van deze node. Deze zal automatisch schoongemaakt worden."
 
-#: /var/www/viennacms/extensions/contact/class.phpmailer.php:653
-msgid "SMTP Error: Data not accepted."
-msgstr "SMTP Fout: Data niet geaccepteerd."
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_edit.php:108
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_new.php:142
+msgid "Clean Title"
+msgstr "Opgeschoonde titel"
 
-#: /var/www/viennacms/extensions/contact/class.phpmailer.php:654
-msgid "SMTP Error: Could not connect to SMTP host."
-msgstr "SMTP Fout: Kon niet verbinden met SMTP host."
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_edit.php:109
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_new.php:143
+msgid "The clean title for the node. If empty, this will be automatically generated. Also, when changing the title, this will also be generated."
+msgstr "Opgeschoonde titel. Als dit leeg is, zal dit automatisch gegenereerd worden, wat ook gebeurd als de titel wordt veranderd."
 
-#: /var/www/viennacms/extensions/contact/class.phpmailer.php:655
-msgid "Could not access file: "
-msgstr "Kreeg geen toegang tot bestand: "
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_edit.php:118
+msgid "Parent dir"
+msgstr "Ouder"
 
-#: /var/www/viennacms/extensions/contact/class.phpmailer.php:656
-msgid "File Error: Could not open file: "
-msgstr "Bestandsfout: Kon bestand niet openen: "
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_edit.php:119
+msgid "The parent dir for the new node. This is not required."
+msgstr "Stam van deze node. Dit is niet verplicht."
 
-#: /var/www/viennacms/extensions/contact/class.phpmailer.php:657
-msgid "Unknown encoding: "
-msgstr "Onbekende codering: "
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_edit.php:120
+msgid "Show example"
+msgstr "Laat voorbeeld zien"
 
-#: /var/www/viennacms/extensions/contact/index.php:25
-msgid "Send the e-mail to"
-msgstr "Verzend de email naar"
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_edit.php:130
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_new.php:164
+msgid "Extension"
+msgstr "Extensie"
 
-#: /var/www/viennacms/extensions/contact/index.php:72
-msgid "Please fill in all fields."
-msgstr "Vul alstublieft alle velden in."
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_edit.php:131
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_new.php:165
+msgid "Enter the extension. By example, html. Don't put a dot ('.') at the begin of the extension!."
+msgstr "Geef de bestandsextensie, bijvoorbeeld: html. Voeg geen punt ('.') toe aan het begin!"
 
-#: /var/www/viennacms/extensions/contact/index.php:138
-msgid "Your e-mail has been successfully sent."
-msgstr "Uw email is succesvol verzonden."
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_edit.php:141
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_new.php:175
+msgid "Description"
+msgstr "Beschrijving"
 
-#: /var/www/viennacms/extensions/contact/index.php:140
-msgid "Your e-mail could not be sent. Please try again later."
-msgstr "Uw email kon niet worden verzonden. Probeer het later nog eens."
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_edit.php:142
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_new.php:176
+msgid "Enter the description for the node"
+msgstr "Geef de beschrijving voor deze node."
 
-#: /var/www/viennacms/extensions/contact/index.php:150
-msgid "Contact extension"
-msgstr "Contact extensie"
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_edit.php:153
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_modules.php:128
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_new.php:187
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_options.php:80
+msgid "Save"
+msgstr "Opslaan"
 
-#: /var/www/viennacms/extensions/contact/index.php:151
-msgid "Contact extension for sending emails"
-msgstr "Contact extensie om emails te verzenden."
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_modules.php:20
+msgid "viennaCMS ACP - Edit the node modules"
+msgstr "viennaCMS Beheerderspaneel - Wijzig de modules van deze node."
 
-#: /var/www/viennacms/extensions/core/index.php:28
-msgid "Content"
-msgstr "Inhoud"
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_modules.php:118
+msgid "Enter the title to display"
+msgstr "Geef de titel die weergegeven moet worden op."
 
-#: /var/www/viennacms/extensions/core/index.php:40
-msgid "Options for sitemap"
-msgstr "Opties voor sitemap"
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_modules.php:132
+msgid "Delete"
+msgstr "Verwijder"
 
-#: /var/www/viennacms/extensions/core/index.php:130
-msgid "Hostname"
-msgstr "Website adres"
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_modules.php:155
+msgid "Select module type"
+msgstr "Selecteer het type module"
 
-#: /var/www/viennacms/extensions/core/index.php:131
-msgid "The hostname where this site node should be displayed."
-msgstr "Het website adres waar men deze site moet zien."
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_modules.php:165
+msgid "Continue"
+msgstr "Doorgaan"
 
-#: /var/www/viennacms/extensions/core/index.php:134
-msgid "Rewrite"
-msgstr "Herschrijf"
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_modules.php:176
+msgid "Left"
+msgstr "Links"
 
-#: /var/www/viennacms/extensions/core/index.php:135
-msgid "Use mod_rewrite for this site? Leave empty to disable, else type \"on\"."
-msgstr "Gebruik de mod_rewrite (website adres herschrijvingsfunctie)? Laat dit leeg als u dit niet wilt, als u het wel wilt typt u hier \"on\" in."
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_modules.php:180
+msgid "Middle"
+msgstr "Midden"
 
-#: /var/www/viennacms/extensions/core/index.php:148
-msgid "Core extension"
-msgstr "Basis extensie"
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_modules.php:184
+msgid "Right"
+msgstr "Rechts"
 
-#: /var/www/viennacms/extensions/core/index.php:149
-msgid "The core extension provides some basic modules."
-msgstr "De basis extensie geeft een paar basis functies."
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_modules.php:204
+msgid "Add"
+msgstr "Voeg toe"
 
-#: /var/www/viennacms/extensions/form/index.php:92
-msgid "Subject"
-msgstr "Onderwerp"
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_new.php:83
+msgid "viennaCMS ACP - Add a new node"
+msgstr "viennaCMS Beheerderspaneel - Voeg een nieuwe node toe"
 
-#: /var/www/viennacms/extensions/form/index.php:93
-msgid "Give the subject."
-msgstr "Geef het onderwerp"
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_new.php:87
+#, php-format
+msgid "Add a new node under %s"
+msgstr "Voeg een nieuwe node toe onder %s"
 
-#: /var/www/viennacms/extensions/form/index.php:100
-msgid "Your email address:"
-msgstr "Uw email adres:"
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_options.php:30
+msgid "Template"
+msgstr "Template"
 
-#: /var/www/viennacms/extensions/form/index.php:101
-msgid "Give your email address. This will be used to answer your message."
-msgstr "Geef uw email adres. Dit wordt gebruikt om uw bericht te beantwoorden."
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_options.php:31
+msgid "The template that will be used for this node, and child nodes. Leave empty to use the parent's template."
+msgstr "De template die voor deze node, en de aftakkingen daarvan, moet worden gebruikt. Laat leeg om de template van de ouder te gebruiken"
 
-#: /var/www/viennacms/extensions/form/index.php:108
-msgid "Message"
-msgstr "Bericht"
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_options.php:35
+msgid "viennaCMS ACP - Node options"
+msgstr "viennaCMS Beheerderspaneel - Node opties"
 
-#: /var/www/viennacms/extensions/form/index.php:109
-msgid "Give the message to send."
-msgstr "Geef het te verzenden bericht."
+#: E:\xampp\xampplite\htdocs\vienna/adm/admin_node_options.php:59
+#, php-format
+msgid "Edit options for %s"
+msgstr "Wijzig de opties voor %s"
 
-#: /var/www/viennacms/extensions/form/index.php:118
-msgid "Send"
-msgstr "Verzend"
+#: E:\xampp\xampplite\htdocs\vienna/adm/login.php:25
+#: E:\xampp\xampplite\htdocs\vienna/adm/login.php:102
+msgid "Login"
+msgstr "Login"
 
-#: /var/www/viennacms/extensions/form/index.php:213
-msgid "Form extension"
-msgstr "Formulier extensie"
+#: E:\xampp\xampplite\htdocs\vienna/adm/login.php:87
+#: E:\xampp\xampplite\htdocs\vienna/adm/header.php:216
+msgid "View site"
+msgstr "Bekijk de site"
 
-#: /var/www/viennacms/extensions/form/index.php:214
-msgid "This extension provides a form API to other extensions."
-msgstr "Deze extensie wordt gebruikt om formulieren van andere extensies te genereren."
+#: E:\xampp\xampplite\htdocs\vienna/adm/login.php:94
+#: E:\xampp\xampplite\htdocs\vienna/install/tpl/install.php:76
+msgid "Username"
+msgstr "Gebruikersnaam"
 
-#: /var/www/viennacms/extensions/files/index.php:22
-#: /var/www/viennacms/install/tpl/install.php:27
-msgid "File"
-msgstr "Bestand"
+#: E:\xampp\xampplite\htdocs\vienna/adm/login.php:98
+#: E:\xampp\xampplite\htdocs\vienna/install/tpl/install.php:80
+msgid "Password"
+msgstr "Wachtwoord"
 
-#: /var/www/viennacms/extensions/files/index.php:23
-msgid "The file that should be uploaded"
-msgstr "Het bestandstype dat gebruikt moet worden."
+#: E:\xampp\xampplite\htdocs\vienna/adm/header.php:231
+msgid "Log out"
+msgstr "Uitloggen"
 
-#: /var/www/viennacms/extensions/files/index.php:24
-msgid "Upload"
-msgstr "Upload"
+#: E:\xampp\xampplite\htdocs\vienna/adm/header.php:244
+msgid "Hide the admin node tree"
+msgstr "Verberg de boom."
 
-#: /var/www/viennacms/extensions/files/index.php:108
-msgid "We need a valid mime content type"
-msgstr "We hebben een geldig mime content type nodig."
+#: E:\xampp\xampplite\htdocs\vienna/adm/header.php:244
+msgid "Display the admin node tree"
+msgstr "Laat de boom zien"
 
-#: /var/www/viennacms/extensions/files/index.php:139
-msgid "No valid file id given!"
-msgstr "Geen geldig bestands id gegeven!"
+#: E:\xampp\xampplite\htdocs\vienna/styles/default/index.php:12
+msgid "ACP"
+msgstr "Beheerderspaneel"
 
-#: /var/www/viennacms/extensions/files/index.php:218
-msgid "Files extension"
-msgstr "Bestands extensie"
+#: E:\xampp\xampplite\htdocs\vienna/styles/default/index.php:29
+#: E:\xampp\xampplite\htdocs\vienna/styles/blue/index.php:17
+#: E:\xampp\xampplite\htdocs\vienna/styles/blue/index.php:24
+msgid "Navigation"
+msgstr "Navigatie"
 
-#: /var/www/viennacms/extensions/files/index.php:219
-msgid "Extension for uploading and downloading files"
-msgstr "Extensie om bestanden te downloaden en uploaden."
+#: E:\xampp\xampplite\htdocs\vienna/includes/user.php:154
+msgid "Login incorrect"
+msgstr "Login fout."
 
-#: /var/www/viennacms/install/index.php:16
+#: E:\xampp\xampplite\htdocs\vienna/includes/utils.php:313
+msgid "General Error"
+msgstr "Algemene fout"
+
+#: E:\xampp\xampplite\htdocs\vienna/includes/page.php:91
+#, php-format
+msgid "You are currently viewing revision %d of this node, which was made on %s."
+msgstr "Je bekijkt nu revisie %d van deze node, die gemaakt is op %s."
+
+#: E:\xampp\xampplite\htdocs\vienna/includes/page.php:119
+#, php-format
+msgid "&laquo; Previous (revision %d)"
+msgstr "&laquo; Vorige (revisie %d)"
+
+#: E:\xampp\xampplite\htdocs\vienna/includes/page.php:126
+#, php-format
+msgid "Next (revision %d) &raquo;"
+msgstr "Volgende (revisie %d) &raquo;"
+
+#: E:\xampp\xampplite\htdocs\vienna/includes/page.php:298
+msgid "No site node found."
+msgstr "Geen site node gevonden"
+
+#: E:\xampp\xampplite\htdocs\vienna/includes/nodetree.php:330
+msgid "This node has no content. Add content in the administration panel."
+msgstr "Deze node heeft geen inhoud. Voeg inhoud toe in het Beheerderspaneel."
+
+#: E:\xampp\xampplite\htdocs\vienna/includes/nodetree.php:331
+msgid "Edit this content title"
+msgstr "Wijzig de titel van de inhoud"
+
+#: E:\xampp\xampplite\htdocs\vienna/includes/db/dbal.php:547
+msgid "An sql error occurred while fetching this page. Please contact an administrator if this problem persists."
+msgstr "Er is een SQL fout opgetreden toen deze pagina werd gegenereerd. Neem alstublieft contact op met de beheerder als dit probleem zich blijft voordoen."
+
+#: E:\xampp\xampplite\htdocs\vienna/install/index.php:44
 msgid "Welcome to the viennaCMS installation"
 msgstr "Welkom bij de viennaCMS installatie"
 
-#: /var/www/viennacms/install/index.php:17
+#: E:\xampp\xampplite\htdocs\vienna/install/index.php:45
 msgid "Input your data"
 msgstr "Geef uw gegevens"
 
-#: /var/www/viennacms/install/index.php:18
+#: E:\xampp\xampplite\htdocs\vienna/install/index.php:46
 msgid "Installation complete!"
 msgstr "De installatie is succesvol afgerond!"
 
-#: /var/www/viennacms/install/index.php:45
+#: E:\xampp\xampplite\htdocs\vienna/install/index.php:74
 msgid "Does not exist"
 msgstr "Bestaat niet"
 
-#: /var/www/viennacms/install/index.php:48
+#: E:\xampp\xampplite\htdocs\vienna/install/index.php:77
 msgid "No"
 msgstr "Nee"
 
-#: /var/www/viennacms/install/index.php:50
+#: E:\xampp\xampplite\htdocs\vienna/install/index.php:79
 msgid "Yes"
 msgstr "Ja"
 
-#: /var/www/viennacms/install/index.php:57
+#: E:\xampp\xampplite\htdocs\vienna/install/index.php:86
 #, php-format
 msgid "The current PHP version (%s) is too old to run viennaCMS correctly. The minimum version is 5.2.0."
 msgstr "De huidige PHP versie (%s) is te oud om de viennaCMS goed te kunnen gebruiken. De minimum vereiste versie is 5.2.0."
 
-#: /var/www/viennacms/install/index.php:107
+#: E:\xampp\xampplite\htdocs\vienna/install/index.php:136
 msgid "viennaCMS is already installed there. Please try another database or table prefix."
 msgstr "De viennaCMS is al geïnstalleerd in deze database. Probeer aub een andere database, of gebruik een andere prefix voor de tabellen."
 
-#: /var/www/viennacms/install/index.php:122
+#: E:\xampp\xampplite\htdocs\vienna/install/index.php:160
 msgid "Incorrect install step"
 msgstr "Incorrecte installatie stap."
 
-#: /var/www/viennacms/install/tpl/install.php:4
+#: E:\xampp\xampplite\htdocs\vienna/install/tpl/install.php:4
 msgid "Installation wizard"
 msgstr "Installatie wizard"
 
-#: /var/www/viennacms/install/tpl/install.php:4
+#: E:\xampp\xampplite\htdocs\vienna/install/tpl/install.php:4
 msgid "Step"
 msgstr "Stap"
 
-#: /var/www/viennacms/install/tpl/install.php:11
+#: E:\xampp\xampplite\htdocs\vienna/install/tpl/install.php:17
 msgid "viennaCMS installation wizard!"
 msgstr "viennaCMS installatie wizard!"
 
-#: /var/www/viennacms/install/tpl/install.php:13
+#: E:\xampp\xampplite\htdocs\vienna/install/tpl/install.php:19
 #, php-format
 msgid "Step %s of %s"
 msgstr "Stap %s van %s"
 
-#: /var/www/viennacms/install/tpl/install.php:21
-msgid "Welcome to the viennaCMS installation wizard. placeholder"
-msgstr "Welkom bij de viennaCMS installatie wizard. -- Hier komt nog meer --"
+#: E:\xampp\xampplite\htdocs\vienna/install/tpl/install.php:27
+msgid "Welcome to the viennaCMS installation wizard."
+msgstr "Welkom bij de viennaCMS installatiewizard."
 
-#: /var/www/viennacms/install/tpl/install.php:25
+#: E:\xampp\xampplite\htdocs\vienna/install/tpl/install.php:31
 msgid "File rights"
 msgstr "Bestandsrechten"
 
-#: /var/www/viennacms/install/tpl/install.php:28
+#: E:\xampp\xampplite\htdocs\vienna/install/tpl/install.php:34
 msgid "Writable?"
 msgstr "Schrijfbaar?"
 
-#: /var/www/viennacms/install/tpl/install.php:37
-msgid "message about not being writable or so"
-msgstr "bericht over niet schrijfbaar of iets in die richting"
+#: E:\xampp\xampplite\htdocs\vienna/install/tpl/install.php:43
+msgid "If one or more of these files are not writable, you cannot install viennaCMS."
+msgstr "Als een of meer van deze bestanden niet schrijfbaar zijn, kun je viennaCMS niet installeren."
 
-#: /var/www/viennacms/install/tpl/install.php:42
+#: E:\xampp\xampplite\htdocs\vienna/install/tpl/install.php:48
 msgid "Database login data"
 msgstr "Database login gegevens"
 
-#: /var/www/viennacms/install/tpl/install.php:63
+#: E:\xampp\xampplite\htdocs\vienna/install/tpl/install.php:51
+msgid "Database server (mostly localhost)"
+msgstr "Databaseserver (meestal localhost)"
+
+#: E:\xampp\xampplite\htdocs\vienna/install/tpl/install.php:56
+msgid "Database user name"
+msgstr "Database-gebruikersnaam"
+
+#: E:\xampp\xampplite\htdocs\vienna/install/tpl/install.php:60
+msgid "Database password"
+msgstr "Databasewachtwoord"
+
+#: E:\xampp\xampplite\htdocs\vienna/install/tpl/install.php:65
+msgid "Database name"
+msgstr "Databasenaam"
+
+#: E:\xampp\xampplite\htdocs\vienna/install/tpl/install.php:69
 msgid "Table prefix"
 msgstr "Tabel prefix"
 
-#: /var/www/viennacms/install/tpl/install.php:66
+#: E:\xampp\xampplite\htdocs\vienna/install/tpl/install.php:72
 msgid "User information"
 msgstr "Gebruikersinformatie"
 
-#: /var/www/viennacms/install/tpl/install.php:84
+#: E:\xampp\xampplite\htdocs\vienna/install/tpl/install.php:86
+msgid "The installation of viennaCMS is now complete. Click Next to go to your new site."
+msgstr "De installatie van viennaCMS is nu voltooid. Klik op Volgende om naar je nieuwe site te gaan."
+
+#: E:\xampp\xampplite\htdocs\vienna/install/tpl/install.php:100
 msgid "Back"
 msgstr "Terug"
 
-#: /var/www/viennacms/install/tpl/install.php:85
+#: E:\xampp\xampplite\htdocs\vienna/install/tpl/install.php:101
 msgid "Restart"
 msgstr "Start opnieuw"
 
-#: /var/www/viennacms/install/tpl/install.php:86
+#: E:\xampp\xampplite\htdocs\vienna/install/tpl/install.php:102
 msgid "Next"
 msgstr "Volgende"
 
-#: /var/www/viennacms/includes/user.php:154
-msgid "Login incorrect"
-msgstr "Login fout."
-
-#: /var/www/viennacms/includes/nodetree.php:330
-msgid "This node has no content. Add content in the administration panel."
-msgstr "Deze node heeft geen inhoud. Voeg inhoud toe in het Beheerderspaneel."
-
-#: /var/www/viennacms/includes/nodetree.php:331
-msgid "Edit this content title"
-msgstr "Wijzig de titel van de inhoud"
-
-#: /var/www/viennacms/includes/utils.php:307
-msgid "General Error"
-msgstr "Algemene fout"
-
-#: /var/www/viennacms/includes/page.php:241
-msgid "No site node found."
-msgstr "Geen site node gevonden"
-
-#: /var/www/viennacms/includes/db/dbal.php:547
-msgid "An sql error occurred while fetching this page. Please contact an administrator if this problem persists."
-msgstr "Er is een SQL fout opgetreden toen deze pagina werd gegenereerd. Neem alstublieft contact op met de beheerder als dit probleem zich blijft voordoen."
-
-#: /var/www/viennacms/styles/blue/index.php:17
-#: /var/www/viennacms/styles/blue/index.php:24
-#: /var/www/viennacms/styles/default/index.php:17
-#: /var/www/viennacms/styles/fllippy/index.php:29
-#: /var/www/viennacms/styles/fllippy/header.php:29
-msgid "Navigation"
-msgstr "Navigatie"
-
-#: /var/www/viennacms/styles/fllippy/index.php:4
-#: /var/www/viennacms/styles/fllippy/header.php:4
-msgid "Home"
-msgstr "Home"
-
-#: /var/www/viennacms/styles/fllippy/index.php:13
-#: /var/www/viennacms/styles/fllippy/header.php:13
-msgid "ACP"
-msgstr "Beheerderspaneel"
+#~ msgid "Files"
+#~ msgstr "Bestand"
+#~ msgid "Welcome to the viennaCMS installation wizard. placeholder"
+#~ msgstr ""
+#~ "Welkom bij de viennaCMS installatie wizard. -- Hier komt nog meer --"
+#~ msgid "message about not being writable or so"
+#~ msgstr "bericht over niet schrijfbaar of iets in die richting"
+#~ msgid "Home"
+#~ msgstr "Home"
 
