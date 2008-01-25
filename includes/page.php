@@ -339,7 +339,7 @@ class page {
 
 			$template->set_filename($module_function, 'module.php');
 			$template->assign_vars(array(
-				'title' 	=> $module['content_title'],
+				'title' 	=> htmlentities($module['content_title']),
 				'content' 	=> $contents,
 				'margin'  	=> ( $location == 'middle' ? ' style="margin-left: 20px;"' : ''),
 			));
