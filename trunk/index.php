@@ -25,6 +25,7 @@ $template->assign_vars(array(
 	'middle' => $page->get_loc('middle'),
 	'left' => $page->get_loc('left'),
 	'head' => $Header,
+	'homeurl' => $page->get_link($page->sitenode)
 ));
 	
 $template->display('main');
