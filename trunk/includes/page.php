@@ -97,9 +97,9 @@ class page {
 		$result = $db->sql_query($sql);
 		$rowset = $db->sql_fetchrowset($result);
 		
-		var_dump($rowset);
-		var_dump($next);
-		var_dump($prev);
+		//var_dump($rowset);
+		//var_dump($next);
+		//var_dump($prev);
 		
 		foreach ($rowset as $row) {
 			if ($row['revision_number'] == $next) {
