@@ -89,7 +89,7 @@
 <tr>
 <th style="text-align: left;">
 	<select name="langselect" onchange="langify(this.form);">
-		<option value="english">Select</option>
+		<option value="english">Select language</option>
 		<option value="english">en_US</option>
 		<?php foreach ($languages as $language) { ?>
 			<option value="<?php echo $language ?>"><?php echo $language ?></option>
