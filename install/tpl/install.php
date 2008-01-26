@@ -69,7 +69,7 @@
 			<td><?php echo __('Table prefix') ?></td>
 			<td><input type="text" value="viennacms_" name="prefix"></td>
 		</tr>
-		<tr><th colspan="2"><?php echo __('User information') ?>
+		<tr><th colspan="2"><?php echo __('Admin information') ?>
 		</th></tr>
 
 		<tr>
