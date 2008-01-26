@@ -142,7 +142,16 @@ class extension_core {
 				//$maxi = count($nodes);
 				foreach ($nodes as $node) {
 					$list = $this->_get_map_tree($node, $list, array('i' => $i, 'mi' => $maxi));
-					$i++;
+					$ext = utils::load_extension(utils::$types[$node->type]['extension']);
+					$show = true;
+					if (method_exists($ext, $node->type . '_show_to_visitor')) {
+						$function = $node->type . '_show_to_visitor';
+						$show = $ext->$function($node);
+					}
+					
+					if ($show) {
+						$i++;
+					}
 				}
 				$list .= '</ul>';
 			}
