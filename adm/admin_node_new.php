@@ -33,12 +33,12 @@ if ($do == 'new') {
 
 switch($mode) {
 	case 'save':
-		$post_vars = array('node_id', 'title', 'description', 'title_clean', 'parentdir', 'extension');
+		$post_vars = array('node_id', 'title', 'description', 'title_clean', 'extension');
 		if ($do == 'new') {
 			$post_vars[] = 'type';
 		}
 		foreach($post_vars as $postvar) {
-			if(empty($_POST[$postvar]) && !in_array($postvar, array('parentdir', 'extension', 'title_clean'))) {
+			if(empty($_POST[$postvar]) && $postvar != 'extension') {
 				trigger_error(__($postvar . '  not given!'), E_USER_ERROR);
 				return;
 			}
@@ -62,13 +62,24 @@ switch($mode) {
 			// strip trailing slash
 			$newnode_parentdir = substr($newnode_parentdir, 0, -1);
 		}
+		$newnode_title_clean = (empty($newnode_title_clean)) ? utils::clean_title($newnode_title) : $newnode_title_clean;
 		
+		$sql = 'SELECT node_id, title 
+				FROM ' . NODES_TABLE . "
+				WHERE title_clean = '$newnode_title_clean';";
+		$result = $db->sql_query($sql); 
+		if($result != false) {
+			$row = $db->sql_fetchrow($result);
+			trigger_error(__('There is already an node with the same clean title. This node is: ') .
+			'<a href="' . $page->get_link($row['node_id']) . '">' . $row['title'] . '</a>.<br />
+			Click <a href="./admin_node_new.php?do=edit&node=' . $newnode_node_id . '">here</a> to return to the previous page.', E_USER_ERROR);
+		}
 		$node->created = time();
 		$node->title = $newnode_title;
 		$node->extension = $newnode_extension;
 		$node->description = $newnode_description;
 		$node->parentdir = $newnode_parentdir;
-		$node->title_clean = (empty($newnode_title_clean)) ? utils::clean_title($newnode_title) : $newnode_title_clean;
+		$node->title_clean = $newnode_title_clean;
 		$node->write();
 		header('Location: ' . utils::base() . 'admin_node.php?node=' . $node->node_id);		
 	break;
