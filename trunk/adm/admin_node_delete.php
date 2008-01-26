@@ -29,9 +29,9 @@ switch($mode) {
 			$$var = $db->sql_escape($_POST[$postvar]); 
 		}
 		// Get the number of sites
-		$sql = "SELECT COUNT(node_type) AS site_count
+		$sql = "SELECT COUNT(type) AS site_count
 				FROM " . NODES_TABLE . "
-				WHERE node_type = 'site'";
+				WHERE type = 'site'";
 		$result = $db->sql_query($sql);
 		$row = $db->sql_fetchrow($result);
 		$site_count = $row['site_count'];
