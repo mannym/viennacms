@@ -401,7 +401,7 @@ CONTENT;
 	
 	function url_full_parsers() {
 		return array(
-			'@file-download/(.*\/)?(.+?)\.(.+)*$@' => array(
+			'@file-download/(.*\/)?(.+)\.(.+)*$@' => array(
 				1 => 'download_folder',
 				2 => 'download_filename',
 				3 => 'download_extension'
