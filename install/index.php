@@ -65,7 +65,7 @@ switch ($step) {
 		$template->assign_vars(array('step' => '1'));
 		$disabled = false;
 		$check = array(
-			'config.php', 'cache/'
+			'config.php', 'cache/', 'files/'
 		);
 		$files = array();
 		foreach ($check as $wa) {
