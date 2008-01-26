@@ -96,6 +96,7 @@ class extension_core {
 .treeview .lastCollapsable { background-image: url(adm/images/tv-collapsable-last.gif); }
 .treeview .lastExpandable { background-image: url(adm/images/tv-expandable-last.gif); }
 ");
+		utils::get_types();
 		echo '<ul class="treeview">';
 		echo $this->_get_map_tree($page->sitenode);
 		echo '</ul>';
@@ -103,29 +104,52 @@ class extension_core {
 	
 
 	function _get_map_tree($node, $list = '', $extra = array()) {
-		$page = page::getnew();
-		if ($node->node_id != 0) {
-			$class = '';
-			if ($extra['i'] == $extra['mi']) {
-				$class = ' class="last"';
+		$ext = utils::load_extension(utils::$types[$node->type]['extension']);
+		$show = true;
+		if (method_exists($ext, $node->type . '_show_to_visitor')) {
+			$function = $node->type . '_show_to_visitor';
+			$show = $ext->$function($node);
+		}
+
+		if ($show) {	
+			$page = page::getnew();
+			if ($node->node_id != 0) {
+				$class = '';
+				if ($extra['i'] == $extra['mi']) {
+					$class = ' class="last"';
+				}
+				$list .= '<li' . $class . '><a href="' . $page->get_link($node) . '">' . $node->title . '</a>' . '<span>' . $node->description . "</span>\r\n";			
 			}
-			$list .= '<li' . $class . '><a href="' . $page->get_link($node) . '">' . $node->title . '</a>' . '<span>' . $node->description . "</span>\r\n";			
+			
+			$nodes = $node->get_children();
+			
+			if ($nodes) {
+				$list .= '<ul>';
+				$i = 1;
+				$maxi = 0;
+				foreach ($nodes as $node) {
+					$ext = utils::load_extension(utils::$types[$node->type]['extension']);
+					$show = true;
+					if (method_exists($ext, $node->type . '_show_to_visitor')) {
+						$function = $node->type . '_show_to_visitor';
+						$show = $ext->$function($node);
+					}
+					
+					if ($show) {
+						$maxi++;
+					}
+				}
+				//$maxi = count($nodes);
+				foreach ($nodes as $node) {
+					$list = $this->_get_map_tree($node, $list, array('i' => $i, 'mi' => $maxi));
+					$i++;
+				}
+				$list .= '</ul>';
+			}
+			
+			$list .= '</li>';
 		}
 		
-		$nodes = $node->get_children();
-		
-		if ($nodes) {
-			$list .= '<ul>';
-			$i = 1;
-			$maxi = count($nodes);
-			foreach ($nodes as $node) {
-				$list = $this->_get_map_tree($node, $list, array('i' => $i, 'mi' => $maxi));
-				$i++;
-			}
-			$list .= '</ul>';
-		}
-		
-		$list .= '</li>';
 		return $list;
 	}
 	

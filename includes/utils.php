@@ -123,11 +123,11 @@ class utils {
 	* Generates a node selector.
 	*/
 	
-	static function node_select($name) {
+	static function node_select($name, $callback = false) {
 		$node = new CMS_Node();
 		$node->node_id = 0;
 		$text = '<ul class="nodes">';
-		$text .= self::_get_select_tree($node, '', $name);
+		$text .= self::_get_select_tree($node, '', $name, $callback);
 		$text .= '</ul>';
 		$text .= '<input type="hidden" name="' . $name . '" id="' . $name . '" />';
 		
@@ -415,22 +415,38 @@ class utils {
 		return $list;
 	}
 
-	static function _get_select_tree($node, $list = '', $name = '') {
+	static function _get_select_tree($node, $list = '', $name = '', $callback = false) {
+		self::get_types();
+		$show = true;		
 		if ($node->node_id != 0) {
-			$list .= '<li id="' . $name . '-' . $node->node_id . '"><a href="javascript:void()" onclick="select_node(\'' . $name . '\', ' . $node->node_id . '); return false;" class="' . $node->type . '">' . $node->title . '</a>' . "\r\n";			
-		}
-		
-		$nodes = $node->get_children();
-		
-		if ($nodes) {
-			$list .= '<ul>';
-			foreach ($nodes as $node) {
-				$list = self::_get_select_tree($node, $list, $name);
+			$ext = self::load_extension(self::$types[$node->type]['extension']);
+			if (method_exists($ext, $node->type . '_in_tree')) {
+				$function = $node->type . '_in_tree';
+				$show = $ext->$function($node);
 			}
-			$list .= '</ul>';
+			
+			if ($callback) {
+				$show = call_user_func($callback, $node);
+			}
 		}
 		
-		$list .= '</li>';
+		if ($show) {
+			if ($node->node_id != 0) {
+				$list .= '<li id="' . $name . '-' . $node->node_id . '"><a href="javascript:void()" onclick="select_node(\'' . $name . '\', ' . $node->node_id . '); return false;" class="' . $node->type . '">' . $node->title . '</a>' . "\r\n";			
+			}
+			
+			$nodes = $node->get_children();
+			
+			if ($nodes) {
+				$list .= '<ul>';
+				foreach ($nodes as $node) {
+					$list = self::_get_select_tree($node, $list, $name, $callback);
+				}
+				$list .= '</ul>';
+			}
+			
+			$list .= '</li>';
+		}
 		return $list;
 	}
 	
