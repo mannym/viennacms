@@ -205,16 +205,23 @@ class page {
 	*/
 
 	function get_link($node, $extra_params = '') {
+		$link = '';
+		$prefix = '';
+		
+		if ($node->type == 'file') {
+			$prefix .= 'file-download/';
+		}
+	
 		if ($node->type == 'site') {
-			$link = utils::basepath();
+			$link .= utils::basepath();
 			$link .= substr($extra_params, 1);
 			$link .= ( (empty($node->extension) ? '' : '.' . $node->extension));
 		} else if ($this->sitenode->options['rewrite']) {
 			//$link = $extra_params;
-			$link = (empty($node->parentdir) ? '' :  $node->parentdir . '/') . $node->title_clean . $extra_params . ( (empty($node->extension) ? '' : '.' . $node->extension));
+			$link .= $prefix . (empty($node->parentdir) ? '' :  $node->parentdir . '/') . $node->title_clean . $extra_params . ( (empty($node->extension) ? '' : '.' . $node->extension));
 		} else {
 			//$link = 'index.php?id=' .  $node->node_id;
-			$link = 'index.php/';
+			$link .= 'index.php/' . $prefix;
 			$link .= (empty($node->parentdir) ? '' :  $node->parentdir . '/') . $node->title_clean . $extra_params . ( (empty($node->extension) ? '' : '.' . $node->extension));
 		}
 		return $link;
@@ -403,8 +410,22 @@ class page {
 				}
 			}
 		}
-		
+
 		$uri = $uri_noext . $uri_parts[3];
+		if (!preg_match('/(.*\/)(.+?)(\..+)*$/', $uri, $uri_parts)) {
+			return;
+		}
+		
+		$parsers = utils::run_hook_all('url_full_parsers');
+		foreach ($parsers as $parser => $destination) {
+			if (preg_match($parser, $uri, $parse_regs)) {
+				$uri = preg_replace($parser, '', $uri);
+				foreach ($destination as $reg => $param) {
+					$_GET[$param] = $parse_regs[$reg];
+				}
+			}
+		}		
+
 		if (!preg_match('/(.*\/)(.+?)(\..+)*$/', $uri, $uri_parts)) {
 			return;
 		}

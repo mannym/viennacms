@@ -226,10 +226,13 @@ $h_node	 		= $query_string . 'node';*/
 						</li>
 						<li>
 							<a href="<?php echo $h_node; ?>"><?php echo __('Nodes'); ?></a>
+						</li>*/ ?>
+						<li>
+							<a href="index.php"><?php echo __("Nodes"); ?></a>
 						</li>
 						<li>
 							<a href="admin_files.php"><?php echo __("Files"); ?></a>
-						</li>*/?>
+						</li>
 						<li>
 							<a href="login.php?mode=logout"><?php echo __("Log out"); ?></a>
 						</li>						
@@ -242,6 +245,11 @@ $h_node	 		= $query_string . 'node';*/
 					if (isset($display_admin_tree) && $display_admin_tree) {
 						//FIXME: add display_admin_tree value in query string.  
 						utils::get_admin_tree();
+					}
+					
+					if (defined('IN_FILES')) {
+						$files = utils::load_extension('files');
+						$files->get_admin_tree();
 					}
 					
 					$display_tree_msg = '<p><a href="' . $_SERVER['PHP_SELF'] . '?' . preg_replace('#(&)?(display_admin_tree\=)(1|0)#', '', $_SERVER['QUERY_STRING']) . (isset($_GET['node']) ? '&amp;' : '') . 'display_admin_tree=' . ($display_admin_tree ? 1 : 0) .'">' . ($display_admin_tree ? __('Hide the admin node tree') : __('Display the admin node tree')) . '</a></p>';
