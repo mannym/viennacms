@@ -44,7 +44,7 @@ switch ($mode) {
 		<?php
 		foreach ($rowset as $row) {
 			//echo '<li><a href="../index.php?id=' . $node->node_id . '&amp;revision=' . $row['revision_number'] . '">';
-			echo '<li><a href="../' . $page->get_link($node, 'revision/' . $row['revision_number'] . '/') . '">';
+			echo '<li><a href="../' . $page->get_link($node, '/revision/' . $row['revision_number']) . '">';
 			echo 'Revision ' . $row['revision_number'] . ' (' . date('d-m-Y G:i:s', $row['revision_date']) . ' )';
 			echo '</a></li>' . "\r\n";
 		}

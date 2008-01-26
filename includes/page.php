@@ -70,7 +70,7 @@ class page {
 			if ($user->user_logged_in) {
 				$node->revision->revision_id = 0;
 				$node->revision->revision_number = $_GET['revision'];
-				$node->revision->read();
+				$node->revision->read($node);
 				
 				$this->get_revision_nav($node);
 			}
@@ -115,14 +115,14 @@ class page {
 		
 		if ($prevfound) {
 			$html .= '<div style="width: 49%; float: left;">';
-			$html .= '<a href="' . $this->get_link($node, 'revision/' . $prevrow['revision_number'] . '/') . '">';
+			$html .= '<a href="' . $this->get_link($node, '/revision/' . $prevrow['revision_number']) . '">';
 			$html .= sprintf(__('&laquo; Previous (revision %d)'), $prevrow['revision_number']);
 			$html .= '</a></div>' . "\r\n";
 		}
 		
 		if ($nextfound) {
 			$html .= '<div style="width: 49%; float: right; text-align: right;">';
-			$html .= '<a href="' . $this->get_link($node, 'revision/' . $nextrow['revision_number'] . '/') . '">';
+			$html .= '<a href="' . $this->get_link($node, '/revision/' . $nextrow['revision_number']) . '">';
 			$html .= sprintf(__('Next (revision %d) &raquo;'), $nextrow['revision_number']);
 			$html .= '</a></div>' . "\r\n";
 		}
@@ -207,13 +207,15 @@ class page {
 	function get_link($node, $extra_params = '') {
 		if ($node->type == 'site') {
 			$link = utils::basepath();
+			$link .= substr($extra_params, 1);
+			$link .= ( (empty($node->extension) ? '' : '.' . $node->extension));
 		} else if ($this->sitenode->options['rewrite']) {
-			$link = $extra_params;
-			$link .= (empty($node->parentdir) ? '' :  $node->parentdir . '/') . $node->title_clean . ( (empty($node->extension) ? '' : '.' . $node->extension));
+			//$link = $extra_params;
+			$link = (empty($node->parentdir) ? '' :  $node->parentdir . '/') . $node->title_clean . $extra_params . ( (empty($node->extension) ? '' : '.' . $node->extension));
 		} else {
 			//$link = 'index.php?id=' .  $node->node_id;
-			$link = 'index.php/' . $extra_params;
-			$link .= (empty($node->parentdir) ? '' :  $node->parentdir . '/') . $node->title_clean . ( (empty($node->extension) ? '' : '.' . $node->extension));
+			$link = 'index.php/';
+			$link .= (empty($node->parentdir) ? '' :  $node->parentdir . '/') . $node->title_clean . $extra_params . ( (empty($node->extension) ? '' : '.' . $node->extension));
 		}
 		return $link;
 	}
@@ -389,12 +391,29 @@ class page {
 		if (!preg_match('/(.*\/)(.+?)(\..+)*$/', $uri, $uri_parts)) {
 			return;
 		}
+
+		$uri_noext = $uri_parts[1] . $uri_parts[2];
+		$parsers = utils::run_hook_all('url_parsers');
+		$parsers['@/revision/([0-9]+)$@'] = array(1 => 'revision');
+		foreach ($parsers as $parser => $destination) {
+			if (preg_match($parser, $uri_noext, $parse_regs)) {
+				$uri_noext = preg_replace($parser, '', $uri_noext);
+				foreach ($destination as $reg => $param) {
+					$_GET[$param] = $parse_regs[$reg];
+				}
+			}
+		}
+		
+		$uri = $uri_noext . $uri_parts[3];
+		if (!preg_match('/(.*\/)(.+?)(\..+)*$/', $uri, $uri_parts)) {
+			return;
+		}
 		
 		// get revision parameter
-		if (preg_match('#/revision/([0-9]+)#', $uri_parts[1], $regs)) {
+/*		if (preg_match('#revision/([0-9]+)#', $uri_parts[1], $regs)) {
 			$uri_parts[1] = str_replace($regs[0], '', $uri_parts[1]);
 			$_GET['revision'] = $regs[1];
-		}
+		}*/
 		
 		// Parent dir
 		if(empty($uri_parts[1])) {
