@@ -136,6 +136,8 @@ class page {
 	* Get navigation on a selected level. 
 	*/
 	public function get_nav($level = 1) {
+		utils::get_types();
+	
 		$active = array();
 		
 		if ($level == 1) {
@@ -159,17 +161,26 @@ class page {
 		}
 		
 		foreach ($nodes as $node) {
-			$class = '';
-			
-			if (in_array($node->node_id, $active)) {
-				$class = ' class="active"';
+			$ext = utils::load_extension(utils::$types[$node->type]['extension']);
+			$show = true;
+			if (method_exists($ext, $node->type . '_show_to_visitor')) {
+				$function = $node->type . '_show_to_visitor';
+				$show = $ext->$function($node);
 			}
-			
-			$ret .= "						<li$class>\r\n";
-			$ret .= '							<a href="' . $this->get_link($node) . '">';
-			$ret .= $node->title;
-			$ret .= "</a>\r\n";
-			$ret .= "						</li>\r\n";
+		
+			if ($show) {
+				$class = '';
+				
+				if (in_array($node->node_id, $active)) {
+					$class = ' class="active"';
+				}
+				
+				$ret .= "						<li$class>\r\n";
+				$ret .= '							<a href="' . $this->get_link($node) . '">';
+				$ret .= $node->title;
+				$ret .= "</a>\r\n";
+				$ret .= "						</li>\r\n";
+			}
 		}
 		
 		return $ret;
@@ -334,17 +345,21 @@ class page {
 				$ext = utils::load_extension($module['extension']);
 				
 				ob_start();
-				$ext->$module_function($module);
+				$mret = $ext->$module_function($module);
 				$contents = ob_get_contents();
 				ob_end_clean();
 
-				$template->set_filename($module_function, 'module.php');
-				$template->assign_vars(array(
-					'title' 	=> htmlentities($module['content_title']),
-					'content' 	=> $contents,
-					'margin'  	=> ( $location == 'middle' ? ' style="margin-left: 20px;"' : ''),
-				));
-				$return .= $template->assign_display($module_function);
+				if ($mret != 500) {
+					$template->set_filename($module_function, 'module.php');
+					$template->assign_vars(array(
+						'title' 	=> htmlentities($module['content_title']),
+						'content' 	=> $contents,
+						'margin'  	=> ( $location == 'middle' ? ' style="margin-left: 20px;"' : ''),
+					));
+					$return .= $template->assign_display($module_function);
+				} else {
+					$return .= $contents;
+				}
 			}
 		} else {
 			if ($location == 'middle') {

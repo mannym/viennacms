@@ -196,6 +196,9 @@ $h_node	 		= $query_string . 'node';*/
 				});
 			});
 		</script>
+			<?php
+			echo $Header;
+			?>
 		<?php
 		if (defined('LIGHT_ADMIN')) { return; }
 		?>

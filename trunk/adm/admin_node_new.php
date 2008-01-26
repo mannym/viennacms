@@ -64,15 +64,16 @@ switch($mode) {
 		}
 		$newnode_title_clean = (empty($newnode_title_clean)) ? utils::clean_title($newnode_title) : $newnode_title_clean;
 		
-		$sql = 'SELECT node_id, title 
-				FROM ' . NODES_TABLE . "
-				WHERE title_clean = '$newnode_title_clean';";
-		$result = $db->sql_query($sql); 
-		if($result != false) {
-			$row = $db->sql_fetchrow($result);
-			trigger_error(__('There is already an node with the same clean title. This node is: ') .
-			'<a href="' . $page->get_link($row['node_id']) . '">' . $row['title'] . '</a>.<br />
-			Click <a href="./admin_node_new.php?do=edit&node=' . $newnode_node_id . '">here</a> to return to the previous page.', E_USER_ERROR);
+		if ($do == 'new') {
+			$sql = 'SELECT node_id, title 
+					FROM ' . NODES_TABLE . "
+					WHERE title_clean = '$newnode_title_clean';";
+			$result = $db->sql_query($sql); 
+			if($row = $db->sql_fetchrow($result)) {
+				trigger_error(__('There is already an node with the same clean title. This node is: ') .
+				'<a href="' . $page->get_link($row['node_id']) . '">' . $row['title'] . '</a>.<br />
+				Click <a href="./admin_node_new.php?do=edit&node=' . $newnode_node_id . '">here</a> to return to the previous page.', E_USER_ERROR);
+			}
 		}
 		$node->created = time();
 		$node->title = $newnode_title;
@@ -131,6 +132,17 @@ switch($mode) {
 						<select name="type"<?php echo ($do == 'edit') ? ' disabled="disabled"' : '' ?>>
 							<option name="">--<?php echo __('Select') ?>--</option>
 							<?php foreach($type_options as $type => $extension) {
+								$ext = utils::load_extension($extension['extension']);
+								$show = true;
+								if (method_exists($ext, $type . '_allow_as_child')) {
+									$function = $type . '_allow_as_child';
+									$show = $ext->$function($parent);
+								}
+								
+								if (!$show) {
+									continue;
+								}
+								
 								if ($type == $node->type) {
 									$selected = ' selected="selected"';
 								}

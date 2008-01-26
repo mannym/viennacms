@@ -120,4 +120,5 @@ $cache = new acm();
 $db = database::getnew();
 $template = template::getnew();
 
+utils::run_hook_all('init');
 ?>

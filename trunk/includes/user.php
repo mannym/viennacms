@@ -180,6 +180,8 @@ class user {
 			exit;
 		}
 		
+		utils::run_hook_all('admin_init');
+		
 		return;
 	}
 	
