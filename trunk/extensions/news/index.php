@@ -70,6 +70,14 @@ CSS;
 	}
 	
 	function module_latestnews($args) {
+		if (isset($_GET['news_title'])) {
+			$node = new CMS_Node();
+			$node->title_clean = $_GET['news_title'];
+			$node->read(NODE_TITLEC);
+			$this->show_news($node);
+			return 500;
+		}
+		
 		$template = template::getnew();
 	
 		$folder = new CMS_Node();
@@ -86,25 +94,35 @@ CSS;
 		
 		$i = 1;
 		
-		foreach ($news as $date => $new) {
+		foreach ($news as $new) {
 			if ($i > 5) {
 				break;
 			}
 			
-			$content = nl2br(utils::handle_text($new->revision->node_content));
-			$content .= '<br />';
-			$content .= '<span style="font-size: 11px;">' . sprintf(__('Posted on %s'), date('d-m-Y G:i:s', $date)) . '</span>';
-			
-			$template->set_filename('node-' . $new->node_id, 'module.php');
-			$template->assign_vars(array(
-				'title' 	=> $new->title,
-				'content' 	=> $content,
-			));
-			echo $template->assign_display('node-' . $new->node_id);
+			$this->show_news($new);
+
 			$i++;
 		}
 		
 		return 500;
+	}
+	
+	function show_news($node) {
+		$date = $node->revision->revision_date;
+	
+		$template = template::getnew();
+		$page = page::getnew(false);
+	
+		$content = nl2br(utils::handle_text($node->revision->node_content));
+		$content .= '<br />';
+		$content .= '<span style="font-size: 11px;">' . sprintf(__('Posted on %s'), date('d-m-Y G:i:s', $date)) . '</span>';
+		
+		$template->set_filename('node-' . $node->node_id, 'module.php');
+		$template->assign_vars(array(
+			'title' 	=> '<a href="' . $page->get_link($page->node, '/news/' . $node->title_clean) . '">' . $node->title . '</a>',
+			'content' 	=> $content,
+		));
+		echo $template->assign_display('node-' . $node->node_id);
 	}
 	
 	function newsfolder_select($node) {
@@ -128,6 +146,14 @@ CSS;
 			'version' => '0.0.1',
 			'name' => __('News extension'),
 			'description' => __('The news extension provides a news system ;)')
+		);
+	}
+	
+	function url_parsers() {
+		return array(
+			'@/news/([a-z0-9\-]+)$@' => array(
+				1 => 'news_title'
+			)
 		);
 	}
 }

@@ -14,6 +14,7 @@ define('NODE_SIBLINGS', 3);
 define('NODE_PARENT', 4);
 define('NODE_SIBLINGS_ALL', 5);
 define('NODE_TITLE', 6);
+define('NODE_TITLEC', 7);
 
 class CMS_Node {
 	public $node_id;
@@ -65,6 +66,10 @@ class CMS_Node {
 				$sql_where = "title_clean = '" . $db->sql_escape($this->title_clean) . "' 
 				AND parentdir = '{$this->parentdir}' 
 				AND extension = '{$this->extension}'";
+				$what = NODE_SINGLE;
+			break;
+			case NODE_TITLEC:
+				$sql_where = "title_clean = '" . $db->sql_escape($this->title_clean) . "'";
 				$what = NODE_SINGLE;
 			break;
 		}
