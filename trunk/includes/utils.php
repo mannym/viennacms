@@ -22,6 +22,19 @@ if (!defined('IN_VIENNACMS')) {
 */
 
 class utils {
+	static public $types;
+	static public $extensions;
+
+	/**
+	* gets types if not yet fetched
+	*/
+	
+	static function get_types() {
+		if (!empty(self::$types) || !is_array(self::$types)) {
+			self::$types = self::run_hook_all('list_types');
+		}
+	}
+	
 	/**
 	* Connects to the database. Is automatically called by the database class on first
 	* getnew(). 
@@ -232,6 +245,10 @@ class utils {
 	}
 	
 	static function load_extension($extension) {
+		if (isset(self::$extensions[$extension])) {
+			return self::$extensions[$extension];
+		}
+	
 		@include_once(ROOT_PATH . 'extensions/' . $extension . '/index.php');
 		$class = 'extension_' . $extension;
 		
@@ -240,6 +257,7 @@ class utils {
 		}
 		
 		$ext = new $class;
+		self::$extensions[$extension] = $ext;
 		return $ext;
 	}
 	
@@ -368,21 +386,32 @@ class utils {
 	}
 	
 	static function _get_admin_tree($node, $list = '') {
-		if ($node->node_id != 0) {
-			$list .= '<li><a href="admin_node.php?node=' . $node->node_id . '" class="' . $node->type . '">' . $node->title . '</a>' . "\r\n";			
+		self::get_types();
+		
+		$ext = self::load_extension(self::$types[$node->type]['extension']);
+		$show = true;
+		if (method_exists($ext, $node->type . '_in_tree')) {
+			$function = $node->type . '_in_tree';
+			$show = $ext->$function($node);
 		}
 		
-		$nodes = $node->get_children();
-		
-		if ($nodes) {
-			$list .= '<ul>';
-			foreach ($nodes as $node) {
-				$list = self::_get_admin_tree($node, $list);
+		if ($show) {
+			if ($node->node_id != 0) {
+				$list .= '<li><a href="admin_node.php?node=' . $node->node_id . '" class="' . $node->type . '">' . $node->title . '</a>' . "\r\n";			
 			}
-			$list .= '</ul>';
+			
+			$nodes = $node->get_children();
+			
+			if ($nodes) {
+				$list .= '<ul>';
+				foreach ($nodes as $node) {
+					$list = self::_get_admin_tree($node, $list);
+				}
+				$list .= '</ul>';
+			}
+			
+			$list .= '</li>';
 		}
-		
-		$list .= '</li>';
 		return $list;
 	}
 

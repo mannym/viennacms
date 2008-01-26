@@ -119,7 +119,7 @@ switch($mode) {
 					<td>
 						<select name="type"<?php echo ($do == 'edit') ? ' disabled="disabled"' : '' ?>>
 							<option name="">--<?php echo __('Select') ?>--</option>
-							<?php foreach($type_options as $type) {
+							<?php foreach($type_options as $type => $extension) {
 								if ($type == $node->type) {
 									$selected = ' selected="selected"';
 								}
