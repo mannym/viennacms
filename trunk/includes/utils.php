@@ -36,6 +36,32 @@ class utils {
 	}
 	
 	/**
+	* gets the current database version
+	*/
+	
+	static function get_database_version() {
+		$db = database::getnew();
+		include(ROOT_PATH . 'includes/version.php');
+		
+		$sql = 'SELECT * FROM ' . NODE_OPTIONS_TABLE . " WHERE node_id = 0 AND option_name = 'database_version'";
+		$result = $db->sql_query($sql);
+		
+		if (!$row = $db->sql_fetchrow($result)) {
+			$currentdbver = 0;
+		} else {
+			$currentdbver = $row['option_value'];
+		}
+		
+		$return = array(
+			'current' => $currentdbver,
+			'new' => $database_version,
+			'uptodate' => ($currentdbver < $database_version) ? false : true
+		);
+		
+		return $return;
+	}
+	
+	/**
 	* Connects to the database. Is automatically called by the database class on first
 	* getnew(). 
 	*/

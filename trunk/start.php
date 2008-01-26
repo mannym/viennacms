@@ -120,5 +120,17 @@ $cache = new acm();
 $db = database::getnew();
 $template = template::getnew();
 
+if (!defined('IN_INSTALL') && !defined('IN_UPGRADE')) {
+	$version = utils::get_database_version();
+	if (!$version['uptodate']) {
+		if (stripos($_SERVER['REQUEST_URI'], 'adm') !== false) {
+			header('Location: ../install/upgrade.php');
+		} else {
+			header('Location: ./install/upgrade.php');
+		}
+		exit;
+	}
+}
+
 utils::run_hook_all('init');
 ?>

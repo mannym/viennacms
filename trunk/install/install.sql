@@ -126,6 +126,6 @@ CREATE TABLE `viennacms_downloads` (
   `forwarded_for` varchar(15) NOT NULL,
   `user_agent` mediumtext NOT NULL,
   `referer` mediumtext NOT NULL,
-  `time` mediumint(12) NOT NULL,
+  `time` int(11) NOT NULL,
   PRIMARY KEY  (`download_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;

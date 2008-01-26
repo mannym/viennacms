@@ -2,6 +2,10 @@
 if (!defined('LIGHT_ADMIN')) {
 ?>
 </div>
+<br style="clear: both;" />
+<div style="text-align: center;">
+	Powered by viennaCMS <?php include(ROOT_PATH . 'includes/version.php'); echo $version; ?>
+</div>
 </div>
 <?php
 }
