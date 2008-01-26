@@ -326,26 +326,31 @@ class page {
 		if (isset($this->prefix[$location])) {
 			$return .= $this->prefix[$location];
 		}
-	
-		$template = template::getnew();
-		foreach ($this->node->revision->modules[$location] as $module) {
-			$module_function = 'module_' . $module['module'];
-			$ext = utils::load_extension($module['extension']);
-			
-			ob_start();
-			$ext->$module_function($module);
-			$contents = ob_get_contents();
-			ob_end_clean();
-
-			$template->set_filename($module_function, 'module.php');
-			$template->assign_vars(array(
-				'title' 	=> htmlentities($module['content_title']),
-				'content' 	=> $contents,
-				'margin'  	=> ( $location == 'middle' ? ' style="margin-left: 20px;"' : ''),
-			));
-			$return .= $template->assign_display($module_function);
-		}
 		
+		if ($this->node->revision->has_modules) {
+			$template = template::getnew();
+			foreach ($this->node->revision->modules[$location] as $module) {
+				$module_function = 'module_' . $module['module'];
+				$ext = utils::load_extension($module['extension']);
+				
+				ob_start();
+				$ext->$module_function($module);
+				$contents = ob_get_contents();
+				ob_end_clean();
+
+				$template->set_filename($module_function, 'module.php');
+				$template->assign_vars(array(
+					'title' 	=> htmlentities($module['content_title']),
+					'content' 	=> $contents,
+					'margin'  	=> ( $location == 'middle' ? ' style="margin-left: 20px;"' : ''),
+				));
+				$return .= $template->assign_display($module_function);
+			}
+		} else {
+			if ($location == 'middle') {
+				$return .= utils::handle_text($this->node->revision->node_content);
+			}
+		}
 		return $return;
 	}
 

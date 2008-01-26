@@ -20,7 +20,16 @@ class extension_core {
 	}
 	
 	function list_types() {
-		return array('site', 'page');
+		return array(
+			'site' => array(
+				'extension' => 'core',
+				'type' => NODE_MODULES
+			),
+			'page' => array(
+				'extension' => 'core',
+				'type' => NODE_MODULES
+			)
+		);
 	}
 	
 	function args_html_content() {

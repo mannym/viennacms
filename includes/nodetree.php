@@ -73,6 +73,8 @@ class CMS_Node {
 		$result = $db->sql_query($sql);
 		$rowset = $db->sql_fetchrowset($result);	
 		
+		utils::get_types();
+		
 		if (count($rowset) == 1 && $what == NODE_SINGLE) {
 			$row = $rowset[0];
 			//$this->dbfields = array();
@@ -88,10 +90,12 @@ class CMS_Node {
 				}
 			}
 			
-			$this->revision = new Node_Revision();
-			$this->revision->node_id = $this->node_id;
-			$this->revision->revision_number = $this->revision_number;
-			$this->revision->read();
+			if (utils::$types[$this->type]['type'] != NODE_NO_REVISION) {
+				$this->revision = new Node_Revision();
+				$this->revision->node_id = $this->node_id;
+				$this->revision->revision_number = $this->revision_number;
+				$this->revision->read($this);
+			}
 			
 			$sql  = 'SELECT * FROM ' . NODE_OPTIONS_TABLE;
 			$sql .= ' WHERE node_id = ' . intval($this->node_id);
@@ -123,11 +127,12 @@ class CMS_Node {
 						//$return[$i]->dbfields[] = $name;
 					}
 				}
-				
-				$return[$i]->revision = new Node_Revision();
-				$return[$i]->revision->node_id = $return[$i]->node_id;
-				$return[$i]->revision->revision_number = $return[$i]->revision_number;
-				$return[$i]->revision->read();
+				if (utils::$types[$return[$i]->type]['type'] != NODE_NO_REVISION) {
+					$return[$i]->revision = new Node_Revision();
+					$return[$i]->revision->node_id = $return[$i]->node_id;
+					$return[$i]->revision->revision_number = $return[$i]->revision_number;
+					$return[$i]->revision->read($return[$i]);
+				}
 				
 				$sql  = 'SELECT * FROM ' . NODE_OPTIONS_TABLE;
 				$sql .= ' WHERE node_id = ' . intval($return[$i]->node_id);
@@ -189,9 +194,13 @@ class CMS_Node {
 		
 		// and now add/update the revision :)
 		if ($all) {
-			$this->revision->node_id = $this->node_id;
-			$this->revision_number = $this->revision->write();
-
+			utils::get_types();
+			$type = utils::$types[$this->type];
+			if ($type['type'] != NODE_NO_REVISION) {
+				$this->revision->node_id = $this->node_id;
+				$this->revision_number = $this->revision->write();
+			}
+			
 			foreach ($this->options as $name => $value) {
 				$this->write_option($name, $value);
 			}
@@ -260,6 +269,8 @@ class CMS_Node {
 }
 
 class Node_Revision {
+	private $mynode;
+	public $has_modules = true;
 	public $revision_id;
 	public $node_id;
 	public $revision_number = 0;
@@ -269,11 +280,13 @@ class Node_Revision {
 	
 	private $dbfields = array('revision_id', 'node_id', 'revision_number', 'node_content', 'revision_date');
 	
-	public function read() {
+	public function read($node) {
 		global $revcache;
 		if (!isset($revcache)) {
 			$revcache = array();
 		}
+		
+		$this->mynode = $node;
 		
 		$db = database::getnew();
 		$row = array();
@@ -319,20 +332,25 @@ class Node_Revision {
 	}
 	
 	public function read_modules() {
-		$this->modules = unserialize($this->node_content);
-		if (!$this->modules || is_null($this->modules)) {
-			$this->modules = array(
-				'left' => array(),
-				'middle' => array(
-					array(
-						'extension' => 'core',
-						'module' => 'html_content',
-						'content' => __('This node has no content. Add content in the administration panel.'),
-						'content_title' => __("Edit this content title"),
+		utils::get_types();
+		if (utils::$types[$this->mynode->type]['type'] == NODE_MODULES) {
+			$this->modules = unserialize($this->node_content);
+			if (!$this->modules || is_null($this->modules)) {
+				$this->modules = array(
+					'left' => array(),
+					'middle' => array(
+						array(
+							'extension' => 'core',
+							'module' => 'html_content',
+							'content' => __('This node has no content. Add content in the administration panel.'),
+							'content_title' => __("Edit this content title"),
+						),
 					),
-				),
-				'right' => array()
-			);
+					'right' => array()
+				);
+			}
+		} else {
+			$this->has_modules = false;
 		}
 	}
 	
@@ -340,7 +358,9 @@ class Node_Revision {
 		$this->revision_number++;
 		$this->revision_date = time();
 		$this->revision_id = '';
-		$this->node_content = serialize($this->modules);
+		if ($this->has_modules) {
+			$this->node_content = serialize($this->modules);
+		}
 		$this->_write();
 		
 		return $this->revision_number;
