@@ -15,10 +15,149 @@ if (! defined ( 'IN_VIENNACMS' )) {
  *
  */
 class extension_files {
+	function admin_init() {
+		$css = <<<CSS
+.nodes a.file { background: url(../extensions/files/file.png) 0 0 no-repeat; }
+.nodes a.fileroot { background: url(../extensions/files/folder.png) 0 0 no-repeat; }	
+CSS;
+		utils::add_css('inline', $css);
+	}
+
+	function list_types() {
+		return array(
+			'file' => array(
+				'extension' => 'files',
+				'type' => NODE_NO_REVISION
+			),
+			'fileroot' => array(
+				'extension' => 'files',
+				'type' => NODE_NO_REVISION
+			)
+		);
+	}
+	
+	// hide in default system
+	
+	function file_allow_as_child($node) {
+		return false;
+	}
+	
+	function fileroot_allow_as_child($node) {
+		return false;
+	}
+	
+	function file_show_to_visitor($node) {
+		return false;
+	}
+	
+	function fileroot_show_to_visitor($node) {
+		return false;
+	}
+	
+	function file_in_tree($node) {
+		if (defined('IN_FILES')) {
+			return true;
+		}
+		return false;
+	}
+	
+	function fileroot_in_tree($node) {
+		if (defined('IN_FILES')) {
+			return true;
+		}
+		return false;
+	}
+	
+	function create_root() {
+		$node = CMS_Node::getnew();
+		$node->parent_id = 0;
+		$node->type = 'fileroot';
+		$node->title = 'Files';
+		$node->created = time();
+		$node->extension = '';
+		$node->description = '';
+		$node->parentdir = '';
+		$node->title_clean = 'filerootvienna';
+		$node->write();
+		
+		return $node;
+	}
+	
+	function create_folder($name, $parent) {
+		$node = CMS_Node::getnew();
+		$node->parent_id = $parent->node_id;
+		$node->type = 'fileroot';
+		$node->title = $name;
+		$node->created = time();
+		$node->extension = '';
+		$node->description = '';
+		$node->parentdir = '';
+		$node->title_clean = utils::clean_title($name);
+		$node->write();
+		
+		return $node;	
+	}
+	
+	function get_root() {
+		$node = new CMS_Node();
+		$node->node_id = 0;
+		$nodes = $node->get_children();
+		
+		foreach ($nodes as $node) {
+			if ($node->type == 'fileroot') {
+				$root = $node;
+				break;
+			}
+		}
+		
+		if (!$root) {
+			$root = $this->create_root();
+		}
+		
+		return $root;
+	}
+	
+	function get_admin_tree() {
+		$root = $this->get_root();
+	
+		echo $this->_get_admin_tree($root);
+	}
+	
+	function _get_admin_tree($node, $list = '') {
+		utils::get_types();
+		
+		$ext = utils::load_extension(utils::$types[$node->type]['extension']);
+		$show = true;
+		if (method_exists($ext, $node->type . '_in_tree')) {
+			$function = $node->type . '_in_tree';
+			$show = $ext->$function($node);
+		}
+		
+		if ($show) {
+			if ($node->node_id != 0) {
+				$list .= '<li><a href="admin_files.php?mode=options&amp;node=' . $node->node_id . '" class="' . $node->type . '">' . $node->title . '</a>' . "\r\n";			
+			}
+			
+			$nodes = $node->get_children();
+			
+			if ($nodes) {
+				$list .= '<ul>';
+				foreach ($nodes as $node) {
+					$list = $this->_get_admin_tree($node, $list);
+				}
+				$list .= '</ul>';
+			}
+			
+			$list .= '</li>';
+		}
+		return $list;
+	}
+		
+	
 	/**
 	 * Display the upload form
 	 */
-	function upload_form () {
+	function upload_form ($folder_id) {
 		$txt_file = __ ( 'File' ) ;
 		$txt_desc = __ ( 'The file that should be uploaded' ) ;
 		$txt_save = __ ( "Upload" ) ;
@@ -33,6 +172,7 @@ class extension_files {
 					
 					<td width="30%">
 						<input type="hidden" name="MAX_FILE_SIZE" value="10000000">
+						<input type="hidden" name="folder" value="$folder_id" />
 						<input name="file" type="file">
 					</td>
 				</tr>
@@ -93,8 +233,10 @@ CONTENT;
 	 * @param string $filename given by the input type 'file'
 	 * @return bool succes
 	 */
-	function handle_file_upload ( $filename ) {
-		global $db ;
+	function handle_file_upload ( $folder, $filename ) {
+		$db = database::getnew();
+		$page = page::getnew(false);
+		
 		if (empty ( $_FILES [ $filename ] )) {
 			return false ;
 		}
@@ -108,10 +250,41 @@ CONTENT;
 			trigger_error ( __ ( "We need a valid mime content type" ), E_USER_ERROR ) ;
 			return false ;
 		}
-		$type = $db->sql_escape ( $file [ 'type' ] ) ;
-		$name = $db->sql_escape ( $file [ 'name' ] ) ;
+		$type = $file [ 'type' ];
+		$name = $file [ 'name' ];
+		
+		if ($folder->type != 'fileroot') {
+			trigger_error(__('Invalid folder ID'), E_USER_ERROR);
+			return false;
+		}
+		
+		$parents = $page->get_parents($folder);
+		$newnode_parentdir = '';
+		foreach ($parents as $par) {
+			$newnode_parentdir .= $par->title_clean . '/';
+		}
+
+		// hard way to strip first dir off
+		$newnode_parentdir = substr($newnode_parentdir, strlen($parents[0]->title_clean . '/'));
+		// strip trailing slash
+		$newnode_parentdir = substr($newnode_parentdir, 0, -1);
+		
+		$pi = pathinfo($name);
+		
+		$node = CMS_Node::getnew();
+		$node->parent_id = $folder->node_id;
+		$node->type = 'file';
+		$node->title = $name;
+		$node->created = time();
+		$node->extension = $pi['extension'];
+		$node->description = $md5;
+		$node->parentdir = $newnode_parentdir;
+		$node->title_clean = $pi['filename'];
+		$node->options['mimetype'] = $type;
+		$node->write();
+		
 		// Datbase query
-		$sql = "INSERT INTO " . UPLOADS_TABLE . "
+/*		$sql = "INSERT INTO " . UPLOADS_TABLE . "
 				(filename, md5, type, time) VALUES(
 				'" . $name . "',
 				'" . $md5 . "',
@@ -119,8 +292,8 @@ CONTENT;
 				'" . time () . "')" ;
 		if (! $db->sql_query ( $sql )) {
 			return false ;
-		}
-		return true ;
+		}*/
+		return $node;
 	
 	}
 	
@@ -133,17 +306,13 @@ CONTENT;
 	
 	function download_file ( $file_id ) {
 		global $db ;
-		$sql = "SELECT * FROM " . UPLOADS_TABLE . "
-				WHERE upload_id = " . intval ( $file_id ) ;
-		if (! $result = $db->sql_query ( $sql )) {
-			trigger_error ( __ ( "No valid file id given!" ) ) ;
-			return false ;
-		}
-		$file = $db->sql_fetchrow ( $result ) ;
+		$node = new CMS_Node();
+		$node->node_id = $file_id;
+		$node->read();
 		
-		$type = $file [ 'type' ] ;
-		$filename = $file [ 'filename' ] ;
-		$md5 = $file [ 'md5' ] ;
+		$type = $node->options['mimetype'];
+		$filename = $node->title;
+		$md5 = $node->description;
 		
 		// Put some things about our visitor in the database now
 		
@@ -181,12 +350,8 @@ CONTENT;
 		$db->sql_query($sql);
 		
 		// one more download now
-		$sql = 
-		"UPDATE " . UPLOADS_TABLE . "
-		SET downloaded = downloaded+1
-		WHERE upload_id = " . intval ( $file_id );
-		
-		$db->sql_query($sql);
+		$node->options['downloads']++;
+		$node->write();
 		
 		// Content type
 		header ( 'Content-type: ' . $type ) ;
@@ -200,13 +365,27 @@ CONTENT;
 		return true ;
 	}
 	
-	function list_files ( $start = 0 , $count = 30 ) {
-		global $db ;
+	function list_files () {
+/*		global $db ;
 		$sql = "SELECT * FROM " . UPLOADS_TABLE . "
 				LIMIT $start,$count" ;
 		$result = $db->sql_query ( $sql ) ;
 		$rowset = $db->sql_fetchrowset ( $result ) ;
-		return $rowset ;
+		return $rowset ;*/
+		$root = $this->get_root();
+		
+		return $this->_list_files($root);
+	}
+	
+	function _list_files($node, $list = array()) {
+		$nodes = $node->get_children();
+		
+		foreach ($nodes as $node) {
+			$list[] = $node;
+			$list = $this->_list_files($node, $list);
+		}
+		
+		return $list;
 	}
 	
 	/**
@@ -218,6 +397,28 @@ CONTENT;
 			'name' => __ ( 'Files extension' ) , 
 			'description' => __ ( 'Extension for uploading and downloading files' ) 
 		) ;
+	}
+	
+	function url_full_parsers() {
+		return array(
+			'@file-download/(.*\/)?(.+?)\.(.+)*$@' => array(
+				1 => 'download_folder',
+				2 => 'download_filename',
+				3 => 'download_extension'
+			)
+		);
+	}
+	
+	function before_display() {
+		if (isset($_GET['download_filename'])) {
+			$node = new CMS_Node();
+			$node->title_clean	= $_GET['download_filename'];
+			$node->parentdir	= substr($_GET['download_folder'], 0, -1);	
+			$node->extension 	= $_GET['download_extension'];
+			$node->read(NODE_TITLE);
+			$this->download_file($node->node_id);
+			exit;
+		}
 	}
 }
 ?>

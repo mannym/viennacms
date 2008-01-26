@@ -207,7 +207,13 @@ class CMS_Node {
 			}
 			
 			foreach ($this->options as $name => $value) {
-				$this->write_option($name, $value);
+				$sql = "SELECT * FROM " . NODE_OPTIONS_TABLE . "
+				WHERE node_id = " . $this->node_id . "
+				AND option_name = '" . $name . "'";
+				$result = $db->sql_query($sql);
+				$row = $db->sql_fetchrow($result);
+				$add = ($row === false) ? true : false;
+				$this->write_option($name, $value, $add);
 			}
 			
 			$this->write(false);

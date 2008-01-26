@@ -13,6 +13,8 @@ include('./start.php');
 $page = page::getnew();
 $page->assign_nav();
 
+utils::run_hook_all('before_display');
+
 $Header = '<base href="' . utils::base() . '" />' . "\r\n";
 
 $template->set_filename('main', 'index.php');
