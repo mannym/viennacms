@@ -28,15 +28,40 @@ switch($mode) {
 			$var = 'newnode_' . $postvar;
 			$$var = $db->sql_escape($_POST[$postvar]); 
 		}
-		$sql = "DELETE FROM " . NODES_TABLE . " WHERE node_id = " . $node_id . " AND type <> 'site'";
-		if(!$result = $db->sql_query($sql)) {
-			trigger_error(__("Can't delete the node. Are you trying to delete a site?") );
+		// Get the number of sites
+		$sql = "SELECT COUNT(node_type) AS site_count
+				FROM " . NODES_TABLE . "
+				WHERE node_type = 'site'";
+		$result = $db->sql_query($sql);
+		$row = $db->sql_fetchrow($result);
+		$site_count = $row['site_count'];
+		if($site_count < 1 || $site_count == 1) {
+			define('SITE_DELETE_LEGAL', true);
 		}
-		$sql = "DELETE FROM " . NODES_TABLE . " WHERE parent_id = " . $node_id . " AND type <> 'site'";
-		if(!$result = $db->sql_query($sql)) {
-			trigger_error(__("Can't delete the node. Are you trying to delete a site?") );
+		else {
+			define('SITE_DELETE_LEGAL', false);
 		}
-		header('Location: ' . utils::base() . 'index.php');		
+		
+		$sql1 = "DELETE FROM " . NODES_TABLE . "
+				 WHERE node_id = " . $node_id;
+		$sql2 = "DELETE FROM " . NODES_TABLE . "
+				 WHERE parent_id = " . $node_id;
+		if(SITE_DELETE_LEGAL) {
+			$result1 = $db->sql_query($sql1);
+			$result2 = $db->sql_query($sql2);
+			if(!$result1 || !$result2) {
+				trigger_error(__('Sorry, this isn\'t going to work.'), E_USER_ERROR);
+				define('ERROR', true);
+			}
+		}
+		else {
+			trigger_error(__("Can't delete the node. Are you trying to delete a site?"), E_USER_ERROR);
+			define('ERROR', true);
+		}
+		
+		if(!defined('ERROR')) {
+			header('Location: ' . utils::base() . 'index.php');		
+		}
 	break;
 		
 	default:
