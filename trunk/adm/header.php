@@ -221,12 +221,6 @@ $h_node	 		= $query_string . 'node';*/
 				<div style="clear: both;"></div>
 				<div id="navcontainer">
 					<ul id="navlist">
-						<?php /*<li>
-							<a href="<?php echo $h_general ?>"><?php echo __("General"); ?></a>
-						</li>
-						<li>
-							<a href="<?php echo $h_node; ?>"><?php echo __('Nodes'); ?></a>
-						</li>*/ ?>
 						<li>
 							<a href="index.php"><?php echo __("Nodes"); ?></a>
 						</li>
@@ -240,21 +234,20 @@ $h_node	 		= $query_string . 'node';*/
 				</div>
 			</div>
 			<div id="left">
-				<ul class="nodes">
+				<ul class="nodes" id="tree" style="display: block;">
 					<?php
-					if (isset($display_admin_tree) && $display_admin_tree) {
-						//FIXME: add display_admin_tree value in query string.  
-						utils::get_admin_tree();
-					}
-					
 					if (defined('IN_FILES')) {
 						$files = utils::load_extension('files');
 						$files->get_admin_tree();
 					}
-					
-					$display_tree_msg = '<p><a href="' . $_SERVER['PHP_SELF'] . '?' . preg_replace('#(&)?(display_admin_tree\=)(1|0)#', '', $_SERVER['QUERY_STRING']) . (isset($_GET['node']) ? '&amp;' : '') . 'display_admin_tree=' . ($display_admin_tree ? 1 : 0) .'">' . ($display_admin_tree ? __('Hide the admin node tree') : __('Display the admin node tree')) . '</a></p>';
-					echo $display_tree_msg;
+					else {
+						utils::get_admin_tree();
+					}
+					//$display_tree_msg = '<p><a href="' . $_SERVER['PHP_SELF'] . '?' . preg_replace('#(&)?(display_admin_tree\=)(1|0)#', '', $_SERVER['QUERY_STRING']) . (isset($_GET['node']) ? '&amp;' : '') . 'display_admin_tree=' . ($display_admin_tree ? 1 : 0) .'">' . ($display_admin_tree ? __('Hide the admin node tree') : __('Display the admin node tree')) . '</a></p>';
 					?>
 				</ul>
+				<div class="nodes">
+					<a href="javascript: void(0);" onClick="$('#tree').toggle(); return false;"><?php echo __('Show/hide tree') ?></a>
+				</div>
 			</div>
 			<div id="right">

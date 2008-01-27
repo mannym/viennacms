@@ -55,17 +55,11 @@ CSS;
 	}
 	
 	function file_in_tree($node) {
-		if (defined('IN_FILES')) {
-			return true;
-		}
-		return false;
+		return defined('IN_FILES');
 	}
 	
 	function fileroot_in_tree($node) {
-		if (defined('IN_FILES')) {
-			return true;
-		}
-		return false;
+		return defined('IN_FILES');
 	}
 	
 	function create_root() {
@@ -201,7 +195,9 @@ CONTENT;
 		$new_path = $this->getuploaddir ( ROOT_PATH ) ;
 		$md5_file = md5 ( uniqid ( time (), true ) ) ;
 		$filename = $new_path . $md5_file . '.upload' ;
-		move_uploaded_file ( $file [ 'tmp_name' ], $filename ) ;
+		if(!move_uploaded_file ( $file [ 'tmp_name' ], $filename )) {
+			return false;
+		}
 		return $md5_file ;
 	}
 	
@@ -246,6 +242,9 @@ CONTENT;
 			return false ;
 		}
 		$md5 = $this->upload_file ( $file ) ;
+		if(!$md5) {
+			return false;
+		}
 		if (empty ( $file [ 'type' ] ) || strlen ( $file [ 'type' ] ) < 5) {
 			trigger_error ( __ ( "We need a valid mime content type" ), E_USER_ERROR ) ;
 			return false ;
