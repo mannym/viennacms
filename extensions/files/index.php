@@ -334,6 +334,12 @@ CONTENT;
 			$referer = $db->sql_escape ( $_SERVER['HTTP_REFERER'] );
 		}
 		
+		$suffix = (isset($_GET['download_thumb'])) ? '.thumb' : '.upload';
+
+		if (!file_exists($this->getuploaddir ( ROOT_PATH ) . $md5 . $suffix)) {
+			trigger_error(__('This file does not exist'), E_USER_ERROR);
+		}
+		
 		// Make the query
 		
 		if (!isset($_GET['download_nocount']) && !isset($_GET['download_thumb'])) {
@@ -353,8 +359,6 @@ CONTENT;
 		// one more download now
 		$node->options['downloads']++;
 		$node->write();
-		
-		$suffix = (isset($_GET['download_thumb'])) ? '.thumb' : '.upload';
 		
 		// Content type
 		header ( 'Content-type: ' . $type ) ;

@@ -28,6 +28,10 @@ class extension_core {
 			'page' => array(
 				'extension' => 'core',
 				'type' => NODE_MODULES
+			),
+			'link' => array(
+				'extension' => 'core',
+				'type' => NODE_NO_REVISION
 			)
 		);
 	}
@@ -174,6 +178,15 @@ class extension_core {
 			)
 		);
 	}
+
+	function options_link() {
+		return array(
+			'destination' => array(
+				'title' => __('Destination'),
+				'description' => __('The URL where the link should go to.')
+			)
+		);
+	}
 	
 	function options_page() {
 		return array();
@@ -186,6 +199,26 @@ class extension_core {
 			'name' => __('Core extension'),
 			'description' => __('The core extension provides some basic modules.')
 		);
+	}
+	
+	function before_display() {
+		$page = page::getnew(false);
+		if ($page->node->type == 'link') {
+			if (empty($page->node->options['destination'])) {
+				header('Location: ' . $page->get_link($page->sitenode));
+				exit;
+			}
+			
+			header('Location: ' . $page->node->options['destination']);
+			exit;
+		}
+	}
+	
+	function admin_init() {
+		$css = <<<CSS
+.nodes a.link { background: url(../extensions/core/link.png) 0 0 no-repeat; }
+CSS;
+		utils::add_css('inline', $css);
 	}
 }
 ?>
