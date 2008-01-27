@@ -87,7 +87,7 @@ CSS;
 		$news = array();
 		
 		foreach ($nodes as $node) {
-			$news[$node->revision->revision_date] = $node;
+			$news[$node->created] = $node;
 		}
 		
 		krsort($news);
@@ -108,7 +108,7 @@ CSS;
 	}
 	
 	function show_news($node) {
-		$date = $node->revision->revision_date;
+		$date = $node->created;
 	
 		$template = template::getnew();
 		$page = page::getnew(false);

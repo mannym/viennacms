@@ -34,7 +34,13 @@ if ($node->revision->has_modules) {
 }
 ?>
 <p class="icon_p"><a href="admin_node_options.php?node=<?php echo $node->node_id ?>"><img src="images/edit.png" /><br /><?php echo __('Edit options') ?></a><br /><?php echo __('Configure options in this node.') ?></p>
+<?php
+if (utils::$types[$node->type]['type'] != NODE_NO_REVISION) {
+?>
 <p class="icon_p"><a href="admin_node_revisions.php?node=<?php echo $node->node_id ?>"><img src="images/revisions.png" /><br /><?php echo __('Older versions') ?></a><br /><?php echo __('View older versions of this node.') ?></p>
+<?php
+}
+?>
 <p class="icon_p"><a href="admin_node_new.php?node=<?php echo $node->node_id ?>&amp;do=edit"><img src="images/edit.png" /><br /><?php echo __('Edit node details') ?></a><br /><?php echo __('Edit the node details like title and description.') ?></p>
 <p class="icon_p"><a href="admin_node_delete.php?node=<?php echo $node->node_id ?>"><img src="images/edit_remove.png" /><br /><?php echo __('Delete node') ?></a><br /><?php echo __('Delete this node.') ?></p>
 <?php
