@@ -208,8 +208,8 @@ $h_node	 		= $query_string . 'node';*/
 		mode : "textareas",
 		theme : "advanced",
 		editor_selector : "wysiwyg",
-		plugins : "nodelink",
-		theme_advanced_buttons3_add_before : "nodelink"
+		plugins : "nodelink,viennafiles",
+		theme_advanced_buttons3_add_before : "nodelink,viennafiles"
 	});
 </script>
 	</head>

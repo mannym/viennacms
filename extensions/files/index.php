@@ -147,7 +147,37 @@ CSS;
 		return $list;
 	}
 		
-	
+	function _get_select_tree($node, $list = '', $name = '') {
+		utils::get_types();
+		
+		$ext = utils::load_extension(utils::$types[$node->type]['extension']);
+		$show = true;
+		if (method_exists($ext, $node->type . '_in_tree')) {
+			$function = $node->type . '_in_tree';
+			$show = $ext->$function($node);
+		}
+		
+		if ($show) {
+			if ($node->node_id != 0) {
+				$list .= '<li id="' . $name . '-' . $node->node_id . '"><a href="javascript:void()" onclick="select_node(\'' . $name . '\', ' . $node->node_id . '); return false;" class="' . $node->type . '">' . $node->title . '</a>' . "\r\n";			
+			}
+			
+			$nodes = $node->get_children();
+			
+			if ($nodes) {
+				$list .= '<ul>';
+				foreach ($nodes as $node) {
+					$list = $this->_get_select_tree($node, $list, $name);
+				}
+				$list .= '</ul>';
+			}
+			
+			$list .= '</li>';
+		}
+		return $list;
+	}
+		
+		
 	/**
 	 * Display the upload form
 	 */
@@ -526,6 +556,20 @@ CONTENT;
 		$replacement = str_replace('{viennafile:' . $matches[1] . '}', $widget, $matches[0]);
 		
 		return $replacement;
+	}
+	
+	/**
+	* Generates a node selector.
+	*/
+	
+	function node_select($name, $callback = false) {
+		$node = $this->get_root();
+		$text = '<ul class="nodes">';
+		$text .= $this->_get_select_tree($node, '', $name, $callback);
+		$text .= '</ul>';
+		$text .= '<input type="hidden" name="' . $name . '" id="' . $name . '" />';
+		
+		return $text;
 	}
 }
 ?>
