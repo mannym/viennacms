@@ -175,7 +175,11 @@ class extension_core {
 			'rewrite' => array(
 				'title' => __('Rewrite'),
 				'description' => __('Use mod_rewrite for this site? Leave empty to disable, else type "on".')
-			)
+			),
+			'language' => array(
+				'title' => __('Language'),
+				'description' => __('Specify the language to use for this node')
+			),
 		);
 	}
 

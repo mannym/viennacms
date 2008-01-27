@@ -25,12 +25,15 @@ $node->node_id = $node_id;
 $node->read();
 
 $options = utils::run_hook_all('options_' . $node->type);
-$options = array_merge($options, array(
-	'template' => array(
-		'title' => __('Template'),
-		'description' => __('The template that will be used for this node, and child nodes. Leave empty to use the parent\'s template.')
-	),
-));
+if(in_array($node->type, array('site', 'newsfolder', 'page', 'news'))) {
+		$options = array_merge($options, array(
+		'template' => array(
+			'title' => __('Template'),
+			'description' => __('The template that will be used for this node, and child nodes. Leave empty to use the parent\'s template.')
+		),
+	));
+}
+
 
 $page_title = __('viennaCMS ACP - Node options');
 
@@ -68,21 +71,52 @@ switch($mode) {
 							<?php echo $data['description'] ?>
 						</td>
 						<td width="30%">
-							<input type="text" name="<?php echo $key ?>" value="<?php echo $node->options[$key] ?>" />
+							<?php  if($key != 'template' && $key != 'language') {
+								?><input type="text" name="<?php echo $key ?>" value="<?php echo $node->options[$key] ?>" /><?php
+							}
+							elseif($key == 'template') { ?>
+							<select name="template">
+								<option name="">--<?php echo __('Select') ?>--</option>
+								<?php 
+								$templates = scandir(ROOT_PATH . 'styles');
+								foreach($templates as $template) {
+									if(is_dir(ROOT_PATH . 'styles/' . $template) && file_exists(ROOT_PATH . 'styles/' . $template . '/index.php') && file_exists(ROOT_PATH . 'styles/' . $template . '/module.php'))
+									{
+										?><option name="<?php echo $template ?>"><?php echo $template ?></option>
+								<?php } 
+								}
+								?>
+							</select>
+							<?php } 
+							elseif($key == 'language') { ?>
+							<select name="language">
+								<option name="">--<?php echo __('Select') ?>--</option>
+								<?php 
+								$languages = scandir(ROOT_PATH . 'locale');
+								foreach($languages as $language) {
+									if(is_dir(ROOT_PATH . 'locale/' . $language) && is_dir(ROOT_PATH . 'locale/' . $language . '/LC_MESSAGES/') && file_exists(ROOT_PATH . 'locale/' . $language . '/LC_MESSAGES/viennacms.mo'))
+									{
+										?><option name="<?php echo $language ?>"><?php echo $language ?></option>
+								<?php } 
+								}
+								?>
+							</select>
+							<?php } ?>
 						</td>
 					</tr>
 					<?php
 				}
 				?>
-			<tr>
-				<td colspan="2">
-					<input type="hidden" name="node" value="<?php echo $node->node_id ?>" />
-					<input type="submit" value="<?php echo __('Save') ?>" />
-				</td>
-			</tr>
+				<tr>
+					<td colspan="2">
+						<input type="hidden" name="node" value="<?php echo $node->node_id ?>" />
+						<input type="submit" value="<?php echo __('Save') ?>" />
+					</td>
+				</tr>
 			</table>
 		</form>
 		<?php
 		include('./footer.php');
 	break;
 }
+?>
