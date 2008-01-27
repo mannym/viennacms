@@ -40,6 +40,13 @@ switch($mode) {
 		} else {
 			$folder = $files->get_root();
 		}
+		if(!is_writable(ROOT_PATH . 'files/')) {
+			echo '<div style="color: red;">' . 
+			sprinft(__('Folder %s is not writable'), 'files/') . 
+			'</div>';
+			include('./footer.php');
+			die();
+		}
 		echo '<h1>' . sprintf(__('Upload a new file in %s'), $folder->title) . '</h1>';
 		$files->upload_form($folder->node_id);
 		include('./footer.php');
@@ -57,7 +64,7 @@ switch($mode) {
 	case 'folder':
 		include('./header.php');
 		?>
-		<form action="?mode=savefolder" method="post">
+		<form action="?mode=savefolder" method="post" style="padding-top: 10px;">
 			<?php echo __('Folder name') ?>: 
 			<input type="text" name="name" /><br />
 			<input type="hidden" name="parent" value="<?php echo $_GET['node'] ?>" />
@@ -128,17 +135,19 @@ switch($mode) {
 		header('Location: admin_files.php?mode=options&node=' . $node->parent_id);
 		exit;		
 	break;
+	
 	case 'options':
 	default:
 		include('./header.php');
 		if (!isset($_GET['node'])) {
 			$node = $files->get_root();
 		} else {
-			$node_id = $_GET['node'];
+			$node_id = intval($_GET['node']);
 			$node = new CMS_Node();
 			$node->node_id = $node_id;
 			$node->read();
 		}
+		$page = page::getnew(false);
 		
 		switch ($node->type) {
 			case 'fileroot':
@@ -150,56 +159,87 @@ switch($mode) {
 				<?php
 			break;
 			case 'file':
-				$db = database::getnew();
-				$page = page::getnew(false);
-				$page->sitenode->options['rewrite'] = 'on';
-				$sql = 'SELECT * FROM ' . DOWNLOADS_TABLE . ' WHERE file_id = ' . intval($node->node_id);
-				$result = $db->sql_query($sql);
-				
 				?>
-				<h1><?php echo sprintf(__('Downloads for %s'), $node->title); ?></h1>
-				<table>
-				<tr>
-					<th><?php echo __('IP address') ?></th>
-					<th><?php echo __('Referer') ?></th>
-					<th><?php echo __('User agent') ?></th>
-					<th><?php echo __('Time') ?></th>
-				</tr>
-				<?php
-				while ($row = $db->sql_fetchrow($result)) {
-					?>
-					<tr>
-						<td><?php echo (!empty($row['forwarded_for'])) ? $row['forwarded_for'] : $row['ip'] ?></td>
-						<td><?php echo htmlspecialchars($row['referer']) ?></td>
-						<td><?php echo htmlspecialchars($row['user_agent']) ?></td>
-						<td><?php echo date('d-m-Y G:i:s', $row['time']) ?></td>
-					</tr>
-					<?php
-				}
-				?>
-				</table>
 				<h1><?php echo sprintf(__('Actions for %s'), $node->title); ?></h1>
 				<p class="icon_p"><a href="admin_files.php?node=<?php echo $node->node_id ?>&amp;mode=deletefile"><img src="images/edit_remove.png" /><br /><?php echo __('Delete') ?></a><br /><?php echo __('Delete this file from the file system') ?></p>
 				<p class="icon_p"><a href="<?php echo '../' . $page->get_link($node) ?>"><img src="images/revisions.png" /><br /><?php echo __('Download') ?></a><br /><?php echo __('Download this file') ?></p>
+				<div>Total downloads: <?php echo $node->options['downloads'] ?>.<p />
+				<a href="#" onclick="window.open('./admin_files.php?mode=downloadpopup&node=<?php echo $node->node_id ?>', 'downloadpopup', 'height=500px,scrollbars=yes,width=800px');"><?php echo __('View all download details'); ?></a>
 				<?php
 			break;
 		}		
 		include('./footer.php');
 	break;
+	
+	case 'downloadpopup':
+		if (!isset($_GET['node'])) {
+			$node = $files->get_root();
+		} else {
+			$node_id = intval($_GET['node']);
+			$node = new CMS_Node();
+			$node->node_id = $node_id;
+			$node->read();
+		}
+		$start = empty($_GET['start']) ? 0 : intval($_GET['start']);
+		$end = $start + 10;
+		$db = database::getnew();
+		$dl_count = $node->options['downloads'];
+		$page = page::getnew(false);
+		$page->sitenode->options['rewrite'] = 'on';
+		$sql = 'SELECT *
+				FROM ' . DOWNLOADS_TABLE . '
+				WHERE file_id = ' . intval($node->node_id) . "
+				LIMIT $start,$end";
+		$result = $db->sql_query($sql);
+		?><html>
+	<head>
+		<title><?php echo sprintf(__('Downloads for %s'), $node->title); ?></title>
+	</head>
+	<body>
+		<h1><?php echo sprintf(__('Downloads for %s'), $node->title); ?></h1>
+		<table>
+			<tr>
+				<th width="100px"><?php echo __('IP address') ?></th>
+				<th width="200px"><?php echo __('Referer') ?></th>
+				<th width="200px;"><?php echo __('User agent') ?></th>
+				<th width="100px"><?php echo __('Time') ?></th>
+			</tr>
+			<?php
+			while ($row = $db->sql_fetchrow($result)) {
+				?>
+			<tr>
+				<td><?php echo (!empty($row['forwarded_for'])) ? $row['forwarded_for'] : $row['ip'] ?></td>
+				<td><?php echo wordwrap(htmlspecialchars($row['referer']), 30, "<br />\r\n", true) ?></td>
+				<td><?php echo htmlspecialchars($row['user_agent']) ?></td>
+				<td> <?php echo date('d-m-Y G:i:s', $row['time']) ?></td>
+			</tr><?php
+			}?>
+		</table>
+		<?php if(!$start < $dl_count) { ?>
+		<a href="?mode=downloadpopup&amp;node=<?php echo $node->node_id ?>&amp;start=<?php echo $start - 10 ?>">&laquo;&laquo;</a> 
+		<?php } ?>
+		<div style="text-align: center;"><a href="#" onclick="window.close();"><?php echo __('Close window') ?></a></div>
+		<?php if($dl_count > $end) { ?>
+		<div style="text-align: right;"><a href="?mode=downloadpopup&amp;node=<?php echo $node->node_id ?>&amp;start=<?php echo $start + 10 ?>">&raquo;&raquo;</a></div>
+		<?php } ?>
+	</body>
+</html><?php
+	break;
 }		
 
 function recursive_delete($node) {
 	global $files;
-
-	$nodes = $node->get_children();
-	foreach ($nodes as $cnode) {
-		recursive_delete($cnode);
-	}
 	
 	$db = database::getnew();
 	@unlink($files->getuploaddir ( ROOT_PATH ) . $node->description . '.upload');
 	$sql = "DELETE FROM " . NODES_TABLE . "
 			 WHERE node_id = " . $node->node_id;
 	$db->sql_query($sql);
+
+	$nodes = $node->get_children();
+	foreach ($nodes as $cnode) {
+		recursive_delete($cnode);
+	}
+	
 }
 ?>
