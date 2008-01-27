@@ -42,7 +42,7 @@ switch($mode) {
 		}
 		if(!is_writable(ROOT_PATH . 'files/')) {
 			echo '<div style="color: red;">' . 
-			sprinft(__('Folder %s is not writable'), 'files/') . 
+			sprintf(__('Folder %s is not writable'), 'files/') . 
 			'</div>';
 			include('./footer.php');
 			die();
