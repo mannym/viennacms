@@ -35,7 +35,10 @@ switch ($mode) {
 		$page->sitenode = $page->get_this_site();
 		
 		$db = database::getnew();
-		$sql = 'SELECT * FROM ' . NODE_REVISIONS_TABLE . ' WHERE node_id = ' . $node->node_id . ' ORDER BY revision_date DESC';
+		$sql = 'SELECT * 
+				FROM ' . NODE_REVISIONS_TABLE . '
+				WHERE node_id = ' . $node->node_id . '
+				ORDER BY revision_date DESC';
 		$result = $db->sql_query($sql);
 		$rowset = $db->sql_fetchrowset($result);
 		?>
@@ -44,7 +47,7 @@ switch ($mode) {
 		<?php
 		foreach ($rowset as $row) {
 			//echo '<li><a href="../index.php?id=' . $node->node_id . '&amp;revision=' . $row['revision_number'] . '">';
-			echo '<li><a href="../' . $page->get_link($node, '/revision/' . $row['revision_number']) . '">';
+			echo '<li><a href="../' . $page->get_link($node, '/revision/' . $row['revision_number'], true) . '">';
 			echo 'Revision ' . $row['revision_number'] . ' (' . date('d-m-Y G:i:s', $row['revision_date']) . ' )';
 			echo '</a></li>' . "\r\n";
 		}

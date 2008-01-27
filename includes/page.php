@@ -204,7 +204,7 @@ class page {
 	* Get a link to a node. 
 	*/
 
-	function get_link($node, $extra_params = '') {
+	function get_link($node, $extra_params = '', $site_full_link = false) {
 		$link = '';
 		$prefix = '';
 		
@@ -212,11 +212,11 @@ class page {
 			$prefix .= 'file-download/';
 		}
 	
-		if ($node->type == 'site') {
+		if ($node->type == 'site' && !$site_full_link) {
 			$link .= utils::basepath();
 			$link .= substr($extra_params, 1);
 			$link .= ( (empty($node->extension) ? '' : '.' . $node->extension));
-		} else if ($this->sitenode->options['rewrite']) {
+		} else if ($this->sitenode->options['rewrite'] || ($this->sitenode->options['rewrite'] && $site_full_link)) {
 			//$link = $extra_params;
 			$link .= $prefix . (empty($node->parentdir) ? '' :  $node->parentdir . '/') . $node->title_clean . $extra_params . ( (empty($node->extension) ? '' : '.' . $node->extension));
 		} else {
