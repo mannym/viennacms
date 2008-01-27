@@ -6,7 +6,7 @@
 <script type="text/javascript">
 	function langify(form) {
 		var index = form.langselect.selectedIndex;
-		location.href = 'index.php?language=' + form.langselect.options[index].value;
+		location.href = 'upgrade.php?language=' + form.langselect.options[index].value;
 	}
 </script>
 </head>

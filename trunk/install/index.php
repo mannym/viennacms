@@ -3,6 +3,11 @@ define('IN_VIENNACMS', true);
 define('IN_INSTALL', true);
 include('../start.php');
 
+if (filesize(ROOT_PATH . 'config.php') > 10) {
+	header('Location: ../');
+	exit;
+}
+
 // check language
 if (isset($_GET['language'])) {
 	setcookie('language', $_GET['language'], time() + 3600, '/', '');
