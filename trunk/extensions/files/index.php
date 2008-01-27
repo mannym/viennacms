@@ -337,31 +337,37 @@ CONTENT;
 		
 		// Make the query
 		
-		$sql = 
-		"INSERT INTO " . DOWNLOADS_TABLE . "
-		(file_id, ip, forwarded_for, user_agent, referer, time) VALUES(
-		'" . intval ( $file_id ) . "',
-		'" . $ip_addr . "',
-		'" . $forwarded_for . "',
-		'" . $user_agent . "',
-		'" . $referer . "',
-		'" . time() . "');" ;
-		// Now execute the query
-		$db->sql_query($sql);
+		if (!isset($_GET['download_nocount']) && !isset($_GET['download_thumb'])) {
+			$sql = 
+			"INSERT INTO " . DOWNLOADS_TABLE . "
+			(file_id, ip, forwarded_for, user_agent, referer, time) VALUES(
+			'" . intval ( $file_id ) . "',
+			'" . $ip_addr . "',
+			'" . $forwarded_for . "',
+			'" . $user_agent . "',
+			'" . $referer . "',
+			'" . time() . "');" ;
+			// Now execute the query
+			$db->sql_query($sql);
+		}
 		
 		// one more download now
 		$node->options['downloads']++;
 		$node->write();
 		
+		$suffix = (isset($_GET['download_thumb'])) ? '.thumb' : '.upload';
+		
 		// Content type
 		header ( 'Content-type: ' . $type ) ;
-		// Force the user to download the file
-		header ( 'Content-Disposition: attachment; filename="' . $filename . '"' ) ;
+		if (substr($type, 0, 6) != 'image/') {
+			// Force the user to download the file
+			header ( 'Content-Disposition: attachment; filename="' . $filename . '"' ) ;
+		}
 		// We don't want cache
 		header ( "Cache-Control: no-cache, must-revalidate" ) ; // HTTP/1.1
 		header ( "Expires: Mon, 26 Jul 1997 05:00:00 GMT" ) ; // Date in the past
 		// Now read the file
-		readfile ( $this->getuploaddir ( ROOT_PATH ) . $md5 . '.upload' ) ;
+		readfile ( $this->getuploaddir ( ROOT_PATH ) . $md5 . $suffix ) ;
 		return true ;
 	}
 	
@@ -401,6 +407,20 @@ CONTENT;
 	
 	function url_full_parsers() {
 		return array(
+			// this one needs to go first...
+			'@file-download/(.*\/)?(.+)(/nocount)\.(.+)*$@' => array(
+				1 => 'download_folder',
+				2 => 'download_filename',
+				3 => 'download_nocount',
+				4 => 'download_extension'
+			),
+			// and this one second
+			'@file-download/(.*\/)?(.+)(\.thumb)\.(.+)*$@' => array(
+				1 => 'download_folder',
+				2 => 'download_filename',
+				3 => 'download_thumb',
+				4 => 'download_extension'
+			),
 			'@file-download/(.*\/)?(.+)\.(.+)*$@' => array(
 				1 => 'download_folder',
 				2 => 'download_filename',
@@ -419,6 +439,90 @@ CONTENT;
 			$this->download_file($node->node_id);
 			exit;
 		}
+	}
+	
+	public function generate_thumbnail($source, $dest, $type) {
+		// Set a maximum height and width
+		$width = 500;
+
+		// Get new dimensions
+		list($width_orig, $height_orig) = getimagesize($source);
+
+		$height = $height_orig;
+		
+		$ratio_orig = $width_orig/$height_orig;
+
+		if ($width/$height > $ratio_orig) {
+		   $width = $height*$ratio_orig;
+		} else {
+		   $height = $width/$ratio_orig;
+		}
+
+		// Resample
+		$image_p = imagecreatetruecolor($width, $height);
+		switch ($type) {
+			case 'image/jpeg':
+				$image = imagecreatefromjpeg($source);
+			break;
+			case 'image/gif':
+				$image = imagecreatefromgif($source);
+			break;
+			case 'image/png':
+				$image = imagecreatefrompng($source);
+			break;
+		}
+		imagecopyresampled($image_p, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
+
+		// Output
+		switch ($type) {
+			case 'image/png':
+				imagepng($image_p, $dest);
+			break;
+			case 'image/gif':
+				imagegif($image_p, $dest);
+			break;
+			case 'image/jpeg':
+				imagejpeg($image_p, $dest, 90);
+			break;
+		}
+	}
+	
+	public function get_widget($matches) {
+		$page = page::getnew(false);
+		$node = new CMS_Node();
+		$node->node_id = $matches[1];
+		$node->read();
+
+		$filename = $this->getuploaddir ( ROOT_PATH ) . $node->description . '.upload';
+		$filesize = round(filesize($filename) / 1024, 2);
+		
+		$widget = '';
+		switch ($node->options['mimetype']) {
+			case 'image/gif':
+			case 'image/png':
+			case 'image/jpeg':
+				$image = getimagesize($filename);
+				$thumbname = $this->getuploaddir ( ROOT_PATH ) . $node->description . '.thumb';
+				if (!file_exists($thumbname)) {
+					$this->generate_thumbnail($filename, $thumbname, $node->options['mimetype']);
+				}
+				$oldtitle = $node->title_clean;
+				$node->title_clean .= '.thumb';
+				$widget .= '<img src="' . $page->get_link($node) . '" alt="' . $node->title . '" /><br />';
+				$node->title_clean = $oldtitle;
+				$thumbnail = getimagesize($thumbname);
+				if ($thumbnail[0] != $image[0]) {
+					$widget .= '<a href="' . $page->get_link($node) . '">' . sprintf(__('View the full image'), $node->title, $filesize) . '</a>';
+				}
+			break;
+			default:
+				$widget .= '<a href="' . $page->get_link($node) . '"><img style="float: left; border: 0px;" src="adm/images/download.png" /><span style="float: left; padding-top: 5px;">' . sprintf(__('Download %s<br />(%d kB)'), $node->title, $filesize) . '</span></a><br style="clear: both;" />';
+			break;
+		}
+		
+		$replacement = str_replace('{viennafile:' . $matches[1] . '}', $widget, $matches[0]);
+		
+		return $replacement;
 	}
 }
 ?>
