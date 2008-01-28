@@ -352,6 +352,7 @@ class page {
 			foreach ($this->node->revision->modules[$location] as $module) {
 				$module_function = 'module_' . $module['module'];
 				$ext = utils::load_extension($module['extension']);
+				$module['location'] = $location;
 				
 				ob_start();
 				$mret = $ext->$module_function($module);
@@ -359,7 +360,7 @@ class page {
 				ob_end_clean();
 
 				if ($mret != 500) {
-					$template->set_filename($module_function, 'module.php');
+					$template->set_alt_filename($module_function, array('module-' . $location . '.php', 'module.php'));
 					$template->assign_vars(array(
 						'title' 	=> htmlentities($module['content_title']),
 						'content' 	=> $contents,
