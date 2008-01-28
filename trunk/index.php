@@ -21,7 +21,9 @@ $template->set_filename('main', 'index.php');
 
 $template->assign_vars(array(
 	'title' => $page->node->title,
+	'description' => $page->node->description,
 	'sitename' => $page->sitenode->title,
+	'sitedescription' => $page->sitenode->description,
 	'crumbs' => $page->make_breadcrumbs(),
 	'right' => $page->get_loc('right'),
 	'middle' => $page->get_loc('middle'),

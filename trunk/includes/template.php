@@ -75,6 +75,21 @@ class template {
 		
 		$this->handles[$handle] = $this->root . $name;
 	}
+
+	public function set_alt_filename($handle, $names) {
+		foreach ($names as $name) {
+			if (file_exists($this->root . $name)) {
+				$filename = $this->root . $name;
+				break;
+			}
+		}
+		
+		if (empty($filename)) {
+			trigger_error('Multiple template files do not exist', E_USER_ERROR);
+		}
+		
+		$this->handles[$handle] = $this->root . $name;
+	}
 	
 	public function assign_vars($array) {
 		foreach ($array as $key => $value) {

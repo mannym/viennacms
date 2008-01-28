@@ -74,7 +74,7 @@ CSS;
 			$node = new CMS_Node();
 			$node->title_clean = $_GET['news_title'];
 			$node->read(NODE_TITLEC);
-			$this->show_news($node);
+			$this->show_news($node, $args);
 			return 500;
 		}
 		
@@ -99,7 +99,7 @@ CSS;
 				break;
 			}
 			
-			$this->show_news($new);
+			$this->show_news($new, $args);
 
 			$i++;
 		}
@@ -107,7 +107,7 @@ CSS;
 		return 500;
 	}
 	
-	function show_news($node) {
+	function show_news($node, $args) {
 		$date = $node->created;
 	
 		$template = template::getnew();
@@ -117,7 +117,7 @@ CSS;
 		$content .= '<br />';
 		$content .= '<span style="font-size: 11px;">' . sprintf(__('Posted on %s'), date('d-m-Y G:i:s', $date)) . '</span>';
 		
-		$template->set_filename('node-' . $node->node_id, 'module.php');
+		$template->set_alt_filename('node-' . $node->node_id, array('module-' . $args['location'] . '.php', 'module.php'));
 		$template->assign_vars(array(
 			'title' 	=> '<a href="' . $page->get_link($page->node, '/news/' . $node->title_clean) . '">' . $node->title . '</a>',
 			'content' 	=> $content,
