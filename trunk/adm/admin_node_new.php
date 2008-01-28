@@ -87,12 +87,8 @@ switch($mode) {
 		
 	default:
 	case 'form':
-		// TODO: re-enable this code, but with prettier formatting :)
-		/* $sql			= "SELECT node_id, title FROM " . NODES_TABLE;
-		$result			= $db->sql_query($sql);
-		$parent_options	= $db->sql_fetchrowset($result); */
 		$type_options	= utils::run_hook_all('list_types');
-		$page_title		= __('viennaCMS ACP - Add a new node');
+		$page_title		= $do == 'edit' ? __('viennaCMS ACP - Edit a node') : __('viennaCMS ACP - Add a new node');
 		include('./header.php');
 		if ($do == 'new') {
 		?>
@@ -143,10 +139,7 @@ switch($mode) {
 									continue;
 								}
 								
-								if ($type == $node->type) {
-									$selected = ' selected="selected"';
-								}
-								?><option value="<?php echo $type; ?>"<?php echo $selected ?>><?php echo $type; ?></option><?php
+								?><option value="<?php echo $type; ?>"<?php echo ( $node->type == $type ? ' selected="selected"' : '') ?>><?php echo $type; ?></option><?php
 							} ?></select>
 					</td>
 				</tr>
