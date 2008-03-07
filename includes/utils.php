@@ -149,11 +149,11 @@ class utils {
 	* Generates a node selector.
 	*/
 	
-	static function node_select($name, $callback = false) {
+	static function node_select($name, $callback = false, $cbtype = 0) {
 		$node = new CMS_Node();
 		$node->node_id = 0;
 		$text = '<ul class="nodes">';
-		$text .= self::_get_select_tree($node, '', $name, $callback);
+		$text .= self::_get_select_tree($node, '', $name, $callback, $cbtype);
 		$text .= '</ul>';
 		$text .= '<input type="hidden" name="' . $name . '" id="' . $name . '" />';
 		
@@ -443,9 +443,10 @@ class utils {
 		return $list;
 	}
 
-	static function _get_select_tree($node, $list = '', $name = '', $callback = false) {
+	static function _get_select_tree($node, $list = '', $name = '', $callback = false, $cbtype = 0) {
 		self::get_types();
-		$show = true;		
+		$show = true;	
+		$link = true;	
 		if ($node->node_id != 0) {
 			$ext = self::load_extension(self::$types[$node->type]['extension']);
 			if (method_exists($ext, $node->type . '_in_tree')) {
@@ -454,13 +455,29 @@ class utils {
 			}
 			
 			if ($callback) {
-				$show = call_user_func($callback, $node);
+				if ($cbtype == 0) {
+					$show = call_user_func($callback, $node);
+				} else if ($cbtype == 1) {
+					if ($node->type != 'site') {
+						$show = call_user_func($callback, $node);
+					} else {
+						$link = call_user_func($callback, $node);
+					}
+				}
 			}
 		}
 		
 		if ($show) {
 			if ($node->node_id != 0) {
-				$list .= '<li id="' . $name . '-' . $node->node_id . '"><a href="javascript:void()" onclick="select_node(\'' . $name . '\', ' . $node->node_id . '); return false;" class="' . $node->type . '">' . $node->title . '</a>' . "\r\n";			
+				$list .= '<li id="' . $name . '-' . $node->node_id . '">';
+				if ($link) {
+					$list .= '<a href="javascript:void()" onclick="select_node(\'' . $name . '\', ' . $node->node_id . '); return false;" class="' . $node->type . '">';
+				} else {
+					$list .= '<a href="javascript:void()" onclick="return false;" class="' . $node->type . '">';
+				}
+				$list .= $node->title;
+				$list .= '</a>';
+				$list .= "\r\n";			
 			}
 			
 			$nodes = $node->get_children();
@@ -468,7 +485,7 @@ class utils {
 			if ($nodes) {
 				$list .= '<ul>';
 				foreach ($nodes as $node) {
-					$list = self::_get_select_tree($node, $list, $name, $callback);
+					$list = self::_get_select_tree($node, $list, $name, $callback, $cbtype);
 				}
 				$list .= '</ul>';
 			}

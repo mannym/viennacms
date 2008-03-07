@@ -23,15 +23,18 @@ class extension_core {
 		return array(
 			'site' => array(
 				'extension' => 'core',
-				'type' => NODE_MODULES
+				'type' => NODE_MODULES,
+				'allow_easy' => true
 			),
 			'page' => array(
 				'extension' => 'core',
-				'type' => NODE_MODULES
+				'type' => NODE_MODULES,
+				'allow_easy' => true
 			),
 			'link' => array(
 				'extension' => 'core',
-				'type' => NODE_NO_REVISION
+				'type' => NODE_NO_REVISION,
+				'allow_easy' => true
 			)
 		);
 	}

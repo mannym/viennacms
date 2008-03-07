@@ -16,6 +16,7 @@ $page = page::getnew(false);
 $display_admin_tree = (empty($_GET['display_admin_tree']) ) ?  1 : 0;
 $mode = isset($_GET['mode']) ? $_GET['mode'] : 'form';
 $do = isset($_REQUEST['do']) ? $_REQUEST['do'] : 'new';
+$easy = (isset($_POST['easy']));
 if ($do == 'new') {
 	$parent = new CMS_Node();
 	$parent->node_id = (isset($_GET['node'])) ? $_GET['node'] : $_POST['node_id'];
@@ -32,6 +33,28 @@ if ($do == 'new') {
 }
 
 switch($mode) {
+	case 'easy':
+		include('./header.php');
+		$type = explode('::', base64_decode($_GET['type']));
+		$ext = utils::load_extension($type[0]);
+		if (method_exists($ext, $type[1] . '_allow_as_child')) {
+			$function = $type[1] . '_allow_as_child';
+			$callback = array($ext, $function);
+		} else {
+			$callback = false;
+		}
+		echo '<h1>' . sprintf(__('Content wizard, step %d of %d'), 1, 4) . '</h1>';
+		echo '<form action="?mode=form" method="post">';
+		echo __('Where do you want to place this new node?') . '<br />';
+		echo utils::node_select('node_id', $callback, 1);
+		?>
+		<input type="submit" value="<?php echo __('Next &raquo;') ?>" />
+		<input type="hidden" name="type" value="<?php echo $_GET['type'] ?>" />
+		<input type="hidden" name="easy" value="true" />
+		<?php
+		echo '</form>';
+		include('./footer.php');
+	break;
 	case 'save':
 		$post_vars = array('node_id', 'title', 'description', 'title_clean', 'extension');
 		if ($do == 'new') {
@@ -82,7 +105,11 @@ switch($mode) {
 		$node->parentdir = $newnode_parentdir;
 		$node->title_clean = $newnode_title_clean;
 		$node->write();
-		header('Location: ' . utils::base() . 'admin_node.php?node=' . $node->node_id);		
+		if (!$easy) {
+			header('Location: ' . utils::base() . 'admin_node.php?node=' . $node->node_id);
+		} else {
+			header('Location: ' . utils::base() . 'admin_node_options.php?easy=true&node=' . $node->node_id);
+		}
 	break;
 		
 	default:
@@ -90,14 +117,18 @@ switch($mode) {
 		$type_options	= utils::run_hook_all('list_types');
 		$page_title		= $do == 'edit' ? __('viennaCMS ACP - Edit a node') : __('viennaCMS ACP - Add a new node');
 		include('./header.php');
-		if ($do == 'new') {
-		?>
-			<h1><?php echo sprintf(__('Add a new node under %s'), $parent->title); ?></h1>
-		<?php
-		} else {
+		if (!$easy) {
+			if ($do == 'new') {
 			?>
-			<h1><?php echo sprintf(__('Edit the node %s'), $node->title); ?></h1>
+				<h1><?php echo sprintf(__('Add a new node under %s'), $parent->title); ?></h1>
 			<?php
+			} else {
+				?>
+				<h1><?php echo sprintf(__('Edit the node %s'), $node->title); ?></h1>
+				<?php
+			}
+		} else {
+			echo '<h1>' . sprintf(__('Content wizard, step %d of %d'), 2, 4) . '</h1>';	
 		}
 		?>
 		<form action="?mode=save" method="post">
@@ -119,6 +150,9 @@ switch($mode) {
 					</td>
 				</tr>
 				*/ ?>
+				<?php
+				if (!$easy) {
+				?>
 				<tr>
 					<td>
 						<strong><?php echo __('Type') ?>:</strong><br />
@@ -143,7 +177,16 @@ switch($mode) {
 							} ?></select>
 					</td>
 				</tr>
-				
+				<?php
+				} else {
+					$type = explode('::', base64_decode($_POST['type']));
+					$type = $type[1];
+					?>
+					<input type="hidden" name="type" value="<?php echo $type ?>" />
+					<input type="hidden" name="easy" value="true" />
+					<?php	
+				}
+				?>
 				<tr>
 					<td>
 						<strong> <?php echo __('Title'); ?></strong><br />

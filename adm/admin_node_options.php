@@ -15,6 +15,7 @@ $user->checkacpauth();
 
 $display_admin_tree = (empty($_GET['display_admin_tree']) ) ?  1 : 0;
 $mode = isset($_GET['mode']) ? $_GET['mode'] : 'form';
+$easy = (isset($_POST['easy']) || isset($_GET['easy']));
 if(!isset($_GET['node']) && !isset($_POST['node'])) {
 	header('Location: ' . utils::base() . 'index.php');
 	exit;
@@ -52,14 +53,32 @@ switch($mode) {
 			}
 		}
 		
-		header('Location: ' . utils::base() . 'admin_node.php?node=' . $node->node_id);
+		utils::get_types();
+		
+		if (!$easy) {
+			header('Location: ' . utils::base() . 'admin_node.php?node=' . $node->node_id);
+		} else {
+			if (utils::$types[$node->type]['type'] == NODE_MODULES) {
+				header('Location: ' . utils::base() . 'admin_node_modules.php?easy=true&node=' . $node->node_id);
+			} else if (utils::$types[$node->type]['type'] == NODE_CONTENT) {
+				header('Location: ' . utils::base() . 'admin_node_content.php?easy=true&node=' . $node->node_id);
+			} else {
+				header('Location: ' . utils::base() . 'admin_node.php?node=' . $node->node_id);
+			}
+		}
 		exit;
 	break;
 	case 'form':
 	default:
 		include('./header.php');
+		if (!$easy) {
 		?>
 		<h1><?php echo sprintf(__('Edit options for %s'), $node->title); ?></h1>
+		<?php
+		} else {
+			echo '<h1>' . sprintf(__('Content wizard, step %d of %d'), 3, 4) . '</h1>';	
+		}
+		?>
 		<form action="?mode=save" method="post">
 			<table>
 				<?php
@@ -109,6 +128,13 @@ switch($mode) {
 				?>
 				<tr>
 					<td colspan="2">
+						<?php
+						if ($easy) {
+							?>
+							<input type="hidden" name="easy" value="true" />
+							<?php	
+						}
+						?>
 						<input type="hidden" name="node" value="<?php echo $node->node_id ?>" />
 						<input type="submit" value="<?php echo __('Save') ?>" />
 					</td>
