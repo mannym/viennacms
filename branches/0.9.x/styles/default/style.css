@@ -1,0 +1,139 @@
+body {
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 140%;
+	margin: 0px;
+	text-align: center;
+}
+
+#wrap {
+	width: 1000px;
+	text-align: left;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+a {
+	text-decoration: none;
+	color: #b70000;
+}
+
+a:hover {
+	color: #dd0000;
+	text-decoration: underline;
+}
+
+#header {
+		width: 100%;
+		height: 80px;
+		margin-top: 5px;
+}
+
+#header a.logo {
+	display: block;
+	float: left;
+	width: 300px;
+	height: 80px;
+	background-image: url(images/logo.png);
+}
+
+#header span {
+	float: right;
+	font-size: 11px;
+}
+
+#menucontainer {
+	background-image: url(images/menu_r1_c2.png);
+	background-position: right;
+	width: 100%;
+	height: 30px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#menucontainer div {
+	background-image: url(images/menu_r1_c1.png);
+	background-repeat: no-repeat;
+	height: 30px;
+	padding-left: 20px;
+}
+
+#menucontainer ul {
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+	border-left: 1px solid #fff;
+	height: 30px;
+}
+
+#menucontainer ul li {
+	display: inline;
+	float: left;
+}
+
+#menucontainer ul li a {
+	display: block;
+	color: #fff;
+	padding: 5px;
+	padding-top: 6px;
+	padding-left: 7px;
+	padding-right: 7px;
+	border-right: 1px solid #ffffff;
+	height: 19px;
+}
+
+#menucontainer ul li a:hover {
+	text-decoration: none;
+	background-image: url(images/menu-hover.png);
+}
+
+#content {
+	float: left;
+	width: 780px;
+	padding-left: 20px;
+}
+
+#content h1#pagetitle {
+	font-size: 23px;
+	font-weight: normal;
+	line-height: 24px;
+	margin: 0px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	color: #b50000;
+	width: 39%;
+	float: left;
+}
+
+#content .breadcrumbs {
+	font-size: 11px;
+	width: 59%;
+	display: block;
+	float: right;
+	text-align: right;
+}
+
+#sidebar {
+	float: right;
+	width: 190px;
+	padding-left: 10px;
+}
+
+#sidebar h1, #content h1 {
+	font-size: 14px;
+	color: #b50000;
+	margin: 0px;
+}
+
+#sidebar ul {
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+#footer {
+	clear: both;
+	border-top: 1px solid #b50000;
+	text-align: center;
+	font-size: 11px;
+}
