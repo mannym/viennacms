@@ -30,12 +30,14 @@ CSS;
 		return array(
 			'newsfolder' => array(
 				'extension' => 'news',
-				'type' => NODE_NO_REVISION
+				'type' => NODE_NO_REVISION,
+				'allow_easy' => true
 			),
 			'news' => array(
 				'extension' => 'news',
 				'type' => NODE_CONTENT,
-				'field' => 'wysiwyg'
+				'field' => 'wysiwyg',
+				'allow_easy' => true
 			)
 		);
 	}

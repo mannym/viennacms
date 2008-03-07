@@ -27,11 +27,13 @@ CSS;
 		return array(
 			'file' => array(
 				'extension' => 'files',
-				'type' => NODE_NO_REVISION
+				'type' => NODE_NO_REVISION,
+				'allow_easy' => false
 			),
 			'fileroot' => array(
 				'extension' => 'files',
-				'type' => NODE_NO_REVISION
+				'type' => NODE_NO_REVISION,
+				'allow_easy' => false
 			)
 		);
 	}
