@@ -81,9 +81,12 @@ switch ($step) {
 );';
 			// no break
 			case 80:
-				$sql[] = 'ALTER TABLE ' . NODES_TABLE . ' ADD `order` INT( 11 ) NOT NULL';
 				$sql[] = 'ALTER TABLE `' . DOWNLOADS_TABLE . '` CHANGE `download_id` `download_id` INT( 15 ) NOT NULL AUTO_INCREMENT';
 				$sql[] = 'ALTER TABLE `' . DOWNLOADS_TABLE . '` CHANGE `file_id` `file_id` INT( 15 ) NOT NULL';
+			// no break
+			
+			case 86:
+				$sql[] = 'ALTER TABLE ' . NODES_TABLE . ' ADD `order` INT( 11 ) NOT NULL';
 		}
 		$db->sql_return_on_error(true);
 		$mes = '';
