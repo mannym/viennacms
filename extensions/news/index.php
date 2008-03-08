@@ -1,6 +1,6 @@
 <?php
 /**
-* Core extension for viennaCMS
+* News extension for viennaCMS
 * 
 * @package viennaCMS
 * @author viennainfo.nl

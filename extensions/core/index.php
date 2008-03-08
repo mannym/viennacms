@@ -12,10 +12,18 @@ if (!defined('IN_VIENNACMS')) {
 }
 
 class extension_core {
+	
+	function eval_text($matches)
+	{
+		eval($matches[2]);
+		return "";
+	}
+		
 	function list_modules() {
 		return array(
 			'html_content' => 'core',
-			'sitemap' => 'core'
+			'sitemap' => 'core',
+			'rawcontent' => 'core',
 		);
 	}
 	
@@ -35,20 +43,35 @@ class extension_core {
 				'extension' => 'core',
 				'type' => NODE_NO_REVISION,
 				'allow_easy' => true
-			)
+			),
 		);
 	}
 	
 	function args_html_content() {
 		return array('content' => array( // 'content' is the argument name
 			'title' => __('Content'), // title is what it will show
-			'type' => 'wysiwyg', // textarea or text, currently
+			'type' => 'wysiwyg', // textarea, text or wysiwyg
+			'newrow' => true // true to make the control 100% width in ACP
+		));
+	}
+	
+	function args_rawcontent() {
+		return array('content' => array( // 'content' is the argument name
+			'title' => __('Content'), // title is what it will show
+			'type' => 'textarea', // textarea, text or wysiwyg
 			'newrow' => true // true to make the control 100% width in ACP
 		));
 	}
 	
 	function module_html_content($args) {
-		echo nl2br(utils::handle_text(stripslashes($args['content'])));
+		echo utils::handle_text(stripslashes($args['content']));
+	}
+	
+	function module_rawcontent($args) {
+		$fnc_txt = 'eval($matches[2]) ;return "";';
+		$text = stripslashes($args['content']);
+		$text = utils::handle_text(preg_replace_callback('|<\?(php)?(.*?)\?>|is', create_function('$matches', $fnc_txt), $text));
+		echo $text;
 	}
 
 	function args_sitemap() {
