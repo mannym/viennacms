@@ -101,13 +101,13 @@ a:hover {
 	margin-top: 5px;
 	margin-bottom: 5px;
 	color: #b50000;
-	width: 39%;
+	width: 49%;
 	float: left;
 }
 
 #content .breadcrumbs {
 	font-size: 11px;
-	width: 59%;
+	width: 50%;
 	display: block;
 	float: right;
 	text-align: right;

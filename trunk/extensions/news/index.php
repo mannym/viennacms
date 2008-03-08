@@ -72,13 +72,13 @@ CSS;
 	}
 	
 	function module_latestnews($args) {
-		if (isset($_GET['news_title'])) {
+		/*if (isset($_GET['news_title'])) {
 			$node = new CMS_Node();
 			$node->title_clean = $_GET['news_title'];
 			$node->read(NODE_TITLEC);
 			$this->show_news($node, $args);
 			return 500;
-		}
+		}*/
 		
 		$template = template::getnew();
 	
@@ -121,7 +121,7 @@ CSS;
 		
 		$template->set_alt_filename('node-' . $node->node_id, array('module-' . $args['location'] . '.php', 'module.php'));
 		$template->assign_vars(array(
-			'title' 	=> '<a href="' . $page->get_link($page->node, '/news/' . $node->title_clean) . '">' . $node->title . '</a>',
+			'title' 	=> '<a href="' . $page->get_link($node) . '">' . $node->title . '</a>',
 			'content' 	=> $content,
 		));
 		echo $template->assign_display('node-' . $node->node_id);
@@ -151,6 +151,50 @@ CSS;
 		);
 	}
 	
+	function get_url_callback($node) {
+		if ($node->type == 'news') {
+			$page = page::getnew(false);
+			$parents = $page->get_parents($node);
+			$folder = $parents[count($parents) - 2];
+			
+			$path = $node->title_clean;
+			$path = $folder->title_clean . '/' . $path; 
+			if ($node->extension) {
+				$path .= '.' . $node->extension; 
+			}
+			
+			//$urls = array_merge($urls, array(
+			return array(
+				$path => array(
+					'callback' => array('extension_news', 'show_newspage'),
+					'cbtype' => 'create_new',
+					'parameters' => array(
+						'node_id' => $node->node_id
+					)
+				)
+			);
+		}
+	}
+	
+	function show_newspage($args) {
+		$page = page::getnew(false);
+		$node = new CMS_Node();
+		$node->node_id = $args['node_id'];
+		$node->read();
+		ob_start();
+		$this->show_news($node, array('location' => 'middle'));
+		$c = ob_get_contents();
+		ob_end_clean();
+		$page->parents = $page->get_parents($page->sitenode);
+		$template = template::getnew();
+		$template->assign_vars(array(
+			'title' => $node->title,
+			'sitename' => $page->sitenode->title,
+			'sitedescription' => $page->sitenode->description,
+			'middle' => $c,
+		));
+	}
+
 	function url_parsers() {
 		return array(
 			'@/news/([a-z0-9\-]+)$@' => array(
