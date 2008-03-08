@@ -130,6 +130,14 @@ if (!defined('IN_INSTALL') && !defined('IN_UPGRADE')) {
 		}
 		exit;
 	}
+	
+	$sql = 'SELECT * FROM ' . CONFIG_TABLE;
+	$result = $db->sql_query($sql);
+	$config = array();
+
+	while ($row = $db->sql_fetchrow($result)) {
+		$config[$row['config_name']] = $row['config_value'];
+	}
 }
 
 utils::run_hook_all('init');

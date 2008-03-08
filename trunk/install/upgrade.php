@@ -73,6 +73,13 @@ switch ($step) {
 				$sql[] = 'ALTER TABLE ' . DOWNLOADS_TABLE . ' CHANGE `time` `time` INT(11) NOT NULL';
 				$sql[] = 'INSERT INTO ' . NODE_OPTIONS_TABLE . " SET node_id = 0, option_name = 'database_version', option_value = '1'";
 			// no break
+			case 59:
+				$sql[] = 'CREATE TABLE `' . CONFIG_TABLE . '` (
+  `config_name` varchar(255) NOT NULL,
+  `config_value` text NOT NULL,
+  PRIMARY KEY  (`config_name`)
+);';
+			// no break
 		}
 		$db->sql_return_on_error(true);
 		$mes = '';
