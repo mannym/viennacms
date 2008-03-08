@@ -120,8 +120,8 @@ CREATE TABLE `viennacms_uploads` (
 --
 
 CREATE TABLE `viennacms_downloads` (
-  `download_id` tinyint(15) NOT NULL auto_increment,
-  `file_id` tinyint(15) NOT NULL,
+  `download_id` int(15) NOT NULL auto_increment,
+  `file_id` int(15) NOT NULL,
   `ip` varchar(15) NOT NULL,
   `forwarded_for` varchar(15) NOT NULL,
   `user_agent` mediumtext NOT NULL,
