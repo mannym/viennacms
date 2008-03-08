@@ -129,3 +129,9 @@ CREATE TABLE `viennacms_downloads` (
   `time` int(11) NOT NULL,
   PRIMARY KEY  (`download_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+CREATE TABLE `viennacms_config` (
+  `config_name` varchar(255) NOT NULL,
+  `config_value` text NOT NULL,
+  PRIMARY KEY  (`config_name`)
+);
