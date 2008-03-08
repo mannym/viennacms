@@ -120,7 +120,7 @@ CSS;
 		$content .= '<span style="font-size: 11px;">' . sprintf(__('Posted on %s'), date('d-m-Y G:i:s', $date)) . '</span>';
 		
 		$template->set_alt_filename('node-' . $node->node_id, array('module-' . $args['location'] . '.php', 'module.php'));
-		$template->assign_vars(array(
+		$template->assign_priv_vars('node-' . $node->node_id, array(
 			'title' 	=> '<a href="' . $page->get_link($node) . '">' . $node->title . '</a>',
 			'content' 	=> $content,
 		));
