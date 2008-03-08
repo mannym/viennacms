@@ -325,7 +325,7 @@ class utils {
 	* Handles errors thrown by PHP, or trigger_error. 
 	*/
 
-	function handle_error($errno, $msg_text, $errfile, $errline)
+	static function handle_error($errno, $msg_text, $errfile, $errline)
 	{
 		global $msg_title, $msg_long_text;
 	
@@ -550,6 +550,49 @@ define('CMS_INSTALLED', true);
 ?>
 CONFIG;
 		file_put_contents(ROOT_PATH . 'config.php', $config);
+	}
+
+	static function array_move_element($array, $value, $direction = 'up') {
+	   
+	    $temp = array();
+	   
+	    if(end($array) == $value && $direction == 'down') {
+	        return $array;
+	    }
+	    if(reset($array) == $value && $direction == 'up') {
+	        return $array;
+	    }
+
+	    while (($array_value = current($array)) !== false) {
+	    	$this_key = key($array);
+	        if ($array_value == $value) {
+	        	if($direction == 'down') {
+	                $next_value = next($array);
+	                $temp[key($array)] = $next_value;
+	                $temp[$this_key] = $array_value;
+	            } else {
+	                $prev_value = prev($array);
+	                $prev_key = key($array);
+	                unset($temp[$prev_key]);
+	                $temp[$this_key] = $array_value;
+	                $temp[$prev_key] = $prev_value;
+	                next($array);
+	                next($array);
+	            }
+	            continue;
+	        } else {
+	            $temp[$this_key] = $array_value;
+	        }
+	
+	        next($array);
+	    }
+	    
+	    $temp2 = array();
+	    foreach ($temp as $value) {
+	    	$temp2[] = $value;
+	    }
+	    return $temp2;
+	   
 	}
 }
 
