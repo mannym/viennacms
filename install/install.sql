@@ -64,6 +64,7 @@ CREATE TABLE `viennacms_nodes` (
   `type` varchar(40) collate latin1_general_ci NOT NULL,
   `parent_id` int(11) NOT NULL,
   `revision_number` int(11) NOT NULL,
+  `order` int(11) NOT NULL,
   PRIMARY KEY  (`node_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=2 ;
 

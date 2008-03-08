@@ -502,7 +502,6 @@ class utils {
 	
 	static function set_config($key, $val)
 	{
-		error_reporting(E_ALL);
 		global $config;
 		if(isset($config[$key]) && $config[$key] === $val)
 		{
