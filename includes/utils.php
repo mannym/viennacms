@@ -504,9 +504,9 @@ class utils {
 	{
 		error_reporting(E_ALL);
 		global $config;
-		if($config[$key] === $val)
+		if(isset($config[$key]) && $config[$key] === $val)
 		{
-			#return true;
+			return true;
 		}
 		$db = database::getnew();
 		$key = $db->sql_escape($key);
