@@ -49,8 +49,15 @@ class page {
 	* Initialize the page class. 
 	*/
 	public function initialize() {
+		$template = template::getnew();
+		
 		// first get the site, the decoder may need it :)
 		$this->sitenode = $this->get_this_site();
+
+		$template->assign_vars(array(
+			'left' => $this->get_bloc('left'),
+			'right' => $this->get_bloc('right')
+		));
 		
 		// first try to decode an URL.
 		$parser = $this->try_decode_url();
@@ -60,7 +67,6 @@ class page {
 		
 		if ($parser === '404') {
 			$this->parents = $this->get_parents($this->sitenode);
-			$template = template::getnew();
 			$template->assign_vars(array(
 				'title' => __('Page not found'),
 				'sitename' => $this->sitenode->title,
@@ -68,6 +74,9 @@ class page {
 				'middle' => __('The page you requested can not be found'),
 			));
 		}
+		
+		$template->vars['middle'] = $this->get_bloc('before_content') . $template->vars['middle'] . $this->get_bloc('after_content');
+		$template->vars['content'] = &$template->vars['middle'];
 
 		// and then run
 		/*$id = intval($_GET['id']);
@@ -137,9 +146,9 @@ class page {
 			'sitename' => $this->sitenode->title,
 			'sitedescription' => $this->sitenode->description,
 			'crumbs' => $this->make_breadcrumbs(),
-			'right' => $this->get_loc('right'),
+			//'right' => $this->get_loc('right'),
 			'middle' => $this->get_loc('middle'),
-			'left' => $this->get_loc('left'),
+			//'left' => $this->get_loc('left'),
 		));
 	}
 	/**
@@ -395,6 +404,8 @@ class page {
 		// Choose domain
 		_textdomain("viennacms");
 
+		$this_site->options['blocks'] = unserialize($this_site->options['blocks']);
+		
 		// Translation is looking for in ./locale/$language/LC_MESSAGES/viennacms.mo now
 		return $this_site;
 	}
@@ -440,6 +451,41 @@ class page {
 		return $return;
 	}
 
+	/**
+	* Gets a block location. 
+	*/
+	public function get_bloc($location) {
+		$return = '';
+		if (isset($this->prefix[$location])) {
+			$return .= $this->prefix[$location];
+		}
+		
+		$template = template::getnew();
+		foreach ($this->sitenode->options['blocks'][$location] as $module) {
+			$module_function = 'module_' . $module['module'];
+			$ext = utils::load_extension($module['extension']);
+			$module['location'] = $location;
+			
+			ob_start();
+			$mret = $ext->$module_function($module);
+			$contents = ob_get_contents();
+			ob_end_clean();
+
+			if ($mret != 500) {
+				$template->set_alt_filename($module_function, array('module-' . $location . '.php', 'module.php'));
+				$template->assign_vars(array(
+					'title' 	=> htmlentities($module['content_title']),
+					'content' 	=> $contents,
+					'margin'  	=> ( $location == 'middle' ? ' style="margin-left: 20px;"' : ''),
+				));
+				$return .= $template->assign_display($module_function);
+			} else {
+				$return .= $contents;
+			}
+		}
+		return $return;
+	}
+	
 	public function try_decode_url() {
 		$uri_no_qs = explode('?', $_SERVER['REQUEST_URI']);
 		$uri_no_qs = $uri_no_qs[0];

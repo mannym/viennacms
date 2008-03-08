@@ -32,6 +32,11 @@ if ($node->revision->has_modules) {
 <p class="icon_p"><a href="admin_node_content.php?node=<?php echo $node->node_id ?>"><img src="images/modules.png" /><br /><?php echo __('Edit content') ?></a><br /><?php echo __('Add or edit the text content in this node.') ?></p>
 <?php
 }
+if ($node->type == 'site') {
+?>
+<p class="icon_p"><a href="admin_node_modules.php?node=<?php echo $node->node_id ?>&amp;blocks=true"><img src="images/modules.png" /><br /><?php echo __('Edit blocks') ?></a><br /><?php echo __('Add or edit the blocks for this site.') ?></p>
+<?php
+}
 ?>
 <p class="icon_p"><a href="admin_node_options.php?node=<?php echo $node->node_id ?>"><img src="images/edit.png" /><br /><?php echo __('Edit options') ?></a><br /><?php echo __('Configure options in this node.') ?></p>
 <?php
