@@ -378,7 +378,7 @@ class acm
 	*/
 	function sql_save($query, &$query_result, $ttl)
 	{
-		global $db;
+		$db = database::getnew();
 		// Remove extra spaces and tabs
 		$query = preg_replace('/[\n\r\s\t]+/', ' ', $query);
 		$filename = $this->cache_dir . 'sql_' . md5($query) . '.php';
@@ -429,6 +429,13 @@ class acm
 		}
 
 		return false;
+	}
+	
+	/**
+	* Fetch database rowset. 
+	*/
+	function sql_fetchrowset($query_id) {
+		return $this->sql_rowset[$query_id];
 	}
 
 	/**

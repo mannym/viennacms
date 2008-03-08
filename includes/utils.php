@@ -25,6 +25,11 @@ class utils {
 	static public $types;
 	static public $extensions;
 
+	static function lsort_callback($a, $b) {
+		return (strlen($a) - strlen($b));
+		
+	}
+	
 	/**
 	* gets types if not yet fetched
 	*/
@@ -510,5 +515,13 @@ define('CMS_INSTALLED', true);
 CONFIG;
 		file_put_contents(ROOT_PATH . 'config.php', $config);
 	}
+}
+
+function shutdown_cleanly() {
+	global $cache;
+	$cache->save();
+	$cache->unload();
+	$db = database::getnew();
+	$db->sql_close();
 }
 ?>

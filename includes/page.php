@@ -49,12 +49,16 @@ class page {
 	* Initialize the page class. 
 	*/
 	public function initialize() {
+		// first get the site, the decoder may need it :)
+		$this->sitenode = $this->get_this_site();
+		
 		// first try to decode an URL.
-		$this->try_decode_url();
+		if (!$this->try_decode_url()) {
+			$this->show_node(array('node_id' => $this->sitenode->node_id));
+		}
 
 		// and then run
-		$id = intval($_GET['id']);
-		$this->sitenode = $this->get_this_site();
+		/*$id = intval($_GET['id']);
 		
 		$node = new CMS_Node();
 		
@@ -78,9 +82,40 @@ class page {
 		
 		$this->node = $node;
 		$this->parents = $this->get_parents($this->node);
-		$this->get_template();
+		$this->get_template();*/
 	}
 	
+	/**
+	* Show a node... 
+	*/
+
+	public function show_node($args) {
+		$id = intval($args['node_id']);
+		
+		$node = new CMS_Node();
+		
+		if (!$id) {
+			$node = $this->sitenode;
+		} else {
+			$node->node_id = $id;
+			$node->read();
+		}
+		$user = user::getnew();
+		if (isset($args['revision'])) {
+			$user->initialize(true);
+			if ($user->user_logged_in) {
+				$node->revision->revision_id = 0;
+				$node->revision->revision_number = $args['matches'][1];
+				$node->revision->read($node);
+				
+				$this->get_revision_nav($node);
+			}
+		}
+		
+		$this->node = $node;
+		$this->parents = $this->get_parents($this->node);
+		$this->get_template();
+	}
 	/**
 	* Get revision navigation
 	*/
@@ -392,73 +427,54 @@ class page {
 			return;
 		}
 		
-		$this->do_decode($uri);
+		return $this->do_decode($uri);
+	}
+	
+	private function regexify($url) {
+		$url = '@^/' . $url . '$@';
+		$url = str_replace(array('%text', '%number'), array('([a-z\-0-9]+)', '([0-9]+)'), $url);
+		return $url;
 	}
 	
 	private function do_decode($uri) {
-		if (!preg_match('/(.*\/)(.+?)(\..+)*$/', $uri, $uri_parts)) {
-			return;
+		global $cache;
+		$sitehash = md5($_SERVER['HTTP_HOST']);
+		if (!($urls = $cache->get('_url_callbacks_' . $sitehash))) {
+			$urls = utils::run_hook_all('url_callbacks');
+			$cache->put('_url_callbacks_' . $sitehash, $urls);			
 		}
-
-		$uri_noext = $uri_parts[1] . $uri_parts[2];
-		$parsers = utils::run_hook_all('url_parsers');
-		$parsers['@/revision/([0-9]+)$@'] = array(1 => 'revision');
-		foreach ($parsers as $parser => $destination) {
-			if (preg_match($parser, $uri_noext, $parse_regs)) {
-				$uri_noext = preg_replace($parser, '', $uri_noext);
-				foreach ($destination as $reg => $param) {
-					$_GET[$param] = $parse_regs[$reg];
-				}
+		
+		uksort($urls, array('utils', 'lsort_callback'));
+		$found = false;
+		foreach ($urls as $url => $data) {
+			$url = $this->regexify($url);
+			if (preg_match($url, $uri, $matches)) {
+				$data['parameters']['matches'] = $matches;
+				$found = true;
+				break;
 			}
 		}
-
-		$uri = $uri_noext . $uri_parts[3];
-		if (!preg_match('/(.*\/)(.+?)(\..+)*$/', $uri, $uri_parts)) {
-			return;
+		
+		if (!$found) {
+			return false;
 		}
 		
-		$parsers = utils::run_hook_all('url_full_parsers');
-		foreach ($parsers as $parser => $destination) {
-			if (preg_match($parser, $uri, $parse_regs)) {
-				$uri = preg_replace($parser, '', $uri);
-				foreach ($destination as $reg => $param) {
-					$_GET[$param] = $parse_regs[$reg];
+		switch ($data['cbtype']) {
+			case 'create_new_getnew':
+				if ($data['callback'][0] == __CLASS__) {
+					$callback = array(&$this, $data['callback'][1]);
+				} else {
+					// not implemented
 				}
-			}
-		}		
-
-		if (!preg_match('/(.*\/)(.+?)(\..+)*$/', $uri, $uri_parts)) {
-			return;
+			break;
+			case 'create_new':
+				$class = new $data['callback'][0];
+				$callback = array($class, $data['callback'][1]);
+			break;
 		}
 		
-		// get revision parameter
-/*		if (preg_match('#revision/([0-9]+)#', $uri_parts[1], $regs)) {
-			$uri_parts[1] = str_replace($regs[0], '', $uri_parts[1]);
-			$_GET['revision'] = $regs[1];
-		}*/
-		
-		// Parent dir
-		if(empty($uri_parts[1])) {
-			$parentdir = '';
-		}
-		else {
-			$parentdir = substr($uri_parts[1], 1, strlen($uri_parts[1]) - 2);
-		}
-		// extension
-		if(empty($uri_parts[3])) {
-			$extension = '';
-		}
-		else {
-			$extension = substr($uri_parts[3], 1);
-		}
-				
-		$node = new CMS_Node();
-		$node->title_clean	= $uri_parts[2];
-		$node->parentdir	= $parentdir;	
-		$node->extension 	= $extension;
-		$node->read(NODE_TITLE);
-		
-		$_GET['id'] = $node->node_id;
+		call_user_func($callback, $data['parameters']);
+		return true;
 	}
 	
 	public function get_correct_link($matches) {

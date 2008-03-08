@@ -41,7 +41,7 @@ class CMS_Node {
 		return $return;
 	}
 	
-	public function read($what = NODE_SINGLE, $use_cache = true) {
+	public function read($what = NODE_SINGLE, $use_cache = false) {
 		$db = database::getnew();
 		$row = array();
 			
@@ -73,10 +73,21 @@ class CMS_Node {
 				$what = NODE_SINGLE;
 			break;
 		}
-		
+
 		$sql = 'SELECT * FROM ' . NODES_TABLE . ' WHERE ' . $sql_where;
-		$result = $db->sql_query($sql);
-		$rowset = $db->sql_fetchrowset($result);	
+		
+		if (!$use_cache) {
+			$result = $db->sql_query($sql);
+			$rowset = $db->sql_fetchrowset($result);
+		} else {
+			global $cache;
+			$result = $cache->sql_load($sql);
+			if (!$result) {
+				$result = $db->sql_query($sql);
+				$cache->sql_save($sql, $result, $use_cache);
+			}
+			$rowset = $cache->sql_fetchrowset($result);
+		}
 		
 		utils::get_types();
 		
