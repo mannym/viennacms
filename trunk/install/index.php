@@ -114,7 +114,7 @@ switch ($step) {
 		$db = database::getnew();
 		$db->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname);
 		$db->prefix = $table_prefix;
-		utils::write_config($dbhost, $dbuser, $dbpasswd, $dbname, $table_prefix);	
+		utils::config_file_write($dbhost, $dbuser, $dbpasswd, $dbname, $table_prefix);	
 		include(ROOT_PATH . 'includes/sql_parse.php');
 		$dbms_schema = 'install.sql';
 		$sql_query = file_get_contents($dbms_schema);
