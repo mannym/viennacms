@@ -29,7 +29,7 @@ class template {
 	public $root;
 	
 	private $handles;
-	private $vars;
+	public $vars;
 	
 	/**
 	* Return an instance of template.
