@@ -87,6 +87,9 @@ switch ($step) {
 			
 			case 86:
 				$sql[] = 'ALTER TABLE ' . NODES_TABLE . ' ADD `order` INT( 11 ) NOT NULL';
+				
+			case 89:
+				$sql[] = 'ALTER TABLE ' . NODES_TABLE . ' CHANGE `order` `node_order` INT( 11 ) NOT NULL';
 		}
 		$db->sql_return_on_error(true);
 		$mes = '';

@@ -16,6 +16,15 @@ define('NODE_SIBLINGS_ALL', 5);
 define('NODE_TITLE', 6);
 define('NODE_TITLEC', 7);
 
+/**
+ * CMS_Node
+ *
+ * @package viennaCMS
+ * @author viennaCMS developers, original design by Bas
+ * @copyright 2008
+ * @version $Id$
+ * @access public
+ */
 class CMS_Node {
 	public $node_id;
 	public $title;
@@ -28,12 +37,17 @@ class CMS_Node {
 	public $revision_number;
 	public $parentdir;
 	public $extension;
-	public $order;
+	public $node_order;
 		
 	public $options = array();
 	
-	private $dbfields = array('node_id', 'title', 'description', 'title_clean', 'created', 'parent_id', 'type', 'revision_number', 'parentdir', 'extension', 'order');
+	private $dbfields = array('node_id', 'title', 'description', 'title_clean', 'created', 'parent_id', 'type', 'revision_number', 'parentdir', 'extension', 'node_order');
 	
+  /**
+   * CMS_Node::getnew()
+   *
+   * @return CMS_Node new CMS_Node object
+   */
 	static public function getnew() {
 		$return = new CMS_Node();
 		$return->revision = new Node_Revision();
@@ -42,6 +56,13 @@ class CMS_Node {
 		return $return;
 	}
 	
+  /**
+   * CMS_Node::read()
+   *
+   * @param mixed $what what to grab?
+   * @param mixed $use_cache false for no caching, int for time
+   * @return mixed array with nodes, or a single node
+   */
 	public function read($what = NODE_SINGLE, $use_cache = false) {
 		$db = database::getnew();
 		$row = array();
@@ -51,7 +72,7 @@ class CMS_Node {
 				$sql_where = 'node_id = ' . intval($this->node_id);
 			break;
 			case NODE_CHILDREN:
-				$sql_where = 'parent_id = ' . intval($this->node_id) . ' ORDER BY `order` DESC';
+				$sql_where = 'parent_id = ' . intval($this->node_id) . ' ORDER BY node_order DESC';
 			break;
 			case NODE_SIBLINGS:
 				$sql_where = 'parent_id = ' . intval($this->parent_id);
@@ -172,6 +193,12 @@ class CMS_Node {
 		return false;
 	}
 	
+  /**
+   * CMS_Node::write()
+   *
+   * @param bool $all internal use only, write all
+   * @return void
+   */
 	public function write($all = true) {
 		$db = database::getnew();
 		
@@ -230,6 +257,11 @@ class CMS_Node {
 		}
 	}
 	
+  /**
+   * CMS_Node::prepare()
+   *
+   * @return void
+   */
 	public function prepare() {
 		if (empty($this->title_clean)) {
 			$this->title_clean = utils::clean_title($this->title);
@@ -238,6 +270,14 @@ class CMS_Node {
 		
 	}
 	
+  /**
+   * CMS_Node::write_option()
+   *
+   * @param string $name option name
+   * @param string $value option value
+   * @param bool $add create or replace
+   * @return bool query result
+   */
 	public function write_option($name, $value, $add = false) {
 		$db = database::getnew();
 		
@@ -255,22 +295,47 @@ class CMS_Node {
 		return $db->sql_query($sql);
 	}
 	
+  /**
+   * CMS_Node::get_children()
+   *
+   * @return array children of current node
+   */
 	public function get_children() {
 		return $this->read(NODE_CHILDREN, false);
 	}
 	
+  /**
+   * CMS_Node::get_siblings()
+   *
+   * @return array siblings of current node
+   */
 	public function get_siblings() {
 		return $this->read(NODE_SIBLINGS);
 	}
 
+  /**
+   * CMS_Node::get_siblings_all()
+   *
+   * @return array siblings of current node, and current node
+   */
 	public function get_siblings_all() {
 		return $this->read(NODE_SIBLINGS_ALL);
 	}
 	
+  /**
+   * CMS_Node::get_parent()
+   *
+   * @return CMS_Node parent of current node
+   */
 	public function get_parent() {
 		return $this->read(NODE_PARENT);
 	}
 	
+  /**
+   * CMS_Node::dump()
+   *
+   * @return void
+   */
 	public function dump() {
 		$class = new ReflectionClass('CMS_Node');
 		$properties = $class->getProperties();
@@ -289,6 +354,15 @@ class CMS_Node {
 	}
 }
 
+/**
+ * Node_Revision
+ *
+ * @package viennaCMS
+ * @author viennaCMS Developers
+ * @copyright 2008
+ * @version $Id$
+ * @access public
+ */
 class Node_Revision {
 	private $mynode;
 	public $has_modules = true;
@@ -301,6 +375,12 @@ class Node_Revision {
 	
 	private $dbfields = array('revision_id', 'node_id', 'revision_number', 'node_content', 'revision_date');
 	
+  /**
+   * Node_Revision::read()
+   *
+   * @param mixed $node node to read the revision for
+   * @return
+   */
 	public function read($node) {
 		global $revcache;
 		if (!isset($revcache)) {
@@ -352,6 +432,11 @@ class Node_Revision {
 		$this->read_modules();
 	}
 	
+  /**
+   * Node_Revision::read_modules()
+   *
+   * @return
+   */
 	public function read_modules() {
 		utils::get_types();
 		if (utils::$types[$this->mynode->type]['type'] == NODE_MODULES) {
@@ -375,6 +460,11 @@ class Node_Revision {
 		}
 	}
 	
+  /**
+   * Node_Revision::write()
+   *
+   * @return
+   */
 	public function write() {
 		$this->revision_number++;
 		$this->revision_date = time();
@@ -387,6 +477,11 @@ class Node_Revision {
 		return $this->revision_number;
 	}
 	
+  /**
+   * Node_Revision::_write()
+   *
+   * @return
+   */
 	private function _write() {
 		$db = database::getnew();
 		
@@ -421,6 +516,11 @@ class Node_Revision {
 		return $db->sql_nextid();
 	}
 
+  /**
+   * Node_Revision::dump()
+   *
+   * @return
+   */
 	public function dump() {
 		$class = new ReflectionClass('Node_Revision');
 		$properties = $class->getProperties();
