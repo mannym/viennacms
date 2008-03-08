@@ -28,10 +28,11 @@ class CMS_Node {
 	public $revision_number;
 	public $parentdir;
 	public $extension;
+	public $order;
 		
 	public $options = array();
 	
-	private $dbfields = array('node_id', 'title', 'description', 'title_clean', 'created', 'parent_id', 'type', 'revision_number', 'parentdir', 'extension');
+	private $dbfields = array('node_id', 'title', 'description', 'title_clean', 'created', 'parent_id', 'type', 'revision_number', 'parentdir', 'extension', 'order');
 	
 	static public function getnew() {
 		$return = new CMS_Node();
@@ -50,7 +51,7 @@ class CMS_Node {
 				$sql_where = 'node_id = ' . intval($this->node_id);
 			break;
 			case NODE_CHILDREN:
-				$sql_where = 'parent_id = ' . intval($this->node_id);
+				$sql_where = 'parent_id = ' . intval($this->node_id) . ' ORDER BY `order` DESC';
 			break;
 			case NODE_SIBLINGS:
 				$sql_where = 'parent_id = ' . intval($this->parent_id);
@@ -199,8 +200,6 @@ class CMS_Node {
 		
 		$sql = substr($sql, 0, -2);
 		$sql .= $sql_end;
-
-//		echo $sql . "<br />";
 		
 		$db->sql_query($sql);
 		
@@ -416,8 +415,6 @@ class Node_Revision {
 		
 		$sql = substr($sql, 0, -2);
 		$sql .= $sql_end;
-		
-//		echo $sql . "<br />";
 		
 		$db->sql_query($sql);
 		

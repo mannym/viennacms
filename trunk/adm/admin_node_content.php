@@ -1,6 +1,6 @@
 <?php
 /**
- * Edit a node
+ * Edit node content
  *  
  * @package viennaCMS
  * @author viennainfo.nl
@@ -12,7 +12,6 @@ include('../start.php');
 $user = user::getnew();
 $user->checkacpauth();
 
-$display_admin_tree = (empty($_GET['display_admin_tree']) ) ?  1 : 0;
 $mode = isset($_GET['mode']) ? $_GET['mode'] : 'form';
 $node = new CMS_Node();
 $node->node_id = $_REQUEST['node'];
