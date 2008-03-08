@@ -26,7 +26,7 @@ class utils {
 	static public $extensions;
 
 	static function lsort_callback($a, $b) {
-		return (strlen($a) - strlen($b));
+		return (strlen($b) - strlen($a));
 		
 	}
 	
