@@ -60,9 +60,13 @@ class page {
 		
 		if ($parser === '404') {
 			$this->parents = $this->get_parents($this->sitenode);
-			$this->node = CMS_Node::getnew();
-			$this->node->title = __('Page not found');
-			$this->prefix['middle'] = __('This page can not be found.');
+			$template = template::getnew();
+			$template->assign_vars(array(
+				'title' => __('Page not found'),
+				'sitename' => $this->sitenode->title,
+				'sitedescription' => $this->sitenode->description,
+				'middle' => __('The page you requested can not be found'),
+			));
 		}
 
 		// and then run
@@ -98,6 +102,8 @@ class page {
 	*/
 
 	public function show_node($args) {
+		global $Header;
+		
 		$id = intval($args['node_id']);
 		
 		$node = new CMS_Node();
@@ -123,6 +129,18 @@ class page {
 		$this->node = $node;
 		$this->parents = $this->get_parents($this->node);
 		$this->get_template();
+		
+		$template = template::getnew();
+		$template->assign_vars(array(
+			'title' => $this->node->title,
+			'description' => $this->node->description,
+			'sitename' => $this->sitenode->title,
+			'sitedescription' => $this->sitenode->description,
+			'crumbs' => $this->make_breadcrumbs(),
+			'right' => $this->get_loc('right'),
+			'middle' => $this->get_loc('middle'),
+			'left' => $this->get_loc('left'),
+		));
 	}
 	/**
 	* Get revision navigation
