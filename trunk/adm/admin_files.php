@@ -26,6 +26,8 @@ switch($mode) {
 		$folder->read();
 		
 		$new = $files->handle_file_upload($folder, 'file');
+		$cache->destroy('_url_callbacks_' . md5(''));
+		$cache->destroy('_url_callbacks_' . md5($_SERVER['HTTP_HOST']));
 		header('Location: admin_files.php?mode=options&node=' . $new->node_id);
 		exit;
 	break;
