@@ -123,8 +123,6 @@ class user {
 		return true;
 	}
 	
-
-	
 	/**
 	 * Log in.
 	 *

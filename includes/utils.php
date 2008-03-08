@@ -500,7 +500,43 @@ class utils {
 		return $list;
 	}
 	
-	static function write_config($dbhost, $dbuser, $dbpasswd, $dbname, $prefix) {
+	static function set_config($key, $val)
+	{
+		error_reporting(E_ALL);
+		global $config;
+		if($config[$key] === $val)
+		{
+			#return true;
+		}
+		$db = database::getnew();
+		$key = $db->sql_escape($key);
+		$val = $db->sql_escape($val);
+		$sql = 'SELECT * FROM ' . CONFIG_TABLE . " WHERE config_name = '$key';";
+		$result = $db->sql_fetchrow($db->sql_query($sql));
+		if(!$result)
+		{
+			$sql = 'INSERT INTO ' . CONFIG_TABLE . "
+				(config_name, config_value)
+				VALUES(
+				'$key', '$val');";
+		}
+		else {
+			$sql = "UPDATE " . CONFIG_TABLE . "
+				SET config_value = '$val'
+				WHERE config_name = '$key';";		
+		}
+		$result = $db->sql_query($sql);
+		if(!$result) 
+		{
+			return false;
+		}
+		else {
+			$config[$key] = $val;
+			return true;
+		}
+	}
+	
+	static function config_file_write($dbhost, $dbuser, $dbpasswd, $dbname, $prefix) {
 		$config = <<<CONFIG
 <?php
 \$dbhost = '$dbhost';
