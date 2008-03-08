@@ -11,14 +11,8 @@ if (!defined('IN_VIENNACMS')) {
 	exit;
 }
 
-class extension_core {
-	
-	function eval_text($matches)
-	{
-		eval($matches[2]);
-		return "";
-	}
-		
+class extension_core 
+{
 	function list_modules() {
 		return array(
 			'html_content' => 'core',
@@ -68,7 +62,7 @@ class extension_core {
 	}
 	
 	function module_rawcontent($args) {
-		$fnc_txt = 'eval($matches[2]) ;return "";';
+		$fnc_txt = 'if(!preg_match("#;[[:space:]]$#is", $matches[2])) { $matches[2] = $matches[2] . ";"; } eval($matches[2]) ;return "";';
 		$text = stripslashes($args['content']);
 		$text = utils::handle_text(preg_replace_callback('|<\?(php)?(.*?)\?>|is', create_function('$matches', $fnc_txt), $text));
 		echo $text;

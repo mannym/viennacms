@@ -42,6 +42,10 @@ switch($mode) {
 	case 'save':
 		error_reporting(E_ALL);
 		foreach ($_POST as $key => $value) {
+			if($value == '--' . __('Select') . '--')
+			{
+				$value = '';
+			}
 			if (isset($options[$key])) {
 				$sql = "SELECT * FROM " . NODE_OPTIONS_TABLE . "
 				WHERE node_id = " . $node->node_id . "
