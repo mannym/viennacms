@@ -141,14 +141,14 @@ class page {
 		
 		$template = template::getnew();
 		$template->assign_vars(array(
+			//'right' => $this->get_loc('right'),
+			'middle' => $this->get_loc('middle'),
+			//'left' => $this->get_loc('left'),
 			'title' => $this->node->title,
 			'description' => $this->node->description,
 			'sitename' => $this->sitenode->title,
 			'sitedescription' => $this->sitenode->description,
-			'crumbs' => $this->make_breadcrumbs(),
-			//'right' => $this->get_loc('right'),
-			'middle' => $this->get_loc('middle'),
-			//'left' => $this->get_loc('left'),
+			'crumbs' => $this->make_breadcrumbs()
 		));
 	}
 	/**
@@ -473,7 +473,7 @@ class page {
 
 			if ($mret != 500) {
 				$template->set_alt_filename($module_function, array('module-' . $location . '.php', 'module.php'));
-				$template->assign_vars(array(
+				$template->assign_priv_vars($module_function, array(
 					'title' 	=> htmlentities($module['content_title']),
 					'content' 	=> $contents,
 					'margin'  	=> ( $location == 'middle' ? ' style="margin-left: 20px;"' : ''),

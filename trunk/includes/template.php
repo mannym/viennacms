@@ -30,6 +30,7 @@ class template {
 	
 	private $handles;
 	public $vars;
+	public $private_vars;
 	
 	/**
 	* Return an instance of template.
@@ -96,6 +97,15 @@ class template {
 			$this->assign_var($key, $value);
 		}
 	}
+
+	public function assign_priv_vars($handle, $array) {
+		foreach ($array as $key => $value) {
+			if (!$this->private_vars[$handle]) {
+				$this->private_vars[$handle] = array();
+			}
+			$this->private_vars[$handle][$key] = $value;
+		}
+	}
 	
 	private function assign_var($var, $value) {
 		$this->vars[$var] = $value;
@@ -104,6 +114,12 @@ class template {
 	public function display($handle, $process = true) {
 		foreach ($this->vars as $key => $value) {
 			$$key = $value;
+		}
+		
+		if (is_array($this->private_vars[$handle])) {
+			foreach ($this->private_vars[$handle] as $key => $value) {
+				$$key = $value;
+			}
 		}
 		
 		ob_start();
