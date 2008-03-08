@@ -53,8 +53,16 @@ class page {
 		$this->sitenode = $this->get_this_site();
 		
 		// first try to decode an URL.
-		if (!$this->try_decode_url()) {
+		$parser = $this->try_decode_url();
+		if (!$parser) {
 			$this->show_node(array('node_id' => $this->sitenode->node_id));
+		}
+		
+		if ($parser === '404') {
+			$this->parents = $this->get_parents($this->sitenode);
+			$this->node = CMS_Node::getnew();
+			$this->node->title = __('Page not found');
+			$this->prefix['middle'] = __('This page can not be found.');
 		}
 
 		// and then run
@@ -424,7 +432,7 @@ class page {
 		} else if (isset($_SERVER['PATH_INFO']) && !empty($_SERVER['PATH_INFO'])) {
 			$uri = $_SERVER['PATH_INFO'];
 		} else {
-			return;
+			return false;
 		}
 		
 		return $this->do_decode($uri);
@@ -438,7 +446,7 @@ class page {
 	
 	private function do_decode($uri) {
 		global $cache;
-		$sitehash = md5($_SERVER['HTTP_HOST']);
+		$sitehash = md5($this->sitenode->options['hostname']);
 		if (!($urls = $cache->get('_url_callbacks_' . $sitehash))) {
 			$urls = utils::run_hook_all('url_callbacks');
 			$cache->put('_url_callbacks_' . $sitehash, $urls);			
@@ -456,7 +464,7 @@ class page {
 		}
 		
 		if (!$found) {
-			return false;
+			return '404';
 		}
 		
 		switch ($data['cbtype']) {

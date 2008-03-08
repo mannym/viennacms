@@ -105,6 +105,10 @@ switch($mode) {
 		$node->parentdir = $newnode_parentdir;
 		$node->title_clean = $newnode_title_clean;
 		$node->write();
+		$parents = $page->get_parents($node);
+		$sitenode = $parents[0];
+		$sitehash = md5($sitenode->options['hostname']);
+		$cache->destroy('_url_callbacks_' . $sitehash); 
 		if (!$easy) {
 			header('Location: ' . utils::base() . 'admin_node.php?node=' . $node->node_id);
 		} else {
