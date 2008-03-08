@@ -227,5 +227,63 @@ class extension_core {
 CSS;
 		utils::add_css('inline', $css);
 	}
+
+	function url_callbacks() {
+		$urls = array();
+		$page = page::getnew(false);
+		$urls = $this->recursive_urls($page->sitenode, $urls);
+		return $urls;
+	}
+	
+	function recursive_urls($node, $urls) {
+		$urls = array_merge($urls, utils::run_hook_all('get_url_callback', $node));
+		
+		$children = $node->get_children();
+		foreach ($children as $child) {
+			$urls = $this->recursive_urls($child, $urls);
+		}
+		
+		return $urls;
+	}
+	
+	function get_url_callback($node) {
+		if ($node->type == 'page' || $node->type == 'site' || $node->type == 'link') {
+			$path = $node->title_clean;
+			if ($node->parentdir) {
+				$path = $node->parentdir . '/' . $path; 
+			}
+			if ($node->extension) {
+				$path .= '.' . $node->extension; 
+			}
+
+			$rpath = $node->title_clean;
+			if ($node->parentdir) {
+				$rpath = $node->parentdir . '/' . $rpath; 
+			}
+			$rpath .= '/revision/%number';
+			if ($node->extension) {
+				$rpath .= '.' . $node->extension; 
+			}
+			
+			//$urls = array_merge($urls, array(
+			return array(
+				$path => array(
+					'callback' => array('page', 'show_node'),
+					'cbtype' => 'create_new_getnew',
+					'parameters' => array(
+						'node_id' => $node->node_id
+					)
+				),
+				$rpath => array(
+					'callback' => array('page', 'show_node'),
+					'cbtype' => 'create_new_getnew',
+					'parameters' => array(
+						'node_id' => $node->node_id,
+						'revision' => true
+					)
+				)
+			);
+		}
+	}
 }
 ?>

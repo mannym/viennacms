@@ -335,7 +335,7 @@ CONTENT;
 	 * @return bool succes, but it also gives the file.
 	 */
 	
-	function download_file ( $file_id ) {
+	function download_file ( $file_id, $utype = 'normal' ) {
 		global $db ;
 		$node = new CMS_Node();
 		$node->node_id = $file_id;
@@ -365,8 +365,8 @@ CONTENT;
 		if(isset($_SERVER['HTTP_REFERER'])) {
 			$referer = $db->sql_escape ( $_SERVER['HTTP_REFERER'] );
 		}
-		
-		$suffix = (isset($_GET['download_thumb'])) ? '.thumb' : '.upload';
+
+		$suffix = ($utype == 'thumb') ? '.thumb' : '.upload';
 
 		if (!file_exists($this->getuploaddir ( ROOT_PATH ) . $md5 . $suffix)) {
 			trigger_error(__('This file does not exist'), E_USER_ERROR);
@@ -374,7 +374,7 @@ CONTENT;
 		
 		// Make the query
 		
-		if (!isset($_GET['download_nocount']) && !isset($_GET['download_thumb'])) {
+		if ($utype == 'normal') {
 			$sql = 
 			"INSERT INTO " . DOWNLOADS_TABLE . "
 			(file_id, ip, forwarded_for, user_agent, referer, time) VALUES(
@@ -462,6 +462,11 @@ CONTENT;
 				3 => 'download_extension'
 			)
 		);
+	}
+	
+	function get_file($args) {
+		$this->download_file($args['node_id'], $args['type']);
+		exit;
 	}
 	
 	function before_display() {
@@ -558,6 +563,73 @@ CONTENT;
 		$replacement = str_replace('{viennafile:' . $matches[1] . '}', $widget, $matches[0]);
 		
 		return $replacement;
+	}
+	
+	function url_callbacks() {
+		$node = $this->get_root();
+		$core = utils::load_extension('core');
+		return $core->recursive_urls($node, array());
+	}
+	
+	function get_url_callback($node) {
+		if ($node->type == 'file') {
+			$return = array();
+			// normal counted files
+			$path = $node->title_clean;
+			if ($node->parentdir) {
+				$path = $node->parentdir . '/' . $path; 
+			}
+			if ($node->extension) {
+				$path .= '.' . $node->extension; 
+			}
+			$path = 'file-download/' . $path;
+			$return[$path] = array(
+				'callback' => array('extension_files', 'get_file'),
+				'cbtype' => 'create_new',
+				'parameters' => array(
+					'node_id' => $node->node_id,
+					'type' => 'normal'
+				)
+			);
+			// nocount files
+			$ncpath = $node->title_clean;
+			if ($node->parentdir) {
+				$ncpath = $node->parentdir . '/' . $ncpath; 
+			}
+			$ncpath .= '/nocount';
+			if ($node->extension) {
+				$ncpath .= '.' . $node->extension; 
+			}
+			$ncpath = 'file-download/' . $ncpath;
+			$return[$ncpath] = array(
+				'callback' => array('extension_files', 'get_file'),
+				'cbtype' => 'create_new',
+				'parameters' => array(
+					'node_id' => $node->node_id,
+					'type' => 'nocount'
+				)
+			);
+			// thumbnails
+			$thpath = $node->title_clean;
+			if ($node->parentdir) {
+				$thpath = $node->parentdir . '/' . $thpath; 
+			}
+			$thpath .= '.thumb';
+			if ($node->extension) {
+				$thpath .= '.' . $node->extension; 
+			}
+			$thpath = 'file-download/' . $thpath;
+			$return[$thpath] = array(
+				'callback' => array('extension_files', 'get_file'),
+				'cbtype' => 'create_new',
+				'parameters' => array(
+					'node_id' => $node->node_id,
+					'type' => 'thumb'
+				)
+			);
+			
+			return $return;
+		}
 	}
 	
 	/**
