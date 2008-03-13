@@ -548,7 +548,7 @@ class utils {
 define('CMS_INSTALLED', true);
 ?>
 CONFIG;
-		file_put_contents(ROOT_PATH . 'config.php', $config);
+		return file_put_contents(ROOT_PATH . 'config.php', $config);
 	}
 
 	static function array_move_element($array, $value, $direction = 'up') {

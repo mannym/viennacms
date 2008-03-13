@@ -1,0 +1,56 @@
+<?php
+require_once("PHPUnit/Framework/TestCase.php");
+
+class TestCase_start extends PHPUnit_Framework_TestCase {
+    protected function setUp() {
+
+    }
+
+    protected function tearDown() {
+
+    }
+
+    public function testStartSystem() {
+    	global $cache; // for not die-ing with a fatal error
+        define('IN_VIENNACMS', true);
+		define('IN_INSTALL', true);
+		require_once("../../start.php");
+		$this->assertNotNull($db, 'database class not created');
+		$this->assertNotNull($template, 'template class not created');
+		$this->assertNotNull($cache, 'acm class not created');
+		$this->assertEquals(true, class_exists('CMS_Node'), 'CMS_Node does not exist');
+		$this->assertEquals(true, class_exists('page'), 'page does not exist');
+		$this->assertEquals(true, class_exists('user'), 'user does not exist');
+		//$this->assertType('array', $config, '$config is not an array');
+    }
+
+	public function testConfigFile() {
+		$correct = <<<CONFIG
+<?php
+\$dbhost = 'localhost';
+\$dbuser = 'root';
+\$dbpasswd = '';
+\$dbname = 'viennacms_unittest';
+
+\$table_prefix = 'viennacms_';
+
+define('CMS_INSTALLED', true);
+?>
+CONFIG;
+		$this->assertEquals(strlen($correct), utils::config_file_write('localhost', 'root', '', 'viennacms_unittest', 'viennacms_'), 'config file writing failed');
+		$this->assertFileExists(ROOT_PATH . 'config.php', 'config file does not exist');
+		$this->assertEquals(file_get_contents(ROOT_PATH . 'config.php'), $correct, 'config file does not contain correct data');
+	}
+	
+	public function testInstallDB() {
+		$db = database::getnew();
+		$db->sql_connect('localhost', 'root', '', 'viennacms_unittest');
+		$db->prefix = 'viennacms_';
+		$this->assertNotEquals(false, $db->db_connect_id, 'could not connect to DB - sure details are correct?');
+		include(ROOT_PATH . 'includes/functions_install.php');
+		$this->assertEquals(true, function_exists('install_database'), 'function for installing not correct?');
+		$dbresult = install_database('viennacms_');
+		$this->assertEquals(false, $dbresult, 'database not created correctly, returned: ' . $dbresult);
+	}
+}
+?>

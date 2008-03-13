@@ -23,7 +23,7 @@ if (!defined('IN_VIENNACMS'))
 */
 class CMS_System_DBAL
 {
-	private $db_connect_id;
+	public $db_connect_id;
 	private $query_result;
 	private $return_on_error = false;
 	private $transaction = false;
