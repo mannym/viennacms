@@ -1,5 +1,5 @@
 <?php
-function install_database($table_prefix) {
+function install_database($table_prefix, $name2, $ww2) {
 	$db = database::getnew();
 	$db->sql_return_on_error(true);
 	include(ROOT_PATH . 'includes/sql_parse.php');

@@ -49,7 +49,7 @@ CONFIG;
 		$this->assertNotEquals(false, $db->db_connect_id, 'could not connect to DB - sure details are correct?');
 		include(ROOT_PATH . 'includes/functions_install.php');
 		$this->assertEquals(true, function_exists('install_database'), 'function for installing not correct?');
-		$dbresult = install_database('viennacms_');
+		$dbresult = install_database('viennacms_', 'admin', md5('admin'));
 		$this->assertEquals(false, $dbresult, 'database not created correctly, returned: ' . $dbresult);
 	}
 }
