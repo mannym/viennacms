@@ -25,13 +25,16 @@ $node = new CMS_Node();
 $node->node_id = $node_id;
 $node->read();
 
-$options = utils::run_hook_all('options_' . $node->type);
-if(in_array($node->type, array('site', 'newsfolder', 'page', 'news'))) {
-		$options = array_merge($options, array(
+$options = utils::run_hook_all('options_' . $node->type, $node->options);
+if(in_array($node->type, array('site', 'page'))) {
+	$options = array_merge($options, array(
 		'template' => array(
-			'title' => __('Template'),
-			'description' => __('The template that will be used for this node, and child nodes. Leave empty to use the parent\'s template.')
-		),
+				'type'			=> 'template',
+				'name'			=> 'template',
+				'title' 		=> __('Template'),
+ 	            'description'	=> __('The template that will be used for this node, and child nodes. Leave empty to use the parent\'s template.'),
+				'value'			=> $node->options['template']
+		)
 	));
 }
 
@@ -82,6 +85,25 @@ switch($mode) {
 		} else {
 			echo '<h1>' . sprintf(__('Content wizard, step %d of %d'), 3, 4) . '</h1>';	
 		}
+		$form = utils::load_extension('form');
+		$form->action = '?mode=save';
+		$form->submit = __('Save');
+		$form->setformfields($options);
+		$form->_add_formfield(array(
+			'type'			=> 'hidden',
+			'name'			=> 'node',
+			'value'			=> $node->node_id
+		));
+		if ($easy) {
+			$form->_add_formfield(array(
+				'type'			=> 'hidden',
+				'name'			=> 'easy',
+				'value'			=> 'true'
+			));
+		}
+		$form->generateform();
+		echo $form->content;
+		/*
 		?>
 		<form action="?mode=save" method="post">
 			<table>
@@ -146,6 +168,7 @@ switch($mode) {
 			</table>
 		</form>
 		<?php
+		*/
 		include('./footer.php');
 	break;
 }
