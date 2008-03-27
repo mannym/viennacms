@@ -15,10 +15,12 @@ class extension_form {
 	public $textareas = array();
 	public $textfields = array();
 	public $hiddenfields = array();
+	public $selectboxes = array();
 	public $place = array();
 	public $submit;
 	public $action;
 	public $content;
+	private $position = 0;
 	
 	function setformfields($formfields) {
 		foreach($formfields as $formfield) {
@@ -27,8 +29,21 @@ class extension_form {
 		return;
 	}
 	
-	private function _add_formfield($formfield) {
+	public function _add_formfield($formfield) {
 		$type 	= $formfield['type'];
+		
+		// special type handling
+		switch ($type) {
+			case 'language':
+				$this->_add_language($formfield);
+				return;
+			break;
+			case 'template':
+				$this->_add_template($formfield);
+				return;
+			break;
+		}
+		
 		$name 	= $formfield['name'];
 		$value	= isset($formfield['value']) ? $formfield['value'] : ''; // Not required
 		$title	= isset($formfield['title']) ? $formfield['title'] : ''; // Not required for hidden formfields
@@ -36,17 +51,19 @@ class extension_form {
 		/**
 		 * TODO: Automaticaly generate the place of the field
 		 */
-		$place	= isset($formfield['place']) ? $formfield['place'] : '';
+		//$place	= isset($formfield['place']) ? $formfield['place'] : '';
 		
-		if(!empty($place)) {
-			switch ($type) {
-				case 'textarea': // Set the place of the formfield. Not for hidden or submit:
-				case 'textfield':
-					$this->place[$place]['name'] = $name;
-					$this->place[$place]['type'] = $type;					
-				break;
-			}
+		//if(!empty($place)) {
+		switch ($type) {
+			case 'selectbox':
+			case 'textarea': // Set the place of the formfield. Not for hidden or submit:
+			case 'textfield':
+				$this->position++;
+				$this->place[$this->position]['name'] = $name;
+				$this->place[$this->position]['type'] = $type;					
+			break;
 		}
+		//}
 		
 		switch($type) {
 			case 'textarea': // if type is textarea, add it to textareas
@@ -69,6 +86,15 @@ class extension_form {
 				);
 			break;
 			
+			case 'selectbox':
+				$this->selectboxes[$name] = array(
+					'name'			=> $name,
+					'title'			=> $title,
+					'description'	=> $desc,
+					'values'		=> $value
+				);
+			break;
+			
 			case 'hidden':
 				$this->hiddenfields[$name] = array(
 					'name'	=> $name,
@@ -82,6 +108,54 @@ class extension_form {
 							
 		}
 		return;
+	}
+	
+	public function _add_language($formfield) {
+		$formfield['type'] = 'selectbox';
+		$current = $formfield['value'];
+		$formfield['value'] = array(
+			'' => array(
+				'title' => '-- Select --',
+				'selected' => false
+			)
+		);
+		$languages = scandir(ROOT_PATH . 'locale');
+		foreach($languages as $language) {
+			if (is_dir(ROOT_PATH . 'locale/' . $language) && is_dir(ROOT_PATH . 'locale/' . $language . '/LC_MESSAGES/') && file_exists(ROOT_PATH . 'locale/' . $language . '/LC_MESSAGES/viennacms.mo'))
+			{
+				$formfield['value'][$language] = array(
+					'title' => $language,
+					'selected' => ($current == $language)
+				);
+			} 
+		}
+		// and add the new, improved, formfield.
+		$this->_add_formfield($formfield);
+	}
+	
+	public function _add_template($formfield) {
+		$formfield['type'] = 'selectbox';
+		$current = $formfield['value'];
+		$formfield['value'] = array(
+			'' => array(
+				'title' => '-- Select --',
+				'selected' => false
+			)
+		);
+		
+		$templates = scandir(ROOT_PATH . 'styles');
+		foreach($templates as $template) {
+			if (is_dir(ROOT_PATH . 'styles/' . $template) && file_exists(ROOT_PATH . 'styles/' . $template . '/index.php') && file_exists(ROOT_PATH . 'styles/' . $template . '/module.php'))
+			{
+				$formfield['value'][$template] = array(
+					'title' => $template,
+					'selected' => ($current == $template)
+				);
+			} 
+		}
+
+		// and add the new, improved, formfield.
+		$this->_add_formfield($formfield);
 	}
 	
 	function contactform() {
@@ -132,6 +206,9 @@ CONTENT;
 				break;
 				case 'textfield':
 					$this->_generate_textfield($place['name']);
+				break;
+				case 'selectbox':
+					$this->_generate_selectbox($place['name']);
 				break;
 			}
 		}
@@ -193,6 +270,29 @@ CONTENT;
 CONTENT;
 	$this->content .= $content;
 	return;		
+	}
+	
+	function _generate_selectbox($name) {
+		$item = $this->selectboxes[$name];
+		
+		$selectbox = '<select name="' . $item['name'] . '">';
+		foreach ($item['values'] as $key => $value) {
+			$selected = ($value['selected']) ? ' selected="selected"' : '';
+			$selectbox .= '<option value="' . $key . '"' . $selected . '>' . $value['title'] . '</option>';
+		}
+		$selectbox .= '</select>';
+		
+		$this->content .= <<<CONTENT
+		<tr>
+			<td width="45%">
+				<strong>{$item['title']}</strong><br />
+				{$item['description']}
+			</td>
+			<td width="55%">
+				{$selectbox}
+			</td>
+		</tr>
+CONTENT;
 	}
 	
 	function _generate_hidden_formfield($hidden_formfield_name) {

@@ -186,28 +186,49 @@ class extension_core
 		return $list;
 	}
 	
-	function options_site() {
+	function options_site($options) {
 		return array(
 			'hostname' => array(
-				'title' => __('Hostname'),
-				'description' => __('The hostname where this site node should be displayed.')
+				'type'			=> 'textfield',
+				'name'			=> 'hostname',
+				'title'			=> __('Hostname'),
+				'description'	=> __('The hostname where this site node should be displayed. Leave empty if not using a multi-site setup.'),
+				'value'			=> $options['hostname']
 			),
 			'rewrite' => array(
-				'title' => __('Rewrite'),
-				'description' => __('Use mod_rewrite for this site? Leave empty to disable, else type "on".')
+				'type'			=> 'selectbox',
+				'name'			=> 'rewrite',
+				'title'			=> __('Clean URLs'),
+				'description'	=> __('Use clean URLs for this site?'),
+				'value'			=> array(
+					'on' => array(
+						'title' => 'On',
+						'selected' => ($options['rewrite'] == 'on')
+					),
+					'' => array(
+						'title' => 'Off',
+						'selected' => ($options['rewrite'] != 'on')
+					)
+				)
 			),
 			'language' => array(
-				'title' => __('Language'),
-				'description' => __('Specify the language to use for this node')
-			),
+				'type'			=> 'language',
+				'name'			=> 'language',
+				'title'			=> __('Language'),
+				'description'	=> __('Specify the language to use for this node'),
+				'value'			=> $options['language']
+			)
 		);
 	}
 
-	function options_link() {
+	function options_link($options) {
 		return array(
 			'destination' => array(
-				'title' => __('Destination'),
-				'description' => __('The URL where the link should go to.')
+				'name'			=> 'destination',
+				'type'			=> 'textfield',
+				'title'			=> __('Destination'),
+				'description'	=> __('The URL where the link should go to.'),
+				'value'			=> $options['destination']
 			)
 		);
 	}
