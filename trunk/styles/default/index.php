@@ -31,8 +31,24 @@
 				<?php echo $nav_level2 ?>
 			</ul>
 			<br />
-		<?php endif; ?>
-		<?php if ($right) : ?><?php echo $right ?><?php endif; ?>
+		<?php endif;?>
+		<?php if ($nav_level3) : ?>
+			<h1><?php echo __('Navigation') ?></h1>
+			<ul>
+				<?php echo $nav_level3 ?>
+			</ul>
+			<br />
+		<?php endif;?>
+		
+		<?php if ($nav_level4) : ?>
+			<h1><?php echo __('Navigation') ?></h1>
+			<ul>
+				<?php echo $nav_level4 ?>
+			</ul>
+			<br />
+		<?php endif;?>
+		
+		<?php if ($left) echo $left;?>
 	</div>
 	<div id="footer">
 		Powered by <a href="http://viennainfo.nl/">viennaCMS</a>

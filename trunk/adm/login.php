@@ -69,6 +69,7 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'logout') {
 			#left {
 				float: left;
 				width: 24%;
+				text-align: center;
 			}
 			
 			#right {
@@ -78,6 +79,8 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'logout') {
 			
 			table {
 				font-size: 12px;
+				text-align: center;
+				align: center;
 			}
 		</style>	
 	</head>
@@ -87,9 +90,9 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'logout') {
 				<div style="text-align: right; color: black !important;"><a href="../"><?php echo __('View site') ?></a></div>
 				<h1><?php echo __('viennaCMS ACP'); ?></h1>
 			</div>
-			<div id="left">
+			<div id="left" style="text-align: center; align: center;">
 				<form action="" method="post">
-					<table>
+					<table align="center" style="text-align: center;">
 						<tr>
 							<td><?php echo __('Username') ?>: </td>
 							<td><input type="text" name="username" /></td>

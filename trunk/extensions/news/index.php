@@ -177,7 +177,7 @@ CSS;
 	}
 	
 	function show_newspage($args) {
-		$page = page::getnew(false);
+		$page = page::getnew();
 		$node = new CMS_Node();
 		$node->node_id = $args['node_id'];
 		$node->read();

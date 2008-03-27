@@ -461,6 +461,10 @@ class page {
 		}
 		
 		$template = template::getnew();
+		if(!isset($this->sitenode->options['blocks'][$location]))
+		{
+			$this->sitenode->options['blocks'][$location] = array();
+		}
 		foreach ($this->sitenode->options['blocks'][$location] as $module) {
 			$module_function = 'module_' . $module['module'];
 			$ext = utils::load_extension($module['extension']);
