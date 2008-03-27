@@ -115,11 +115,11 @@ switch ($step) {
 		$db = database::getnew();
 		$db->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname);
 		$db->prefix = $table_prefix;
-		utils::config_file_write($dbhost, $dbuser, $dbpasswd, $dbname, $table_prefix);	
 		$result = install_database($db->prefix, $name2, $ww2);
 		if ($result) { // got an error
 			install_die($result);
 		}
+		utils::config_file_write($dbhost, $dbuser, $dbpasswd, $dbname, $table_prefix);	
 	break;	
 	case 4:
 		header('Location: ../index.php');
