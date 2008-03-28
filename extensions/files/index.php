@@ -556,7 +556,7 @@ CONTENT;
 				}
 			break;
 			default:
-				$widget .= '<a href="' . $page->get_link($node) . '"><img style="float: left; border: 0px;" src="adm/images/download.png" /><span style="float: left; padding-top: 5px;">' . sprintf(__('Download %s<br />(%d kB)'), $node->title, $filesize) . '</span></a><br style="clear: both;" />';
+				$widget .= '<a href="' . $page->get_link($node) . '"><img style="float: left; border: 0px;" src="adm/images/download.png" alt="File" /><span style="float: left; padding-top: 5px;">' . sprintf(__('Download %s<br />(%d kB)'), $node->title, $filesize) . '</span></a><br style="clear: both;" />';
 			break;
 		}
 		
