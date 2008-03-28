@@ -519,12 +519,14 @@ class page {
 	
 	private function do_decode($uri) {
 		global $cache;
+		$uri = urldecode($uri); // for spaces and other characters in URIs
+				
 		$sitehash = md5($this->sitenode->options['hostname']);
 		if (!($urls = $cache->get('_url_callbacks_' . $sitehash))) {
 			$urls = utils::run_hook_all('url_callbacks');
 			$cache->put('_url_callbacks_' . $sitehash, $urls);			
 		}
-		
+	
 		uksort($urls, array('utils', 'lsort_callback'));
 		$found = false;
 		foreach ($urls as $url => $data) {
