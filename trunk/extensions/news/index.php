@@ -181,11 +181,11 @@ CSS;
 		$node = new CMS_Node();
 		$node->node_id = $args['node_id'];
 		$node->read();
+		$page->init_page($node);
 		ob_start();
 		$this->show_news($node, array('location' => 'middle'));
 		$c = ob_get_contents();
 		ob_end_clean();
-		$page->parents = $page->get_parents($page->sitenode);
 		$template = template::getnew();
 		$template->assign_vars(array(
 			'title' => $node->title,

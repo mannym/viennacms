@@ -26,7 +26,7 @@ $node->node_id = $node_id;
 $node->read();
 
 $options = utils::run_hook_all('options_' . $node->type, $node->options);
-if(in_array($node->type, array('site', 'page'))) {
+if(in_array($node->type, array('site', 'page', 'newsfolder'))) {
 	$options = array_merge($options, array(
 		'template' => array(
 				'type'			=> 'template',

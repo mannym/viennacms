@@ -66,7 +66,7 @@ class page {
 		}
 		
 		if ($parser === '404') {
-			$this->parents = $this->get_parents($this->sitenode);
+			$this->init_page($this->sitenode);
 			$template->assign_vars(array(
 				'title' => __('Page not found'),
 				'sitename' => $this->sitenode->title,
@@ -136,8 +136,7 @@ class page {
 		}
 		
 		$this->node = $node;
-		$this->parents = $this->get_parents($this->node);
-		$this->get_template();
+		$this->init_page($this->node);
 		
 		$template = template::getnew();
 		$template->assign_vars(array(
@@ -151,6 +150,12 @@ class page {
 			'crumbs' => $this->make_breadcrumbs()
 		));
 	}
+	
+	public function init_page(CMS_Node $node) {
+		$this->parents = $this->get_parents($node);
+		$this->get_template();
+	}
+	
 	/**
 	* Get revision navigation
 	*/
