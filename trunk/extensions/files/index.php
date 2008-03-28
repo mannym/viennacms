@@ -541,20 +541,22 @@ CONTENT;
 			case 'image/gif':
 			case 'image/png':
 			case 'image/jpeg':
-				$image = getimagesize($filename);
-				$thumbname = $this->getuploaddir ( ROOT_PATH ) . $node->description . '.thumb';
-				if (!file_exists($thumbname)) {
-					$this->generate_thumbnail($filename, $thumbname, $node->options['mimetype']);
-				}
-				$oldtitle = $node->title_clean;
-				$node->title_clean .= '.thumb';
-				$widget .= '<img src="' . $page->get_link($node) . '" alt="' . $node->title . '" /><br />';
-				$node->title_clean = $oldtitle;
-				$thumbnail = getimagesize($thumbname);
-				if ($thumbnail[0] != $image[0]) {
-					$widget .= '<a href="' . $page->get_link($node) . '">' . sprintf(__('View the full image'), $node->title, $filesize) . '</a>';
-				}
-			break;
+				if (extension_loaded('gd') && function_exists('imagecreatetruecolor')) {
+					$image = getimagesize($filename);
+					$thumbname = $this->getuploaddir ( ROOT_PATH ) . $node->description . '.thumb';
+					if (!file_exists($thumbname)) {
+						$this->generate_thumbnail($filename, $thumbname, $node->options['mimetype']);
+					}
+					$oldtitle = $node->title_clean;
+					$node->title_clean .= '.thumb';
+					$widget .= '<img src="' . $page->get_link($node) . '" alt="' . $node->title . '" /><br />';
+					$node->title_clean = $oldtitle;
+					$thumbnail = getimagesize($thumbname);
+					if ($thumbnail[0] != $image[0]) {
+						$widget .= '<a href="' . $page->get_link($node) . '">' . sprintf(__('View the full image'), $node->title, $filesize) . '</a>';
+					}
+					break;
+				} // if else, no break
 			default:
 				$widget .= '<a href="' . $page->get_link($node) . '"><img style="float: left; border: 0px;" src="adm/images/download.png" alt="' . __('File') . '" /><span style="float: left; padding-top: 5px;">' . sprintf(__('Download %s<br />(%d kB)'), $node->title, $filesize) . '</span></a><br style="clear: both;" />';
 			break;
