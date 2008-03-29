@@ -567,10 +567,11 @@ class page {
 		$node->read();
 		
 		$link = $this->get_link($node);
+		$link = 'href="' . $link . '"';
 		
-		$replacement = str_replace('{node:' . $matches[1] . '}', $link, $matches[0]);
+		//$replacement = str_replace('{node:' . $matches[1] . '}', $link, $matches[0]);
 		
-		return $replacement;
+		return $link;
 	}
 }
 ?>
