@@ -189,7 +189,7 @@ $h_node	 		= $query_string . 'node';*/
 				<?php
 				} else {
 				?>
-				persist: "all",
+				persist: "allg",
 				<?php } ?>
 				collapsed: true,
 				unique: true
