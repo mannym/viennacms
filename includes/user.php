@@ -4,7 +4,7 @@
 * "Hey, what are you doing in the ACP? Have you logged in?"
 * 
 * @package viennaCMS
-* @author viennainfo.nl
+* @author viennacms.nl
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 */
 

@@ -1,4 +1,12 @@
 <?php
+/**
+* Install/upgrade system
+* 
+* @package install
+* @author viennacms.nl
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
+*/
+
 define('IN_VIENNACMS', true);
 define('IN_INSTALL', true);
 include('../start.php');
