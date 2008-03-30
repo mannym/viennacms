@@ -4,7 +4,7 @@
 * "Let's print out that page, and use that layout"
 * 
 * @package viennaCMS
-* @author viennainfo.nl
+* @author viennacms.nl
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 */
 

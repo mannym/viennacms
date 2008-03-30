@@ -3,7 +3,7 @@
  * File extension for viennaCMS, for uploading and downloading
  * 
  * @package viennaCMS
- * @author viennainfo.nl
+ * @author viennacms.nl
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License 
  */
 

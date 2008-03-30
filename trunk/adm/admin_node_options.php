@@ -4,7 +4,7 @@
  * "O no! I want this node to be blue!"
  * 
  * @package viennaCMS
- * @author viennainfo.nl
+ * @author viennacms.nl
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 

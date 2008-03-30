@@ -3,7 +3,7 @@
  * Node page for the ACP of the viennaCMS
  * 
  * @package viennaCMS
- * @author viennainfo.nl
+ * @author viennacms.nl
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License 
  */
 
