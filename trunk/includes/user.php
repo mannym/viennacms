@@ -3,7 +3,7 @@
 * User class for viennaCMS.
 * "Hey, what are you doing in the ACP? Have you logged in?"
 * 
-* @package viennaCMS
+* @package user
 * @author viennacms.nl
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 */
@@ -19,7 +19,7 @@ if (!defined('IN_VIENNACMS')) {
 /**
 * User class. Important stuff like login etc.
 * 
-* @package viennaCMS
+* @package user
 * */
 
 class user {
@@ -50,6 +50,8 @@ class user {
 	
 	/**
 	 * Intialize the user class	
+	 * 
+	 * @param bool $checklogin: Any need to check login?
 	 */
 	
 	public function initialize($checklogin = false) {
@@ -58,17 +60,15 @@ class user {
 			if(!$login) return false;
 			$login = $this->login_correct($this->userid);
 			$this->user_logged_in = $login;
-			$this->getlanguage();
-			
-			
+			$this->getlanguage();			
 		}
-		
-		// Do some stuff... :P		
 	}
 	
 	/**
-	 * Check if the user is logged in. You can check it after calling this function, by t
-	 * the variable $this->user_logged_in
+	 * Check if the user is logged in. You can check it after calling this function, by 
+	 * the variable user_logged_in 
+	 * 
+	 * @return bool $login: user logged in?
 	 */
 	
 	private function checkcookie() {

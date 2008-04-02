@@ -1,6 +1,6 @@
 <?php
 /**
- * Edit a node
+ * Files admin
  *  
  * @package viennaCMS
  * @author viennacms.nl
@@ -191,6 +191,7 @@ switch($mode) {
 		$sql = 'SELECT *
 				FROM ' . DOWNLOADS_TABLE . '
 				WHERE file_id = ' . intval($node->node_id) . "
+				ORDER BY time DESC
 				LIMIT $start,$end";
 		$result = $db->sql_query($sql);
 		?><html>
