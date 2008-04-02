@@ -31,6 +31,9 @@ class page {
 	
 	/**
 	* Return an instance of page.
+	* 
+	* @param bool init: Do we need to initialize the page?
+	* @return instance $instance
 	*/
 	static function getnew($init = true) {
 		if (!isset(self::$instance)) {
@@ -66,6 +69,7 @@ class page {
 		}
 		
 		if ($parser === '404') {
+			header('HTTP/1.0 404 Not Found', true, 404);
 			$this->init_page($this->sitenode);
 			$template->assign_vars(array(
 				'title' => __('Page not found'),
@@ -108,6 +112,8 @@ class page {
 	
 	/**
 	* Show a node... 
+	* 
+	* @param array $args: The args, like node id etc.
 	*/
 
 	public function show_node($args) {
@@ -151,6 +157,11 @@ class page {
 		));
 	}
 	
+	/**
+	 * Initialize the page, good for getting template and parent nodes
+	 * @param CMS_Node $node
+	 */
+	
 	public function init_page(CMS_Node $node) {
 		$this->parents = $this->get_parents($node);
 		$this->get_template();
@@ -158,6 +169,8 @@ class page {
 	
 	/**
 	* Get revision navigation
+	* 
+	* @param CMS_Node $node
 	*/
 	
 	private function get_revision_nav($node) {
@@ -171,10 +184,6 @@ class page {
 		$sql = 'SELECT * FROM ' . NODE_REVISIONS_TABLE . ' WHERE node_id = ' . $node->node_id . ' AND (revision_number = ' . $next . ' OR revision_number = ' . $prev . ') ORDER BY revision_date DESC';
 		$result = $db->sql_query($sql);
 		$rowset = $db->sql_fetchrowset($result);
-		
-		//var_dump($rowset);
-		//var_dump($next);
-		//var_dump($prev);
 		
 		foreach ($rowset as $row) {
 			if ($row['revision_number'] == $next) {
@@ -209,6 +218,9 @@ class page {
 	
 	/**
 	* Get navigation on a selected level. 
+	* 
+	* @param int $level: The level
+	* @return $ret: navigation
 	*/
 	public function get_nav($level = 1) {
 		utils::get_types();
@@ -277,6 +289,11 @@ class page {
 	
 	/**
 	* Get a link to a node. 
+	* 
+	* @param CMS_Node $node
+	* @param string $extra_params
+	* @param $site_full_link: Do we need a full link for the site?
+	* @return string $link
 	*/
 
 	function get_link($node, $extra_params = '', $site_full_link = false) {
@@ -304,6 +321,8 @@ class page {
 	
 	/**
 	* Generates breadcrumbs. 
+	* 
+	* @return string $crumbs
 	*/
 
 	function make_breadcrumbs() {
@@ -324,14 +343,23 @@ class page {
 	
 	/**
 	* Get all parents of a node. 
+	* 
+	* @param CMS_Node $node
+	* @return array $parents
 	*/
 
 	public function get_parents($node) {
 		$array = array($node);
 		$array = array_merge($array, $this->_get_parents($node));
-		$array = array_reverse($array);
-		return $array;
+		$parents = array_reverse($array);
+		return $parents;
 	}
+	
+	/**
+	 * Internal get_parents
+	 * 
+	 * @param CMS_Node $node
+	 */
 	
 	private function _get_parents($node) {
 		$nodes = $node->get_parent();
@@ -360,7 +388,9 @@ class page {
 	}
 	
 	/**
-	* Get the current site node.
+	* Get the current site node, and initialize language and style.
+	* 
+	* @return mixed $this_site: The current site
 	*/
 	public function get_this_site() {
 		$node = new CMS_Node();
@@ -417,6 +447,9 @@ class page {
 	
 	/**
 	* Gets a module location. 
+	* 
+	* @param string $location
+	* @return mixed $return
 	*/
 	public function get_loc($location) {
 		$return = '';
@@ -457,7 +490,10 @@ class page {
 	}
 
 	/**
-	* Gets a block location. 
+	* Gets a block location
+	* 
+	* @param string $location
+	* @return mixed $return 
 	*/
 	public function get_bloc($location) {
 		$return = '';
@@ -495,6 +531,12 @@ class page {
 		return $return;
 	}
 	
+	/**
+	 * Decode the current url
+	 * 
+	 * @return do_decode
+	 */
+	
 	public function try_decode_url() {
 		$uri_no_qs = explode('?', $_SERVER['REQUEST_URI']);
 		$uri_no_qs = $uri_no_qs[0];
@@ -511,11 +553,24 @@ class page {
 		return $this->do_decode($uri);
 	}
 	
+	/**
+	 * Refex fix
+	 * @param string $url
+	 * @return string $url: The fixed url.
+	 */
+	
 	private function regexify($url) {
 		$url = '@^/' . $url . '$@';
 		$url = str_replace(array('%text', '%number'), array('([a-z\-0-9]+)', '([0-9]+)'), $url);
 		return $url;
 	}
+	
+	/**
+	 * Do the decode
+	 * 
+	 * @param string $uri
+	 * @return mixed succes
+	 */
 	
 	private function do_decode($uri) {
 		global $cache;
@@ -559,6 +614,13 @@ class page {
 		call_user_func($callback, $data['parameters']);
 		return true;
 	}
+	
+	/**
+	 * Get the correct link
+	 * 
+	 * @param array $matches
+	 * @return string $link
+	 */
 	
 	public function get_correct_link($matches) {
 		global $pages, $fixed_url;
