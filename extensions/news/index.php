@@ -121,7 +121,7 @@ CSS;
 		
 		$template->set_alt_filename('node-' . $node->node_id, array('module-' . $args['location'] . '.php', 'module.php'));
 		$template->assign_priv_vars('node-' . $node->node_id, array(
-			'title' 	=> '<a href="' . $page->get_link($node) . '">' . $node->title . '</a>',
+			'title' 	=> '<a href="' . $page->get_link($node) . '" class="newstitle">' . $node->title . '</a>',
 			'content' 	=> $content,
 		));
 		echo $template->assign_display('node-' . $node->node_id);

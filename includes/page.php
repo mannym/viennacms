@@ -554,7 +554,7 @@ class page {
 	}
 	
 	/**
-	 * Refex fix
+	 * Refgex fix
 	 * @param string $url
 	 * @return string $url: The fixed url.
 	 */
