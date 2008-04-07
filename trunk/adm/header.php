@@ -115,7 +115,7 @@ $h_node	 		= $query_string . 'node';*/
 				margin-left: 10px;
 			}
 	
-			.nodes a { padding-left: 19px; display: block; height: 16px; text-decoration: none; color: #0066ff; }
+			.nodes a { padding-left: 19px; display: inline-block; height: 16px; text-decoration: none; color: #0066ff; }
 			.nodes a:visited { color: #0066ff; }
 			.nodes a.site { background: url(images/site.png) 0 0 no-repeat; }
 			.nodes a.page { background: url(images/page.png) 0 0 no-repeat; }
@@ -180,12 +180,44 @@ $h_node	 		= $query_string . 'node';*/
 		<script src="js/jquery.treeview.js" type="text/javascript"></script>
 		<script src="js/selectnode.js" type="text/javascript"></script>
 		<script type="text/javascript">
-			$(document).ready(function() {
+			function updateNodeLinks() {
+				$('#tree li a').after(' <a href="#" style="display: inline; padding: 0px;" onclick="upMyNode(this.parentNode.id, this.parentNode.parentNode.id); return false;">^</a> <a href="#" style="display: inline; padding: 0px;" onclick="downMyNode(this.parentNode.id, this.parentNode.parentNode.id); return false;">v</a>');
+			}
+
+			function downMyNode(id, parent) {
+				$.ajax({
+					cache: false,
+					type: "POST",
+					url: "ajax.php",
+					data: "mode=move_node&type=down&id=" + id,
+					success: function(output) {
+						$('#tree').html(output);
+						startTree('all');
+						updateNodeLinks();
+					}
+				});
+			}
+			
+			function upMyNode(id, parent) {
+				$.ajax({
+					cache: false,
+					type: "POST",
+					url: "ajax.php",
+					data: "mode=move_node&type=up&id=" + id,
+					success: function(output) {
+						$('#tree').html(output);
+						startTree('all');
+						updateNodeLinks();
+					}
+				});
+			}
+	
+			function startTree(what) {
 				$(".nodes").treeview({
 				<?php
 				if (!defined('LIGHT_ADMIN')) {
 				?>
-				persist: "location",
+				persist: what,
 				<?php
 				} else {
 				?>
@@ -193,6 +225,14 @@ $h_node	 		= $query_string . 'node';*/
 				<?php } ?>
 				collapsed: true,
 				unique: true
+				});
+			}
+		
+			$(document).ready(function() {
+				startTree('location');
+				$('#left a.order').click(function() {
+					updateNodeLinks();
+					return false;
 				});
 			});
 		</script>
@@ -247,7 +287,14 @@ $h_node	 		= $query_string . 'node';*/
 					?>
 				</ul>
 				<div class="nodes">
-					<a href="javascript: void(0);" onClick="$('#tree').toggle(); return false;"><?php echo __('Show/hide tree') ?></a>
+					<a href="javascript: void(0);" onClick="$('#tree').toggle(); return false;"><?php echo __('Show/hide tree') ?></a><br />
+					<?php
+					if (!defined('IN_FILES')) {
+						?>
+						<a href="#" class="order"><?php echo __('Move nodes') ?></a>
+						<?php
+					}
+					?>
 				</div>
 			</div>
 			<div id="right">

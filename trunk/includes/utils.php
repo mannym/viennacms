@@ -430,7 +430,7 @@ class utils {
 		
 		if ($show) {
 			if ($node->node_id != 0) {
-				$list .= '<li><a href="admin_node.php?node=' . $node->node_id . '" class="' . $node->type . '">' . $node->title . '</a>' . "\r\n";			
+				$list .= '<li id="node-' . $node->node_id . '"><a href="admin_node.php?node=' . $node->node_id . '" class="' . $node->type . '">' . $node->title . '</a>' . "\r\n";			
 			}
 			
 			$nodes = $node->get_children();
