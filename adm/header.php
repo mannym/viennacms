@@ -189,7 +189,7 @@ $h_node	 		= $query_string . 'node';*/
 		<script src="js/selectnode.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			function updateNodeLinks() {
-				$('#tree li a').after(' <a href="#" style="display: inline; padding: 0px;" onclick="upMyNode(this.parentNode.id, this.parentNode.parentNode.id); return false;">^</a> <a href="#" style="display: inline; padding: 0px;" onclick="downMyNode(this.parentNode.id, this.parentNode.parentNode.id); return false;">v</a>');
+				$('#tree li a').after(' <a href="#" class="nudl" style="display: inline; padding: 0px; margin-right: 3px;" onclick="upMyNode(this.parentNode.id, this.parentNode.parentNode.id); return false;">^</a><a href="#" class="nudl" style="display: inline; padding: 0px;" onclick="downMyNode(this.parentNode.id, this.parentNode.parentNode.id); return false;">v</a>');
 			}
 
 			function downMyNode(id, parent) {
@@ -236,10 +236,18 @@ $h_node	 		= $query_string . 'node';*/
 				});
 			}
 		
+			var orderOn = false;
+		
 			$(document).ready(function() {
 				startTree('location');
 				$('#left a.order').click(function() {
-					updateNodeLinks();
+					if (orderOn) {
+						orderOn = false;
+						$('#left a.nudl').remove();
+					} else {
+						orderOn = true;
+						updateNodeLinks();
+					}
 					return false;
 				});
 			});
