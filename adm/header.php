@@ -188,13 +188,8 @@ $h_node	 		= $query_string . 'node';*/
 		<script src="js/jquery.treeview.js" type="text/javascript"></script>
 		<script src="js/selectnode.js" type="text/javascript"></script>
 		<script type="text/javascript">
-			var updatedNodeLinks = false;
 			function updateNodeLinks() {
-				if(!updatedNodeLinks)
-				{
-					$('#tree li a').after(' <a href="#" style="display: inline; padding: 0px;" onclick="upMyNode(this.parentNode.id, this.parentNode.parentNode.id); return false;">^</a> <a href="#" style="display: inline; padding: 0px;" onclick="downMyNode(this.parentNode.id, this.parentNode.parentNode.id); return false;">v</a>');
-					updatedNodeLinks = true;
-				}
+				$('#tree li a').after(' <a href="#" style="display: inline; padding: 0px;" onclick="upMyNode(this.parentNode.id, this.parentNode.parentNode.id); return false;">^</a> <a href="#" style="display: inline; padding: 0px;" onclick="downMyNode(this.parentNode.id, this.parentNode.parentNode.id); return false;">v</a>');
 			}
 
 			function downMyNode(id, parent) {
