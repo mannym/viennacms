@@ -72,14 +72,14 @@ class CMS_Node {
 				$sql_where = 'node_id = ' . intval($this->node_id);
 			break;
 			case NODE_CHILDREN:
-				$sql_where = 'parent_id = ' . intval($this->node_id) . ' ORDER BY node_order DESC';
+				$sql_where = 'parent_id = ' . intval($this->node_id) . ' ORDER BY node_order ASC, title ASC';
 			break;
 			case NODE_SIBLINGS:
 				$sql_where = 'parent_id = ' . intval($this->parent_id);
-				$sql_where .= ' AND node_id <> ' . intval($this->node_id);
+				$sql_where .= ' AND node_id <> ' . intval($this->node_id) . ' ORDER BY node_order ASC, title ASC';
 			break;
 			case NODE_SIBLINGS_ALL:
-				$sql_where = 'parent_id = ' . intval($this->parent_id);
+				$sql_where = 'parent_id = ' . intval($this->parent_id) . ' ORDER BY node_order ASC, title ASC';
 			break;
 			case NODE_PARENT:
 				$sql_where = 'node_id = ' . intval($this->parent_id);
