@@ -1,4 +1,12 @@
 <?php
+/**
+ * Header of the viennaCMS admin file.
+ * 
+ * @package viennaCMS
+ * @author viennacms.nl
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
+
 if(!defined('IN_VIENNACMS')) {
 		die('Hacking attempt!');
 }
@@ -180,8 +188,13 @@ $h_node	 		= $query_string . 'node';*/
 		<script src="js/jquery.treeview.js" type="text/javascript"></script>
 		<script src="js/selectnode.js" type="text/javascript"></script>
 		<script type="text/javascript">
+			var updatedNodeLinks = false;
 			function updateNodeLinks() {
-				$('#tree li a').after(' <a href="#" style="display: inline; padding: 0px;" onclick="upMyNode(this.parentNode.id, this.parentNode.parentNode.id); return false;">^</a> <a href="#" style="display: inline; padding: 0px;" onclick="downMyNode(this.parentNode.id, this.parentNode.parentNode.id); return false;">v</a>');
+				if(!updatedNodeLinks)
+				{
+					$('#tree li a').after(' <a href="#" style="display: inline; padding: 0px;" onclick="upMyNode(this.parentNode.id, this.parentNode.parentNode.id); return false;">^</a> <a href="#" style="display: inline; padding: 0px;" onclick="downMyNode(this.parentNode.id, this.parentNode.parentNode.id); return false;">v</a>');
+					updatedNodeLinks = true;
+				}
 			}
 
 			function downMyNode(id, parent) {
