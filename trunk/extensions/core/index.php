@@ -187,14 +187,22 @@ class extension_core
 	}
 	
 	function options_site($options) {
-		return array(
-			'hostname' => array(
+		$db = database::getnew();
+		$sql = "SELECT * FROM " . NODES_TABLE . " WHERE type = 'site'";
+		$result = $db->sql_query($sql);
+		$affectedrows = $db->sql_affectedrows($result);
+		$array = array();
+		if(count($affectedrows) >= 2)
+		{
+			$array = array(	'hostname' => array(
 				'type'			=> 'textfield',
 				'name'			=> 'hostname',
 				'title'			=> __('Hostname'),
 				'description'	=> __('The hostname where this site node should be displayed. Leave empty if not using a multi-site setup.'),
 				'value'			=> $options['hostname']
-			),
+			));
+		}
+		return array_merge($array, array(
 			'rewrite' => array(
 				'type'			=> 'selectbox',
 				'name'			=> 'rewrite',
@@ -218,8 +226,9 @@ class extension_core
 				'description'	=> __('Specify the language to use for this node'),
 				'value'			=> $options['language']
 			)
-		);
+		));
 	}
+	
 
 	function options_link($options) {
 		return array(

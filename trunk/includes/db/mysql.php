@@ -470,6 +470,12 @@ class database extends CMS_System_DBAL
 			break;
 		}
 	}
+
+	function sql_report()
+	{
+		$args = func_get_args();
+		return;
+	}
 }
 
 ?>

@@ -11,4 +11,7 @@ define('CONFIG_TABLE', $db->prefix . 'config');
 define('NODE_NO_REVISION', 0);
 define('NODE_CONTENT', 1);
 define('NODE_MODULES', 2);
+
+// Error messages
+define('GENERAL_ERROR', 'general_viennacms_error');
 ?>

@@ -48,19 +48,19 @@ class utils {
 		$db = database::getnew();
 		include(ROOT_PATH . 'includes/version.php');
 		
-		$sql = 'SELECT * FROM ' . NODE_OPTIONS_TABLE . " WHERE node_id = 0 AND option_name = 'database_version'";
+		$sql = 'SELECT * FROM ' . CONFIG_TABLE . " WHERE config_name = 'database_version'";
 		$result = $db->sql_query($sql);
 		
 		if (!$row = $db->sql_fetchrow($result)) {
 			$currentdbver = 0;
 		} else {
-			$currentdbver = $row['option_value'];
+			$currentdbver = $row['config_value'];
 		}
 		
 		$return = array(
 			'current' => $currentdbver,
 			'new' => $database_version,
-			'uptodate' => ($currentdbver < $database_version) ? false : true
+			'uptodate' => (version_compare($currentdbver, $database_version, '>')),
 		);
 		
 		return $return;
@@ -98,17 +98,10 @@ class utils {
 	
 	function validate_email($add) {
 		$regex = "#^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+)\.+([a-zA-Z0-9]{2,4})+$#i";
-		if(!preg_match($regex, $add, $match)) {
+		if(!preg_match($regex, $add)) {
 			return false;
 		}
-		/**
-		* Removed because this make the function to slow
-		*/
-		/*$addr = 'http://' . $match[2] . '.' . $match[4];
-		$addr2 = 'https://' . $match[2] . '.' . $match[4];
-		if(!fopen($addr, 'r') && !fopen($addr2, 'r')) {
-			return false;
-		}*/
+
 		return true;
 	}
 	
@@ -334,9 +327,15 @@ class utils {
 		{
 			$msg_text = $msg_long_text;
 		}
-		
+		if(!function_exists('__'))
+		{
+			function __($name)
+			{
+				return $name;
+			}
+		}
 		$msg_text = __($msg_text);
-	
+		
 		switch ($errno)
 		{
 			case E_NOTICE:
@@ -362,48 +361,39 @@ class utils {
 			case E_USER_ERROR:
 	
 				$msg_title = __('General Error');
-				$l_notify = '';
-
-				// $l_notify = '<p>' . __('Please notify the site administrator or webmaster: ') . ' <a href="mailto:' . $config->get('admin_contact') . '">' . $config->get('admin_contact') . '</a></p>';
 	
-				// Try to not call the adm page data...
-	
-				echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
-				echo '<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">';
-				echo '<head>';
-				echo '<meta http-equiv="content-type" content="text/html; charset=utf-8" />';
-				echo '<title>' . $msg_title . '</title>';
-				echo '<style type="text/css">' . "\n" . '<!--' . "\n";
-				echo '* { margin: 0; padding: 0; } html { font-size: 100%; height: 100%; margin-bottom: 1px; background-color: #E4EDF0; } body { font-family: "Lucida Grande", Verdana, Helvetica, Arial, sans-serif; color: #536482; background: #E4EDF0; font-size: 62.5%; margin: 0; } ';
-				echo 'a:link, a:active, a:visited { color: #006699; text-decoration: none; } a:hover { color: #DD6900; text-decoration: underline; } ';
-				echo '#wrap { padding: 0 20px 15px 20px; min-width: 615px; } #page-header { text-align: right; height: 40px; } #page-footer { clear: both; font-size: 1em; text-align: center; } ';
-				echo '.panel { margin: 4px 0; background-color: #FFFFFF; border: solid 1px  #A9B8C2; } ';
-				echo '#errorpage #page-header a { font-weight: bold; line-height: 6em; } #errorpage #content { padding: 10px; } #errorpage #content h1 { line-height: 1.2em; margin-bottom: 0; color: #DF075C; } ';
-				echo '#errorpage #content div { margin-top: 20px; margin-bottom: 5px; border-bottom: 1px solid #CCCCCC; padding-bottom: 5px; color: #333333; font: bold 1.2em "Lucida Grande", Arial, Helvetica, sans-serif; text-decoration: none; line-height: 120%; text-align: left; } ';
-				echo "\n" . '//-->' . "\n";
-				echo '</style>';
-				echo '</head>';
-				echo '<body id="errorpage">';
-				echo '<div id="wrap">';
-				echo '	<div id="page-header">';
-				echo '	</div>';
-				echo '	<div id="acp">';
-				echo '	<div class="panel">';
-				echo '		<div id="content">';
-				echo '			<h1>' . $msg_title . '</h1>';
+				$error_type = strtolower($msg_title);
+				$error_text = <<<HTML
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>$msg_title</title>
+		<link rel="stylesheet" href="styles/default/style.css" />
+	</head>
+	<body>
+	<div id="wrap">
+	<div id="header">
+	</div>
+	<div id="content">
+		<span class="breadcrumbs"></span>
+		<h1 id="pagetitle">$msg_title</h1>
+		<br style="clear: both;" />
+		<div>During the parsing of this page, an $error_type occured on line <b>$errline</b> in <b>$errfile</b>: $msg_text</p>
+	</div>
+	<div id="footer">
+		Powered by <a href="http://viennainfo.nl/">viennaCMS</a>
+	</div>
+	</div>	
+			</body>
+</html>				
+HTML;
 				
-				echo '			<div>' . $msg_text . '</div>';
-				
-				echo $l_notify;
-	
-				echo '		</div>';
-				echo '	</div>';
-				echo '	</div>';
-				echo '</div>';
-				echo '</body>';
-				echo '</html>';
-				
+				echo $error_text;
 				exit;
+			break;
+			
+			case GENERAL_ERROR:
+				// @TODO: Do something
 			break;
 		}
 	
