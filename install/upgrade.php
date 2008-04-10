@@ -60,7 +60,7 @@ $template->assign_vars(array(
 	'total_step' => (count($steps)),
 	'languages' => $languages
 ));
-
+		var_dump($dbversion);
 switch ($step) {
 	case 1:
 	case 0:
@@ -87,10 +87,14 @@ switch ($step) {
 			
 			case 89:
 				$sql[] = 'ALTER TABLE ' . NODES_TABLE . ' ADD `node_order` INT( 11 ) NOT NULL';
+			// no break
+			case 110:
+				$sql[] = 'INSERT INTO ' . CONFIG_TABLE . " (config_name, config_value) VALUES ('database_version', '110')";
+				$sql[] = 'DELETE FROM ' . NODE_OPTIONS_TABLE . ' WHERE node_id = 0 AND option_name = \'database_version\'';
+			// no break
 		}
 		$db->sql_return_on_error(true);
 		$mes = '';
-		$all = true;
 		foreach ($sql as $query) {
 			$mes .= '<br />' . $query . ' [';
 			
@@ -99,7 +103,10 @@ switch ($step) {
 			if ($success) {
 				$mes .= '<span style="color: green;">' . __('Success') . '</span>';
 			} else {
-				$all = false;
+				if(!defined('ALL_SUCCES'))
+				{
+					define('ALL_SUCCES', false);
+				}
 				$mes .= '<span style="color: red;">' . __('Failed') . '</span><br />' . mysql_error();
 			}
 			
@@ -110,10 +117,8 @@ switch ($step) {
 		}	
 		$db->sql_return_on_error(false);
 		
-		if ($all) {
-			 $sql = 'UPDATE ' . NODE_OPTIONS_TABLE . " SET option_value = '" . $dbversion['new'] . "' WHERE node_id = 0 AND option_name = 'database_version'";
-			 $db->sql_query($sql);
-		}
+		$sql = 'UPDATE ' . CONFIG_TABLE . " SET config_value = '" . $dbversion['new'] . "' WHERE config_name = 'database_version'";
+		$db->sql_query($sql);
 		
 		$template->assign_vars(array('mes' => $mes));
 	break;	

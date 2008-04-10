@@ -133,7 +133,6 @@ class user {
 	public function login($username, $password) {
 		$login = true;
 		$db = database::getnew();
-		// TODO: case insensitive usernames
 		$sql = "SELECT * FROM " . USER_TABLE . " WHERE username = '" . $db->sql_escape($username) . "'"; 
 		if(!$result = $db->sql_query($sql)) {
 			$login = false;

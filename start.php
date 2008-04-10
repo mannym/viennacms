@@ -119,14 +119,13 @@ set_error_handler(array('utils', 'handle_error'));
 $cache = new acm();
 $db = database::getnew();
 $template = template::getnew();
-
 if (!defined('IN_INSTALL') && !defined('IN_UPGRADE')) {
 	$version = utils::get_database_version();
 	if (!$version['uptodate']) {
-		if (stripos($_SERVER['REQUEST_URI'], 'adm') !== false) {
+		if (stripos($_SERVER['DOCUMENT_ROOT'], 'adm') !== false) {
 			header('Location: ../install/upgrade.php');
 		} else {
-			header('Location: ./install/upgrade.php');
+			header('Location: ' . utils::base() . 'install/upgrade.php');
 		}
 		exit;
 	}

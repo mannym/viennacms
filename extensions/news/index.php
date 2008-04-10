@@ -63,25 +63,22 @@ CSS;
 	}
 	
 	function args_latestnews() {
-		return array('folder' => array( // 'content' is the argument name
-			'title' => __('News folder'), // title is what it will show
-			'type' => 'node', // textarea or text, currently
-			'newrow' => false, // true to make the control 100% width in ACP
-			'callback' => array($this, 'newsfolder_select')
-		));
+		return array(
+			'folder' => array( // 'content' is the argument name
+				'title' => __('News folder'), // title is what it will show
+				'type' => 'node', 
+				'newrow' => false, // true to make the control 100% width in ACP
+				'callback' => array($this, 'newsfolder_select')
+			),
+			'count' => array(
+				'title' => __('Count of newsitems to display'),
+				'type' => 'text',
+				'newrow' => false,
+			),
+		);
 	}
 	
 	function module_latestnews($args) {
-		/*if (isset($_GET['news_title'])) {
-			$node = new CMS_Node();
-			$node->title_clean = $_GET['news_title'];
-			$node->read(NODE_TITLEC);
-			$this->show_news($node, $args);
-			return 500;
-		}*/
-		
-		$template = template::getnew();
-	
 		$folder = new CMS_Node();
 		$folder->node_id = $args['folder'];
 		$folder->read();
@@ -97,7 +94,7 @@ CSS;
 		$i = 1;
 		
 		foreach ($news as $new) {
-			if ($i > 5) {
+			if ($i > $args['count']) {
 				break;
 			}
 			
