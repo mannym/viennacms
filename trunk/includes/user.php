@@ -137,9 +137,25 @@ class user {
 		if(!$result = $db->sql_query($sql)) {
 			$login = false;
 		}
+		
 		$logindata = $db->sql_fetchrow($result);
+		if($logindata['login_attempts'] >= 3 && $logindata['last_login_attempt'] > (time() - 120))
+		{
+			$login = false;
+		}
 		if($logindata['password'] != md5($password)) {
 			$login = false;
+			if($logindata['login_attempts'] >= 3 && $logindata['last_login_attempt'] < (time() - 120))
+			{
+				$new_login_attempts = 1;
+			}
+			else {
+				$new_login_attempts = $logindata['login_attempts'] + 1;
+			}
+			$logindata['login_attempts'] = $new_login_attempts;
+			$sql = 'UPDATE ' . USER_TABLE . ' SET login_attempts = ' . $new_login_attempts . ',
+					last_login_attempt = \'' . time() . '\' WHERE userid = ' . $logindata['userid'];
+			$db->sql_query($sql);
 		}
 		$this->userid = $logindata['userid'];
 		$this->md5_password		= md5(md5($password));
@@ -148,8 +164,7 @@ class user {
 			$login = $this->login_correct($logindata['userid'], true);
 		}
 		if(!$login) {
-			trigger_error(__('Login incorrect'), E_USER_ERROR);
-			
+			trigger_error(__('Login incorrect'));		
 			return false;
 		}
 		$this->set_login_cookies();
