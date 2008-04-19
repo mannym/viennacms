@@ -84,9 +84,14 @@ switch ($step) {
 			case 89:
 				$sql[] = 'ALTER TABLE ' . NODES_TABLE . ' ADD `node_order` INT( 11 ) NOT NULL';
 			// no break
-			case 110:
+			case 90:
 				$sql[] = 'INSERT INTO ' . CONFIG_TABLE . " (config_name, config_value) VALUES ('database_version', '110')";
 				$sql[] = 'DELETE FROM ' . NODE_OPTIONS_TABLE . ' WHERE node_id = 0 AND option_name = \'database_version\'';
+			// no break
+			
+			case 110:
+				$sql[] = 'ALTER ' . USER_TABLE . ' ADD `login_attempts` MEDIUMINT NOT NULL, 
+						  ADD `last_login_attempt` INT(11) NOT NULL';
 			// no break
 		}
 		$db->sql_return_on_error(true);

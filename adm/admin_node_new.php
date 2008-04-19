@@ -69,8 +69,8 @@ switch($mode) {
 			$post_vars[] = 'type';
 		}
 		foreach($post_vars as $postvar) {
-			if(empty($_POST[$postvar]) && $postvar != 'extension') {
-				trigger_error(__($postvar . '  not given!'), E_USER_ERROR);
+			if(empty($_POST[$postvar]) && $postvar != 'extension' && $postvar !='description' ) {
+				trigger_error($postvar . __(' not given!'));
 				return;
 			}
 			$var = 'newnode_' . $postvar;
