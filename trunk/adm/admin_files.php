@@ -8,6 +8,7 @@
  */
 
 define('IN_VIENNACMS', true);
+define('IN_ADMIN', true);
 define('IN_FILES', true);
 include('../start.php');
 $user = user::getnew();

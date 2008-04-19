@@ -10,6 +10,7 @@
 if(!defined('IN_VIENNACMS')) {
 		die('Hacking attempt!');
 }
+define('ADM_HEADER', true);
 /*$query_string 	= preg_replace('#(&|\?)tab=(.*)#', '', $_SERVER['query_string']);
 $query_string	= (!empty($query_string)) ? ('?' . $query_string . '&amp;tab=') : ('?tab='); 
 $h_general		= $query_string . 'general';
@@ -187,6 +188,12 @@ $h_node	 		= $query_string . 'node';*/
 		<script src="js/jquery.cookie.js" type="text/javascript"></script>
 		<script src="js/jquery.treeview.js" type="text/javascript"></script>
 		<script src="js/selectnode.js" type="text/javascript"></script>
+			<?php
+			echo $Header;
+			?>
+		<?php
+		if (defined('LIGHT_ADMIN')) { return; }
+		?>
 		<script type="text/javascript">
 			function updateNodeLinks() {
 				$('#tree li a').after(' <a href="#" class="nudl" style="display: inline; padding: 0px; margin-right: 3px;" onclick="upMyNode(this.parentNode.id, this.parentNode.parentNode.id); return false;">^</a><a href="#" class="nudl" style="display: inline; padding: 0px;" onclick="downMyNode(this.parentNode.id, this.parentNode.parentNode.id); return false;">v</a>');
@@ -252,12 +259,6 @@ $h_node	 		= $query_string . 'node';*/
 				});
 			});
 		</script>
-			<?php
-			echo $Header;
-			?>
-		<?php
-		if (defined('LIGHT_ADMIN')) { return; }
-		?>
 		<script language="javascript" type="text/javascript" src="../includes/js/tinymce/tiny_mce.js"></script>
 <script language="javascript" type="text/javascript">
 	tinyMCE.init({

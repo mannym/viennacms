@@ -48,19 +48,30 @@ class utils {
 		$db = database::getnew();
 		include(ROOT_PATH . 'includes/version.php');
 		
+		$db->sql_return_on_error(true);
 		$sql = 'SELECT * FROM ' . CONFIG_TABLE . " WHERE config_name = 'database_version'";
 		$result = $db->sql_query($sql);
 		
-		if (!$row = $db->sql_fetchrow($result)) {
-			$currentdbver = 0;
+		if ($result) {
+			if (!$row = $db->sql_fetchrow($result)) {
+				$currentdbver = 109;
+			} else {
+				$currentdbver = $row['config_value'];
+			}
 		} else {
-			$currentdbver = $row['config_value'];
+			$sql = 'SELECT * FROM ' . NODE_OPTIONS_TABLE . " WHERE node_id = 0 AND option_name = 'database_version'";
+			$result = $db->sql_query($sql);
+			if ($row = $db->sql_fetchrow($result)) {
+				$currentdbver = $row['option_value'];
+			} else {
+				$currentdbver = 0;
+			}
 		}
 		
 		$return = array(
 			'current' => $currentdbver,
 			'new' => $database_version,
-			'uptodate' => (version_compare($currentdbver, $database_version, '>')),
+			'uptodate' => (version_compare($currentdbver, $database_version, '>=')),
 		);
 		
 		return $return;
@@ -378,7 +389,7 @@ class utils {
 		<span class="breadcrumbs"></span>
 		<h1 id="pagetitle">$msg_title</h1>
 		<br style="clear: both;" />
-		<div>During the parsing of this page, an $error_type occured on line <b>$errline</b> in <b>$errfile</b>: $msg_text</p>
+		<div>While loading this page, a $error_type occured on line <strong>$errline</strong> in <strong>$errfile</strong>:<br />$msg_text</div>
 	</div>
 	<div id="footer">
 		Powered by <a href="http://viennainfo.nl/">viennaCMS</a>
@@ -392,8 +403,32 @@ HTML;
 				exit;
 			break;
 			
-			case GENERAL_ERROR:
-				// @TODO: Do something
+			case E_USER_WARNING:
+			case E_USER_NOTICE:
+				if (defined('IN_ADMIN')) {
+					$Header = '';
+					$page_title = __('Information');
+					if (!defined('ADM_HEADER')) {
+						include('./header.php');
+					}
+					echo '<h1>' . __('Information') . '</h1>';
+					echo $msg_text;
+					include('./footer.php');
+					exit;
+				}
+				
+				$template = template::getnew();
+				$page = page::getnew(false);
+				$template->set_filename('error', 'index.php');
+				$template->assign_vars(array(
+					'sitename'	=> (isset($page->sitenode->title)) ? $page->sitenode->title : 'viennaCMS',
+					'title' 	=> __('Information'),
+					'content'	=> $msg_text,
+					'middle'	=> $msg_text,
+					'head'		=> '<base href="' . self::base() . '" />'
+				));
+				$template->display('error');
+				exit;
 			break;
 		}
 	
@@ -411,11 +446,15 @@ HTML;
 	static function _get_admin_tree($node, $list = '') {
 		self::get_types();
 		
-		$ext = self::load_extension(self::$types[$node->type]['extension']);
-		$show = true;
-		if (method_exists($ext, $node->type . '_in_tree')) {
-			$function = $node->type . '_in_tree';
-			$show = $ext->$function($node);
+		if ($node->node_id != 0) {
+			$ext = self::load_extension(self::$types[$node->type]['extension']);
+			$show = true;
+			if (method_exists($ext, $node->type . '_in_tree')) {
+				$function = $node->type . '_in_tree';
+				$show = $ext->$function($node);
+			}
+		} else {
+			$show = true;
 		}
 		
 		if ($show) {

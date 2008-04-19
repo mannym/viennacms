@@ -70,7 +70,7 @@ class CMS_System_DBAL
 	/**
 	* Constructor
 	*/
-	function dbal()
+	function __construct()
 	{
 		$this->num_queries = array(
 			'cached'		=> 0,

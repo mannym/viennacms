@@ -51,7 +51,6 @@ class CMS_Node {
 	static public function getnew() {
 		$return = new CMS_Node();
 		$return->revision = new Node_Revision();
-		$return->revision->read_modules();
 		
 		return $return;
 	}

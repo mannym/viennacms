@@ -9,6 +9,7 @@ die('obsolete');
  */
 
 define('IN_VIENNACMS', true);
+define('IN_ADMIN', true);
 include('../start.php');
 $user = user::getnew();
 $user->checkacpauth();
