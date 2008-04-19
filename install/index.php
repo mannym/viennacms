@@ -48,11 +48,7 @@ if (!file_exists(ROOT_PATH . 'config.php') && is_writeable(ROOT_PATH)) {
 	@fclose(@fopen(ROOT_PATH . 'config.php','w'));
 }
 include(ROOT_PATH . 'config.php');
-$step = $_REQUEST['step']; 
-
-if (empty($step)) {
-	$step = 1;
-}
+$step = (isset($_REQUEST['step'])) ? $_REQUEST['step'] : 1; 
 
 $steps = array(
 	1 => __('Welcome to the viennaCMS installation'),

@@ -231,9 +231,9 @@ class page {
 			$node = $this->sitenode;
 			$nodes = $node->get_children();
 		} else if ($level > 1) {
-			if ($this->parents[$level]) {
+			if (isset($this->parents[$level])) {
 				$nodes = $this->parents[$level]->get_siblings_all();
-			} else if ($this->parents[$level - 1]) {
+			} else if (isset($this->parents[$level - 1])) {
 				$nodes = $this->parents[$level - 1]->get_children();
 			}
 		}
@@ -243,7 +243,7 @@ class page {
 				
 		$ret = '';
 		
-		if (!$nodes) {
+		if (!isset($nodes) || !$nodes) {
 			return;
 		}
 		
@@ -439,7 +439,11 @@ class page {
 		// Choose domain
 		_textdomain("viennacms");
 
-		$this_site->options['blocks'] = unserialize($this_site->options['blocks']);
+		if (isset($this_site->options['blocks'])) {
+			$this_site->options['blocks'] = unserialize($this_site->options['blocks']);
+		} else {
+			$this_site->options['blocks'] = array();
+		}
 		
 		// Translation is looking for in ./locale/$language/LC_MESSAGES/viennacms.mo now
 		return $this_site;

@@ -17,6 +17,7 @@ if (!defined('IN_VIENNACMS')) {
 }
 
 define('ROOT_PATH', dirname(__FILE__) . '/');
+error_reporting(E_ALL & ~E_NOTICE);
 
 // If we are on PHP >= 6.0.0 we do not need some code
 if (version_compare(PHP_VERSION, '6.0.0-dev', '>='))

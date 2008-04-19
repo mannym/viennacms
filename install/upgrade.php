@@ -36,12 +36,8 @@ foreach ($dir as $file) {
 	}
 }
 
-include(ROOT_PATH . 'config.php');
-$step = $_REQUEST['step']; 
-
-if (empty($step)) {
-	$step = 1;
-}
+//include(ROOT_PATH . 'config.php');
+$step = (isset($_REQUEST['step'])) ? $_REQUEST['step'] : 1; 
 
 $steps = array(
 	1 => __('Welcome to the viennaCMS upgrade page'),
@@ -60,7 +56,7 @@ $template->assign_vars(array(
 	'total_step' => (count($steps)),
 	'languages' => $languages
 ));
-		var_dump($dbversion);
+//var_dump($dbversion);
 switch ($step) {
 	case 1:
 	case 0:

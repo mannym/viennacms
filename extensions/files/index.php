@@ -94,7 +94,7 @@ CSS;
 		return $node;	
 	}
 	
-	function get_root() {
+	function get_root($create = true) {
 		$node = new CMS_Node();
 		$node->node_id = 0;
 		$nodes = $node->get_children();
@@ -105,9 +105,14 @@ CSS;
 				break;
 			}
 		}
-		
-		if (!$root) {
-			$root = $this->create_root();
+
+		if (!isset($root)) {
+			if ($create) {
+				$this->create_root();
+				$root = $this->get_root(false);
+			} else {
+				trigger_error('Could not create file root!', E_USER_ERROR);
+			}
 		}
 		
 		return $root;
@@ -270,7 +275,10 @@ CONTENT;
 		}
 		$file = $_FILES [ $filename ] ;
 		if (intval ( $file [ 'error' ] ) != 0) {
-			trigger_error ( $file [ 'error' ], E_USER_ERROR ) ;
+			if ($file['error'] == 1) {
+				$file['error'] = 'File too big.';
+			}
+			trigger_error($file [ 'error' ]);
 			return false ;
 		}
 		$md5 = $this->upload_file ( $file ) ;

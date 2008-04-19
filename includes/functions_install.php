@@ -38,7 +38,7 @@ function install_database($table_prefix, $name2, $ww2) {
 	
 	$sql[] = "UPDATE ".USER_TABLE." SET username = '$name2', password = '$ww2', lang = '$language'";		
 	include(ROOT_PATH . 'includes/version.php');
-	$sql[] = "INSERT INTO " . NODE_OPTIONS_TABLE . " SET node_id = 0, option_name = 'database_version', option_value = '$database_version'";
+	$sql[] = "INSERT INTO " . CONFIG_TABLE . " SET config_name = 'database_version', config_value = '$database_version'";
 
 	foreach ($sql as $query) {
 		if(!$db->sql_query($query)){

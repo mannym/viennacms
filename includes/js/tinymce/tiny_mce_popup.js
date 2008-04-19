@@ -93,11 +93,14 @@ TinyMCE_Popup.prototype = {
 	},
 
 	onLoad : function() {
+		//alert('tMCE Onload .1');
 		var dir, i, elms, body = document.body;
+
+		//alert('tMCE Onload');
 
 		if (tinyMCE.getWindowArg('mce_replacevariables', true))
 			body.innerHTML = tinyMCE.applyTemplate(body.innerHTML, tinyMCE.windowArgs);
-
+		
 		dir = tinyMCE.selectedInstance.settings.directionality;
 		if (dir == "rtl" && document.forms && document.forms.length > 0) {
 			elms = document.forms[0].elements;
@@ -116,7 +119,7 @@ TinyMCE_Popup.prototype = {
 	},
 
 	executeOnLoad : function(str) {
-		if (tinyMCE.isOpera && parseFloat(opera.version()) < 9.5)
+		if ((tinyMCE.isOpera && parseFloat(opera.version()) < 9.5) || tinyMCE.isIE)
 			this.onLoadEval = str;
 		else
 			eval(str);
