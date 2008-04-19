@@ -463,7 +463,7 @@ class page {
 		
 		if ($this->node->revision->has_modules) {
 			$template = template::getnew();
-			foreach ($this->node->revision->modules[$location] as $module) {
+			foreach ($this->node->revision->modules[$location] as $key => $module) {
 				$module_function = 'module_' . $module['module'];
 				$ext = utils::load_extension($module['extension']);
 				$module['location'] = $location;
@@ -472,6 +472,8 @@ class page {
 				$mret = $ext->$module_function($module);
 				$contents = ob_get_contents();
 				ob_end_clean();
+				
+				$module_function = $module_function . $key . $location;
 
 				if ($mret != 500) {
 					$template->set_alt_filename($module_function, array('module-' . $location . '.php', 'module.php'));
@@ -510,7 +512,7 @@ class page {
 		{
 			$this->sitenode->options['blocks'][$location] = array();
 		}
-		foreach ($this->sitenode->options['blocks'][$location] as $module) {
+		foreach ($this->sitenode->options['blocks'][$location] as $key => $module) {
 			$module_function = 'module_' . $module['module'];
 			$ext = utils::load_extension($module['extension']);
 			$module['location'] = $location;
@@ -519,6 +521,8 @@ class page {
 			$mret = $ext->$module_function($module);
 			$contents = ob_get_contents();
 			ob_end_clean();
+
+			$module_function = 'block' . $module_function . $location . $key;
 
 			if ($mret != 500) {
 				$template->set_alt_filename($module_function, array('module-' . $location . '.php', 'module.php'));
