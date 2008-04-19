@@ -64,6 +64,32 @@ CSS;
 		return defined('IN_FILES');
 	}
 	
+	function display_node($type, $node, $other) {
+		if ($node->type == 'fileroot' || $node->type == 'file') {
+			switch ($type) {
+				case 'other_under_this':
+				case 'show_to_visitor':
+					return false;
+				break;
+				case 'in_tree':
+					return defined('IN_FILES');
+				break;
+				case 'this_under_other':
+					return false;
+				break;
+				default:
+					return true;
+				break;
+			}
+		} else if ($other->type == 'fileroot' || $other->type == 'file') {
+			switch ($type) {
+				case 'this_under_other':
+					return false;
+				break;
+			}
+		}
+	}
+	
 	function create_root() {
 		$node = CMS_Node::getnew();
 		$node->parent_id = 0;
