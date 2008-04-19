@@ -90,7 +90,7 @@ switch ($step) {
 			// no break
 			
 			case 110:
-				$sql[] = 'ALTER ' . USER_TABLE . ' ADD `login_attempts` MEDIUMINT NOT NULL, 
+				$sql[] = 'ALTER TABLE ' . USER_TABLE . ' ADD `login_attempts` MEDIUMINT NOT NULL, 
 						  ADD `last_login_attempt` INT(11) NOT NULL';
 			// no break
 		}
