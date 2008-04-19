@@ -38,12 +38,19 @@ switch($mode) {
 		include('./header.php');
 		$type = explode('::', base64_decode($_GET['type']));
 		$ext = utils::load_extension($type[0]);
-		if (method_exists($ext, $type[1] . '_allow_as_child')) {
+		/*if (method_exists($ext, $type[1] . '_allow_as_child')) {
 			$function = $type[1] . '_allow_as_child';
 			$callback = array($ext, $function);
 		} else {
 			$callback = false;
-		}
+		}*/
+		$newnode = CMS_Node::getnew();
+		$newnode->type = $type[1];
+		$callback = array(
+			'type'	=> 'this_under_other',
+			'ntype'	=> 'other',
+			'node'	=> $newnode
+		);
 		echo '<h1>' . sprintf(__('Content wizard, step %d of %d'), 1, 4) . '</h1>';
 		echo '<form action="?mode=form" method="post">';
 		echo __('Where do you want to place this new node?') . '<br />';
@@ -167,12 +174,15 @@ switch($mode) {
 						<select name="type"<?php echo ($do == 'edit') ? ' disabled="disabled"' : '' ?>>
 							<option name="">--<?php echo __('Select') ?>--</option>
 							<?php foreach($type_options as $type => $extension) {
+								$tempnode = new CMS_Node();
+								$tempnode->type = $type;
 								$ext = utils::load_extension($extension['extension']);
-								$show = true;
-								if (method_exists($ext, $type . '_allow_as_child')) {
+								$show = utils::display_allowed('this_under_other', $tempnode, $parent);
+								unset($tempnode);
+								/*if (method_exists($ext, $type . '_allow_as_child')) {
 									$function = $type . '_allow_as_child';
 									$show = $ext->$function($parent);
-								}
+								}*/
 								
 								if (!$show) {
 									continue;

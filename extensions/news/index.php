@@ -62,13 +62,62 @@ CSS;
 		return false;
 	}
 	
+	function display_node($type, $node, $other = false) {
+		switch ($type) {
+			case 'this_under_other':
+				if ($node->type == 'news') {
+					if ($other->type == 'newsfolder') {
+						return true;
+					} else {
+						return false;
+					}
+				}
+				
+				if ($node->type == 'newsfolder') {
+					if ($other->type == 'site') {
+						return true;
+					} else {			
+						return false;
+					}
+				}
+			break;
+			case 'other_under_this':
+				if ($node->type = 'newsfolder') {
+					if ($other->type != 'site') {
+						return false;
+					}
+				}
+				
+				return true;
+			break;
+			case 'show_to_visitor':
+				if ($node->type == 'newsfolder') {
+					return false;
+				}
+				
+				return true;
+			break;
+			default:
+				return true;
+			break;
+		}
+	}
+	
 	function args_latestnews() {
+		$testnews = new CMS_Node();
+		$testnews->type = 'news';
+		
 		return array(
 			'folder' => array( // 'content' is the argument name
 				'title' => __('News folder'), // title is what it will show
-				'type' => 'node', 
+				'type' => 'node',
+				'cbtype'	=> 1, 
 				'newrow' => false, // true to make the control 100% width in ACP
-				'callback' => array($this, 'newsfolder_select')
+				'callback' => array(
+					'type'		=> 'this_under_other',
+					'ntype'		=> 'other',
+					'node'		=> $testnews
+				)
 			),
 			'count' => array(
 				'title' => __('Count of newsitems to display'),
@@ -76,6 +125,8 @@ CSS;
 				'newrow' => false,
 			),
 		);
+		
+		unset($testnews);
 	}
 	
 	function module_latestnews($args) {

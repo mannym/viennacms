@@ -129,11 +129,11 @@ class extension_core
 
 	function _get_map_tree($node, $list = '', $extra = array()) {
 		$ext = utils::load_extension(utils::$types[$node->type]['extension']);
-		$show = true;
-		if (method_exists($ext, $node->type . '_show_to_visitor')) {
+		$show = utils::display_allowed('show_to_visitor', $node);
+		/*if (method_exists($ext, $node->type . '_show_to_visitor')) {
 			$function = $node->type . '_show_to_visitor';
 			$show = $ext->$function($node);
-		}
+		}*/
 
 		if ($show) {	
 			$page = page::getnew();
@@ -153,11 +153,12 @@ class extension_core
 				$maxi = 0;
 				foreach ($nodes as $node) {
 					$ext = utils::load_extension(utils::$types[$node->type]['extension']);
-					$show = true;
+					/*$show = true;
 					if (method_exists($ext, $node->type . '_show_to_visitor')) {
 						$function = $node->type . '_show_to_visitor';
 						$show = $ext->$function($node);
-					}
+					}*/
+					$show = utils::display_allowed('show_to_visitor', $node);
 					
 					if ($show) {
 						$maxi++;
@@ -167,11 +168,12 @@ class extension_core
 				foreach ($nodes as $node) {
 					$list = $this->_get_map_tree($node, $list, array('i' => $i, 'mi' => $maxi));
 					$ext = utils::load_extension(utils::$types[$node->type]['extension']);
-					$show = true;
+					/*$show = true;
 					if (method_exists($ext, $node->type . '_show_to_visitor')) {
 						$function = $node->type . '_show_to_visitor';
 						$show = $ext->$function($node);
-					}
+					}*/
+					$show = utils::display_allowed('show_to_visitor', $node);
 					
 					if ($show) {
 						$i++;
@@ -331,6 +333,10 @@ CSS;
 				)
 			);
 		}
+	}
+	
+	function display_node($type, $node, $other) {
+		return true;
 	}
 }
 ?>

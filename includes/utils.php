@@ -443,16 +443,30 @@ HTML;
 		echo self::_get_admin_tree($node);
 	}
 	
+	static function display_allowed($type, $node, $other = false) {
+		$result = utils::run_hook_all('display_node', $type, $node, $other);
+		$return = true;
+		foreach ($result as $res) {
+			if ($res == false) {
+				$return = false;
+				break;
+			}
+		}
+		
+		return $return;
+	}
+	
 	static function _get_admin_tree($node, $list = '') {
 		self::get_types();
 		
 		if ($node->node_id != 0) {
 			$ext = self::load_extension(self::$types[$node->type]['extension']);
-			$show = true;
-			if (method_exists($ext, $node->type . '_in_tree')) {
+			//$show = true;
+			$show = self::display_allowed('in_tree', $node);
+			/*if (method_exists($ext, $node->type . '_in_tree')) {
 				$function = $node->type . '_in_tree';
 				$show = $ext->$function($node);
-			}
+			}*/
 		} else {
 			$show = true;
 		}
@@ -482,20 +496,31 @@ HTML;
 		$show = true;	
 		$link = true;	
 		if ($node->node_id != 0) {
-			$ext = self::load_extension(self::$types[$node->type]['extension']);
+			/*$ext = self::load_extension(self::$types[$node->type]['extension']);
 			if (method_exists($ext, $node->type . '_in_tree')) {
 				$function = $node->type . '_in_tree';
 				$show = $ext->$function($node);
-			}
+			}*/
+			$show = self::display_allowed('in_tree', $node);
 			
 			if ($callback) {
+				if ($callback['ntype'] == 'this') {
+					$thisnode = $node;
+					$othernode = (isset($callback['node'])) ? $callback['node'] : false;
+				} else {
+					$othernode = $node;
+					$thisnode = (isset($callback['node'])) ? $callback['node'] : false;					
+				}
 				if ($cbtype == 0) {
-					$show = call_user_func($callback, $node);
+					//$show = call_user_func($callback, $node);
+					$show = self::display_allowed($callback['type'], $thisnode, $othernode);
 				} else if ($cbtype == 1) {
 					if ($node->type != 'site') {
-						$show = call_user_func($callback, $node);
+						$show = self::display_allowed($callback['type'], $thisnode, $othernode);
+						//$show = call_user_func($callback, $node);
 					} else {
-						$link = call_user_func($callback, $node);
+						$link = self::display_allowed($callback['type'], $thisnode, $othernode);
+						//$link = call_user_func($callback, $node);
 					}
 				}
 			}
