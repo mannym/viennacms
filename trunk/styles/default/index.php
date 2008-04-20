@@ -52,7 +52,7 @@
 		<?php if ($right): echo $right; endif; ?>
 	</div>
 	<div id="footer">
-		Powered by <a href="http://viennainfo.nl/">viennaCMS</a>
+		Powered by <a href="http://www.viennacms.nl/">viennaCMS</a> &copy; 2008 viennaCMS Group
 	</div>
 	</div>	
 		<?php echo $footer ?>
