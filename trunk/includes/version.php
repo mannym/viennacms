@@ -1,4 +1,4 @@
 <?php
-$version = '0.10.0-dev';
-$database_version = 110;
+$version = '1.0.B1-dev';
+$database_version = 114;
 ?>

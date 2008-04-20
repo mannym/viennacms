@@ -12,7 +12,7 @@ function install_database($table_prefix, $admin_username, $admin_password) {
 	include(ROOT_PATH . "includes/constants_core.php");
 	$csql = "SELECT * FROM " . CONFIG_TABLE;
 	$installed = false;
-	$db->sql_return_onerror(false);
+	$db->sql_return_on_error(true);
 	if ($db->sql_query($csql) != false){
 		$installed = true;
 	}
