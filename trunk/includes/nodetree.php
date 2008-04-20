@@ -199,6 +199,7 @@ class CMS_Node {
    * @return void
    */
 	public function write($all = true) {
+		global $cache;
 		$db = database::getnew();
 		
 		if (!empty($this->node_id)) {
@@ -232,7 +233,8 @@ class CMS_Node {
 		if (empty($this->node_id)) {
 			$this->node_id = $db->sql_nextid();
 		}
-		
+		$cache->destroy('sql', NODES_TABLE);
+		$cache->destroy('sql', NODE_REVISIONS_TABLE);
 		// and now add/update the revision :)
 		if ($all) {
 			utils::get_types();
@@ -299,8 +301,8 @@ class CMS_Node {
    *
    * @return array children of current node
    */
-	public function get_children() {
-		return $this->read(NODE_CHILDREN, false);
+	public function get_children($use_cache = false) {
+		return $this->read(NODE_CHILDREN, $use_cache);
 	}
 	
   /**

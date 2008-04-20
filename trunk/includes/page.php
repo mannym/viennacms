@@ -81,33 +81,6 @@ class page {
 		
 		$template->vars['middle'] = $this->get_bloc('before_content') . $template->vars['middle'] . $this->get_bloc('after_content');
 		$template->vars['content'] = &$template->vars['middle'];
-
-		// and then run
-		/*$id = intval($_GET['id']);
-		
-		$node = new CMS_Node();
-		
-		if (!$id) {
-			$node = $this->sitenode;
-		} else {
-			$node->node_id = $id;
-			$node->read();
-		}
-		$user = user::getnew();
-		if (isset($_GET['revision'])) {
-			$user->initialize(true);
-			if ($user->user_logged_in) {
-				$node->revision->revision_id = 0;
-				$node->revision->revision_number = $_GET['revision'];
-				$node->revision->read($node);
-				
-				$this->get_revision_nav($node);
-			}
-		}
-		
-		$this->node = $node;
-		$this->parents = $this->get_parents($this->node);
-		$this->get_template();*/
 	}
 	
 	/**
@@ -127,7 +100,7 @@ class page {
 			$node = $this->sitenode;
 		} else {
 			$node->node_id = $id;
-			$node->read();
+			$node->read(NODE_SINGLE, true);
 		}
 		$user = user::getnew();
 		if (isset($args['revision'])) {
@@ -229,12 +202,12 @@ class page {
 		
 		if ($level == 1) {
 			$node = $this->sitenode;
-			$nodes = $node->get_children();
+			$nodes = $node->get_children(true);
 		} else if ($level > 1) {
 			if (isset($this->parents[$level])) {
 				$nodes = $this->parents[$level]->get_siblings_all();
 			} else if (isset($this->parents[$level - 1])) {
-				$nodes = $this->parents[$level - 1]->get_children();
+				$nodes = $this->parents[$level - 1]->get_children(true);
 			}
 		}
 		foreach ($this->parents as $parent) {

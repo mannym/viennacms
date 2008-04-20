@@ -771,6 +771,18 @@ class FileReader {
 
 }
 
+/**
+ * echo $msgid
+ *
+ * @param string $msgid
+ */
+
+function _e($msgid)
+{
+	echo $msgid;
+	return;
+}
+
 // Preloads entire file in memory first, then creates a StringReader 
 // over it (it assumes knowledge of StringReader internals)
 class CachedFileReader extends StringReader {
