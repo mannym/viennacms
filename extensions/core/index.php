@@ -75,6 +75,7 @@ class extension_core
 	}
 	
 	function module_sitemap($args) {
+		global $cache;
 		$page = page::getnew();
 		utils::add_css('inline', "
 .treeview, .treeview ul { 
@@ -120,10 +121,20 @@ class extension_core
 .treeview .lastCollapsable { background-image: url(adm/images/tv-collapsable-last.gif); }
 .treeview .lastExpandable { background-image: url(adm/images/tv-expandable-last.gif); }
 ");
-		utils::get_types();
-		echo '<ul class="treeview">';
-		echo $this->_get_map_tree($page->sitenode);
-		echo '</ul>';
+		$cache_id = '_module_sitemap_' . $page->sitenode->node_id;
+		if (($content = $cache->get($cache_id)) !== false) {
+			echo $content;
+		} else {
+			ob_start();
+			utils::get_types();
+			echo '<ul class="treeview">';
+			echo $this->_get_map_tree($page->sitenode);
+			echo '</ul>';
+			$content = ob_get_contents();
+			ob_end_clean();
+			$cache->put($cache_id, $content, 7200);
+			echo $content;
+		}		
 	}
 	
 
