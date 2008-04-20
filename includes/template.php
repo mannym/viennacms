@@ -173,8 +173,7 @@ class template {
 				$content = str_replace(array("\t", "\n", "\r"), '', $content);
 			}
 			$content = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" . $content . "\t";
-		}
-		$content .= <<<HTML
+			$content .= <<<HTML
 <!--
 
 	**************************************************************
@@ -186,13 +185,8 @@ class template {
 	site: http://www.viennacms.nl/
 	**************************************************************
 HTML;
-		if($process)
-		{
-			$content .= "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t -->";
-		}
-		else {
-			$content .= " -->";
-		}
+		$content .= "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t -->";
+	}
 		echo $content;
 	}
 	

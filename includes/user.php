@@ -131,19 +131,22 @@ class user {
 	 * @return bool succes
 	 */
 	public function login($username, $password) {
+		// Standard true
 		$login = true;
 		$db = database::getnew();
+		// Get all user data
 		$sql = "SELECT * FROM " . USER_TABLE . " WHERE username = '" . $db->sql_escape($username) . "'"; 
 		if(!$result = $db->sql_query($sql)) {
 			$login = false;
 		}
-		
 		$logindata = $db->sql_fetchrow($result);
+		$max_attempts = false;
 		if($logindata['login_attempts'] >= 3 && $logindata['last_login_attempt'] > (time() - 120))
 		{
 			$login = false;
+			$max_attempts = true;
 		}
-		if($logindata['password'] != md5($password)) {
+		if(!$max_attempts && $logindata['password'] != md5($password)) {
 			$login = false;
 			if($logindata['login_attempts'] >= 3 && $logindata['last_login_attempt'] < (time() - 120))
 			{
@@ -162,8 +165,17 @@ class user {
 		$this->data = $logindata;
 		if($login) {
 			$login = $this->login_correct($logindata['userid'], true);
+			// Reset login attempts
+			$sql = 'UPDATE ' . USER_TABLE . '
+					SET login_attempts = 0, last_login_attempt = 0
+					WHERE userid = ' . $this->userid;
 		}
-		if(!$login) {
+		elseif($max_attempts)
+		{
+			trigger_error(__('Login limit reached. Please wait 2 minutes before attempting to login again.'));
+			return false;
+		}
+		elseif(!$login && !$max_attempts) {
 			trigger_error(__('Login incorrect'));		
 			return false;
 		}

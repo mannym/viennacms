@@ -1,4 +1,11 @@
 <?php
+/**
+ * Upgrade file for the viennaCMS
+ * 
+ * @package viennaCMS
+ * @author viennaCMS developpers
+ */
+
 define('IN_VIENNACMS', true);
 define('IN_UPGRADE', true);
 include('../start.php');
@@ -36,7 +43,6 @@ foreach ($dir as $file) {
 	}
 }
 
-//include(ROOT_PATH . 'config.php');
 $step = (isset($_REQUEST['step'])) ? $_REQUEST['step'] : 1; 
 
 $steps = array(
@@ -64,6 +70,7 @@ switch ($step) {
 	break;
 	case 2:
 		$template->assign_vars(array('step' => '2'));
+		$sql = array();
 		switch ($dbversion['current']) {
 			case 0:
 				$sql[] = 'ALTER TABLE ' . DOWNLOADS_TABLE . ' CHANGE `time` `time` INT(11) NOT NULL';
@@ -108,13 +115,10 @@ switch ($step) {
 				{
 					define('ALL_SUCCES', false);
 				}
-				$mes .= '<span style="color: red;">' . __('Failed') . '</span><br />' . mysql_error();
+				$mes .= '<span style="color: red;">' . __('Failed') . '</span><br />' . $db->sql_error();
 			}
 			
 			$mes .= ']';
-			/*if(!$db->sql_query($query)){
-				install_die("Could not insert SQL. Error: " . mysql_error());	
-			}*/	
 		}	
 		$db->sql_return_on_error(false);
 		

@@ -12,10 +12,6 @@ define('IN_INSTALL', true);
 include('../start.php');
 include(ROOT_PATH . 'includes/functions_install.php');
 
-if (filesize(ROOT_PATH . 'config.php') > 10) {
-	header('Location: ../');
-	exit;
-}
 
 // check language
 if (isset($_GET['language'])) {
@@ -108,18 +104,24 @@ switch ($step) {
 	break;
 	case 3:
 		$template->assign_vars(array('step' => '3'));
-		//install_die('grr');
-		$dbhost = $_POST['host'];
-		$dbuser = $_POST['username'];
-		$dbpasswd = $_POST['password'];
-		$dbname = $_POST['database'];
-		$table_prefix = $_POST['prefix'];
-		$name2 = addslashes($_POST['name2']);
-		$ww2 = md5($_POST['ww2']);
+		$dbhost = $_POST['database_host'];
+		$dbuser = $_POST['database_username'];
+		$dbpasswd = $_POST['database_password'];
+		$dbname = $_POST['database_name'];
+		$table_prefix = $_POST['table_prefix'];
+		$admin_username = addslashes($_POST['admin_username']);
+		$admin_password1 = md5($_POST['admin_password']);
+		$admin_password2 = md5($_POST['admin_password_confirm']);
+		if($admin_password1 != $admin_password2)
+		{
+			$pass_error = true;
+			$template->assign_vars(array('step' => '2'));
+			break;
+		}
 		$db = database::getnew();
 		$db->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname);
 		$db->prefix = $table_prefix;
-		$result = install_database($db->prefix, $name2, $ww2);
+		$result = install_database($db->prefix, $admin_username, $admin_password1);
 		if ($result) { // got an error
 			install_die($result);
 		}

@@ -205,7 +205,7 @@ class extension_core
 		$result = $db->sql_query($sql);
 		$affectedrows = $db->sql_affectedrows($result);
 		$array = array();
-		if(count($affectedrows) >= 2)
+		if(count($affectedrows) > 1)
 		{
 			$array = array(	'hostname' => array(
 				'type'			=> 'textfield',

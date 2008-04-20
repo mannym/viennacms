@@ -40,7 +40,7 @@
 				</tr>
 				<?php } ?>
 			</table>
-	<?php echo __('If one or more of these files are not writable, you cannot install viennaCMS.') ?>
+	<?php echo __('If one or more of these files or folders are not writable, you cannot install viennaCMS.') ?>
 <?php endif; ?>
 <?php if ($step == 2) : ?>
   <table width="100%" border="0">
@@ -49,37 +49,41 @@
     </tr>
 		<tr>
 			<td><?php echo __('Database server (mostly localhost)') ?></td>
-			<td><input type="text" value="localhost" name="host"></td>
+			<td><input type="text" value="<?php echo (empty($dbhost) ? 'localhost' : $dbhost) ?>" name="database_host" /></td>
 
 		</tr>
 		<tr>
 			<td><?php echo __('Database user name') ?></td>
-			<td><input type="text" value="" name="username"></td>
+			<td><input type="text" value="<?php echo $dbuser ?>" name="database_username" /></td>
 		</tr>
 		<tr>
 			<td><?php echo __('Database password') ?></td>
-			<td><input type="password" value="" name="password"></td>
+			<td><input type="password" value="<?php echo $dbpasswd ?>" name="database_password" /></td>
 
 		</tr>
 		<tr>
 			<td><?php echo __('Database name') ?></td>
-			<td><input type="text" value="" name="database"></td>
+			<td><input type="text" value="<?php echo $dbname ?>" name="database_name" /></td>
 		</tr>
 		<tr>
 			<td><?php echo __('Table prefix') ?></td>
-			<td><input type="text" value="viennacms_" name="prefix"></td>
+			<td><input type="text" value="<?php echo (empty($table_prefix) ? 'viennacms_' : $table_prefix) ?>" name="table_prefix" /></td>
 		</tr>
-		<tr><th colspan="2"><?php echo __('Admin information') ?>
+		<tr><th colspan="2"><?php echo __('Admin information'); if(!empty($pass_error)) echo '<br />' . __('Passwords do not match'); ?>
 		</th></tr>
 
 		<tr>
 			<td><?php echo __('Username') ?></td>
-			<td><input type="text" value="username" name="name2"></td>
+			<td><input type="text" value="<?php echo ( empty($admin_username) ? 'admin' : $admin_username) ?>" name="admin_username" /></td>
 		</tr>
 		<tr>
 			<td><?php echo __('Password') ?></td>
-			<td><input type="password" value="" name="ww2"></td>
-		</tr>		
+			<td><input type="password" value="" name="admin_password" /></td>
+		</tr>
+		<tr>
+			<td><?php echo __('Confirm password') ?></td>
+			<td><input type="password" value="" name="admin_password_confirm" /></td>
+		</tr>	
 	</table>
 <?php endif; ?>
 <?php if ($step == 3) : ?>

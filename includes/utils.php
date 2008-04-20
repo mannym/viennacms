@@ -406,13 +406,25 @@ HTML;
 			case E_USER_WARNING:
 			case E_USER_NOTICE:
 				if (defined('IN_ADMIN')) {
-					$Header = '';
 					$page_title = __('Information');
-					if (!defined('ADM_HEADER')) {
-						include('./header.php');
-					}
-					echo '<h1>' . __('Information') . '</h1>';
-					echo $msg_text;
+					$header_title = __('viennaCMS ACP');
+					$view_site = __('View site');
+					echo <<<HTML
+<html>
+	<head>
+		<title>$header_title &bull; $page_title</title>
+		<link rel="stylesheet" href="admin.css" />
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="header">
+				<div style="text-align: right; color: black !important;"><a href="../">$view_site</a></div>
+				<h1>$header_title</h1>
+			</div>
+			<div id="right">
+HTML;
+					echo '<h1>' . __('Information') . "</h1>\r\n<div>";
+					echo $msg_text . '<br /><br /></div>';
 					include('./footer.php');
 					exit;
 				}
