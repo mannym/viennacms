@@ -33,6 +33,9 @@ if ($node->revision->has_modules) {
 <p class="icon_p"><a href="admin_node_content.php?node=<?php echo $node->node_id ?>"><img src="images/modules.png" /><br /><?php echo __('Edit content') ?></a><br /><?php echo __('Add or edit the text content in this node.') ?></p>
 <?php
 }
+?>
+<p class="icon_p"><a href="admin_node_new.php?node=<?php echo $node->node_id ?>&amp;do=edit"><img src="images/edit.png" /><br /><?php echo __('Edit node details') ?></a><br /><?php echo __('Edit the node details like title and description.') ?></p>
+<?php
 if ($node->type == 'site') {
 ?>
 <p class="icon_p"><a href="admin_node_modules.php?node=<?php echo $node->node_id ?>&amp;blocks=true"><img src="images/modules.png" /><br /><?php echo __('Edit blocks') ?></a><br /><?php echo __('Add or edit the blocks for this site.') ?></p>
@@ -47,7 +50,6 @@ if (utils::$types[$node->type]['type'] != NODE_NO_REVISION) {
 <?php
 }
 ?>
-<p class="icon_p"><a href="admin_node_new.php?node=<?php echo $node->node_id ?>&amp;do=edit"><img src="images/edit.png" /><br /><?php echo __('Edit node details') ?></a><br /><?php echo __('Edit the node details like title and description.') ?></p>
 <p class="icon_p"><a href="admin_node_delete.php?node=<?php echo $node->node_id ?>"><img src="images/edit_remove.png" /><br /><?php echo __('Delete node') ?></a><br /><?php echo __('Delete this node.') ?></p>
 <?php
 
