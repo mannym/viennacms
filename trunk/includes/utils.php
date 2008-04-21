@@ -52,7 +52,7 @@ class utils {
 		$sql = 'SELECT * FROM ' . CONFIG_TABLE . " WHERE config_name = 'database_version'";
 		$result = $db->sql_query($sql);
 		
-		if ($result) {
+		if ($result !== false) {
 			if (!$row = $db->sql_fetchrow($result)) {
 				$currentdbver = 109;
 			} else {
@@ -67,7 +67,6 @@ class utils {
 				$currentdbver = 0;
 			}
 		}
-		
 		$return = array(
 			'current' => $currentdbver,
 			'new' => $database_version,
@@ -86,15 +85,14 @@ class utils {
 		if (defined('IN_INSTALL')) {
 			return;
 		}
-		
+		global $dbhost, $dbuser, $dbpasswd, $dbname, $table_prefix;
 		$db = database::getnew(); // need some error checking so using this when
 								  // the database class is not loaded we don't loop :)
-		@include(ROOT_PATH . 'config.php');
+		@include_once(ROOT_PATH . 'config.php');
 		
 		if (!defined('CMS_INSTALLED')) {
 			header('Location: install/');
 			exit;
-			//exit(__('You need to install viennaCMS first.'));
 		}
 		
 		$db->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname);
@@ -601,17 +599,18 @@ HTML;
 		}
 	}
 	
-	static function config_file_write($dbhost, $dbuser, $dbpasswd, $dbname, $prefix) {
+	static function config_file_write($dbhost, $dbuser, $dbpasswd, $dbname, $prefix, $dbms) {
 		$config = <<<CONFIG
 <?php
 \$dbhost = '$dbhost';
 \$dbuser = '$dbuser';
 \$dbpasswd = '$dbpasswd';
 \$dbname = '$dbname';
+\$dbms = '$dbms';
 
 \$table_prefix = '$prefix';
 
-define('CMS_INSTALLED', true);
+@define('CMS_INSTALLED', true);
 ?>
 CONFIG;
 		return file_put_contents(ROOT_PATH . 'config.php', $config);

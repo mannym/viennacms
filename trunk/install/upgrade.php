@@ -71,6 +71,7 @@ switch ($step) {
 	case 2:
 		$template->assign_vars(array('step' => '2'));
 		$sql = array();
+		
 		switch ($dbversion['current']) {
 			case 0:
 				$sql[] = 'ALTER TABLE ' . DOWNLOADS_TABLE . ' CHANGE `time` `time` INT(11) NOT NULL';

@@ -1,9 +1,11 @@
 <?php
-function install_database($table_prefix, $admin_username, $admin_password) {
+function install_database($table_prefix, $admin_username, $admin_password, $dbms) {
 	$db = database::getnew();
 	include(ROOT_PATH . 'includes/sql_parse.php');
-	$dbms_schema = ROOT_PATH . 'install/install.sql';
+	$dbms_schema = ROOT_PATH . 'install/schemas/' . $dbms . '.sql';
+	$dbms_data = ROOT_PATH . '/install/schemas/schema_data.sql';
 	$sql_query = file_get_contents($dbms_schema);
+	$sql_query .= file_get_contents($dbms_data);
 	$sql_query = preg_replace('#viennacms_#is', $table_prefix, $sql_query);		
 	$sql_query = remove_comments($sql_query);
 	$sql_query = remove_remarks($sql_query);
@@ -29,13 +31,15 @@ function install_database($table_prefix, $admin_username, $admin_password) {
 		}
 	}
 	$db->sql_return_on_error(true);
-	$sql[] = "UPDATE ".USER_TABLE." SET username = '$admin_username', password = '$admin_password', lang = '$language'";		
+	$sql[] = "INSERT INTO " . USER_TABLE . " SET username = '$admin_username', password = '$admin_password', lang = '$language'";		
 	include(ROOT_PATH . 'includes/version.php');
 	$sql[] = "INSERT INTO " . CONFIG_TABLE . " SET config_name = 'database_version', config_value = '$database_version'";
 
 	foreach ($sql as $query) {
+		var_dump($query);
 		if(!$db->sql_query($query)){
-			return "Could not insert SQL. Error: " . $db->sql_error();	
+			$error = $db->sql_error();
+			return "Could not insert SQL. Error: " . $error['message'];	
 		}	
 	}
 	$db->sql_return_on_error(false);

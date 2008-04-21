@@ -69,6 +69,14 @@
 			<td><?php echo __('Table prefix') ?></td>
 			<td><input type="text" value="<?php echo (empty($table_prefix) ? 'viennacms_' : $table_prefix) ?>" name="table_prefix" /></td>
 		</tr>
+		<tr>
+			<td><?php echo __('Database Type') ?></td>
+			<td>
+				<select name="dbms">
+					<option value="mysql"><?php echo __('MySQL 5 or higher') ?></option>
+				</select>
+			</td>
+		</tr>
 		<tr><th colspan="2"><?php echo __('Admin information'); if(!empty($pass_error)) echo '<br />' . __('Passwords do not match'); ?>
 		</th></tr>
 
