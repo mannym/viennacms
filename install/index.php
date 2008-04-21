@@ -109,6 +109,7 @@ switch ($step) {
 		$dbpasswd = $_POST['database_password'];
 		$dbname = $_POST['database_name'];
 		$table_prefix = $_POST['table_prefix'];
+		$dbms = $_POST['dbms'];
 		$admin_username = addslashes($_POST['admin_username']);
 		$admin_password1 = md5($_POST['admin_password']);
 		$admin_password2 = md5($_POST['admin_password_confirm']);
@@ -121,11 +122,11 @@ switch ($step) {
 		$db = database::getnew();
 		$db->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname);
 		$db->prefix = $table_prefix;
-		$result = install_database($db->prefix, $admin_username, $admin_password1);
+		$result = install_database($db->prefix, $admin_username, $admin_password1, $dbms);
 		if ($result) { // got an error
 			install_die($result);
 		}
-		utils::config_file_write($dbhost, $dbuser, $dbpasswd, $dbname, $table_prefix);	
+		utils::config_file_write($dbhost, $dbuser, $dbpasswd, $dbname, $table_prefix, $dbms);	
 	break;	
 	case 4:
 		header('Location: ../index.php');

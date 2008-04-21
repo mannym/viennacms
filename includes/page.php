@@ -369,10 +369,11 @@ class page {
 		$node = new CMS_Node();
 		
 		$node->node_id = 0;
-		$sites = $node->get_children();
+		$sites = $node->get_children(true);
 		$this_site = false;
 		
 		foreach ($sites as $site) {
+			
 			if ($site->type != 'site') {
 				continue;
 			}

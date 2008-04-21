@@ -99,8 +99,9 @@ if (STRIP) {
 /**
 * Load pre-dependencies. 
 */
+include(ROOT_PATH . 'config.php');
 include(ROOT_PATH . 'includes/gettext.php');
-include(ROOT_PATH . 'includes/db/mysql.php');
+include(ROOT_PATH . 'includes/db/' . $dbms . '.php');
 include(ROOT_PATH . 'includes/acm_file.php');
 include(ROOT_PATH . 'includes/utils.php');
 include(ROOT_PATH . 'includes/template.php');
