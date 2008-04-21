@@ -101,6 +101,10 @@ if(!defined('CMS_INSTALLED') && !defined('IN_INSTALL'))
 	header('Location: install/index.php');
 	exit;
 }
+if(empty($dbms))
+{
+	$dbms = 'mysql';
+}
 /**
 * Load pre-dependencies. 
 */
