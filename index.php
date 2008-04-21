@@ -23,6 +23,17 @@ $template->assign_vars(array(
 	'head' => $Header,
 	'homeurl' => $page->get_link($page->sitenode)
 ));
-	
+
+ob_start();	
 $template->display('main');
+$content = ob_get_contents();
+ob_end_flush();
+
+$pages = $cache->get('_page_output');
+$pages[$page->pagehash] = array(
+	'expire' => (time() + 1800),
+	'output' => base64_encode($content)
+);
+
+$cache->put('_page_output', $pages);
 ?>
