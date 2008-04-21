@@ -89,12 +89,7 @@ class utils {
 		$db = database::getnew(); // need some error checking so using this when
 								  // the database class is not loaded we don't loop :)
 		@include_once(ROOT_PATH . 'config.php');
-		
-		if (!defined('CMS_INSTALLED')) {
-			header('Location: install/');
-			exit;
-		}
-		
+
 		$db->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname);
 		$db->prefix = $table_prefix;
 		

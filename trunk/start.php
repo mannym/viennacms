@@ -95,11 +95,15 @@ if (STRIP) {
 		@reset($_COOKIE);
 	}
 }
-
+@include(ROOT_PATH . 'config.php');
+if(!defined('CMS_INSTALLED') && !defined('IN_INSTALL'))
+{
+	header('Location: install/index.php');
+	exit;
+}
 /**
 * Load pre-dependencies. 
 */
-include(ROOT_PATH . 'config.php');
 include(ROOT_PATH . 'includes/gettext.php');
 include(ROOT_PATH . 'includes/db/' . $dbms . '.php');
 include(ROOT_PATH . 'includes/acm_file.php');
