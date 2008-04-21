@@ -36,7 +36,6 @@ function install_database($table_prefix, $admin_username, $admin_password, $dbms
 	$sql[] = "INSERT INTO " . CONFIG_TABLE . " SET config_name = 'database_version', config_value = '$database_version'";
 
 	foreach ($sql as $query) {
-		var_dump($query);
 		if(!$db->sql_query($query)){
 			$error = $db->sql_error();
 			return "Could not insert SQL. Error: " . $error['message'];	
