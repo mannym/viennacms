@@ -16,6 +16,28 @@ if (!defined('IN_VIENNACMS')) {
 	exit;
 }
 
+/**
+* Checks of PHP_EOL is defined, if not he define it. 
+* @author Alexander
+*
+* @todo Check for the user operating system if posible. DONE!
+* @final Check is very simple, needs to improve or just let it this way works fine.
+* 
+* Windows uses only \r\n for a new line
+* the rest of the os'es uses \n instead of \r\n
+*/
+if(!defined("PHP_EOL"))
+{
+    if(preg_match("/Windows/i", $_SERVER['HTTP_USER_AGENT']))
+    {
+        define('PHP_EOL', '\r\n');
+    }
+    else
+    {
+        define('PHP_EOL', '\n');
+    }
+}
+
 define('ROOT_PATH', dirname(__FILE__) . '/');
 error_reporting(E_ALL & ~E_NOTICE);
 
@@ -101,10 +123,12 @@ if(!defined('CMS_INSTALLED') && !defined('IN_INSTALL'))
 	header('Location: install/index.php');
 	exit;
 }
-if(empty($dbms))
+
+if($dbms == '')
 {
 	$dbms = 'mysql';
 }
+
 /**
 * Load pre-dependencies. 
 */
