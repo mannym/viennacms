@@ -124,7 +124,7 @@ if(!defined('CMS_INSTALLED') && !defined('IN_INSTALL'))
 	exit;
 }
 
-if($dbms == '')
+if(empty($dbms) || $dbms != 'mysql')
 {
 	$dbms = 'mysql';
 }
