@@ -29,6 +29,8 @@ class page {
 	public $parents;
 	public $prefix;
 	
+	public $rawnav;
+	
 	/**
 	* Return an instance of page.
 	* 
@@ -136,6 +138,7 @@ class page {
 	 */
 	
 	public function init_page(CMS_Node $node) {
+		$this->assign_rawnav();
 		$this->parents = $this->get_parents($node);
 		$this->get_template();
 	}
@@ -190,6 +193,41 @@ class page {
 	}
 	
 	/**
+	* Assign raw navigation for this site.
+	*/
+	
+	public function assign_rawnav() {
+		$this->rawnav = $this->_assign_rawnav($this->sitenode, array());
+	}
+	
+	private function _assign_rawnav($node, $links) {
+		$nodes = $node->get_children(true);
+		$sublinks = array();
+		
+		foreach ($nodes as $child) {
+			$new = $this->_assign_rawnav($child, $links);
+			if (!empty($new)) {
+				$sublinks = array_merge($sublinks, $new);
+			}		
+		}
+		
+		$show = utils::display_allowed('show_to_visitor', $node);
+		
+		if ($show && $node != $this->sitenode) {
+			$links['n' . $node->node_id] = array(
+				'href'			=> $this->get_link($node),
+				'text'			=> $node->title,
+				'description'	=> $node->description,
+				'children'		=> $sublinks,
+			);
+		} else if ($node == $this->sitenode) {
+			$links = $sublinks;
+		}
+		
+		return $links;
+	}
+	
+	/**
 	* Get navigation on a selected level. 
 	* 
 	* @param int $level: The level
@@ -214,7 +252,7 @@ class page {
 			$active[] = $parent->node_id;
 		}
 				
-		$ret = '';
+		$links = array();
 		
 		if (!isset($nodes) || !$nodes) {
 			return;
@@ -232,18 +270,24 @@ class page {
 				$class = '';
 				
 				if (in_array($node->node_id, $active)) {
-					$class = ' class="active"';
+					$class = 'active';
 				}
 				
-				$ret .= "						<li$class>\r\n";
+				$links['n' . $node->node_id] = array(
+					'class'			=> $class,
+					'href'			=> $this->get_link($node),
+					'text'			=> $node->title,
+					'description'	=> $node->description
+				);
+				/*$ret .= "						<li$class>\r\n";
 				$ret .= '							<a href="' . $this->get_link($node) . '">';
 				$ret .= $node->title;
 				$ret .= "</a>\r\n";
-				$ret .= "						</li>\r\n";
+				$ret .= "						</li>\r\n";*/
 			}
 		}
 		
-		return $ret;
+		return theme('links', 'nav_level' . $level, $links);
 	}
 	
 	/**
@@ -299,19 +343,7 @@ class page {
 	*/
 
 	function make_breadcrumbs() {
-		$crumbs = '';
-		
-		foreach ($this->parents as $node) {
-			$newcrumb  = ' &laquo; <a href="' .  $this->get_link($node) . '">';
-			$newcrumb .= $node->title;
-			$newcrumb .= '</a>';  
-
-			$crumbs = $crumbs . $newcrumb;
-		}
-
-		$crumbs = substr($crumbs, 9);
-		
-		return $crumbs;
+		return theme('breadcrumbs', $this->parents);
 	}
 	
 	/**
