@@ -30,6 +30,8 @@ class template {
 	
 	private $handles;
 	public $vars;
+	public $tpl;
+	public $basic;
 	public $private_vars;
 	
 	/**
@@ -65,6 +67,18 @@ class template {
 		$this->assign_vars(array(
 			'stylesheet' => 'styles/' . $this->name . '/style.css'
 		));
+		
+		if (file_exists($this->root . 'template.php')) {
+			include_once($this->root . 'template.php');
+		}
+		
+		$classname = 'tpl_' . $template;
+		include_once(ROOT_PATH . 'includes/default-tpl.php');
+		$this->tpl = new tpl_basic();
+		
+		if (class_exists($classname)) {
+			$this->tpl = new $classname();
+		}
 	}
 	
 	/**
@@ -211,6 +225,16 @@ HTML;
 			$this->assign_var($var, $contents);
 			return true;
 		}
+	}
+}
+
+function theme() {
+	$args = func_get_args();
+	$hook_name = array_shift($args);
+	
+	$template = template::getnew();
+	if (method_exists($template->tpl, $hook_name)) {
+		return call_user_func_array(array($template->tpl, $hook_name), $args);
 	}
 }
 ?>

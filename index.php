@@ -35,5 +35,5 @@ $pages[$page->pagehash] = array(
 	'output' => base64_encode($content)
 );
 
-$cache->put('_page_output', $pages);
+//$cache->put('_page_output', $pages);
 ?>
