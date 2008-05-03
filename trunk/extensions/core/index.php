@@ -57,6 +57,10 @@ class extension_core
 		));
 	}
 	
+	function dynamic_rawcontent() {
+		return true;
+	}
+	
 	function module_html_content($args) {
 		echo utils::handle_text(stripslashes($args['content']));
 	}
