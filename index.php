@@ -44,7 +44,7 @@ if ($config['caching_type'] == 'normal' || $config['caching_type'] == 'aggressiv
 			}
 		}		
 	}
-	
+
 	if ($do) {
 		$pages = $cache->get('_page_output');
 		$pages[$page->pagehash] = array(
