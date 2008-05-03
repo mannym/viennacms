@@ -29,11 +29,30 @@ $template->display('main');
 $content = ob_get_contents();
 ob_end_flush();
 
-$pages = $cache->get('_page_output');
-$pages[$page->pagehash] = array(
-	'expire' => (time() + 1800),
-	'output' => base64_encode($content)
-);
-
-//$cache->put('_page_output', $pages);
+if ($config['caching_type'] == 'normal' || $config['caching_type'] == 'aggressive') {
+	$do = true;
+	
+	if ($config['caching_type'] == 'normal') {
+		foreach ($page->node->revision->modules as $location) {
+			foreach ($location as $module) {
+				$func = 'dynamic_' . $module['module'];
+				$ext = utils::load_extension($module['extension']);
+				
+				if (method_exists($ext, $func)) {
+					$do = (!$ext->$func());
+				}
+			}
+		}		
+	}
+	
+	if ($do) {
+		$pages = $cache->get('_page_output');
+		$pages[$page->pagehash] = array(
+			'expire' => (time() + $config['caching_time']),
+			'output' => base64_encode($content)
+		);
+		
+		$cache->put('_page_output', $pages);
+	}
+}
 ?>

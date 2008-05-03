@@ -161,3 +161,7 @@ img.icon, p.icon_p img {
 #navlist li a:hover {
 	color: #444444;
 }
+
+span.small {
+	font-size: 90%;
+}

@@ -611,16 +611,19 @@ class page {
 			return '404';
 		}
 
-		$pagehash = sha1(serialize($data));
-		$pages = $cache->get('_page_output');
-		if (isset($pages[$pagehash])) {
-			if ($pages[$pagehash]['expire'] > time()) {
-				echo base64_decode($pages[$pagehash]['output']);
-				exit;
+		global $config;
+		if ($config['caching_type'] == 'normal' || $config['caching_type'] == 'aggressive') {
+			$pagehash = sha1(serialize($data));
+			$pages = $cache->get('_page_output');
+			if (isset($pages[$pagehash])) {
+				if ($pages[$pagehash]['expire'] > time()) {
+					echo base64_decode($pages[$pagehash]['output']);
+					exit;
+				}
 			}
-		}
 		
-		$this->pagehash = $pagehash;
+			$this->pagehash = $pagehash;
+		}
 		
 		switch ($data['cbtype']) {
 			case 'create_new_getnew':

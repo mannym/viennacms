@@ -653,6 +653,39 @@ CONFIG;
 	    return $temp2;
 	   
 	}
+	
+	static function get_hours($current = 0) {
+		return array(
+			'1800' => array(
+				'title' => __('half an hour'),
+				'selected' => ($current == 1800)
+			),
+			'3600' => array(
+				'title' => __('an hour'),
+				'selected' => ($current == 3600)
+			),
+			'7200' => array(
+				'title' => __('two hours'),
+				'selected' => ($current == 7200)
+			),
+			'21600' => array(
+				'title' => __('six hours'),
+				'selected' => ($current == 21600)
+			),
+			'43200' => array(
+				'title' => __('twelve hours'),
+				'selected' => ($current == 43200)
+			),
+			'86400' => array(
+				'title' => __('an day'),
+				'selected' => ($current == 86400)
+			),
+			'172800' => array(
+				'title' => __('two days'),
+				'selected' => ($current == 172800)
+			),
+		);
+	}
 }
 
 function shutdown_cleanly() {

@@ -102,6 +102,7 @@ switch($mode) {
 				'value'			=> 'true'
 			));
 		}
+		$form->title = __('Options for this node');
 		$form->generateform();
 		echo $form->content;
 		/*

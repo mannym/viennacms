@@ -117,6 +117,9 @@ define('ADM_HEADER', true);
 							<a href="admin_files.php"><?php echo __("Files"); ?></a>
 						</li>
 						<li>
+							<a href="admin_config.php"><?php echo __("Configuration"); ?></a>
+						</li>
+						<li>
 							<a href="login.php?mode=logout"><?php echo __("Log out"); ?></a>
 						</li>						
 					</ul>
@@ -129,6 +132,11 @@ define('ADM_HEADER', true);
 						$files = utils::load_extension('files');
 						$files->get_admin_tree();
 					}
+					else if (defined('IN_CONFIG')) {
+						?>
+						<li><a href="admin_config.php?mode=performance" class="page"><?php echo __('Performance') ?></a></li>
+						<?php
+					}
 					else {
 						utils::get_admin_tree();
 					}
@@ -138,7 +146,7 @@ define('ADM_HEADER', true);
 				<div class="nodes">
 					<a href="javascript: void(0);" onClick="$('#tree').toggle(); return false;"><?php echo __('Show/hide tree') ?></a><br />
 					<?php
-					if (!defined('IN_FILES')) {
+					if (!defined('IN_FILES') && !defined('IN_CONFIG')) {
 						?>
 						<a href="#" class="order"><?php echo __('Move nodes') ?></a>
 						<?php
