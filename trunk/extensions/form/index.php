@@ -20,6 +20,7 @@ class extension_form {
 	public $submit;
 	public $action;
 	public $content;
+	public $title;
 	private $position = 0;
 	
 	function setformfields($formfields) {
@@ -56,6 +57,7 @@ class extension_form {
 		//if(!empty($place)) {
 		switch ($type) {
 			case 'selectbox':
+			case 'radio':
 			case 'textarea': // Set the place of the formfield. Not for hidden or submit:
 			case 'textfield':
 				$this->position++;
@@ -88,6 +90,15 @@ class extension_form {
 			
 			case 'selectbox':
 				$this->selectboxes[$name] = array(
+					'name'			=> $name,
+					'title'			=> $title,
+					'description'	=> $desc,
+					'values'		=> $value
+				);
+			break;
+
+			case 'radio':
+				$this->radios[$name] = array(
 					'name'			=> $name,
 					'title'			=> $title,
 					'description'	=> $desc,
@@ -196,7 +207,8 @@ class extension_form {
 	function generateform() {
 		$this->content = <<<CONTENT
 <form action="$this->action" method="post">
-	<table width="100%">
+	<fieldset>
+		<legend>$this->title</legend>
 CONTENT;
 		
 		foreach ($this->place as $place) {
@@ -210,6 +222,9 @@ CONTENT;
 				case 'selectbox':
 					$this->_generate_selectbox($place['name']);
 				break;
+				case 'radio':
+					$this->_generate_radio($place['name']);
+				break;
 			}
 		}
 		
@@ -218,12 +233,8 @@ CONTENT;
 		}
 		
 		$this->content .= <<<CONTENT
-		<tr>
-			<td colspan="2">
-				<input type="submit" value="$this->submit" /> 
-			</td>
-		</tr>
-	</table>
+		<input type="submit" value="$this->submit" /> 
+	</fieldset>
 </form>					
 CONTENT;
 	}
@@ -236,15 +247,9 @@ CONTENT;
 		$value			= $textfield['value'];
 		
 		$content = <<<CONTENT
-		<tr>
-			<td width="70%">
-				<strong>$title</strong><br />
-				$description
-			</td>
-			<td width="30%">
-				<input type="text" name="$name" value="$value" />
-			</td>
-		</tr>					
+		<strong>$title</strong><br />
+		<input type="text" name="$name" value="$value" /><br />
+		<span class="small">$description</span><br ><br />
 CONTENT;
 	$this->content .= $content;
 	return;		
@@ -258,18 +263,30 @@ CONTENT;
 		$value			= $textarea['value'];
 		
 		$content = <<<CONTENT
-		<tr>
-			<td width="45%">
-				<strong>$title</strong><br />
-				$description
-			</td>
-			<td width="55%">
-				<textarea cols="30" rows="4" name="$name">$value</textarea>
-			</td>
-		</tr>					
+		<strong>$title</strong><br />
+		<textarea cols="30" rows="4" name="$name">$value</textarea>
+		<span class="small">$description</span><br ><br />
 CONTENT;
 	$this->content .= $content;
 	return;		
+	}
+	
+	function _generate_radio($name) {
+		$item = $this->radios[$name];
+		
+		$inputs = '';
+		foreach ($item['values'] as $key => $value) {
+			$selected = ($value['selected']) ? ' checked="checked"' : '';
+			$inputs .= '<label><input type="radio" name="' . $item['name'] . '" value="' . $key . '"' . $selected . ' />';
+			$inputs .= $value['title'];
+			$inputs .= '</label><br />';			
+		}
+		
+		$this->content .= <<<CONTENT
+		<strong>{$item['title']}</strong><br />
+		{$inputs}<br />		
+		<span class="small">{$item['description']}</span><br ><br />
+CONTENT;
 	}
 	
 	function _generate_selectbox($name) {
@@ -283,15 +300,9 @@ CONTENT;
 		$selectbox .= '</select>';
 		
 		$this->content .= <<<CONTENT
-		<tr>
-			<td width="45%">
-				<strong>{$item['title']}</strong><br />
-				{$item['description']}
-			</td>
-			<td width="55%">
-				{$selectbox}
-			</td>
-		</tr>
+		<strong>{$item['title']}</strong><br />
+		{$selectbox}<br />
+		<span class="small">{$item['description']}</span><br ><br />
 CONTENT;
 	}
 	

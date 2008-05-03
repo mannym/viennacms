@@ -235,6 +235,7 @@ class CMS_Node {
 		}
 		$cache->destroy('sql', NODES_TABLE);
 		$cache->destroy('sql', NODE_REVISIONS_TABLE);
+		$cache->destroy('_page_output');
 		// and now add/update the revision :)
 		if ($all) {
 			utils::get_types();
