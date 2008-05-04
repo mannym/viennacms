@@ -30,9 +30,11 @@ $content = ob_get_contents();
 ob_end_flush();
 
 if ($config['caching_type'] == 'normal' || $config['caching_type'] == 'aggressive') {
+	utils::get_types();
+	
 	$do = true;
 	
-	if ($config['caching_type'] == 'normal') {
+	if ($config['caching_type'] == 'normal' && utils::$types[$page->node->type]['type'] == NODE_MODULES) {		
 		foreach ($page->node->revision->modules as $location) {
 			foreach ($location as $module) {
 				$func = 'dynamic_' . $module['module'];
