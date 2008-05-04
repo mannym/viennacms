@@ -130,6 +130,14 @@ CSS;
 	}
 	
 	function module_latestnews($args) {
+		if (!$args['folder']) {
+			return __('Please select a news folder.');
+		}
+		
+		if (!$args['count']) {
+			$args['count'] = 10;
+		}
+		
 		$folder = new CMS_Node();
 		$folder->node_id = $args['folder'];
 		$folder->read();
