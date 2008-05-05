@@ -144,6 +144,11 @@ HEADERS;
 		}
 	}
 	
+	function dynamic_contact()
+	{
+		return true;
+	}
+	
 	function extinfo() {
 		return array(
 			'version' => '0.0.1',
