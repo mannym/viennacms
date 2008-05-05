@@ -14,7 +14,6 @@ include('../start.php');
 $user = user::getnew();
 $user->checkacpauth();
 
-$display_admin_tree = (empty($_GET['display_admin_tree']) ) ?  1 : 0;
 $mode = isset($_GET['mode']) ? $_GET['mode'] : 'form';
 $easy = (isset($_POST['easy']) || isset($_GET['easy']));
 if(!isset($_GET['node']) && !isset($_POST['node'])) {
@@ -105,72 +104,6 @@ switch($mode) {
 		$form->title = __('Options for this node');
 		$form->generateform();
 		echo $form->content;
-		/*
-		?>
-		<form action="?mode=save" method="post">
-			<table>
-				<?php
-				foreach ($options as $key => $data) {
-					?>
-					<tr>
-						<td width="70%">
-							<strong><?php echo $data['title'] ?></strong><br />
-							<?php echo $data['description'] ?>
-						</td>
-						<td width="30%">
-							<?php  if($key != 'template' && $key != 'language') {
-								?><input type="text" name="<?php echo $key ?>" value="<?php echo $node->options[$key] ?>" /><?php
-							}
-							elseif($key == 'template') { ?>
-							<select name="template">
-								<option name="">--<?php echo __('Select') ?>--</option>
-								<?php 
-								$templates = scandir(ROOT_PATH . 'styles');
-								foreach($templates as $template) {
-									if(is_dir(ROOT_PATH . 'styles/' . $template) && file_exists(ROOT_PATH . 'styles/' . $template . '/index.php') && file_exists(ROOT_PATH . 'styles/' . $template . '/module.php'))
-									{
-										?><option name="<?php echo $template ?>"><?php echo $template ?></option>
-								<?php } 
-								}
-								?>
-							</select>
-							<?php } 
-							elseif($key == 'language') { ?>
-							<select name="language">
-								<option name="">--<?php echo __('Select') ?>--</option>
-								<?php 
-								$languages = scandir(ROOT_PATH . 'locale');
-								foreach($languages as $language) {
-									if(is_dir(ROOT_PATH . 'locale/' . $language) && is_dir(ROOT_PATH . 'locale/' . $language . '/LC_MESSAGES/') && file_exists(ROOT_PATH . 'locale/' . $language . '/LC_MESSAGES/viennacms.mo'))
-									{
-										?><option name="<?php echo $language ?>"><?php echo $language ?></option>
-								<?php } 
-								}
-								?>
-							</select>
-							<?php } ?>
-						</td>
-					</tr>
-					<?php
-				}
-				?>
-				<tr>
-					<td colspan="2">
-						<?php
-						if ($easy) {
-							?>
-							<input type="hidden" name="easy" value="true" />
-							<?php	
-						}
-						?>
-						<input type="hidden" name="node" value="<?php echo $node->node_id ?>" />
-						<input type="submit" value="<?php echo __('Save') ?>" />
-					</td>
-				</tr>
-			</table>
-		</form>
-		<?php
-		*/
 		include('./footer.php');
 	break;
 }

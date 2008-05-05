@@ -259,12 +259,7 @@ class page {
 		}
 		
 		foreach ($nodes as $node) {
-			$ext = utils::load_extension(utils::$types[$node->type]['extension']);
 			$show = utils::display_allowed('show_to_visitor', $node);
-			/*if (method_exists($ext, $node->type . '_show_to_visitor')) {
-				$function = $node->type . '_show_to_visitor';
-				$show = $ext->$function($node);
-			}*/
 		
 			if ($show) {
 				$class = '';
@@ -279,11 +274,6 @@ class page {
 					'text'			=> $node->title,
 					'description'	=> $node->description
 				);
-				/*$ret .= "						<li$class>\r\n";
-				$ret .= '							<a href="' . $this->get_link($node) . '">';
-				$ret .= $node->title;
-				$ret .= "</a>\r\n";
-				$ret .= "						</li>\r\n";*/
 			}
 		}
 		
