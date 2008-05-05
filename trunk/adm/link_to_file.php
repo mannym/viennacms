@@ -35,7 +35,6 @@ include('./header.php');
 	</script>
 	<script type="text/javascript">
 		function treeDo() {
-			alert('treeDo begin');
 			$(".nodes").treeview({
 			collapsed: true,
 			unique: true
