@@ -143,13 +143,7 @@ class extension_core
 	
 
 	function _get_map_tree($node, $list = '', $extra = array()) {
-		$ext = utils::load_extension(utils::$types[$node->type]['extension']);
 		$show = utils::display_allowed('show_to_visitor', $node);
-		/*if (method_exists($ext, $node->type . '_show_to_visitor')) {
-			$function = $node->type . '_show_to_visitor';
-			$show = $ext->$function($node);
-		}*/
-
 		if ($show) {	
 			$page = page::getnew();
 			if ($node->node_id != 0) {
@@ -167,27 +161,14 @@ class extension_core
 				$i = 1;
 				$maxi = 0;
 				foreach ($nodes as $node) {
-					$ext = utils::load_extension(utils::$types[$node->type]['extension']);
-					/*$show = true;
-					if (method_exists($ext, $node->type . '_show_to_visitor')) {
-						$function = $node->type . '_show_to_visitor';
-						$show = $ext->$function($node);
-					}*/
 					$show = utils::display_allowed('show_to_visitor', $node);
 					
 					if ($show) {
 						$maxi++;
 					}
 				}
-				//$maxi = count($nodes);
 				foreach ($nodes as $node) {
 					$list = $this->_get_map_tree($node, $list, array('i' => $i, 'mi' => $maxi));
-					$ext = utils::load_extension(utils::$types[$node->type]['extension']);
-					/*$show = true;
-					if (method_exists($ext, $node->type . '_show_to_visitor')) {
-						$function = $node->type . '_show_to_visitor';
-						$show = $ext->$function($node);
-					}*/
 					$show = utils::display_allowed('show_to_visitor', $node);
 					
 					if ($show) {
@@ -259,8 +240,28 @@ class extension_core
 		);
 	}
 	
-	function options_page() {
-		return array();
+	function options_page($options) {
+		$yes_selected = isset($options['display_in_menu']['values']['yes']['selected']) ? (bool) $options['display_in_menu']['values']['yes']['selected'] : true;
+		$no_selected  = $yes_selected ? false : true;
+		return array(
+			'display_in_menu' => array(
+				'name'			=> 'display_in_menu',
+				'type'			=> 'radio',
+				'title'			=> __('Display in menu'),
+				'description'	=> __('Select \'No\' to hide this item from the menu.'),
+				'sameline'		=> true,
+				'values'		=> array(
+					(int) true		=> array(
+						'title'			=> __('Yes'),
+						'selected'		=> 	$yes_selected,
+					),
+					(int) false		=> array(
+						'title'			=> __('No'),
+						'selected'		=> $no_selected,
+					),
+				),
+			),
+		);
 	}
 
 	
@@ -351,6 +352,16 @@ CSS;
 	}
 	
 	function display_node($type, $node, $other) {
+		switch($type) {
+			case 'show_to_visitor':
+				if(isset($node->options['display_in_menu']) && settype($node->options['display_in_menu'], 'bool') && $node->type == 'page')
+				{
+					return false;
+				}
+				return true;
+			break;
+			
+		}
 		return true;
 	}
 }

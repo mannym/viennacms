@@ -46,15 +46,17 @@ class extension_form {
 		}
 		
 		$name 	= $formfield['name'];
-		$value	= isset($formfield['value']) ? $formfield['value'] : ''; // Not required
+		if(isset($formfield['value'])) // In case of radio button or selectbox, we have 'values' for that.
+		{
+			$value	= isset($formfield['value']) ? $formfield['value'] : ''; // Not required
+		}
+		elseif(isset($formfield['values']))
+		{
+			$value = $formfield['values'];
+		}
 		$title	= isset($formfield['title']) ? $formfield['title'] : ''; // Not required for hidden formfields
 		$desc	= isset($formfield['description']) ? $formfield['description'] : ''; // Not required for hidden formfields
-		/**
-		 * TODO: Automaticaly generate the place of the field
-		 */
-		//$place	= isset($formfield['place']) ? $formfield['place'] : '';
 		
-		//if(!empty($place)) {
 		switch ($type) {
 			case 'selectbox':
 			case 'radio':
@@ -65,7 +67,6 @@ class extension_form {
 				$this->place[$this->position]['type'] = $type;					
 			break;
 		}
-		//}
 		
 		switch($type) {
 			case 'textarea': // if type is textarea, add it to textareas
@@ -74,7 +75,7 @@ class extension_form {
 					'title'			=> $title,
 					'value'			=> $value,
 					'description'	=> $desc,
-					'place'			=> $place,
+					// 'place'			=> $place, We don't do anything with this, do we?
 				);
 			break;
 			
@@ -84,7 +85,7 @@ class extension_form {
 					'title'			=> $title,
 					'value'			=> $value,
 					'description'	=> $desc,
-					'place'			=> $place,
+					// 'place'			=> $place, We don't do anything with this, do we?
 				);
 			break;
 			
@@ -102,7 +103,8 @@ class extension_form {
 					'name'			=> $name,
 					'title'			=> $title,
 					'description'	=> $desc,
-					'values'		=> $value
+					'values'		=> $value,
+					'sameline'		=> isset($formfield['sameline']) ? $formfield['sameline'] : true,
 				);
 			break;
 			
@@ -279,7 +281,14 @@ CONTENT;
 			$selected = ($value['selected']) ? ' checked="checked"' : '';
 			$inputs .= '<label><input type="radio" name="' . $item['name'] . '" value="' . $key . '"' . $selected . ' />';
 			$inputs .= $value['title'];
-			$inputs .= '</label><br />';			
+			$inputs .= '</label>';
+			if(!$item['sameline'])
+			{
+				$inputs .= '<br />';			
+			}
+			else {
+				$inputs .= " &nbsp; &nbsp;";
+			}
 		}
 		
 		$this->content .= <<<CONTENT

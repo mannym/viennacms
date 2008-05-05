@@ -82,7 +82,7 @@ CSS;
 				}
 			break;
 			case 'other_under_this':
-				if ($node->type = 'newsfolder') {
+				if ($node->type == 'newsfolder') {
 					if ($other->type != 'site') {
 						return false;
 					}
