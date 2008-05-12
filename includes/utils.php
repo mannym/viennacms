@@ -166,7 +166,7 @@ class utils {
 		$text = urldecode($text);
 		$page = page::getnew();
 		$files = self::load_extension('files');
-		$text = preg_replace_callback('@href=".+?\{node\:([0-9]+)\}"@', array(&$page, 'get_correct_link'), $text);
+		$text = preg_replace_callback('@href=".*?\{node\:([0-9]+)\}"@', array(&$page, 'get_correct_link'), $text);
 		$text = preg_replace_callback('@{viennafile\:([0-9]+)\}@', array(&$files, 'get_widget'), $text);
 		return $text;
 	}
