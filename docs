@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<book>
+  <title>viennaCMS, from start to finish</title>
+
+  <chapter>
+    <title>Introduction</title>
+
+    <section>
+      <title>Why this document was written</title>
+
+      <para>This document is written for the user who wants to use viennaCMS,
+      and maybe even develop for it. It will take you from the beginning of
+      viennaCMS, to the point of developing for it.</para>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Installation</title>
+
+    <section>
+      <title>Needed software</title>
+
+      <para>viennaCMS does not really need that much special software
+      applications. Actually, the only things that are really required
+      are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>A web server, such as Apache, Lighttpd or IIS. We recommend
+          Apache or Lighttpd, by the way, as they support nice URLs.</para>
+        </listitem>
+
+        <listitem>
+          <para>PHP 5.2.0 or higher installed on the web server.</para>
+        </listitem>
+
+        <listitem>
+          <para>A MySQL 5.0 or higer database. Other database types will be
+          supported in future versions.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>After you are sure your web host supports these, you can continue
+      to the next step.</para>
+    </section>
+
+    <section>
+      <title>Installation, step-by-step</title>
+
+      <para>These instructions guide you step-by-step through the installation
+      of viennaCMS. Please note that you already need to have a web site on a
+      host that supports all of the above. Also, a database needs to be
+      already created, and you should know the database host, username,
+      password and name.</para>
+
+      <orderedlist>
+        <listitem>
+          <para>Extract the .zip archive of viennaCMS. After that, upload the
+          contents of the viennacms-VERSION folder to your web site.</para>
+        </listitem>
+
+        <listitem>
+          <para>If needed on your web host, change the permissions of
+          config.php, the files folder and the cache folder to be writable for
+          the web server. On a normal webhost, you should CHMOD them to
+          777.</para>
+        </listitem>
+
+        <listitem>
+          <para>Go to your web site url, where you uploaded viennaCMS. For
+          example: http://yoursite.test/viennacms/ or
+          http://mysite.invalid/</para>
+        </listitem>
+
+        <listitem>
+          <para>You will see the installation wizard. In the first step, you
+          will see if you meet all the requirements for running viennaCMS. If
+          the Next button is available, click it.</para>
+        </listitem>
+
+        <listitem>
+          <para>You will see a long list of form fields. I will step over all
+          of them in just a moment:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis role="bold">Database server:</emphasis> the host
+              name where your database is located. Most web hosts use
+              localhost.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis role="bold">Database username:</emphasis> the
+              user name of your database. You already have this one from
+              before the wizard started.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis role="bold">Database password:</emphasis> the
+              password which belongs to the user.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis role="bold">Database name:</emphasis> the
+              database you created before starting the installation.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis role="bold">Table prefix:</emphasis> if this is
+              the only viennaCMS installation in the database, don't change
+              it.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis role="bold">Admin information:</emphasis> the
+              user name and password for access to the administration
+              panel.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>After entering all of those, click Next. You will now,
+          hopefully, see that the installation is finished. If so, click Next,
+          to go to your new web site!</para>
+        </listitem>
+      </orderedlist>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Administration</title>
+
+    <section>
+      <title>The administration panel</title>
+
+      <para>The viennaCMS administration panel is where the power of viennaCMS
+      is.</para>
+
+      <section>
+        <title>Accessing the ACP</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Node administration</title>
+
+        <para></para>
+
+        <section>
+          <title>Adding a new node</title>
+
+          <para></para>
+        </section>
+
+        <section>
+          <title>What are 'nodes'?</title>
+
+          <para></para>
+        </section>
+
+        <section>
+          <title>Editing a node</title>
+
+          <para></para>
+        </section>
+
+        <section>
+          <title>Step-by-step: creating a page</title>
+
+          <para></para>
+        </section>
+      </section>
+
+      <section>
+        <title>File administration</title>
+
+        <para></para>
+
+        <section>
+          <title>Uploading and organizing files</title>
+
+          <para></para>
+        </section>
+
+        <section>
+          <title>Adding files to nodes</title>
+
+          <para></para>
+        </section>
+      </section>
+
+      <section>
+        <title>Configuration</title>
+
+        <para></para>
+
+        <section>
+          <title>Enabling/disabling caching</title>
+
+          <para></para>
+        </section>
+      </section>
+
+      <section>
+        <title>Interesting things</title>
+
+        <para></para>
+
+        <section>
+          <title>Step-by-step: creating a news page</title>
+
+          <para></para>
+        </section>
+      </section>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Developing for viennaCMS</title>
+
+    <section>
+      <title>The basics</title>
+
+      <para>[placeholder for links to API docs]</para>
+    </section>
+
+    <section>
+      <title>Extension developer's guide</title>
+
+      <para></para>
+
+      <section>
+        <title>Creating modules</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Creating new node types</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Cool things</title>
+
+        <para></para>
+
+        <section>
+          <title>Step-by-step: creating a Twitter module</title>
+
+          <para></para>
+        </section>
+      </section>
+    </section>
+
+    <section>
+      <title>Theme developer's guide</title>
+
+      <para></para>
+
+      <section>
+        <title>Template variables</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Tips and tricks</title>
+
+        <para>[some things about the module-left.php and such]</para>
+      </section>
+
+      <section>
+        <title>Output hooking</title>
+
+        <para>[theme() stuff]</para>
+      </section>
+
+      <section>
+        <title>Examples</title>
+
+        <para></para>
+
+        <section>
+          <title>Example: Category navigation system</title>
+
+          <para></para>
+        </section>
+      </section>
+    </section>
+  </chapter>
+</book>
