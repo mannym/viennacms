@@ -241,8 +241,8 @@ class extension_core
 	}
 	
 	function options_page($options) {
-		$yes_selected = isset($options['display_in_menu']['values']['yes']['selected']) ? (bool) $options['display_in_menu']['values']['yes']['selected'] : true;
-		$no_selected  = $yes_selected ? false : true;
+		$show = isset($options['display_in_menu']) ? (bool) $options['display_in_menu'] : true;
+		//$no_selected  = $yes_selected ? false : true;
 		return array(
 			'display_in_menu' => array(
 				'name'			=> 'display_in_menu',
@@ -253,11 +253,11 @@ class extension_core
 				'values'		=> array(
 					(int) true		=> array(
 						'title'			=> __('Yes'),
-						'selected'		=> 	$yes_selected,
+						'selected'		=> 	$show,
 					),
 					(int) false		=> array(
 						'title'			=> __('No'),
-						'selected'		=> $no_selected,
+						'selected'		=> (!$show),
 					),
 				),
 			),
