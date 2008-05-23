@@ -351,10 +351,10 @@ CSS;
 		}
 	}
 	
-	function display_node($type, $node, $other) {
+	function display_allowed($type, $node, $other) {
 		switch($type) {
 			case 'show_to_visitor':
-				if(isset($node->options['display_in_menu']) && settype($node->options['display_in_menu'], 'bool') && $node->type == 'page')
+				if(isset($node->options['display_in_menu']) && !settype($node->options['display_in_menu'], 'bool') && $node->type == 'page')
 				{
 					return false;
 				}
