@@ -66,10 +66,17 @@ class extension_core
 	}
 	
 	function module_rawcontent($args) {
-		$fnc_txt = 'if(!preg_match("#;[[:space:]]$#is", $matches[2])) { $matches[2] = $matches[2] . ";"; } ob_start(); eval($matches[2]); $c = ob_get_contents(); ob_end_clean(); return $c;';
-		$text = stripslashes($args['content']);
-		$text = utils::handle_text(preg_replace_callback('|<\?(php)?(.*?)\?>|is', create_function('$matches', $fnc_txt), $text));
+		/*$fnc_txt = 'if(!preg_match("#;[[:space:]]$#is", $matches[2])) { $matches[2] = $matches[2] . ";"; } ob_start(); eval($matches[2]); $c = ob_get_contents(); ob_end_clean(); return $c;';
+		//$text = stripslashes($args['content']);
+		//$text = utils::handle_text(preg_replace_callback('|<\?(php)?(.*?)\?>|is', create_function('$matches', $fnc_txt), $text));
 		echo $text;
+		*/
+		ob_start();
+		eval('?>' . $args['content']);
+		$content = ob_get_contents();
+		ob_end_clean();
+		$content = utils::handle_text($content);
+		echo $content;
 	}
 
 	function args_sitemap() {
