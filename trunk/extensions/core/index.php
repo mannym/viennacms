@@ -300,6 +300,7 @@ class extension_core
 .nodes a.link { background: url(../extensions/core/link.png) 0 0 no-repeat; }
 CSS;
 		utils::add_css('inline', $css);
+		utils::add_css('file', 'extensions/core/form.css');
 	}
 
 	function url_callbacks() {
