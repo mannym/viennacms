@@ -118,7 +118,7 @@ class utils {
 	
 		switch ($type) {
 			case 'file':
-				$Header .= '<link rel="stylesheet" href="' . $data . '" type="text/css" />' . "\n";
+				$Header .= '<link rel="stylesheet" href="' . utils::basepath() . $data . '" type="text/css" />' . "\n";
 			break;
 			case 'inline':
 				$Header .= '<style type="text/css">' . "\r\n";
@@ -223,7 +223,8 @@ class utils {
 		$url = dirname($_SERVER['SCRIPT_NAME']);
 		if (dirname($_SERVER['SCRIPT_NAME']) != '/') {
 			$url .= '/';
-		}		
+		}	
+		$url = str_replace(array('/adm', '/install'), '', $url);	
 		return $url;		
 	}
 	
