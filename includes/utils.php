@@ -366,13 +366,15 @@ class utils {
 	
 				$msg_title = __('General Error');
 	
+				$path = (defined('IN_INSTALL')) ? '../' : '';
+				
 				$error_type = strtolower($msg_title);
 				$error_text = <<<HTML
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title>$msg_title</title>
-		<link rel="stylesheet" href="styles/default/style.css" />
+		<link rel="stylesheet" href="{$path}styles/default/style.css" />
 	</head>
 	<body>
 	<div id="wrap">
