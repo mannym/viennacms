@@ -291,6 +291,8 @@ class extension_core
 			header('Location: ' . $page->node->options['destination']);
 			exit;
 		}
+
+		utils::add_css('file', 'extensions/core/form.css');
 	}
 	
 	function admin_init() {
