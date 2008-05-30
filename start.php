@@ -128,6 +128,7 @@ include(ROOT_PATH . 'includes/acm_file.php');
 include(ROOT_PATH . 'includes/utils.php');
 include(ROOT_PATH . 'includes/template.php');
 include(ROOT_PATH . 'includes/nodetree.php');
+include(ROOT_PATH . 'includes/form.php');
 include(ROOT_PATH . 'includes/page.php');
 include(ROOT_PATH . 'includes/user.php');
 

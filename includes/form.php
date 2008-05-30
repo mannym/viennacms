@@ -32,6 +32,8 @@ class formapi {
 			if (is_string($result)) {
 				return $result;
 			}
+			
+			$form->submit($fields);
 		} else {
 			return $this->display_form($form);
 		}
@@ -143,7 +145,11 @@ class formapi_base {
 			break;
 		}
 		
-		$name 	= $this->id . '_' . $formfield['name'];
+		if (!isset($formfield['raw'])) {
+			$name 	= $this->id . '_' . $formfield['name'];
+		} else {
+			$name = $formfield['name'];
+		}
 		//var_dump($this->id);
 		if(isset($formfield['value'])) // In case of radio button or selectbox, we have 'values' for that.
 		{
@@ -409,6 +415,9 @@ CONTENT;
 		$hidden_formfield	= $this->hiddenfields[$hidden_formfield_name];
 		$name				= $hidden_formfield['name'];
 		$value				= $hidden_formfield['value'];
+		if (isset($_POST[$name])) {
+			$value = $_POST[$name];
+		}
 		
 		$content = <<<CONTENT
 			<input type="hidden" name="$name" value="$value" />
