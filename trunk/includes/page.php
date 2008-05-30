@@ -59,11 +59,6 @@ class page {
 		// first get the site, the decoder may need it :)
 		$this->sitenode = $this->get_this_site();
 
-		$template->assign_vars(array(
-			'left' => $this->get_bloc('left'),
-			'right' => $this->get_bloc('right')
-		));
-		
 		// first try to decode an URL.
 		$parser = $this->try_decode_url();
 		if (!$parser) {
@@ -83,6 +78,14 @@ class page {
 		
 		$template->vars['middle'] = $this->get_bloc('before_content') . $template->vars['middle'] . $this->get_bloc('after_content');
 		$template->vars['content'] = &$template->vars['middle'];
+		
+		$left_suffix = (!empty($this->left)) ? $this->left : '';
+		$right_suffix = (!empty($this->right)) ? $this->right : '';
+		
+		$template->assign_vars(array(
+			'left' => $this->get_bloc('left') . $left_suffix,
+			'right' => $this->get_bloc('right') . $right_suffix
+		));
 	}
 	
 	/**
@@ -118,6 +121,9 @@ class page {
 		
 		$this->node = $node;
 		$this->init_page($this->node);
+		
+		$this->left = $this->get_loc('left');
+		$this->right = $this->get_loc('right');
 		
 		$template = template::getnew();
 		$template->assign_vars(array(

@@ -111,20 +111,38 @@ switch ($step) {
 		$table_prefix = $_POST['table_prefix'];
 		$dbms = $_POST['dbms'];
 		$admin_username = addslashes($_POST['admin_username']);
+		if (empty($_POST['admin_password']) || empty($_POST['admin_password_confirm'])) {
+			$error = true;
+			$error_msg = __('Please enter a password');
+			$template->assign_vars(array('step' => 2));
+			break;			
+		}
 		$admin_password1 = md5($_POST['admin_password']);
 		$admin_password2 = md5($_POST['admin_password_confirm']);
 		if($admin_password1 != $admin_password2)
 		{
-			$pass_error = true;
-			$template->assign_vars(array('step' => '2'));
+			$error = true;
+			$error_msg = __('Passwords do not match');
+			$template->assign_vars(array('step' => 2));
 			break;
 		}
 		$db = database::getnew();
-		$db->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname);
+		$db->sql_return_on_error(true);
+		$result = $db->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname);
+		if ($db->sql_error_triggered) {
+			$error = true;
+			$error_msg = sprintf(__('Database information seems to be incorrect, message: %s'), $result['message']);
+			$template->assign_vars(array('step' => 2));
+			break;
+		}
+		$db->sql_return_on_error(false);
 		$db->prefix = $table_prefix;
 		$result = install_database($db->prefix, $admin_username, $admin_password1, $dbms);
 		if ($result) { // got an error
-			install_die($result);
+			$error = true;
+			$error_msg = $result;
+			$template->assign_vars(array('step' => 2));
+			break;
 		}
 		utils::config_file_write($dbhost, $dbuser, $dbpasswd, $dbname, $table_prefix, $dbms);	
 	break;	

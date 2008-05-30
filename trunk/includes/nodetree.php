@@ -243,6 +243,10 @@ class CMS_Node {
 			utils::get_types();
 			$type = utils::$types[$this->type];
 			if ($type['type'] != NODE_NO_REVISION) {
+				if ($type['type'] == NODE_CONTENT) {
+					$this->revision->has_modules = false;
+				}
+				
 				$this->revision->node_id = $this->node_id;
 				$this->revision_number = $this->revision->write();
 			}

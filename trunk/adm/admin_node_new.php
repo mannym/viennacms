@@ -106,12 +106,14 @@ switch($mode) {
 				Click <a href="./admin_node_new.php?do=edit&node=' . $newnode_node_id . '">here</a> to return to the previous page.', E_USER_ERROR);
 			}
 		}
+		
 		$node->created = time();
 		$node->title = $newnode_title;
 		$node->extension = $newnode_extension;
 		$node->description = $newnode_description;
 		$node->parentdir = $newnode_parentdir;
 		$node->title_clean = $newnode_title_clean;
+		
 		$node->write();
 		$parents = $page->get_parents($node);
 		$sitenode = $parents[0];

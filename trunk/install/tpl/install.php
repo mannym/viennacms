@@ -47,6 +47,17 @@
     <tr> 
       <th colspan="2"><?php echo __('Database login data') ?></th>
     </tr>
+    <?php
+    global $error;
+	if ($error) :
+		global $error_msg, $dbhost, $dbuser, $dbpasswd, $dbname, $table_prefix, $admin_username;
+		?>
+		<tr>
+			<td colspan="2"><span style="color: red;"><?php echo $error_msg ?></span></td>
+		</tr>
+		<?php
+	endif;
+    ?>
 		<tr>
 			<td><?php echo __('Database server (mostly localhost)') ?></td>
 			<td><input type="text" value="<?php echo (empty($dbhost) ? 'localhost' : $dbhost) ?>" name="database_host" /></td>
@@ -77,7 +88,7 @@
 				</select>
 			</td>
 		</tr>
-		<tr><th colspan="2"><?php echo __('Admin information'); if(!empty($pass_error)) echo '<br />' . __('Passwords do not match'); ?>
+		<tr><th colspan="2"><?php echo __('Admin information'); ?>
 		</th></tr>
 
 		<tr>
