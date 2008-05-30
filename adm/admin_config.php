@@ -47,7 +47,7 @@ switch ($mode) {
 					'type'			=> 'selectbox',
 					'name'			=> 'caching_time',
 					'title'			=> __('Output cache time'),
-					'description'	=> __('The time the cache of the \'normal\' or \'agressive\' option keeps existing if there are no changes.'),
+					'description'	=> __('The time the cache keeps existing if there are no changes.'),
 					'value'			=> utils::get_hours($config['caching_time'])
 				)
 			)

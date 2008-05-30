@@ -109,8 +109,6 @@ class acm
 	*/
 	function tidy()
 	{
-		
-
 		$dir = @opendir($this->cache_dir);
 
 		if (!$dir)
@@ -378,6 +376,12 @@ class acm
 	*/
 	function sql_save($query, &$query_result, $ttl)
 	{
+		global $config;
+		
+		if ($ttl < 120) {
+			$ttl = (int) $config['caching_time'];
+		}
+		
 		$db = database::getnew();
 		// Remove extra spaces and tabs
 		$query = preg_replace('/[\n\r\s\t]+/', ' ', $query);
