@@ -110,6 +110,9 @@ switch ($step) {
 		$dbname = $_POST['database_name'];
 		$table_prefix = $_POST['table_prefix'];
 		$dbms = $_POST['dbms'];
+		
+		require(ROOT_PATH . 'includes/db/' . $dbms . '.php');
+		
 		$admin_username = addslashes($_POST['admin_username']);
 		if (empty($_POST['admin_password']) || empty($_POST['admin_password_confirm'])) {
 			$error = true;

@@ -695,7 +695,9 @@ function shutdown_cleanly() {
 	global $cache;
 	$cache->save();
 	$cache->unload();
-	$db = database::getnew();
-	$db->sql_close();
+	if (class_exists('database')) {
+		$db = database::getnew();
+		$db->sql_close();
+	}
 }
 ?>

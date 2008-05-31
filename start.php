@@ -123,7 +123,9 @@ if(empty($dbms))
 * Load pre-dependencies. 
 */
 include(ROOT_PATH . 'includes/gettext.php');
-include(ROOT_PATH . 'includes/db/' . $dbms . '.php');
+if (!defined('IN_INSTALL')) {
+	include(ROOT_PATH . 'includes/db/' . $dbms . '.php');
+}
 include(ROOT_PATH . 'includes/acm_file.php');
 include(ROOT_PATH . 'includes/utils.php');
 include(ROOT_PATH . 'includes/template.php');
@@ -142,7 +144,10 @@ set_error_handler(array('utils', 'handle_error'));
 * And load everything :) 
 */
 $cache = new acm();
-$db = database::getnew();
+if (!defined('IN_INSTALL')) {
+	$db = database::getnew();
+}
+
 $template = template::getnew();
 if (!defined('IN_INSTALL') && !defined('IN_UPGRADE')) {
 	$version = utils::get_database_version();

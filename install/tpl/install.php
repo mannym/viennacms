@@ -85,6 +85,7 @@
 			<td>
 				<select name="dbms">
 					<option value="mysql"><?php echo __('MySQL 5 or higher') ?></option>
+					<option value="sqlite">SQLite</option>
 				</select>
 			</td>
 		</tr>

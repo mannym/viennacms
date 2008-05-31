@@ -32,8 +32,13 @@ include_once(ROOT_PATH . 'includes/db/dbal.php');
 */
 class database extends CMS_System_DBAL
 {
-	private $mysql_version;
-	private $multi_insert = true;
+	var $multi_insert = true;
+
+	// Supports multiple table deletion
+	var $multi_table_deletion = true;
+
+	var $dbms_type = 'mysql';
+	
 	static private $instance;
 
 	/**
@@ -61,14 +66,12 @@ class database extends CMS_System_DBAL
 	* Connect to server
 	* @access public
 	*/
-	public function sql_connect($sqlserver, $sqluser, $sqlpassword, $database, $port = false, $persistency = false, $new_link = false)
+	function sql_connect($sqlserver, $sqluser, $sqlpassword, $database, $port = false, $persistency = false, $new_link = false)
 	{
 		$this->persistency = $persistency;
 		$this->user = $sqluser;
 		$this->server = $sqlserver . (($port) ? ':' . $port : '');
 		$this->dbname = $database;
-
-		$this->sql_layer = 'mysql4';
 
 		$this->db_connect_id = ($this->persistency) ? @mysql_pconnect($this->server, $this->user, $sqlpassword, $new_link) : @mysql_connect($this->server, $this->user, $sqlpassword, $new_link);
 
@@ -76,12 +79,31 @@ class database extends CMS_System_DBAL
 		{
 			if (@mysql_select_db($this->dbname, $this->db_connect_id))
 			{
-				// Determine what version we are using and if it natively supports UNICODE
-				$this->mysql_version = mysql_get_server_info($this->db_connect_id);
-
-				if (version_compare($this->mysql_version, '4.0.0', '<'))
+				@mysql_query("SET NAMES 'utf8'", $this->db_connect_id);
+				// enforce strict mode on databases that support it
+				if (version_compare(mysql_get_server_info($this->db_connect_id), '5.0.2', '>='))
 				{
-					$this->sql_layer = 'mysql';
+					$result = @mysql_query('SELECT @@session.sql_mode AS sql_mode', $this->db_connect_id);
+					$row = @mysql_fetch_assoc($result);
+					@mysql_free_result($result);
+					$modes = array_map('trim', explode(',', $row['sql_mode']));
+
+					// TRADITIONAL includes STRICT_ALL_TABLES and STRICT_TRANS_TABLES
+					if (!in_array('TRADITIONAL', $modes))
+					{
+						if (!in_array('STRICT_ALL_TABLES', $modes))
+						{
+							$modes[] = 'STRICT_ALL_TABLES';
+						}
+
+						if (!in_array('STRICT_TRANS_TABLES', $modes))
+						{
+							$modes[] = 'STRICT_TRANS_TABLES';
+						}
+					}
+
+					$mode = implode(',', $modes);
+					@mysql_query("SET SESSION sql_mode='{$mode}'", $this->db_connect_id);
 				}
 
 				return $this->db_connect_id;
@@ -96,7 +118,7 @@ class database extends CMS_System_DBAL
 	*/
 	function sql_server_info()
 	{
-		return 'MySQL ' . $this->mysql_version;
+		return 'MySQL ' . mysql_get_server_info($this->db_connect_id);
 	}
 
 	/**
@@ -230,27 +252,6 @@ class database extends CMS_System_DBAL
 	}
 
 	/**
-	* Seek to given row number
-	* rownum is zero-based
-	*/
-	function sql_rowseek($rownum, &$query_id)
-	{
-		global $cache;
-
-		if ($query_id === false)
-		{
-			$query_id = $this->query_result;
-		}
-
-		if (isset($cache->sql_rowset[$query_id]))
-		{
-			return $cache->sql_rowseek($rownum, $query_id);
-		}
-
-		return ($query_id !== false) ? @mysql_data_seek($query_id, $rownum) : false;
-	}
-
-	/**
 	* Get last inserted id after insert statement
 	*/
 	function sql_nextid()
@@ -295,6 +296,35 @@ class database extends CMS_System_DBAL
 		}
 
 		return @mysql_real_escape_string($msg, $this->db_connect_id);
+	}
+
+	/**
+	* Expose a DBMS specific function
+	*/
+	function sql_function($type, $col)
+	{
+		switch ($type)
+		{
+			case 'length_varchar':
+			case 'length_text':
+				return 'LENGTH(' . $col . ')';
+			break;
+		}
+	}
+
+	function sql_handle_data($type, $table, $data, $where = '')
+	{
+		if ($type === 'UPDATE')
+		{
+			$this->sql_query('INSERT INTO ' . $table . ' ' .
+				$this->sql_build_array('INSERT', $data));
+		}
+		else
+		{
+			$this->sql_query('UPDATE ' . $table . '
+				SET ' . $db->sql_build_array('UPDATE', $data) .
+				$where);
+		}
 	}
 
 	/**
@@ -358,11 +388,12 @@ class database extends CMS_System_DBAL
 	function _sql_report($mode, $query = '')
 	{
 		static $test_prof;
+		static $test_extend;
 
 		// current detection method, might just switch to see the existance of INFORMATION_SCHEMA.PROFILING
 		if ($test_prof === null)
 		{
-			$test_prof = false;
+			$test_prof = $test_extend = false;
 			if (strpos($this->mysql_version, 'community') !== false)
 			{
 				$ver = substr($this->mysql_version, 0, strpos($this->mysql_version, '-'));
@@ -370,6 +401,11 @@ class database extends CMS_System_DBAL
 				{
 					$test_prof = true;
 				}
+			}
+
+			if (version_compare($ver, '4.1.1', '>='))
+			{
+				$test_extend = true;
 			}
 		}
 
@@ -397,7 +433,7 @@ class database extends CMS_System_DBAL
 						@mysql_query('SET profiling = 1;', $this->db_connect_id);
 					}
 
-					if ($result = @mysql_query("EXPLAIN $explain_query", $this->db_connect_id))
+					if ($result = @mysql_query('EXPLAIN ' . (($test_extend) ? 'EXTENDED ' : '') . "$explain_query", $this->db_connect_id))
 					{
 						while ($row = @mysql_fetch_assoc($result))
 						{
@@ -410,6 +446,27 @@ class database extends CMS_System_DBAL
 					{
 						$this->html_hold .= '</table>';
 					}
+
+					if ($test_extend)
+					{
+						$html_table = false;
+
+						if ($result = @mysql_query('SHOW WARNINGS', $this->db_connect_id))
+						{
+							$this->html_hold .= '<br />';
+							while ($row = @mysql_fetch_assoc($result))
+							{
+								$html_table = $this->sql_report('add_select_row', $query, $html_table, $row);
+							}
+						}
+						@mysql_free_result($result);
+
+						if ($html_table)
+						{
+							$this->html_hold .= '</table>';
+						}
+					}
+
 
 					if ($test_prof)
 					{
@@ -470,12 +527,5 @@ class database extends CMS_System_DBAL
 			break;
 		}
 	}
-
-	function sql_report()
-	{
-		$args = func_get_args();
-		return;
-	}
 }
-
 ?>
