@@ -47,7 +47,7 @@ class node_add_form extends form {
 						WHERE title_clean = '$value';";
 				$result = $db->sql_query($sql); 
 				if($row = $db->sql_fetchrow($result)) {
-					return __('There is already an node with the same clean title. This node is: ');
+					return __('There is already an node with the same clean title.');
 				}
 			}
 		}
