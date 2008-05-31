@@ -30,13 +30,13 @@ class CMS_Node {
 	public $title;
 	public $title_clean;
 	public $description;
-	public $created;
+	public $created = 0;
 	public $parent_id;
 	public $type;
 	public $revision;
 	public $revision_number;
-	public $parentdir;
-	public $extension;
+	public $parentdir = '';
+	public $extension = '';
 	public $node_order;
 		
 	public $options = array();
@@ -51,6 +51,8 @@ class CMS_Node {
 	static public function getnew() {
 		$return = new CMS_Node();
 		$return->revision = new Node_Revision();
+		$return->revision_number = 0;
+		$return->node_order = 0;
 		
 		return $return;
 	}
@@ -203,33 +205,43 @@ class CMS_Node {
 		$db = database::getnew();
 		
 		if (!empty($this->node_id)) {
+			$type = 'UPDATE';
 			$sql = 'UPDATE ';
+			$prefix = 'SET ';
 			$sql_end = ' WHERE node_id = ' . intval($this->node_id);
 		} else {
+			$type = 'INSERT';
 			$sql = 'INSERT INTO ';
+			$prefix = '';
 			$sql_end = '';
 		}
 		
-		$sql .= NODES_TABLE . ' SET ';
+		$sql .= NODES_TABLE;
 		
 		$dbfields = utils::remove_array($this->dbfields, 'node_id');
 		
 		$class = new ReflectionClass('CMS_Node');
 		$properties = $class->getProperties();
 		
+		$fields = array();
+		
 		foreach ($properties as $property) {
 			$name = $property->getName();
 			
 			if (in_array($name, $dbfields)) {
-				$sql .= $name . " = '" . $db->sql_escape($this->$name) . "', "; 
+				$fields[$name] = $this->$name;
+				//$sql .= $name . " = '" . $db->sql_escape($this->$name) . "', "; 
 			}
 		}
 		
-		$sql = substr($sql, 0, -2);
+		$sql .= ' ' . $prefix;
+		$sql .= $db->sql_build_array($type, $fields);
+		
+		//$sql = substr($sql, 0, -2);
 		$sql .= $sql_end;
-		
+
 		$db->sql_query($sql);
-		
+
 		if (empty($this->node_id)) {
 			$this->node_id = $db->sql_nextid();
 		}
@@ -494,29 +506,36 @@ class Node_Revision {
 		$db = database::getnew();
 		
 		if (!empty($this->revision_id)) {
+			$type = 'UPDATE';
 			$sql = 'UPDATE ';
+			$prefix = 'SET ';
 			$sql_end = ' WHERE revision_id = ' . intval($this->revision_id);
 		} else {
+			$type = 'INSERT';
 			$sql = 'INSERT INTO ';
+			$prefix = '';
 			$sql_end = '';
 		}
 		
-		$sql .= NODE_REVISIONS_TABLE . ' SET ';
+		$sql .= NODE_REVISIONS_TABLE . ' ' . $prefix;
 		
 		$dbfields = utils::remove_array($this->dbfields, 'revision_id');
 		
 		$class = new ReflectionClass('Node_Revision');
 		$properties = $class->getProperties();
+		$fields = array();
 		
 		foreach ($properties as $property) {
 			$name = $property->getName();
 			
 			if (in_array($name, $dbfields)) {
-				$sql .= $name . " = '" . $db->sql_escape($this->$name) . "', "; 
+				//$sql .= $name . " = '" . $db->sql_escape($this->$name) . "', "; 
+				$fields[$name] = $this->$name;
 			}
 		}
 		
-		$sql = substr($sql, 0, -2);
+		$sql .= $db->sql_build_array($type, $fields);
+		//$sql = substr($sql, 0, -2);
 		$sql .= $sql_end;
 		
 		$db->sql_query($sql);
