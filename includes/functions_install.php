@@ -58,9 +58,9 @@ function install_database($table_prefix, $admin_username, $admin_password, $dbms
 	}
 	
 	$db->sql_return_on_error(true);
-	$sql[] = "INSERT INTO " . USER_TABLE . " SET username = '$admin_username', password = '$admin_password', lang = '$language'";		
+	$sql[] = "INSERT INTO " . USER_TABLE . " (username, password, lang) VALUES ('$admin_username', '$admin_password', '$language')";		
 	include(ROOT_PATH . 'includes/version.php');
-	$sql[] = "INSERT INTO " . CONFIG_TABLE . " SET config_name = 'database_version', config_value = '$database_version'";
+	$sql[] = "INSERT INTO " . CONFIG_TABLE . " (config_name, config_value) VALUES ('database_version', '$database_version')";
 
 	foreach ($sql as $query) {
 		if(!$db->sql_query($query)){
