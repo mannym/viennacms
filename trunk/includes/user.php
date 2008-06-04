@@ -199,7 +199,7 @@ class user {
 	 */
 	public function checkacpauth($redirect = true) {
 		$this->initialize(true);
-		if (!$this->user_logged_in) {
+		if (!$this->user_logged_in && $redirect) {
 			header('Location: ' . utils::base() . 'login.php');
 			exit;
 		}

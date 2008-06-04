@@ -29,6 +29,7 @@ $do_output_page = true;
 if(isset($_GET['sql_report'])) {
 	$user = user::getnew();
 	$user->initialize(true);
+	$user->checkacpauth(false);
 	if($user->user_logged_in) {
 		$db->sql_report('display');
 		$do_output_page = false;
