@@ -197,7 +197,7 @@ class user {
 	/**
 	 * Is the user authenticated to the ACP?
 	 */
-	public function checkacpauth() {
+	public function checkacpauth($redirect = true) {
 		$this->initialize(true);
 		if (!$this->user_logged_in) {
 			header('Location: ' . utils::base() . 'login.php');
@@ -210,13 +210,7 @@ class user {
 	}
 	
 	public function getlanguage() {
-		global $db;
-		$sql = "SELECT lang FROM " . USER_TABLE . "
-				WHERE userid = " . $this->userid;
-		
-		$result 	= $db->sql_query($sql);
-		$row		= $db->sql_fetchrow($result);
-		$language	= $row['lang'];
+		$language	= $this->data['lang'];
 		
 		// Set language to $language
 		_setlocale(LC_ALL, $language);
@@ -226,7 +220,7 @@ class user {
 
 		// Choose domain
 		_textdomain("viennacms");
-		// Translation is looking for in ./locale/$language/LC_MESSAGES/viennaCMS.mo now
+		// Translation is looking for in ./locale/$language/LC_MESSAGES/viennacms.mo now
 		return true;
 	}
 }
