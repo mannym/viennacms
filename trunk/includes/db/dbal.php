@@ -592,11 +592,6 @@ class CMS_System_DBAL
 	{
 		global $cache, $starttime, $user;
 
-		if (empty($_REQUEST['explain']))
-		{
-			return false;
-		}
-
 		if (!$query && $this->query_hold != '')
 		{
 			$query = $this->query_hold;

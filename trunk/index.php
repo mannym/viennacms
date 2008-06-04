@@ -24,12 +24,28 @@ $template->assign_vars(array(
 	'homeurl' => $page->get_link($page->sitenode)
 ));
 
-ob_start();	
-$template->display('main');
-$content = ob_get_contents();
-ob_end_flush();
+$do_output_page = true;
 
-if ($config['caching_type'] == 'normal' || $config['caching_type'] == 'aggressive') {
+if(isset($_GET['sql_report'])) {
+	$user = user::getnew();
+	$user->initialize(true);
+	if($user->user_logged_in) {
+		$db->sql_report('display');
+		$do_output_page = false;
+	}
+	else {
+		$do_output_page = true;
+	}
+}
+
+if($do_output_page) {
+	ob_start();	
+	$template->display('main');
+	$content = ob_get_contents();
+	ob_end_flush();
+}
+
+if ($do_output_page && ($config['caching_type'] == 'normal' || $config['caching_type'] == 'aggressive')) {
 	utils::get_types();
 	
 	$do = true;
