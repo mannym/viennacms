@@ -211,12 +211,7 @@ class user {
 	
 	public function getlanguage() {
 		global $db;
-		$sql = "SELECT lang FROM " . USER_TABLE . "
-				WHERE userid = " . $this->userid;
-		
-		$result 	= $db->sql_query($sql);
-		$row		= $db->sql_fetchrow($result);
-		$language	= $row['lang'];
+		$language	= $this->data['lang'];
 		
 		// Set language to $language
 		_setlocale(LC_ALL, $language);
@@ -226,7 +221,7 @@ class user {
 
 		// Choose domain
 		_textdomain("viennacms");
-		// Translation is looking for in ./locale/$language/LC_MESSAGES/viennaCMS.mo now
+		// Translation is looking for in ./locale/$language/LC_MESSAGES/viennacms.mo now
 		return true;
 	}
 }
