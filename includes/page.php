@@ -470,6 +470,14 @@ class page {
 	* @return mixed $return
 	*/
 	public function get_loc($location) {
+		$return = '<div class="location-' . $location . '">';
+		$return .= $this->get_loc_real($location);
+		$return .= '</div>';
+		
+		return $return;
+	}
+	
+	public function get_loc_real($location) {
 		$return = '';
 		if (isset($this->prefix[$location])) {
 			$return .= $this->prefix[$location];
@@ -526,6 +534,14 @@ class page {
 	* @return mixed $return 
 	*/
 	public function get_bloc($location) {
+		$return = '<div class="location-' . $location . '">';
+		$return .= $this->get_bloc_real($location);
+		$return .= '</div>';
+		
+		return $return;
+	}
+	
+	public function get_bloc_real($location) {
 		$return = '';
 		if (isset($this->prefix[$location])) {
 			$return .= $this->prefix[$location];

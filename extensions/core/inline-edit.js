@@ -3,7 +3,7 @@
  **/
  
 $(document).ready(function () {
-	$('.module-c').append('<div style="text-align: right;"><a href="#" onclick="inlineEdit(this.parentNode.parentNode); return false;">e</a></div>');
+	$('.module-c').append('<div style="text-align: right;" class="clicky"><a href="#" onclick="inlineEdit(this.parentNode.parentNode); return false;">e</a></div>');
 });
 
 function inlineEdit(module) {
@@ -41,9 +41,10 @@ function reload_module(module) {
 		url: inlineedit_cb + "getmodule",
 		data: "id=" + module.id,
 		success: function(output) {
-			module.parentNode.innerHTML = output;
+			module.parentNode.parentNode.innerHTML = output;
 			dmod = '#' + module.id;
-			$(dmod).append('<div style="text-align: right;"><a href="#" onclick="inlineEdit(this.parentNode.parentNode); return false;">e</a></div>');
+			$('.clicky').remove();
+			$('.module-c').append('<div style="text-align: right;" class="clicky"><a href="#" onclick="inlineEdit(this.parentNode.parentNode); return false;">e</a></div>');
 		}
 	});
 }
