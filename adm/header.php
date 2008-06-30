@@ -10,6 +10,9 @@
 if(!defined('IN_VIENNACMS')) {
 		die();
 }
+if (isset($_GET['ajax'])) {
+	return;
+}
 define('ADM_HEADER', true);
 ?>
 <html>

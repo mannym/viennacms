@@ -1,4 +1,7 @@
 <?php
+if (isset($_GET['ajax'])) {
+	return;
+}
 if (!defined('LIGHT_ADMIN')) {
 ?>
 </div>

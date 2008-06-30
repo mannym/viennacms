@@ -293,6 +293,30 @@ class extension_core
 		}
 
 		utils::add_css('file', 'extensions/core/form.css');
+		$user = user::getnew();
+		$user->initialize(true);
+		
+		if ($user->user_logged_in) {
+			$callback = utils::url('inline-edit/');
+			$admin_modules = utils::url('adm/admin_node_modules.php', array('nonsys_url' => true));
+			
+			utils::add_js('file', 'includes/js/tinymce/tiny_mce.js');
+			utils::add_js('file', 'adm/js/jquery.js');
+			utils::add_js('file', 'adm/js/jquery.form.js');
+			utils::add_js('file', 'extensions/core/inline-edit.js');
+			utils::add_js('inline', <<<JS
+var inlineedit_cb = '$callback';
+var inlineedit_ad = '$admin_modules';
+			tinyMCE.init({
+				mode : "textareas",
+				theme : "advanced",
+				editor_selector : "wysiwyg",
+				plugins : "nodelink,viennafiles",
+				theme_advanced_buttons3_add_before : "nodelink,viennafiles"
+			});			
+JS
+);
+		}
 	}
 	
 	function admin_init() {
@@ -302,11 +326,42 @@ CSS;
 		utils::add_css('inline', $css);
 		utils::add_css('file', 'extensions/core/form.css');
 	}
+	
+	function inline_edit_callback($args) {
+		switch ($args['matches'][1]) {
+			case 'form':
+				list($function, $key, $location, $node_id) = explode('-', $_POST['id']);
+				$uargs = '';
+				$uargs .= '&node=' . $node_id;
+				$uargs .= '&location=' . $location;
+				$uargs .= '&key=' . $key;
+				header('Location: ' . utils::url('adm/admin_node_modules.php?mode=args&ajax' . $uargs, array('nonsys_url' => true)));
+			break;
+			case 'getmodule':
+				$page = page::getnew(false);
+				list($function, $key, $location, $node_id) = explode('-', $_POST['id']);
+				$page->node = new CMS_Node();
+				$page->node->node_id = $node_id;
+				$page->node->read();
+				$page->init_page($page->node);
+				
+				echo $page->get_module($page->node->revision->modules[$location][$key], $location, $key);	
+			break;
+		}
+		
+		return 500;
+	}
 
 	function url_callbacks() {
 		$urls = array();
 		$page = page::getnew(false);
 		$urls = $this->recursive_urls($page->sitenode, $urls);
+
+		$urls['inline-edit/%text'] = array(
+			'callback' => array('extension_core', 'inline_edit_callback'),
+			'cbtype' => 'create_new'
+		);
+
 		return $urls;
 	}
 	
