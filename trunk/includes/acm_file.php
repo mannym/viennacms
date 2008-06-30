@@ -180,8 +180,6 @@ class acm
 	{
 		if ($var_name[0] == '_')
 		{
-			
-
 			if ($fp = @fopen($this->cache_dir . "data{$var_name}.php", 'wb'))
 			{
 				@flock($fp, LOCK_EX);

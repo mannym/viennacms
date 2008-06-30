@@ -318,17 +318,29 @@ class page {
 		}
 	
 		if ($node->type == 'site' && !$site_full_link) {
-			$link .= utils::basepath();
+			//$link .= utils::basepath();
 			$link .= substr($extra_params, 1);
 			$link .= ( (empty($node->extension) ? '' : '.' . $node->extension));
-		} else if ($this->sitenode->options['rewrite'] || ($this->sitenode->options['rewrite'] && $site_full_link)) {
+			if (empty($extra_params)) {
+				$link = utils::url($link, array('nonsys_url' => true));
+			} else {
+				$link = utils::url($link);
+			}
+		} /*else if ($this->sitenode->options['rewrite'] || ($this->sitenode->options['rewrite'] && $site_full_link)) {
 			//$link = $extra_params;
 			$link .= $prefix . (empty($node->parentdir) ? '' :  $node->parentdir . '/') . $node->title_clean . $extra_params . ( (empty($node->extension) ? '' : '.' . $node->extension));
 		} else {
 			//$link = 'index.php?id=' .  $node->node_id;
 			$link .= 'index.php/' . $prefix;
 			$link .= (empty($node->parentdir) ? '' :  $node->parentdir . '/') . $node->title_clean . $extra_params . ( (empty($node->extension) ? '' : '.' . $node->extension));
+		}*/
+		else {
+			//$link = 'index.php?id=' .  $node->node_id;
+			$link .= $prefix;
+			$link .= (empty($node->parentdir) ? '' :  $node->parentdir . '/') . $node->title_clean . $extra_params . ( (empty($node->extension) ? '' : '.' . $node->extension));
+			$link = utils::url($link);
 		}
+		
 		return $link;
 	}
 	
@@ -464,36 +476,46 @@ class page {
 		}
 		
 		if ($this->node->revision->has_modules) {
-			$template = template::getnew();
 			foreach ($this->node->revision->modules[$location] as $key => $module) {
-				$module_function = 'module_' . $module['module'];
-				$ext = utils::load_extension($module['extension']);
-				$module['location'] = $location;
-				
-				ob_start();
-				$mret = $ext->$module_function($module);
-				$contents = ob_get_contents();
-				ob_end_clean();
-				
-				$module_function = $module_function . $key . $location;
-
-				if ($mret != 500) {
-					$template->set_alt_filename($module_function, array('module-' . $location . '.php', 'module.php'));
-					$template->assign_vars(array(
-						'title' 	=> htmlentities($module['content_title']),
-						'content' 	=> $contents,
-						'margin'  	=> ( $location == 'middle' ? ' style="margin-left: 20px;"' : ''),
-					));
-					$return .= $template->assign_display($module_function);
-				} else {
-					$return .= $contents;
-				}
+				$return .= $this->get_module($module, $location, $key);
 			}
 		} else {
 			if ($location == 'middle') {
 				$return .= utils::handle_text($this->node->revision->node_content);
 			}
 		}
+		return $return;
+	}
+	
+	function get_module($module, $location, $key) {
+		$template = template::getnew();
+		
+		$return = '';
+		$module_function = 'module_' . $module['module'];
+		$ext = utils::load_extension($module['extension']);
+		$module['location'] = $location;
+		
+		ob_start();
+		$mret = $ext->$module_function($module);
+		$contents = ob_get_contents();
+		ob_end_clean();
+		
+		$module_function = $module_function . '-' . $key . '-' . $location . '-' . $this->node->node_id;
+
+		$contents = '<div class="module-c" id="' . $module_function . '">' . $contents . '</div>';
+
+		if ($mret != 500) {
+			$template->set_alt_filename($module_function, array('module-' . $location . '.php', 'module.php'));
+			$template->assign_vars(array(
+				'title' 	=> htmlentities($module['content_title']),
+				'content' 	=> $contents,
+				'margin'  	=> ( $location == 'middle' ? ' style="margin-left: 20px;"' : ''),
+			));
+			$return .= $template->assign_display($module_function);
+		} else {
+			$return .= $contents;
+		}
+		
 		return $return;
 	}
 
@@ -635,7 +657,11 @@ class page {
 			break;
 		}
 		
-		call_user_func($callback, $data['parameters']);
+		$result = call_user_func($callback, $data['parameters']);
+		
+		if ($result == 500) {
+			exit;
+		}
 		return true;
 	}
 	

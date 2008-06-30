@@ -77,6 +77,22 @@ class utils {
 	}
 	
 	/**
+	 * placeholder
+	 */
+	 
+	function url($link, $options = array()) {
+		$return = self::base();
+		if (!isset($options['nonsys_url'])) {
+			$page = page::getnew(false);
+			if (!empty($page->sitenode) && !$page->sitenode->options['rewrite']) {
+				$return .= 'index.php/';
+			}	
+		}
+		$return .= $link;
+		return $return;
+	}
+	
+	/**
 	* Connects to the database. Is automatically called by the database class on first
 	* getnew(). 
 	*/
@@ -118,7 +134,7 @@ class utils {
 	
 		switch ($type) {
 			case 'file':
-				$Header .= '<link rel="stylesheet" href="' . utils::basepath() . $data . '" type="text/css" />' . "\n";
+				$Header .= '<link rel="stylesheet" href="' . utils::url($data, array('nonsys_url' => true)) . '" type="text/css" />' . "\n";
 			break;
 			case 'inline':
 				$Header .= '<style type="text/css">' . "\r\n";
@@ -137,7 +153,7 @@ class utils {
 	
 		switch ($type) {
 			case 'file':
-				$Header .= '<script type="text/javascript" src="' . $data . '"></script>' . "\n";
+				$Header .= '<script type="text/javascript" src="' . utils::url($data, array('nonsys_url' => true)) . '"></script>' . "\n";
 			break;
 			case 'inline':
 				$Header .= '<script type="text/javascript">' . "\r\n";
