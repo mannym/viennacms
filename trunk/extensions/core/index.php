@@ -345,7 +345,8 @@ CSS;
 				$page->node->read();
 				$page->init_page($page->node);
 				
-				echo $page->get_module($page->node->revision->modules[$location][$key], $location, $key);	
+				//echo $page->get_module($page->node->revision->modules[$location][$key], $location, $key);
+				echo $page->get_loc_real($location);	
 			break;
 		}
 		
