@@ -470,7 +470,7 @@ class page {
 	* @return mixed $return
 	*/
 	public function get_loc($location) {
-		$return = '<div class="location-' . $location . '">';
+		$return = '<div class="location-' . $location . ' location">';
 		$return .= $this->get_loc_real($location);
 		$return .= '</div>';
 		

@@ -41,7 +41,9 @@ function reload_module(module) {
 		url: inlineedit_cb + "getmodule",
 		data: "id=" + module.id,
 		success: function(output) {
-			module.parentNode.parentNode.innerHTML = output;
+			//$('div.location').html('hoi');
+			//alert($('#' + module.id).parents('.location').html());
+			$('#' + module.id).parents('div.location').html(output);
 			dmod = '#' + module.id;
 			$('.clicky').remove();
 			$('.module-c').append('<div style="text-align: right;" class="clicky"><a href="#" onclick="inlineEdit(this.parentNode.parentNode); return false;">e</a></div>');
