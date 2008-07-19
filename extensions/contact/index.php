@@ -79,13 +79,10 @@ class extension_contact {
 				$subject = str_replace(array("\n", "\r"), '', $_POST['subject']);
 				$from = str_replace(array("\n", "\r"), '', $_POST['from']);
 				$message = $_POST['message'];
-				$phpversion = phpversion();
 				$headers = 
 <<<HEADERS
 From: $from
 Reply-to: $from
-X-Mailer: PHP/$phpversion
-Subject: $subject
 HEADERS;
 				// TODO: Add a SMTP option
 				/*
