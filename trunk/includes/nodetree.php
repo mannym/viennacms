@@ -51,6 +51,7 @@ class CMS_Node {
 	static public function getnew() {
 		$return = new CMS_Node();
 		$return->revision = new Node_Revision();
+		$return->revision->node_content = '';
 		$return->revision_number = 0;
 		$return->node_order = 0;
 		
