@@ -430,5 +430,252 @@ CSS;
 		}
 		return true;
 	}
+
+	function get_admin_tree() {
+		$node = new CMS_Node();
+		$node->node_id = 0;
+		echo $this->_get_admin_tree($node);
+	}
+	
+	function _get_admin_tree($node, $list = '') {
+		utils::get_types();
+		
+		if ($node->node_id != 0) {
+			$ext = utils::load_extension(utils::$types[$node->type]['extension']);
+			//$show = true;
+			$show = utils::display_allowed('in_tree', $node);
+			/*if (method_exists($ext, $node->type . '_in_tree')) {
+				$function = $node->type . '_in_tree';
+				$show = $ext->$function($node);
+			}*/
+		} else {
+			$show = true;
+		}
+		
+		if ($show) {
+			if ($node->node_id != 0) {
+				$list .= '<li id="node-' . $node->node_id . '"><a href="index.php?action=show_actions&id=' . $_GET['id'] . '&node=' . $node->node_id . '" class="' . $node->type . '">' . $node->title . '</a>' . "\r\n";			
+			}
+			
+			$nodes = $node->get_children();
+
+			$my_id = $node->node_id;
+			
+			$list .= '<ul>';
+			if ($nodes) {
+				foreach ($nodes as $node) {
+					$list = $this->_get_admin_tree($node, $list);
+				}
+			}
+			if ($my_id != 0) {
+				$list .= '<li id="node-add"><a href="' . admin::get_callback(array('core', 'admin_node_add'), array('node' => $my_id, 'do' => 'new')) .
+					'" class="addnode">' . __('Add') . '</a></li>';
+			}
+			$list .= '</ul>';
+			
+			$list .= '</li>';
+		}
+		return $list;
+	}
+	
+	function admin_get_mainitems() {
+		return array(
+			'site_structure' => array(
+				'image' => 'adm/style/images/structure.png',
+				'title' => __('Site structure'),
+				'extension' => 'core'
+			)
+		);
+	}
+	
+	function admin_get_actions($id) {
+		$node = new CMS_Node();
+		$node->node_id = intval($_GET['node']);
+		$node->read();
+		
+		if ($id == 'site_structure') {
+			return array(
+				'options' => array(
+					'title' => __('Options'),
+					'image' => 'adm/style/images/applications.png',
+					'data' => array(
+						'node_details' => array(
+							'title' => __('Edit node details'),
+							'callback' => array('core', 'admin_node_add'),
+							'params' => array(
+								'node' => $_GET['node'],
+								'do' => 'edit'
+							),
+							'image' => 'adm/images/edit.png',
+							'description' => __('Edit the details of this node, like the title and description.')
+						)
+					)
+				)
+			);
+		}
+	}
+	
+	function admin_node_add($args) {
+		global $do, $parent, $node, $easy, $mode, $page;
+		
+		$mode = isset($args['mode']) ? $args['mode'] : 'form';
+		$do = isset($_REQUEST['do']) ? $_REQUEST['do'] : $args['do'];
+		$easy = (isset($_POST['easy']));
+		if ($do == 'new') {
+			$parent = new CMS_Node();
+			$parent->node_id = (isset($args['node'])) ? $args['node'] : $_POST['node_id'];
+			$parent->read();
+			$node = CMS_Node::getnew();
+			$node_id = $parent->node_id;
+		} else if ($do == 'edit') {
+			$node_id = (isset($args['node'])) ? $args['node'] : $_POST['node_id'];
+			$node = new CMS_Node();
+			$node->node_id = $node_id;
+			$node->read();
+			$parents = $node->get_parent();
+			$parent = $parents[0];
+		}
+		
+		$page = page::getnew(false);
+		
+		include(ROOT_PATH . 'extensions/core/node_add_form.php');
+		
+		switch ($mode) {
+			case 'next':
+			case 'form':
+			default:
+				$type_options	= utils::run_hook_all('list_types');
+				$page_title		= $do == 'edit' ? __('viennaCMS ACP - Edit a node') : __('viennaCMS ACP - Add a new node');
+				if (!$easy) {
+					if ($do == 'new') {
+						$title = sprintf(__('Add a new node under %s'), $parent->title);
+					} else {
+						$title = sprintf(__('Edit the node %s'), $node->title);
+					}
+				} else {
+					$title = sprintf(__('Content wizard, step %d of %d'), 2, 4);	
+				}
+				$form = new node_add_form;
+				$form->elements = array(
+					$title => array(
+		
+					)
+				);
+				$form->form_id = 'node_add_form';
+				$form->action = admin::get_callback(array('core', 'admin_node_add'), $args);
+				if (!$easy && $do != 'edit') {
+					$values = array('' => array(
+						'title' => '--' . __('Select') . '--',
+						'selected' => false
+					));
+					
+					foreach($type_options as $type => $extension) {
+						$tempnode = new CMS_Node();
+						$tempnode->type = $type;
+						$ext = utils::load_extension($extension['extension']);
+						$show = utils::display_allowed('this_under_other', $tempnode, $parent);
+						unset($tempnode);
+						/*if (method_exists($ext, $type . '_allow_as_child')) {
+							$function = $type . '_allow_as_child';
+							$show = $ext->$function($parent);
+						}*/
+						
+						if (!$show) {
+							continue;
+						}
+						$values[$type] = array(
+							'title' => $type,
+							'selected' => ($node->type == $type)
+						);
+					}
+					$form->elements[$title]['type'] = array(
+						'type' => 'selectbox',
+						'name' => 'type',
+						'title' => __('Type'),
+						'description' => __('Select the type of the node'),
+						'value' => $values,
+						'required' => true
+					);
+				} else if ($easy) {
+					$type = explode('::', base64_decode($_POST['type']));
+					$type = $type[1];
+					$form->elements[$title]['type'] = array(
+						'name' => 'type',
+						'type' => 'hidden',
+						'value' => $type
+					);
+					$form->elements[$title]['easy'] = array(
+						'name' => 'easy',
+						'type' => 'hidden',
+						'value' => 'true',
+						'raw' => true
+					);
+				}
+				$form->elements[$title]['title'] = array(
+					'type'			=> 'textfield',
+					'name'			=> 'title',
+					'title'			=> __('Title'),
+					'description'	=> __('Enter the title for the node. This title will be automatically cleaned.'),
+					'value'			=> $node->title,
+					'required'		=> true,
+				);
+				$form->elements[$title]['title_clean'] = array(
+					'type'			=> 'textfield',
+					'name'			=> 'title_clean',
+					'title'			=> __('Clean Title'),
+					'description'	=> __('The clean title for the node. When changing the title, this will be automatically generated.'),
+					'value'			=> $node->title_clean,
+					'required'		=> true,
+				);
+				$form->elements[$title]['extension'] = array(
+					'type'			=> 'textfield',
+					'name'			=> 'extension',
+					'title'			=> __('Extension'),
+					'description'	=> __('Enter the extension. By example, html. Don\'t put a dot (\'.\') at the begin of the extension!.'),
+					'value'			=> $node->extension,
+					'max_length'	=> 6,
+				);
+				$form->elements[$title]['description'] = array(
+					'type'			=> 'textarea',
+					'name'			=> 'description',
+					'title'			=> __('Description'),
+					'description'	=> __('Enter the description for the node'),
+					'value'			=> $node->description,
+					'required'		=> true
+				);
+				$form->elements[$title]['do'] = array(
+					'name' => 'do',
+					'type' => 'hidden',
+					'value' => $do,
+					'raw' => true
+				);
+				$form->elements[$title]['node_id'] = array(
+					'name' => 'node_id',
+					'type' => 'hidden',
+					'value' => $node_id,
+					'raw' => true
+				);
+				
+				$api = new formapi;
+				echo $api->get_form($form);
+				?>
+				<script type="text/javascript">
+					$('#node_add_form_title').blur(function () {
+						$.get('<?php echo utils::base() ?>ajax.php?mode=cleantitle&title=' + escape($('#node_add_form_title').attr('value')), '', function(data, textStatus) {
+							$('#node_add_form_title_clean').attr('value', data);
+						});
+					});
+				</script>
+				
+				<?php
+			break;
+		}
+	}
+	
+	function admin_left_site_structure() {
+		echo '<ul class="nodes" id="tree" style="display: block;">';
+		echo $this->get_admin_tree();
+		echo '</ul>';
+	}
 }
 ?>
