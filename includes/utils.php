@@ -317,6 +317,20 @@ class utils {
 		return $return;
 	}
 	
+	static function array_merge_keys($arr1, $arr2) {
+	    foreach ($arr2 as $k=>$v) {
+	        if (!array_key_exists($k, $arr1)) {
+	            $arr1[$k] = $v;
+	        }
+	        else {
+	            if (is_array($v)) {
+	                $arr1[$k] = self::array_merge_keys($arr1[$k], $arr2[$k]);
+	            }
+	        }
+	    }
+	    return $arr1;
+	}
+	
 	static function run_hook_all() {
 		$args = func_get_args();
 		$hook_name = array_shift($args);
@@ -326,7 +340,8 @@ class utils {
 			if (method_exists($ext, $hook_name)) {
 				$result = call_user_func_array(array($ext, $hook_name), $args);
 			    if (isset($result) && is_array($result)) {
-					$return = array_merge($return, $result);
+					//$return = array_merge($return, $result);
+					$return = self::array_merge_keys($return, $result);
 			    } else if (isset($result)) {
 					$return[] = $result;
 				}
@@ -474,6 +489,12 @@ HTML;
 			if ($res == false) {
 				$return = false;
 				break;
+			}
+		}
+		
+		if ($return) {
+			if ($type == 'this_under_other') {
+				$return = self::display_allowed('other_under_this', $other, $node);
 			}
 		}
 		

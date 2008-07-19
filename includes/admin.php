@@ -66,7 +66,7 @@ class admin {
 		$ext->$function();
 	}
 	
-	function get_default() {
+	static function get_default() {
 		echo $_GET['id'];
 	}
 	
@@ -88,6 +88,16 @@ class admin {
 	<script type="text/javascript" src="js/jquery.form.js"></script>
 	<script type="text/javascript" src="js/jquery.treeview.js"></script>
 	<script type="text/javascript" src="js/admin.js"></script>
+		<script language="javascript" type="text/javascript" src="../includes/js/tinymce/tiny_mce.js"></script>
+<script language="javascript" type="text/javascript">
+	tinyMCE.init({
+		mode : "textareas",
+		theme : "advanced",
+		editor_selector : "wysiwyg",
+		plugins : "nodelink,viennafiles",
+		theme_advanced_buttons3_add_before : "nodelink,viennafiles"
+	});
+</script>
 	<?php echo $Header; ?>
 </head>
 

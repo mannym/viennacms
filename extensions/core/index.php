@@ -26,17 +26,23 @@ class extension_core
 			'site' => array(
 				'extension' => 'core',
 				'type' => NODE_MODULES,
-				'allow_easy' => true
+				'allow_easy' => false,
+				'description' => __('A site is, as the name says, a site. Adding this node will enable multisite features.'),
+				'title' => __('Site')
 			),
 			'page' => array(
 				'extension' => 'core',
 				'type' => NODE_MODULES,
-				'allow_easy' => true
+				'allow_easy' => true,
+				'description' => __('A page is the most basic part of a viennaCMS web site. It appears in the menu, and you can add other content to it.'),
+				'title' => __('Page')
 			),
 			'link' => array(
 				'extension' => 'core',
 				'type' => NODE_NO_REVISION,
-				'allow_easy' => true
+				'allow_easy' => true,
+				'description' => __('A link creates a menu option which links through to a selected location.'),
+				'title' => __('Link')
 			),
 		);
 	}
@@ -461,17 +467,29 @@ CSS;
 
 			$my_id = $node->node_id;
 			
-			$list .= '<ul>';
+			if ($_GET['id'] == 'site_structure') {
+				$list .= '<ul>';
+			}
+			
 			if ($nodes) {
+				if ($_GET['id'] != 'site_structure') {
+					$list .= '<ul>';
+				}
 				foreach ($nodes as $node) {
 					$list = $this->_get_admin_tree($node, $list);
 				}
+				if ($_GET['id'] != 'site_structure') {
+					$list .= '</ul>';
+				}
 			}
-			if ($my_id != 0) {
-				$list .= '<li id="node-add"><a href="' . admin::get_callback(array('core', 'admin_node_add'), array('node' => $my_id, 'do' => 'new')) .
+			if ($_GET['id'] == 'site_structure' && $my_id != 0) {
+				$list .= '<li id="node-add"><a href="' . admin::get_callback(array('core', 'admin_node_add'), array('node' => $my_id, 'do' => 'new', 'mode' => 'initial')) .
 					'" class="addnode">' . __('Add') . '</a></li>';
 			}
-			$list .= '</ul>';
+			
+			if ($_GET['id'] == 'site_structure') {
+				$list .= '</ul>';
+			}
 			
 			$list .= '</li>';
 		}
@@ -484,11 +502,17 @@ CSS;
 				'image' => 'adm/style/images/structure.png',
 				'title' => __('Site structure'),
 				'extension' => 'core'
+			),
+			'site_content' => array(
+				'image' => 'adm/style/images/content.png',
+				'title' => __('Content'),
+				'extension' => 'core'
 			)
 		);
 	}
 	
 	function admin_get_actions($id) {
+		utils::get_types();
 		$node = new CMS_Node();
 		$node->node_id = intval($_GET['node']);
 		$node->read();
@@ -512,6 +536,80 @@ CSS;
 					)
 				)
 			);
+		}
+		
+		if ($id == 'site_content') {
+			$return = array(
+				'content' => array(
+					'title' => __('Content'),
+					'image' => 'adm/style/images/applications.png',
+					'data' => array()
+				)
+			);
+			
+			if (utils::$types[$node->type]['type'] == NODE_CONTENT) {
+				$return['content']['data']['node_content'] = array(
+					'title' => __('Edit content'),
+					'callback' => array('core', 'admin_node_content'),
+					'params' => array(
+						'node' => $_GET['node'],
+					),
+					'image' => 'adm/images/modules.png',
+					'description' => __('Add or edit the text content in this node.')
+				);
+			}
+			
+			return $return;
+		}
+	}
+	
+	function admin_node_content($args) {
+		$mode = isset($args['mode']) ? $args['mode'] : 'form';
+		$node = new CMS_Node();
+		$node->node_id = $args['node'];
+		$node->read();
+		
+		utils::get_types();
+		
+		switch($mode) {
+			case 'save':
+				$node->revision->node_content = $_POST['node_content'];
+				$node->write();
+				//header('Location: ' . utils::base() . 'admin_node.php?node=' . $node->node_id);
+				echo 'reload';	
+				exit;	
+			break;
+				
+			default:
+			case 'form':
+				$thisargs = $args;
+				$thisargs['mode'] = 'save';
+				?>
+				<form action="<?php echo admin::get_callback(array('core', 'admin_node_content'), $thisargs) ?>" method="post">
+					<?php
+					$key = 'node_content';
+					$val = $node->revision->node_content;
+					
+					switch (utils::$types[$node->type]['field']) {
+						case 'wysiwyg':
+						?>
+						<textarea class="wysiwyg" id="wysiwyg_form" name="<?php echo $key ?>" style="width: 500px; height: 250px;"><?php echo stripslashes(preg_replace("#\<br \/\>#", '', $val)); ?></textarea>
+						<?php
+						break;
+						case 'textarea':
+						default:
+							?>
+							<textarea name="<?php echo $key ?>" rows="5" cols="40"><?php echo stripslashes(preg_replace('#\<br \/\>#', '', $val)); ?></textarea>
+							<?php				
+						break;
+					}
+					?><br />
+					<input type="hidden" name="node" value="<?php echo $node->node_id ?>" />
+					<input type="submit" value="<?php echo __('Save') ?>" />
+				</form>
+				
+				<?php include('./footer.php');
+			break;
 		}
 	}
 	
@@ -541,6 +639,31 @@ CSS;
 		include(ROOT_PATH . 'extensions/core/node_add_form.php');
 		
 		switch ($mode) {
+			case 'initial':
+				$type_options	= utils::run_hook_all('list_types');
+				
+				foreach ($type_options as $codename => $type) {
+					if (!$type['allow_easy']) {
+						continue;
+					}
+					
+					$tempnode = new CMS_Node();
+					$tempnode->type = $codename;
+					$show = utils::display_allowed('this_under_other', $tempnode, $parent);
+					unset($tempnode);
+					if (!$show) {
+						continue;
+					}
+					$thisargs = $args;
+					unset($thisargs['mode']);
+					$thisargs['type'] = $type['extension'] . '::' . $codename;
+					?> 
+					<p class="icon_p">
+					<a href="<?php echo admin::get_callback(array('core', 'admin_node_add'), $thisargs) ?>">
+					<img src="../<?php echo 'extensions/' . $type['extension'] . '/big-' . $codename . '.png' ?>" /><br /><?php echo $type['title'] ?></a><br /><?php echo $type['description'] ?></p>
+					<?php
+				}
+			break;
 			case 'next':
 			case 'form':
 			default:
@@ -563,7 +686,7 @@ CSS;
 				);
 				$form->form_id = 'node_add_form';
 				$form->action = admin::get_callback(array('core', 'admin_node_add'), $args);
-				if (!$easy && $do != 'edit') {
+				if (!$easy && !isset($args['type']) && $do != 'edit') {
 					$values = array('' => array(
 						'title' => '--' . __('Select') . '--',
 						'selected' => false
@@ -572,7 +695,7 @@ CSS;
 					foreach($type_options as $type => $extension) {
 						$tempnode = new CMS_Node();
 						$tempnode->type = $type;
-						$ext = utils::load_extension($extension['extension']);
+						//$ext = utils::load_extension($extension['extension']);
 						$show = utils::display_allowed('this_under_other', $tempnode, $parent);
 						unset($tempnode);
 						/*if (method_exists($ext, $type . '_allow_as_child')) {
@@ -609,6 +732,15 @@ CSS;
 						'type' => 'hidden',
 						'value' => 'true',
 						'raw' => true
+					);
+				} else if (isset($args['type'])) {
+					$type = explode('::', $args['type']);
+					$type = $type[1];
+
+					$form->elements[$title]['type'] = array(
+						'name' => 'type',
+						'type' => 'hidden',
+						'value' => $type
 					);
 				}
 				$form->elements[$title]['title'] = array(
@@ -676,6 +808,10 @@ CSS;
 		echo '<ul class="nodes" id="tree" style="display: block;">';
 		echo $this->get_admin_tree();
 		echo '</ul>';
+	}
+	
+	function admin_left_site_content() {
+		$this->admin_left_site_structure();
 	}
 }
 ?>
