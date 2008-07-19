@@ -1,0 +1,179 @@
+body {
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 12px;
+	margin: 0px;
+	padding: 0px;
+}
+
+#main-items {
+	width: 100%;
+	background-color: #000;
+	height: 150px;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	overflow: auto;
+	background-image: url(images/mainbg.png);
+}
+
+#main-items a {
+	float: left;
+	display: block;
+	text-decoration: none;
+	padding-top: 3px;
+	padding-left: 5px;
+	border-right: 1px solid #333;
+	height: 145px;
+}
+
+#main-items a:hover {
+	background-image: url(images/mainbg-hover.png);
+}
+
+#main-items a img {
+	margin-right: 5px;
+	width: 128px;
+	display: block;
+}
+
+#main-items a span {
+	color: #fff;
+	text-align: center;
+	display: block;
+}
+
+#tree-left {
+	background-color: #dbdbdb;
+	position: absolute;
+	top: 150px;
+	bottom: 0px;
+	left: 0px;
+	width: 200px;
+	padding: 5px;
+	overflow: auto;
+}
+
+#system-right {
+	position: absolute;
+	top: 150px;
+	bottom: 0px;
+	left: 210px;
+	padding: 5px;
+	right: 0px;
+	overflow: auto;
+}
+
+.group {
+	margin-right: 5px;
+	margin-bottom: 10px;
+	border: 1px solid #333;
+	padding-bottom: 10px;
+}
+
+.group h1 {
+	font-size: 14px;
+	background-color: #ddd;
+	height: 28px;
+	margin: 0px;
+	margin-bottom: 5px;
+}
+
+.group h1 span {
+	padding-top: 5px;
+	display: block;
+}
+
+.group h1 img {
+	margin: 4px;
+	float: left;
+}
+
+.group ul {
+	list-style-type: square;
+	margin: 0px;
+	margin-left: 20px;
+	padding: 0px;
+}
+
+.group ul li {
+	color: #0066ff;
+	padding: 0px;
+	margin: 0px;
+}
+
+img {
+	border: 0px;
+}
+
+.firing {
+	float: right;
+	margin: 5px;
+}
+
+.treeview, .treeview ul { 
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.treeview div.hitarea {
+	height: 15px;
+	width: 15px;
+	margin-left: -15px;
+	float: left;
+	cursor: pointer;
+}
+/* fix for IE6 */
+* html div.hitarea {
+	background: #fff;
+	filter: alpha(opacity=0);
+	display: inline;
+	float:none;
+}
+
+.treeview li { 
+	margin: 0;
+	padding: 3px 0pt 3px 16px;
+}
+
+.treeview a.selected {
+	background-color: #eee;
+}
+
+#treecontrol { margin: 1em 0; }
+
+.treeview .hover { color: red; cursor: pointer; }
+	
+.treeview li { background: url(../images/tv-item.gif) 0 0 no-repeat; }
+.treeview .collapsable { background-image: url(../images/tv-collapsable.gif); }
+.treeview .expandable { background-image: url(../images/tv-expandable.gif); }
+.treeview .last { background-image: url(../images/tv-item-last.gif); }
+.treeview .lastCollapsable { background-image: url(../images/tv-collapsable-last.gif); }
+.treeview .lastExpandable { background-image: url(../images/tv-expandable-last.gif); }
+		
+.nodes {
+	margin-top: 15px;
+	margin-left: 10px;
+}
+	
+.nodes a { padding-left: 19px; display: inline-block; height: 16px; text-decoration: none; color: #0066ff; }
+.nodes a:visited { color: #0066ff; }
+.nodes a.site { background: url(../images/site.png) 0 0 no-repeat; }
+.nodes a.page { background: url(../images/page.png) 0 0 no-repeat; }
+.nodes a.addnode { background: url(images/add.png) 0 0 no-repeat; }
+.nodes .selected > a {
+	text-decoration: underline;
+	background-color: #eee;
+}
+
+	
+p.icon_p {
+	clear: left;
+}
+img.icon, p.icon_p img {
+	height: 48px;
+	width: 48px;
+	float: left;
+	margin: 5px 10px 5px 10px;
+	border: 0;
+}

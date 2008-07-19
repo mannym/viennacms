@@ -13,6 +13,11 @@ include('../start.php');
 $user = user::getnew();
 $user->checkacpauth();
 
+if (!isset($_GET['legacy'])) {
+	include(ROOT_PATH . 'includes/admin.php');
+	admin::load();
+}
+
 $display_admin_tree = (empty($_GET['display_admin_tree']) ) ?  1 : 0;
 $page_title = __('viennaCMS ACP');
 include('./header.php');

@@ -310,7 +310,8 @@ CONTENT;
 		}
 		
 		$this->content .= <<<CONTENT
-		<input type="submit" name="submit_{$this->id}" value="$this->submit" /> 
+		<input type="hidden" name="submit_{$this->id}" value="true" />
+		<input type="submit" name="submit" value="$this->submit" /> 
 	</fieldset>
 </form>					
 CONTENT;
