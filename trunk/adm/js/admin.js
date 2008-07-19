@@ -81,10 +81,16 @@ function reload_contents(id) {
 	});
 	
 	$('form').submit(function() {
+		// tinyMCE does not save content correctly, so we do it manually :)
+		if ($('#wysiwyg_form').html() != null) {
+			var ed = tinyMCE.getInstanceById('wysiwyg_form');
+			$('#wysiwyg_form').val(tinyMCE.getContent(ed.editorId));
+			tinyMCE.removeInstance(ed); // required to be able to use this again
+		}
         var string = $(this).formSerialize(false);
         string = string;
         loading();
-        //alert(string);
+
         $.post(
                 $(this).attr('action'),
                 string,
@@ -100,9 +106,17 @@ function reload_contents(id) {
         );
         return false;
 	});
+	
+	reinit_wysiwyg();
 }
 
 $(document).ready(function() {
 	reload_topbar();
 	load_main_option('site_structure');
 });
+
+function reinit_wysiwyg() {
+	if ($('#wysiwyg_form').html() != null) {
+		tinyMCE.execCommand("mceAddControl", true, "wysiwyg_form");
+	}
+}

@@ -32,13 +32,17 @@ CSS;
 			'newsfolder' => array(
 				'extension' => 'news',
 				'type' => NODE_NO_REVISION,
-				'allow_easy' => true
+				'allow_easy' => true,
+				'description' => __('A news folder is a container which contains news items. If you want to place news items on your web sit, you need a news folder.'),
+				'title' => __('News folder')
 			),
 			'news' => array(
 				'extension' => 'news',
 				'type' => NODE_CONTENT,
 				'field' => 'wysiwyg',
-				'allow_easy' => true
+				'allow_easy' => true,
+				'description' => __('A news item is a small post to announce something new on your web site. These will be displayed on a page with the correct modules.'),
+				'title' => __('News item')
 			)
 		);
 	}
@@ -84,7 +88,7 @@ CSS;
 			break;
 			case 'other_under_this':
 				if ($node->type == 'newsfolder') {
-					if ($other->type != 'site') {
+					if ($other->type != 'news') {
 						return false;
 					}
 				}
@@ -304,6 +308,35 @@ CSS;
 				1 => 'news_title'
 			)
 		);
+	}
+
+	function admin_get_actions($id) {
+		if ($_GET['id'] == 'site_content') {
+			utils::get_types();
+			$node = new CMS_Node();
+			$node->node_id = intval($_GET['node']);
+			$node->read();
+			
+			if ($node->type == 'newsfolder') {
+				return array(
+					'content' => array(
+						'data' => array(
+							'add_news' => array(
+								'title' => __('Add new news item'),
+								'callback' => array('core', 'admin_node_add'),
+								'params' => array(
+									'node' => $_GET['node'],
+									'do' => 'new',
+									'type' => 'news::news'
+								),
+								'image' => 'extensions/news/big-news.png',
+								'description' => __('Add a new news item in this news folder.')
+							)
+						)
+					)
+				);
+			}
+		}
 	}
 }
 ?>
