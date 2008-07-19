@@ -308,11 +308,13 @@ class CMS_Node {
 		$sql .= 'node_id = ' . intval($this->node_id);
 		
 		if ($add) {
-			$sql  = 'INSERT INTO ' . NODE_OPTIONS_TABLE . ' SET ';
-			$sql .= "option_value = '" . $db->sql_escape($value) . "', ";
-			$sql .= "option_name = '" . $db->sql_escape($name) . "', ";
-			$sql .= 'node_id = ' . intval($this->node_id);
+			$sql  = 'INSERT INTO ' . NODE_OPTIONS_TABLE . ' (option_value, option_name, node_id) VALUES (';
+			$sql .= "'" . $db->sql_escape($value) . "', ";
+			$sql .= "'" . $db->sql_escape($name) . "', ";
+			$sql .= '' . intval($this->node_id);
+			$sql .= ')';
 		}
+		
 		return $db->sql_query($sql);
 	}
 	
