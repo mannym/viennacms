@@ -232,6 +232,7 @@ class utils {
 		if (dirname($_SERVER['SCRIPT_NAME']) != '/') {
 			$url .= '/';
 		}
+		$url = str_replace('/adm', '', $url);
 		return $url;		
 	}
 	
