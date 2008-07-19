@@ -22,7 +22,8 @@ CSS;
 
 	function list_modules() {
 		return array(
-			'latestnews' => 'news'
+			'latestnews' => 'news',
+			'newsheadlines' => 'news'
 		);
 	}
 	
@@ -129,9 +130,14 @@ CSS;
 		unset($testnews);
 	}
 	
+	function args_newsheadlines() {
+		return $this->args_latestnews();
+	}
+	
 	function module_latestnews($args) {
 		if (!$args['folder']) {
-			return __('Please select a news folder.');
+			echo __('Please select a news folder.');
+			return;
 		}
 		
 		if (!$args['count']) {
@@ -163,6 +169,47 @@ CSS;
 		}
 		
 		return 500;
+	}
+	
+	function module_newsheadlines($args) {
+		if (!$args['folder']) {
+			echo __('Please select a news folder.');
+			return;
+		}
+		
+		if (!$args['count']) {
+			$args['count'] = 10;
+		}
+		
+		$folder = new CMS_Node();
+		$folder->node_id = $args['folder'];
+		$folder->read();
+		$nodes = $folder->get_children();
+		$news = array();
+		
+		foreach ($nodes as $node) {
+			$news[$node->created] = $node;
+		}
+		
+		krsort($news);
+		
+		$i = 1;
+		
+		$page = page::getnew(false);
+		
+		echo '<ul class="news-headlines">';
+		
+		foreach ($news as $new) {
+			if ($i > $args['count']) {
+				break;
+			}
+			
+			echo '<li>' . '<a href="' . $page->get_link($new) . '">' . $new->title . '</a>' . '</li>';
+
+			$i++;
+		}
+		
+		echo '</ul>';
 	}
 	
 	function show_news($node, $args) {
