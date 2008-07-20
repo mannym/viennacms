@@ -1,3 +1,5 @@
+var curMain;
+
 function reload_topbar() {
 	loading();
 	$.ajax({
@@ -26,10 +28,13 @@ function load_main_option(id) {
 			});
 	
 			load_option_default(id);
+			curMain = id;
 			unloading();
 		}
 	});
 }
+
+var goOut = '';
 
 function load_option_default(id, value) {
 	loading();
@@ -40,6 +45,10 @@ function load_option_default(id, value) {
 		success: function(output) {
 			delete_wysiwyg();
 			$('#system-right').html(output);
+			if (goOut != '') {
+				$('#system-right').html(goOut);
+				goOut = '';
+			}
 			reload_contents(id);		
 			unloading();
 		}
@@ -66,18 +75,7 @@ function unloading() {
 function reload_contents(id) {
 	$("#tree-left a, #system-right a").click(function() {
 		if ($(this).attr('href') != '#') {
-			loading();
-			$.ajax({
-				cache: false,
-				type: "GET",
-				url: $(this).attr('href') + '&ajax=true',
-				success: function(output) {
-					delete_wysiwyg();
-					$('#system-right').html(output);
-					reload_contents(id);
-					unloading();
-				}
-			});
+			load_in_system($(this).attr('href'), id);
 			return false;
 		}
 	});
@@ -123,6 +121,26 @@ function reload_contents(id) {
 	});
 	
 	reinit_wysiwyg();
+}
+
+function load_in_system(url, id) {
+	loading();
+	$.ajax({
+		cache: false,
+		type: "GET",
+		url: url + '&ajax=true',
+		success: function(output) {
+			delete_wysiwyg();
+			if (id != curMain) {
+				goOut = output;
+				load_main_option(id);
+			} else {
+				$('#system-right').html(output);
+				reload_contents(id);
+			}
+			unloading();
+		}
+	});
 }
 
 function delete_wysiwyg() {

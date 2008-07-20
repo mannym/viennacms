@@ -63,7 +63,27 @@ class node_add_form extends form {
 		} else {
 			//header('Location: ' . utils::base() . 'admin_node_options.php?easy=true&node=' . $node->node_id);
 		}
-		echo 'reload';
+		utils::get_types();
+		if (utils::$types[$node->type]['type'] == NODE_CONTENT) {
+			?> 
+			<script type="text/javascript">
+				load_in_system('<?php echo admin::get_callback(array('core', 'admin_node_content'), array('node' => $node->node_id)) ?>', 'site_content');
+			</script>
+			<?php
+		} else if (utils::$types[$node->type]['type'] != NODE_NO_REVISION) {
+			?> 
+			<script type="text/javascript">
+				load_in_system('index.php?action=show_actions&id=site_content&node=<?php echo $node->node_id ?>', 'site_content');
+			</script>
+			<?php
+		} else {
+			?> 
+			<script type="text/javascript">
+				load_in_system('index.php?action=show_actions&id=site_structure&node=<?php echo $node->node_id ?>', 'site_structure');
+			</script>
+			<?php	
+		}
+		//echo 'reload';
 		exit;
 		//exit;
 	}

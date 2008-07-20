@@ -658,7 +658,11 @@ CSS;
 				$node->revision->node_content = $_POST['node_content'];
 				$node->write();
 				//header('Location: ' . utils::base() . 'admin_node.php?node=' . $node->node_id);
-				echo 'reload';	
+				?> 
+				<script type="text/javascript">
+					load_in_system('index.php?action=show_actions&id=site_content&node=<?php echo $node->node_id ?>', 'site_content');
+				</script>
+				<?php
 				exit;	
 			break;
 				
@@ -775,7 +779,11 @@ CSS;
 				}
 				
 				$node->write();
-				echo 'reload';
+				?> 
+				<script type="text/javascript">
+					load_in_system('index.php?action=show_actions&id=site_content&node=<?php echo $node->node_id ?>', 'site_content');
+				</script>
+				<?php
 				exit;
 			break;
 			case 'args':
