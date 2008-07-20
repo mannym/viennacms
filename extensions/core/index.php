@@ -1567,14 +1567,7 @@ CSS;
 	
 	static function admin_default_site_structure()
 	{
-		$types = utils::run_hook_all('list_types');
-		foreach ($types as $key => $value) {
-			if ($value['allow_easy']) {
-				?>
-				<p class="icon_p"><a href="admin_node_new.php?mode=easy&amp;type=<?php echo base64_encode($value['extension'] . '::' . $key) ?>&amp;do=new"><img src="images/add.png" /><br /><?php echo sprintf(__('Add new %s content item'), $key) ?></a><br /><?php echo sprintf(__('Add a new content item (node) of the type %s'), $key) ?></p>
-				<?php
-			}
-		}
+		echo __('To edit the site structure, select a node to edit on the left. To add a new node, click the Add button below a node.');
 	}
 	
 }
