@@ -135,11 +135,12 @@ class user {
 		$login = true;
 		$db = database::getnew();
 		// Get all user data
-		$sql = "SELECT * FROM " . USER_TABLE . " WHERE username = '" . $db->sql_escape($username) . "'"; 
-		if(!$result = $db->sql_query($sql)) {
-			$login = false;
+		$sql = "SELECT * FROM " . USER_TABLE . " WHERE username = '" . $db->sql_escape($username) . "'";
+		$result = $db->sql_query($sql);
+		$logindata = $db->sql_fetchrow($result); 
+		if(empty($logindata)) {
+			return false;
 		}
-		$logindata = $db->sql_fetchrow($result);
 		$max_attempts = false;
 		if($logindata['login_attempts'] >= 3 && $logindata['last_login_attempt'] > (time() - 120))
 		{

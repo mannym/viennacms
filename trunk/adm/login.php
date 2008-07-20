@@ -17,9 +17,11 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'logout') {
 	header('Location: ' . utils::base() . 'index.php');
 	exit;
 } else if (isset($_POST['submit'])) {
-	$user->login($_POST['username'], $_POST['password']);
-	header('Location: ' . utils::base() . 'index.php');
-	exit;
+	if($user->login($_POST['username'], $_POST['password']))
+	{
+		header('Location: ' . utils::base() . 'adm/index.php');
+		exit;
+	}
 } else {
 	?><html>
 	<head>
