@@ -40,7 +40,7 @@ class admin {
 			}
 			$i++;
 			?> 
-			<div class="group half">
+			<div class="group <?php echo $class ?>">
 			<h1><img src="../<?php echo $item['image'] ?>" alt="<?php echo $item['title'] ?>" /><span><?php echo $item['title'] ?></span></h1>
 			<?php
 			foreach ($item['data'] as $aid => $action) {
