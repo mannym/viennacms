@@ -532,6 +532,15 @@ CSS;
 							),
 							'image' => 'adm/images/edit.png',
 							'description' => __('Edit the details of this node, like the title and description.')
+						),
+						'node_options' => array(
+							'title' => __('Edit options'),
+							'callback' => array('core', 'admin_node_options'),
+							'params' => array(
+								'node' => $_GET['node']
+							),
+							'image' => 'adm/style/images/node-options.png',
+							'description' => __('Edit the options of this node, like for example the template, or a link target.')
 						)
 					)
 				)
@@ -556,6 +565,18 @@ CSS;
 					),
 					'image' => 'adm/images/modules.png',
 					'description' => __('Add or edit the text content in this node.')
+				);
+			}
+			
+			if (utils::$types[$node->type]['type'] != NODE_NO_REVISION) {			
+				$return['content']['data']['node_revisions'] = array(
+					'title' => __('View older versions'),
+					'callback' => array('core', 'admin_node_revisions'),
+					'params' => array(
+						'node' => $_GET['node']
+					),
+					'image' => 'adm/images/revisions.png',
+					'description' => __('View older versions of this node, which are saved automatically while editing.')
 				);
 			}
 			
@@ -611,6 +632,101 @@ CSS;
 				<?php include('./footer.php');
 			break;
 		}
+	}
+	
+	function admin_node_revisions($args) {
+		$node_id = (isset($args['node'])) ? intval($args['node']) : intval($_POST['node']);
+		$node = new CMS_Node();
+		$node->node_id = $node_id;
+		$node->read();
+		$page = page::getnew(false);
+		
+		$page->sitenode = $page->get_this_site();
+		
+		$db = database::getnew();
+		$sql = 'SELECT * 
+				FROM ' . NODE_REVISIONS_TABLE . '
+				WHERE node_id = ' . $node->node_id . '
+				ORDER BY revision_date DESC';
+		$result = $db->sql_query($sql);
+		$rowset = $db->sql_fetchrowset($result);
+		?>
+		<h1><?php echo sprintf(__('View older versions of %s'), $node->title); ?></h1>
+		<ul>
+		<?php
+		foreach ($rowset as $row) {
+			//echo '<li><a href="../index.php?id=' . $node->node_id . '&amp;revision=' . $row['revision_number'] . '">';
+			echo '<li><a href="' . $page->get_link($node, '/revision/' . $row['revision_number'], true) . '" class="external">';
+			echo 'Revision ' . $row['revision_number'] . ' (' . date('d-m-Y G:i:s', $row['revision_date']) . ' )';
+			echo '</a></li>' . "\r\n";
+		}
+		?>
+		</ul>
+		<?php
+	}
+	
+	function admin_node_options($args) {
+		global $node, $easy, $options;
+		
+		$mode = isset($args['mode']) ? $args['mode'] : 'form';
+		$easy = (isset($_POST['easy']) || isset($args['easy']));
+		if(!isset($args['node']) && !isset($args['node'])) {
+			exit;
+		}
+		$node_id = (isset($args['node'])) ? intval($args['node']) : intval($_POST['node']);
+		$node = new CMS_Node();
+		$node->node_id = $node_id;
+		$node->read();
+		
+		$options = utils::run_hook_all('options_' . $node->type, $node->options);
+		if(in_array($node->type, array('site', 'page', 'newsfolder'))) {
+			$options = array_merge($options, array(
+				'template' => array(
+						'type'			=> 'template',
+						'name'			=> 'template',
+						'title' 		=> __('Template'),
+		 	            'description'	=> __('The template that will be used for this node, and child nodes. Leave empty to use the parent\'s template.'),
+						'value'			=> $node->options['template']
+				)
+			));
+		}
+		
+		include(ROOT_PATH . 'extensions/core/node_options_form.php');
+		
+		ob_start();
+		
+		switch($mode) {
+			case 'form':
+			default:
+				if (!$easy) {
+					$title = sprintf(__('Edit options for %s'), $node->title);
+				} else {
+					$title = sprintf(__('Content wizard, step %d of %d'), 3, 4);	
+				}
+				$form = new node_options_form;
+				$form->elements = array(
+					$title => $options
+				);
+				$form->elements[$title]['node'] = array(
+					'type'			=> 'hidden',
+					'name'			=> 'node',
+					'value'			=> $node->node_id,
+					'raw'			=> true
+				);
+				if ($easy) {
+					$form->elements[$title]['easy'] = array(
+						'type'			=> 'hidden',
+						'name'			=> 'easy',
+						'value'			=> 'true',
+						'raw'			=> true
+					);
+				}
+				$form->form_id = 'node_options_form';
+				$form->action = admin::get_callback(array('core', 'admin_node_options'), $args);
+				$api = new formapi;
+				echo $api->get_form($form);
+			break;
+		}	
 	}
 	
 	function admin_node_add($args) {
@@ -793,7 +909,7 @@ CSS;
 				?>
 				<script type="text/javascript">
 					$('#node_add_form_title').blur(function () {
-						$.get('<?php echo utils::base() ?>ajax.php?mode=cleantitle&title=' + escape($('#node_add_form_title').attr('value')), '', function(data, textStatus) {
+						$.get('<?php echo utils::base() ?>adm/ajax.php?mode=cleantitle&title=' + escape($('#node_add_form_title').attr('value')), '', function(data, textStatus) {
 							$('#node_add_form_title_clean').attr('value', data);
 						});
 					});

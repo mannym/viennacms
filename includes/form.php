@@ -96,6 +96,9 @@ class formapi {
 			$api->title = $title;
 			$api->action = $form->action;
 			$api->submit = __('Submit');
+			
+			utils::run_hook_all('formapi_display', $form->form_id, $form, $api);
+			
 			$api->generateform();
 			$return .= $api->content;
 		}
@@ -181,8 +184,8 @@ class formapi_base {
 					'title'			=> $title,
 					'value'			=> $value,
 					'description'	=> $desc,
-					'required'		=> $reqd
-					// 'place'			=> $place, We don't do anything with this, do we?
+					'required'		=> $reqd,
+					'place'			=> $this->position,
 				);
 			break;
 			
@@ -192,8 +195,8 @@ class formapi_base {
 					'title'			=> $title,
 					'value'			=> $value,
 					'description'	=> $desc,
-					'required'		=> $reqd
-					// 'place'			=> $place, We don't do anything with this, do we?
+					'required'		=> $reqd,
+					'place'			=> $this->position,
 				);
 			break;
 			
@@ -203,7 +206,8 @@ class formapi_base {
 					'title'			=> $title,
 					'description'	=> $desc,
 					'values'		=> $value,
-					'required'		=> $reqd
+					'required'		=> $reqd,
+					'place'			=> $this->position,
 				);
 			break;
 
@@ -215,6 +219,7 @@ class formapi_base {
 					'values'		=> $value,
 					'required'		=> $reqd,
 					'sameline'		=> isset($formfield['sameline']) ? $formfield['sameline'] : true,
+					'place'			=> $this->position,
 				);
 			break;
 			
