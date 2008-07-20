@@ -659,7 +659,7 @@ CSS;
 		$page->sitenode = $page->get_this_site();
 		
 		$db = database::getnew();
-		$sql = 'SELECT * 
+		$sql = 'SELECfT * 
 				FROM ' . NODE_REVISIONS_TABLE . '
 				WHERE node_id = ' . $node->node_id . '
 				ORDER BY revision_date DESC';

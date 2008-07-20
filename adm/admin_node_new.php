@@ -234,7 +234,7 @@ switch($mode) {
 			'title'			=> __('Description'),
 			'description'	=> __('Enter the description for the node'),
 			'value'			=> $node->description,
-			'required'		=> true
+			'required'		=> false,
 		);
 		$form->elements[$title]['do'] = array(
 			'name' => 'do',

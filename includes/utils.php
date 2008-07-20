@@ -48,7 +48,8 @@ class utils {
 		$db = database::getnew();
 		include(ROOT_PATH . 'includes/version.php');
 		
-		$db->sql_return_on_error(true);
+		$db->sql_return_on_error(true); // We need this so we don't get an error message
+										// when files are 1.x, and db is 0.9.x.
 		$sql = 'SELECT * FROM ' . CONFIG_TABLE . " WHERE config_name = 'database_version'";
 		$result = $db->sql_query($sql);
 		
@@ -72,6 +73,8 @@ class utils {
 			'new' => $database_version,
 			'uptodate' => (version_compare($currentdbver, $database_version, '>=')),
 		);
+		
+		$db->sql_return_on_error(false); // but now it has to be false again :)
 		
 		return $return;
 	}
@@ -102,13 +105,13 @@ class utils {
 			return;
 		}
 		global $dbhost, $dbuser, $dbpasswd, $dbname, $table_prefix;
-		$db = database::getnew(); // need some error checking so using this when
-								  // the database class is not loaded we don't loop :)
+		$db = database::getnew();
+		
 		@include_once(ROOT_PATH . 'config.php');
 
 		$db->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname);
 		$db->prefix = $table_prefix;
-		
+
 		include(ROOT_PATH . 'includes/constants_core.php');
 	}
 	
