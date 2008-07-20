@@ -1531,7 +1531,7 @@ CSS;
 	
 	function admin_left_site_config()
 	{
-		
+		echo '<ul class="nodes" style="display: block;"><li><a href="admin_config.php?mode=performance" class="page">' .  __('Performance') . '</a></li></ul>';
 	}
 }
 ?>
