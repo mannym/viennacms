@@ -516,15 +516,6 @@ CSS;
 		);
 	}
 	
-	function admin_get_default()
-	{
-		return array(
-			'site_structure' => array(
-				'extension' => 'core',
-			),
-		);
-	}
-	
 	function admin_get_actions($id) {
 		utils::get_types();
 		$node = new CMS_Node();
@@ -1565,9 +1556,34 @@ CSS;
 		echo '<ul class="nodes" style="display: block;"><li><a href="admin_config.php?mode=performance" class="page">' .  __('Performance') . '</a></li></ul>';
 	}
 	
+	function admin_get_default()
+	{
+		return array(
+			'site_structure'	=> array(
+				'extension' 	=> 'core',
+			),
+			'site_config'		=> array(
+				'extension'		=> 'core',
+			),
+			'site_content'		=> array(
+				'extension'		=> 'core',
+			),
+		);
+	}
+	
 	static function admin_default_site_structure()
 	{
 		echo __('To edit the site structure, select a node to edit on the left. To add a new node, click the Add button below a node.');
+	}
+	
+	static function admin_default_site_config()
+	{
+		echo  __('Select a configuration page in the menu to your left.');
+	}
+	
+	static function admin_default_site_content()
+	{
+		echo __('In this menu, you can manage the content of your nodes. To begin, select a node on the left.');
 	}
 	
 }
