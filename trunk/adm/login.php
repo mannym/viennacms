@@ -26,15 +26,14 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'logout') {
 	?><html>
 	<head>
 		<title><?php echo __("Login") ?></title>
-		<link rel="stylesheet" href="admin.css" />
+		<link rel="stylesheet" href="style/style.css" />
 	</head>
 	<body>
-		<div id="wrap">
-			<div id="header">
-				<div style="text-align: right; color: black !important;"><a href="../"><?php echo __('View site') ?></a></div>
-				<h1><?php echo __('viennaCMS ACP'); ?></h1>
-			</div>
-			<div id="right" style="text-align: center;">
+<div id="main-items">
+</div>
+<div id="tree-left">
+</div>
+<div id="system-right">
 				<form action="" method="post">
 					<table>
 						<tr>
@@ -50,7 +49,6 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'logout') {
 						</tr>
 					</table>
 				</form>
-			</div>
 		</div>
 	</body>
 </html>
