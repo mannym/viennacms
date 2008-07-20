@@ -32,12 +32,26 @@ class admin {
 		$items = utils::run_hook_all('admin_get_actions', $_GET['id']);
 		// first the categories
 		$i = 0;
+		$count = count($items);
+		
+		// first check if any are empty
 		foreach ($items as $id => $item) {
-			if ((count($items) % 2) && ((count($items) - $i) == 1)) {
+			if (empty($item['data'])) {
+				$count--;
+			}
+		}
+		
+		foreach ($items as $id => $item) {
+			if (($count % 2) && (($count - $i) == 1)) {
 				$class = 'full';	
 			} else {
 				$class = 'half';
 			}
+			
+			if (empty($item['data'])) {
+				continue;
+			}
+			
 			$i++;
 			?> 
 			<div class="group <?php echo $class ?>">

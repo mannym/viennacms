@@ -584,7 +584,7 @@ CSS;
 			}
 			
 			if (utils::$types[$node->type]['type'] != NODE_NO_REVISION) {			
-				$return['content']['data']['node_revisions'] = array(
+				$return['actions']['data']['node_revisions'] = array(
 					'title' => __('View older versions'),
 					'callback' => array('core', 'admin_node_revisions'),
 					'params' => array(
@@ -593,6 +593,11 @@ CSS;
 					'image' => 'adm/images/revisions.png',
 					'description' => __('View older versions of this node, which are saved automatically while editing.')
 				);
+			}
+			
+			if (empty($return['actions']['title'])) {
+				$return['actions']['title'] = __('Actions');
+				$return['actions']['image'] = 'adm/style/images/applications.png';
 			}
 			
 			return $return;
