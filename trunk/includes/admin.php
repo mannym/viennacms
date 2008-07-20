@@ -79,9 +79,20 @@ class admin {
 		$function = 'admin_left_' . $_GET['id'];
 		$ext->$function();
 	}
-	
+
 	static function get_default() {
+		$items = utils::run_hook_all('admin_get_default');
+		$extension = $items[$_GET['id']]['extension'];
+		$ext = utils::load_extension($extension);
+		
+		$function = 'admin_default_' . $_GET['id'];
+		if(is_callable(array($ext, $function)))
+		{
+			$ext->$function();
+			return true;
+		}
 		echo $_GET['id'];
+		return;
 	}
 	
 	static function load() {
