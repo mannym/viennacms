@@ -77,7 +77,11 @@ class admin {
 		$ext = utils::load_extension($extension);
 		
 		$function = 'admin_left_' . $_GET['id'];
-		$ext->$function();
+		if(is_callable(array($ext, $function)))
+		{
+			$ext->$function();
+			return true;
+		}
 	}
 
 	static function get_default() {
@@ -91,8 +95,6 @@ class admin {
 			$ext->$function();
 			return true;
 		}
-		echo $_GET['id'];
-		return;
 	}
 	
 	static function load() {

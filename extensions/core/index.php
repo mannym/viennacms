@@ -513,6 +513,12 @@ CSS;
 				'title' => __('Config'),
 				'extension' => 'core',
 			),
+			'logout'	=> array(
+				'image' => 'adm/style/images/logout.png',
+				'title'	=> __('Logout'),
+				'extension' => 'core',
+				'no_load'	=> true,
+			)
 		);
 	}
 	
@@ -1556,6 +1562,11 @@ CSS;
 		echo '<ul class="nodes" style="display: block;"><li><a href="admin_config.php?mode=performance" class="page">' .  __('Performance') . '</a></li></ul>';
 	}
 	
+	function admin_left_logout()
+	{
+		return;
+	}
+	
 	function admin_get_default()
 	{
 		return array(
@@ -1566,6 +1577,9 @@ CSS;
 				'extension'		=> 'core',
 			),
 			'site_content'		=> array(
+				'extension'		=> 'core',
+			),
+			'logout'			=> array(
 				'extension'		=> 'core',
 			),
 		);
@@ -1584,6 +1598,16 @@ CSS;
 	static function admin_default_site_content()
 	{
 		echo __('In this menu, you can manage the content of your nodes. To begin, select a node on the left.');
+	}
+	
+	static function admin_default_logout()
+	{
+		global $user;
+		$user->logout();
+		echo '
+		<script type="text/javascript">
+			location.href = "login.php";
+		</script>';
 	}
 	
 }

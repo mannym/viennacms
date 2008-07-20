@@ -189,7 +189,6 @@ class user {
 	 */
 	
 	public function logout() {
-		$this->initialize(true);
 		$this->set_login_cookies(true);
 		unset($this->data);
 	}
