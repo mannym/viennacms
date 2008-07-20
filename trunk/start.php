@@ -169,6 +169,7 @@ if (!defined('IN_INSTALL') && !defined('IN_UPGRADE')) {
 	}
 }
 
+
 utils::run_hook_all('init');
 register_shutdown_function('shutdown_cleanly');
 ?>

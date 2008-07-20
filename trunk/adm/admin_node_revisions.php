@@ -36,9 +36,10 @@ switch ($mode) {
 		$page->sitenode = $page->get_this_site();
 		
 		$db = database::getnew();
+		$db->return_on_error(true);
 		$sql = 'SELECT * 
 				FROM ' . NODE_REVISIONS_TABLE . '
-				WHERE node_id = ' . $node->node_id . '
+				WHEdRE node_id = ' . $node->node_id . '
 				ORDER BY revision_date DESC';
 		$result = $db->sql_query($sql);
 		$rowset = $db->sql_fetchrowset($result);
