@@ -601,6 +601,20 @@ CSS;
 				);
 			}
 			
+			if ($node->type == 'site') {
+				$return['actions']['data']['node_blocks'] = array(
+					'title' => __('Edit blocks'),
+					'callback' => array('core', 'admin_node_modules'),
+					'params' => array(
+						'node' => $_GET['node'],
+						'mode' => 'choose',
+						'blocks' => true
+					),
+					'image' => 'adm/images/modules.png',
+					'description' => __('Add or edit the blocks for this site.')
+				);
+			}
+			
 			if (utils::$types[$node->type]['type'] != NODE_NO_REVISION) {			
 				$return['actions']['data']['node_revisions'] = array(
 					'title' => __('View older versions'),

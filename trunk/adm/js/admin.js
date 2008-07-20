@@ -19,7 +19,7 @@ function load_main_option(id) {
 		url: "index.php?action=get_left&id=" + id,
 		success: function(output) {
 			$('#tree-left').html(output);
-			$(".nodes").treeview({
+			$("#tree-left .nodes").treeview({
 				persist: "cookie",
 				collapsed: true,
 				unique: true
@@ -114,6 +114,12 @@ function reload_contents(id) {
                 }
         );
         return false;
+	});
+	
+	$("#system-right .nodes").treeview({
+				persist: "cookie",
+				collapsed: true,
+				unique: true
 	});
 	
 	reinit_wysiwyg();

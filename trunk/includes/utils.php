@@ -579,9 +579,9 @@ HTML;
 			if ($node->node_id != 0) {
 				$list .= '<li id="' . $name . '-' . $node->node_id . '">';
 				if ($link) {
-					$list .= '<a href="javascript:void()" onclick="select_node(\'' . $name . '\', ' . $node->node_id . '); return false;" class="' . $node->type . '">';
+					$list .= '<a href="#" onclick="select_node(\'' . $name . '\', ' . $node->node_id . '); return false;" class="' . $node->type . '">';
 				} else {
-					$list .= '<a href="javascript:void()" onclick="return false;" class="' . $node->type . '">';
+					$list .= '<a href="#" onclick="return false;" class="' . $node->type . '">';
 				}
 				$list .= $node->title;
 				$list .= '</a>';
