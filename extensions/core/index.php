@@ -513,6 +513,17 @@ CSS;
 				'title' => __('Config'),
 				'extension' => 'core',
 			),
+			'files'	=> array(
+				'image' => 'adm/style/images/files.png',
+				'title'	=> __('Files'),
+				'extension'	=> 'core',
+			),
+			'viewsite'	=> array(
+				'image' => 'adm/style/images/viewsite.png',
+				'title'	=> __('View site'),
+				'extension'	=> 'core',
+			),
+			
 			'logout'	=> array(
 				'image' => 'adm/style/images/logout.png',
 				'title'	=> __('Logout'),
@@ -1607,6 +1618,14 @@ CSS;
 		echo '
 		<script type="text/javascript">
 			location.href = "login.php";
+		</script>';
+	}
+	
+	static function admin_default_viewsite()
+	{
+		echo '
+		<script type="text/javascript">
+			location.href = ' . utils::base() . '";
 		</script>';
 	}
 	
