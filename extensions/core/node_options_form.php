@@ -21,7 +21,11 @@ class node_options_form extends form {
 		
 		utils::get_types();
 		
-		echo 'reload';
+		?> 
+		<script type="text/javascript">
+			load_in_system('index.php?action=show_actions&id=site_structure&node=<?php echo $node->node_id ?>', 'site_structure');
+		</script>
+		<?php
 	}
 }
 ?>
