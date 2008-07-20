@@ -516,6 +516,15 @@ CSS;
 		);
 	}
 	
+	function admin_get_default()
+	{
+		return array(
+			'site_structure' => array(
+				'extension' => 'core',
+			),
+		);
+	}
+	
 	function admin_get_actions($id) {
 		utils::get_types();
 		$node = new CMS_Node();
@@ -1547,5 +1556,18 @@ CSS;
 	{
 		echo '<ul class="nodes" style="display: block;"><li><a href="admin_config.php?mode=performance" class="page">' .  __('Performance') . '</a></li></ul>';
 	}
+	
+	static function admin_default_site_structure()
+	{
+		$types = utils::run_hook_all('list_types');
+		foreach ($types as $key => $value) {
+			if ($value['allow_easy']) {
+				?>
+				<p class="icon_p"><a href="admin_node_new.php?mode=easy&amp;type=<?php echo base64_encode($value['extension'] . '::' . $key) ?>&amp;do=new"><img src="images/add.png" /><br /><?php echo sprintf(__('Add new %s content item'), $key) ?></a><br /><?php echo sprintf(__('Add a new content item (node) of the type %s'), $key) ?></p>
+				<?php
+			}
+		}
+	}
+	
 }
 ?>
