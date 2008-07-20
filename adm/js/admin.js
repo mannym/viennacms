@@ -127,6 +127,12 @@ function delete_wysiwyg() {
 }
 
 $(document).ready(function() {
+	if (jQuery.browser.msie) {
+		docheight = $(document).height();
+		docheight = docheight - 150;
+		
+		$('#tree-left, #system-right').height(docheight);
+	}
 	reload_topbar();
 	load_main_option('site_structure');
 });
