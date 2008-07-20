@@ -48,7 +48,7 @@ class database extends CMS_System_DBAL
 		}
 		return self::$instance;
 	}
-	
+		
 	/**
 	* Initialize the DB layer. I guess we will connect to the DB server? :)
 	*/
@@ -59,6 +59,7 @@ class database extends CMS_System_DBAL
 	/**
 	* Connect to server
 	*/
+
 	function sql_connect($sqlserver, $sqluser, $sqlpassword, $database, $port = false, $persistency = false, $new_link = false)
 	{
 		$this->persistency = $persistency;
