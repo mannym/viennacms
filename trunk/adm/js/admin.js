@@ -50,7 +50,7 @@ var loadCount = 0;
 
 function loading() {
 	if (loadCount == 0) {
-		$('#system-right').prepend('<div class="firing"><img src="style/images/loading.gif" /></div>');
+		$('#tree-left').append('<div class="firing"><img src="style/images/loading.gif" /></div>');
 	}
 	
 	loadCount++;

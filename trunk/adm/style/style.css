@@ -102,12 +102,25 @@ body {
 	margin: 0px;
 }
 
+.group.half {
+	width: 49%;
+	float: left;
+	margin-right: 10px;
+}
+
+.group.full {
+	width: 100%;
+	clear: both;
+}
+
 img {
 	border: 0px;
 }
 
 .firing {
-	float: right;
+	position: absolute;
+	bottom: 20px;
+	right: 10px;
 	margin: 5px;
 }
 

@@ -541,9 +541,24 @@ CSS;
 							),
 							'image' => 'adm/style/images/node-options.png',
 							'description' => __('Edit the options of this node, like for example the template, or a link target.')
+						),
+					)
+				),
+				'structure' => array(
+					'title' => __('Structure'),
+					'image' => 'adm/style/images/applications.png',
+					'data' => array(
+						'node_delete' => array(
+							'title' => __('Delete node'),
+							'callback' => array('core', 'admin_node_delete'),
+							'params' => array(
+								'node' => $_GET['node']
+							),
+							'image' => 'adm/images/edit_remove.png',
+							'description' => __('Delete this node permanently.')
 						)
 					)
-				)
+				),
 			);
 		}
 		
@@ -918,6 +933,98 @@ CSS;
 				<?php
 			break;
 		}
+	}
+	
+	function admin_node_delete($args) {
+		$mode = isset($args['mode']) ? $args['mode'] : 'confirm';
+		$node_id = isset($args['node']) ? $args['node'] : $_POST['node_id'];
+		$db = database::getnew();
+		
+		switch($mode) {
+			case 'confirmed':
+				$post_vars = array('node_id');
+				foreach($post_vars as $postvar) {
+					if(empty($_POST[$postvar])) {
+						trigger_error(__($postvar . '  not given!'), E_USER_ERROR);
+						return;
+					}
+					$var = 'newnode_' . $postvar;
+					$$var = $db->sql_escape($_POST[$postvar]); 
+				}
+				// Get the number of sites
+				$sql = "SELECT COUNT(type) AS site_count
+						FROM " . NODES_TABLE . "
+						WHERE type = 'site'";
+				$result = $db->sql_query($sql);
+				$row = $db->sql_fetchrow($result);
+				$site_count = $row['site_count'];
+				if($site_count < 1 || $site_count == 1) {
+					define('SITE_DELETE_LEGAL', false);
+				}
+				else {
+					define('SITE_DELETE_LEGAL', true);
+				}
+				$node = CMS_Node::getnew();
+				$node->node_id = $node_id;
+				$node->read();		
+				if($node->type == 'site' && !SITE_DELETE_LEGAL) {
+					echo __("Can't delete the node. Are you trying to delete a site?");
+					define('ERROR', true);
+				}
+				else {
+					$this->delete_node($node_id);
+				}
+		
+				if(!defined('ERROR')) {
+					echo 'reload';		
+				}
+			break;
+				
+			default:
+			case 'confirm':
+				$thisargs = $args;
+				$thisargs['mode'] = 'confirmed';
+				?>
+				<form action="<?php echo admin::get_callback(array('core', 'admin_node_delete'), $thisargs) ?>" method="post">
+					<div style="color: red;"><?php echo __("Are you sure you want to delete this node? This will remove any data and children."); ?></div>
+					<input type="hidden" name="node_id" value="<?php echo $node_id; ?>" />
+					<input type="submit" name="submit" value="<?php echo __("Submit"); ?>" />
+				</form>
+				<?php
+			break;
+		}
+	}
+		
+	function delete_node($node_id) {
+		global $db;
+		$sql = 'DELETE FROM ' . NODES_TABLE . "
+				WHERE node_id = $node_id";
+		if(!$db->sql_query($sql)) {
+			return false;
+		}
+		$sql = 'DELETE FROM ' . NODE_REVISIONS_TABLE . "
+				WHERE node_id = $node_id";
+		if(!$db->sql_query($sql)) {
+			return false;
+		}
+		$sql = 'SELECT node_id FROM ' . NODES_TABLE . "
+				WHERE parent_id = $node_id";
+		if(!$result = $db->sql_query($sql)) {
+			return false;
+		}
+		$affected_rows = $db->sql_affectedrows();
+		if($affected_rows < 1) {
+			$rowset = $db->sql_fetchrowset($result);
+			foreach($rowset as $row) {
+				$this->delete_node($row['node_id']);
+			}
+		}
+		elseif($affected_rows == 1) {
+			$row = $db->sql_fetchrow($result);
+			$this->delete_node($row['node_id']);
+		}
+			
+		return true;
 	}
 	
 	function admin_left_site_structure() {
