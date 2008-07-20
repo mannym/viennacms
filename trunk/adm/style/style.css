@@ -124,6 +124,10 @@ img {
 	margin: 5px;
 }
 
+table {
+	font-size: 12px;
+}
+
 .treeview, .treeview ul { 
 	padding: 0;
 	margin: 0;

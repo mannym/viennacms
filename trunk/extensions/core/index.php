@@ -588,6 +588,19 @@ CSS;
 				);
 			}
 			
+			if (utils::$types[$node->type]['type'] == NODE_MODULES) {
+				$return['content']['data']['node_modules'] = array(
+					'title' => __('Edit modules'),
+					'callback' => array('core', 'admin_node_modules'),
+					'params' => array(
+						'node' => $_GET['node'],
+						'mode' => 'choose'
+					),
+					'image' => 'adm/images/modules.png',
+					'description' => __('Add or edit the modules in this node.')
+				);
+			}
+			
 			if (utils::$types[$node->type]['type'] != NODE_NO_REVISION) {			
 				$return['actions']['data']['node_revisions'] = array(
 					'title' => __('View older versions'),
@@ -654,8 +667,407 @@ CSS;
 					<input type="submit" value="<?php echo __('Save') ?>" />
 				</form>
 				
-				<?php include('./footer.php');
+				<?php
 			break;
+		}
+	}
+	
+	function admin_node_modules($args) {
+		global $node, $myargs;
+		$myargs = $args;
+		$mode = (isset($args['mode'])) ? $args['mode'] : $_POST['mode'];
+		$node = new CMS_Node();
+		$node->node_id = (isset($args['node'])) ? $args['node'] : $_POST['node'];
+		$node->read();
+		$blocks = (isset($args['blocks']) || isset($_POST['blocks']));
+		if ($blocks) {
+			$node->options['blocks'] = unserialize($node->options['blocks']);
+		}
+		//$page_title = __("viennaCMS ACP - Edit the node modules");
+		
+		switch($mode) {
+			case 'move':
+				$data = explode('-', $_POST['id']);
+				$node = new CMS_Node();
+				$node->node_id = $data[0];
+				$node->read();
+				if ($blocks) {
+					$node->options['blocks'] = unserialize($node->options['blocks']);
+					$var = &$node->options['blocks'];
+					$thing = &$node->options['blocks'][$data[2]][$data[1]];
+				} else {
+					$var = &$node->revision->modules;
+					$thing = &$node->revision->modules[$data[2]][$data[1]];
+				}
+				
+				$var[$data[2]] = utils::array_move_element($var[$data[2]], $thing, $_POST['type']);
+				
+				if ($blocks) {
+					$this->show_blockform($data[2], false);
+					$node->options['blocks'] = serialize($node->options['blocks']);
+				} else {
+					$this->show_modform($data[2], false);
+				}
+				
+				$node->write();
+			break;
+			case 'ajax-save':
+			case 'save':
+				if (!$blocks) {
+					if ($_POST['key'] != 'empty') {
+						$thing = &$node->revision->modules[$_POST['location']][$_POST['key']];
+					} else {
+						$thing = &$node->revision->modules[$_POST['location']];
+						$thing = &$thing[count($thing)];
+					}
+				} else {
+					if ($_POST['key'] != 'empty') {
+						$thing = &$node->options['blocks'][$_POST['location']][$_POST['key']];
+					} else {
+						$thing = &$node->options['blocks'][$_POST['location']];
+						$thing = &$thing[count($thing)];
+					}			
+				}
+				
+				if (is_null($thing)) {
+					$thing = array();
+				}
+				
+				if (isset($_POST['content_title']) || isset($_GET['ajax'])) {
+					foreach ($_POST as $key => $value) {
+						if ($key != 'key' && $key != 'location' && $key != 'node' && $key != 'submit' && $key != 'blocks') {
+							$thing[$key] = stripslashes($value);
+						}
+					}
+				} else if (isset($args['do']) && $args['do'] == 'delete') {
+					if (!$blocks) {
+						unset($node->revision->modules[$_POST['location']][$_POST['key']]);
+					} else {
+						unset($node->options['blocks'][$_POST['location']][$_POST['key']]);
+					}
+				}
+				
+				if ($blocks) {
+					$node->options['blocks'] = serialize($node->options['blocks']);
+				}
+				
+				$node->write();
+				echo 'reload';
+				exit;
+			break;
+			case 'args':
+				if (isset($args['location']) && isset($args['key'])) {
+					if (!$blocks) {
+						$margs = $node->revision->modules[$args['location']][$args['key']];
+					} else {
+						$margs = $node->options['blocks'][$args['location']][$args['key']];
+					}
+					$exists = true;
+				} else {
+					$temp = explode('::', $_POST['extmod']);
+					$margs = array(
+						'extension' => $temp[0],
+						'module' => $temp[1]
+					);
+					$exists = false;
+				}
+				
+				$sargs = $args;
+				$sargs['mode'] = 'save';
+				
+				?>
+				<form action="<?php echo admin::get_callback(array('core', 'admin_node_modules'), $sargs); ?>" id="module_edit_form" method="post">
+					<input type="hidden" name="extension" value="<?php echo $margs['extension'] ?>" />
+					<input type="hidden" name="module" value="<?php echo $margs['module'] ?>" />
+					<input type="hidden" name="location" value="<?php echo $args['location'] ?>" />
+					<input type="hidden" name="key" value="<?php echo (isset($args['key'])) ? $args['key'] : 'empty' ?>" />
+					<input type="hidden" name="node" value="<?php echo $node->node_id ?>" />
+					<table width="100%">
+				<?php
+				
+				$aargs = utils::run_hook_all('args_' . $margs['module']);
+				
+				foreach ($aargs as $key => $value) {
+					$colspan = ($value['newrow']) ? ' colspan="2"' : '';
+					?>
+					<tr>
+						<td<?php echo $colspan ?> style="vertical-align: top;"><strong><?php echo $value['title'] ?>:</strong></td>
+						<?php
+						if ($value['newrow']) {
+							echo '</tr><tr>';
+						}
+						?>
+						<td<?php echo $colspan ?>>
+						<?php
+						switch ($value['type']) {
+							case 'text':
+								?>
+								<input type="text" name="<?php echo $key ?>" value="<?php echo $margs[$key] ?>" /></td>
+								<?php
+							break;
+							case 'textarea':
+								?>
+								<textarea name="<?php echo $key ?>" rows="5" cols="40"><?php echo stripslashes(preg_replace('#\<br \/\>#', '', $margs[$key])); ?></textarea>
+								<?php
+							break;
+							case 'wysiwyg':
+								?>
+								<textarea class="wysiwyg" id="wysiwyg_form" name="<?php echo $key ?>" style="width: 500px; height: 250px;"><?php echo stripslashes($margs[$key]); ?></textarea>
+								<?php
+							break;
+							case 'node':
+								if (!isset($value['cbtype'])) {
+									$cbtype = 0;
+								} else {
+									$cbtype = $value['cbtype'];
+								}
+								echo utils::node_select($key, $value['callback'], $cbtype);
+							break;
+						}
+						?>
+						</td>
+					</tr>
+					<?php
+				}
+				?>
+					<tr>
+						<td>
+							<strong><?php echo __("Title"); ?></strong><br />
+							<?php echo __("Enter the title to display"); ?>
+						</td>
+						
+						<td>
+							<input type="text" name="content_title" value="<?php echo $margs['content_title']; ?>" />
+						</td>
+					</tr>
+					
+					<tr>
+						<td colspan="2">
+							<input type="submit" name="submit" value="<?php echo __('Save') ?>" />
+						</td>
+					</tr>
+					</table>
+					<?php
+					if ($blocks) {
+						?>
+						<input type="hidden" name="blocks" value="true" />
+						<?php
+					}
+					?>
+				</form>
+				<?php
+				if ($exists) {
+					$dargs = $args;
+					$dargs['mode'] = 'save';
+					$dargs['do'] = 'delete';
+					?>
+					<form method="post" action="<?php echo admin::get_callback(array('core', 'admin_node_modules'), $dargs); ?>">
+						<input type="hidden" name="extension" value="<?php echo $margs['extension'] ?>" />
+						<input type="hidden" name="module" value="<?php echo $margs['module'] ?>" />
+						<input type="hidden" name="location" value="<?php echo $args['location'] ?>" />
+						<input type="hidden" name="key" value="<?php echo (isset($args['key'])) ? $args['key'] : 'empty' ?>" />
+						<input type="hidden" name="node" value="<?php echo $node->node_id ?>" />
+						<input type="submit" name="delete" value="<?php echo __('Delete') ?>" />
+						<?php
+						if ($blocks) {
+							?>
+							<input type="hidden" name="blocks" value="true" />
+							<?php
+						}
+						?>
+					</form>
+					<?php
+				}
+			break;
+			case 'module':
+				/*if (isset($_POST['submit-left'])) {
+					$location = 'left';
+				} else if (isset($_POST['submit-middle'])) {
+					$location = 'middle';
+				} else if (isset($_POST['submit-right'])) {
+					$location = 'right';
+				}*/
+				/*foreach ($_POST as $key => $value) {
+					if (substr($key, 0, 7) == 'submit-') {
+						$location = substr($key, 7);
+					}
+				}*/
+				$aargs = $args;
+				$aargs['mode'] = 'args';
+				?>
+				<form method="post" action="<?php echo admin::get_callback(array('core', 'admin_node_modules'), $aargs) ?>">
+					<input type="hidden" name="node" value="<?php echo $node->node_id ?>" />
+					<h1><?php echo __('Select module type') ?></h1>
+					<?php
+					$modules = utils::run_hook_all('list_modules');
+					
+					foreach ($modules as $module => $extension) {
+						?>
+						<input type="radio" name="extmod" value="<?php echo $extension . '::' . $module; ?>" /> <?php echo $module ?><br />
+						<?php
+					}
+					if ($blocks) {
+						?>
+						<input type="hidden" name="blocks" value="true" />
+						<?php
+					}
+					?>
+					<input type="submit" value="<?php echo __('Continue') ?>" />
+				</form>
+				<?php
+			break;
+			default:
+			case 'choose':
+				?>
+				<script type="text/javascript">
+					$(document).ready(function() {
+						updateLinks();
+					});
+					
+					function updateLinks(id) {
+						if (!id) {
+							$('.upmodule').append(' <a href="#" onclick="upMyModule(this.parentNode.id, this.parentNode.parentNode.id); return false;">^</a>');
+							$('.upmodule').append(' <a href="#" onclick="downMyModule(this.parentNode.id, this.parentNode.parentNode.id); return false;">v</a>');
+						} else {
+							$('#' + id + ' .upmodule').append(' <a href="#" onclick="upMyModule(this.parentNode.id, this.parentNode.parentNode.id); return false;">^</a>');
+							$('#' + id + ' .upmodule').append(' <a href="#" onclick="downMyModule(this.parentNode.id, this.parentNode.parentNode.id); return false;">v</a>');
+						}
+					}
+		
+					<?php
+					$argsm = $args;
+					$argsm['mode'] = 'move';
+					?>
+		
+					function downMyModule(id, parent) {
+						$.ajax({
+							cache: false,
+							type: "POST",
+							url: "<?php echo admin::get_callback(array('core', 'admin_node_modules'), $argsm); ?>",
+							data: "<?php echo ($blocks) ? 'blocks=true&' : '' ?>mode=move&type=down&id=" + id,
+							success: function(output) {
+								$('#' + parent).html(output);
+								updateLinks(parent);
+							}
+						});
+					}
+					
+					function upMyModule(id, parent) {
+						$.ajax({
+							cache: false,
+							type: "POST",
+							url: "<?php echo admin::get_callback(array('core', 'admin_node_modules'), $argsm); ?>",
+							data: "<?php echo ($blocks) ? 'blocks=true&' : '' ?>mode=move&type=up&id=" + id,
+							success: function(output) {
+								$('#' + parent).html(output);
+								updateLinks(parent);
+							}
+						});
+					}
+				</script>
+				<?php
+				if ($node->type != 'site' || !$blocks) {
+				?>
+					<div style="width: 33%; float: left;">
+						<h2><?php echo __('Left') ?></h2>
+						<?php $this->show_modform('left') ?>
+					</div>
+					<div style="width: 33%; float: left;">
+						<h2><?php echo __('Middle') ?></h2>
+						<?php $this->show_modform('middle') ?>
+					</div>
+					<div style="width: 33%; float: left;">
+						<h2><?php echo __('Right') ?></h2>
+						<?php $this->show_modform('right') ?>
+					</div>
+				<?php
+				} else {
+					?>
+					<div style="width: 33%; float: left;">
+						<h2><?php echo __('Left') ?></h2>
+						<?php $this->show_blockform('left') ?>
+					</div>
+					<div style="width: 33%; float: left;">
+						<h2><?php echo __('Before content') ?></h2>
+						<?php $this->show_blockform('before_content') ?>
+						<h2><?php echo __('After content') ?></h2>
+						<?php $this->show_blockform('after_content') ?>
+					</div>
+					<div style="width: 33%; float: left;">
+						<h2><?php echo __('Right') ?></h2>
+						<?php $this->show_blockform('right') ?>
+					</div>			
+					<?php
+				}
+				?>
+				<input type="hidden" name="node" value="<?php echo $node->node_id ?>" />
+				<?php
+				if ($blocks) {
+					?>
+					<input type="hidden" name="blocks" value="true" />
+					<?php
+				}
+			break;
+		}
+	}
+	
+	function show_blockform($location, $all = true) {
+		global $node, $myargs;
+		$fargs = $myargs;
+		$fargs['mode'] = 'module';
+		$fargs['location'] = $location;
+		$aargs = $fargs;
+		$aargs['mode'] = 'args';
+		
+		if ($all) {
+			if (!$node->options['blocks']) {
+				$node->options['blocks'] = array(
+					'left' => array(),
+					'right' => array(),
+					'before_content' => array(),
+					'after_content' => array(),
+				);
+				$node->write_option('blocks', serialize($node->options['blocks']), true);
+			}
+			echo '<form method="post" action="' . admin::get_callback(array('core', 'admin_node_modules'), $fargs) . '">';
+			echo '<ul style="list-style-type: none; margin: 0px; padding: 0px;" id="loc-' . $location . '">' . "\r\n";
+		}
+		foreach ($node->options['blocks'][$location] as $key => $module) {
+			$aargs['key'] = $key;
+			echo '<li class="upmodule" id="' . $node->node_id . '-' . $key . '-' . $location . '"><a href="' . 
+			admin::get_callback(array('core', 'admin_node_modules'), $aargs) . '">';
+			echo $module['extension'] . '::' . $module['module'] . '</a></li>' . "\r\n";
+		}
+		if ($all) {
+			echo '</ul>' . "\r\n";
+		
+			echo '<input type="submit" name="submit" value="' . __('Add') . '" />';
+			echo '</form>';
+		}
+	}
+	
+	function show_modform($location, $all = true) {
+		global $node, $myargs;
+		$fargs = $myargs;
+		$fargs['mode'] = 'module';
+		$fargs['location'] = $location;
+		$aargs = $fargs;
+		$aargs['mode'] = 'args';
+		if ($all) {
+			echo '<form method="post" action="' . admin::get_callback(array('core', 'admin_node_modules'), $fargs) . '">';
+			echo '<ul style="list-style-type: none; margin: 0px; padding: 0px;" id="loc-' . $location . '">' . "\r\n";
+		}
+		foreach ($node->revision->modules[$location] as $key => $module) {
+			$aargs['key'] = $key;
+			echo '<li class="upmodule" id="' . $node->node_id . '-' . $key . '-' . $location . '"><a href="' . 
+			admin::get_callback(array('core', 'admin_node_modules'), $aargs) . '">';
+			echo $module['extension'] . '::' . $module['module'] . '</a></li>' . "\r\n";
+		}
+		if ($all) {
+			echo '</ul>' . "\r\n";
+		
+			echo '<input type="submit" name="submit" value="' . __('Add') . '" />';
+			echo '</form>';
 		}
 	}
 	
