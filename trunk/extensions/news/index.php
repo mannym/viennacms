@@ -310,6 +310,29 @@ CSS;
 		);
 	}
 
+	function formapi_display($id, $form, $api) {
+		if ($id == 'node_add_form') {
+			global $node;
+			
+			if ((!empty($node->type) && $node->type == 'news') || ($api->hiddenfields['node_add_form_type']['value'] == 'news')) {
+				unset($api->place[$api->textfields['node_add_form_extension']['place']]);
+				unset($api->place[$api->textareas['node_add_form_description']['place']]);
+				unset($api->textfields['node_add_form_extension']);
+				unset($api->textareas['node_add_form_description']);
+				$api->_add_formfield(array(
+					'name' => 'extension',
+					'type' => 'hidden',
+					'value' => 'html'
+				));
+				$api->_add_formfield(array(
+					'name' => 'description',
+					'type' => 'hidden',
+					'value' => '!'
+				));
+			}
+		}
+	}
+	
 	function admin_get_actions($id) {
 		if ($_GET['id'] == 'site_content') {
 			utils::get_types();

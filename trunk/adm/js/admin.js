@@ -38,6 +38,7 @@ function load_option_default(id, value) {
 		type: "GET",
 		url: "index.php?action=get_default&id=" + id,
 		success: function(output) {
+			delete_wysiwyg();
 			$('#system-right').html(output);
 			reload_contents(id);		
 			unloading();
@@ -71,6 +72,7 @@ function reload_contents(id) {
 				type: "GET",
 				url: $(this).attr('href') + '&ajax=true',
 				success: function(output) {
+					delete_wysiwyg();
 					$('#system-right').html(output);
 					reload_contents(id);
 					unloading();
@@ -79,6 +81,13 @@ function reload_contents(id) {
 			return false;
 		}
 	});
+	
+	$('a.external').click(
+		function() {
+			location.href = $(this).attr('href');
+			return false;
+		}
+	);
 	
 	$('form').submit(function() {
 		// tinyMCE does not save content correctly, so we do it manually :)
@@ -108,6 +117,13 @@ function reload_contents(id) {
 	});
 	
 	reinit_wysiwyg();
+}
+
+function delete_wysiwyg() {
+	if ($('#wysiwyg_form').html() != null) {
+		var ed = tinyMCE.getInstanceById('wysiwyg_form');
+		tinyMCE.removeInstance(ed); // required to be able to use the WYSIWYG again
+	}
 }
 
 $(document).ready(function() {
