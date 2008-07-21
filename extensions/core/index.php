@@ -1558,6 +1558,26 @@ CSS;
 		echo '<ul class="nodes" id="tree" style="display: block;">';
 		echo $this->get_admin_tree();
 		echo '</ul>';
+		
+		if ($_GET['id'] == 'site_structure') {
+			?> 
+			<a href="#" class="order"><?php echo __('Move nodes') ?></a>
+			<script type="text/javascript">
+				var orderOn = false;
+			
+			 	$('#tree-left a.order').click(function() {
+					if (orderOn) {
+						orderOn = false;
+						$('#tree-left a.nudl').remove();
+					} else {
+						orderOn = true;
+						updateNodeLinks();
+					}
+					return false;
+				});
+			</script>
+			<?php
+		}
 	}
 	
 	function admin_left_site_content() {

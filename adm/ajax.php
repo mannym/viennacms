@@ -1,6 +1,7 @@
 <?php
 define('IN_VIENNACMS', true);
 include('../start.php');
+include(ROOT_PATH . 'includes/admin.php');
 $user = user::getnew();
 $user->checkacpauth();
 
@@ -37,7 +38,10 @@ switch ($_REQUEST['mode']) {
 			$value->write(false);
 		}
 		*/
-		echo utils::get_admin_tree();
+		$_GET['id'] = 'site_structure';
+		$core = utils::load_extension('core');
+		$core->admin_left_site_structure();
+		//echo utils::get_admin_tree();
 	break;
 }
 ?>
