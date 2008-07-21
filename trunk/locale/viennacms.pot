@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: viennaCMS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-21 12:16+0100\n"
+"POT-Creation-Date: 2008-07-21 14:19+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Bas <translation@dotbas.net>\n"
 "Language-Team: viennaCMS developers <developers@viennacms.nl>\n"
@@ -644,8 +644,6 @@ msgid "Logout"
 msgstr ""
 
 #: /Users/bas/Sites/viennacms/extensions/core/index.php:541
-#: /Users/bas/Sites/viennacms/extensions/files/index.php:696
-#: /Users/bas/Sites/viennacms/extensions/files/index.php:741
 msgid "Options"
 msgstr ""
 
@@ -658,7 +656,6 @@ msgid "Edit the options of this node, like for example the template, or a link t
 msgstr ""
 
 #: /Users/bas/Sites/viennacms/extensions/core/index.php:566
-#: /Users/bas/Sites/viennacms/extensions/files/index.php:722
 msgid "Structure"
 msgstr ""
 
@@ -682,11 +679,19 @@ msgstr ""
 msgid "Actions"
 msgstr ""
 
-#: /Users/bas/Sites/viennacms/extensions/core/index.php:1613
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:1150
+msgid "Cache was succesfully purged."
+msgstr ""
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:1600
+msgid "Purge cache"
+msgstr ""
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:1625
 msgid "To edit the site structure, select a node to edit on the left. To add a new node, click the Add button below a node."
 msgstr ""
 
-#: /Users/bas/Sites/viennacms/extensions/core/index.php:1623
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:1635
 msgid "In this menu, you can manage the content of your nodes. To begin, select a node on the left."
 msgstr ""
 
@@ -1110,6 +1115,7 @@ msgstr ""
 msgid "Navigation"
 msgstr ""
 
+#: /Users/bas/Sites/viennacms/styles/blue/index.php:33
 #: /Users/bas/Sites/viennacms/styles/default/index.php:12
 msgid "ACP"
 msgstr ""
