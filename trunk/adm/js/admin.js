@@ -189,3 +189,50 @@ function reinit_wysiwyg() {
 		tinyMCE.execCommand("mceAddControl", true, "wysiwyg_form");
 	}
 }
+
+/* old code, needs to be here for being available for parties */
+function updateNodeLinks() {
+	$('#tree-left li a').after(' <a href="#" class="nudl" style="display: inline; padding: 0px; margin-right: 3px;" onclick="upMyNode(this.parentNode.id, this.parentNode.parentNode.id); return false;">^</a><a href="#" class="nudl" style="display: inline; padding: 0px;" onclick="downMyNode(this.parentNode.id, this.parentNode.parentNode.id); return false;">v</a>');
+	$('a.addnode + .nudl').remove();
+	$('a.addnode + .nudl').remove(); // needs this to get rid of the second one :)
+}
+
+function downMyNode(id, parent) {
+	$.ajax({
+		cache: false,
+		type: "POST",
+		url: "ajax.php",
+		data: "mode=move_node&type=down&id=" + id,
+		success: function(output) {
+			$('#tree-left').html(output);
+			$("#tree-left .nodes").treeview({
+				persist: "cookie",
+				collapsed: true,
+				unique: true
+			});
+			reload_contents('site_structure');
+			updateNodeLinks();
+		}
+	});
+}
+
+function upMyNode(id, parent) {
+	$.ajax({
+		cache: false,
+		type: "POST",
+		url: "ajax.php",
+		data: "mode=move_node&type=up&id=" + id,
+		success: function(output) {
+			$('#tree-left').html(output);
+			$("#tree-left .nodes").treeview({
+				persist: "cookie",
+				collapsed: true,
+				unique: true
+			});
+			reload_contents('site_structure');
+			updateNodeLinks();
+		}
+	});
+}
+
+var orderOn = false;
