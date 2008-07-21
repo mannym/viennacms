@@ -266,7 +266,7 @@ CONTENT;
 		
 		$content = <<<CONTENT
 		<strong>$title</strong><br />
-		<textarea cols="30" rows="4" name="$name">$value</textarea>
+		<textarea cols="30" rows="4" name="$name">$value</textarea><br />
 		<span class="small">$description</span><br ><br />
 CONTENT;
 	$this->content .= $content;
