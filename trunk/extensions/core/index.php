@@ -302,7 +302,7 @@ class extension_core
 		$user = user::getnew();
 		$user->initialize(true);
 		
-		if ($user->user_logged_in) {
+		if ($user->user_logged_in && false) {
 			$callback = utils::url('inline-edit/');
 			$admin_modules = utils::url('adm/admin_node_modules.php', array('nonsys_url' => true));
 			
