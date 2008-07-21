@@ -115,6 +115,7 @@ class template {
 		
 		if (empty($filename)) {
 			trigger_error('Multiple template files do not exist', E_USER_ERROR);
+			return;
 		}
 		
 		$this->handles[$handle] = $this->root . $name;
