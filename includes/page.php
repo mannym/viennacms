@@ -219,7 +219,7 @@ class page {
 		
 		$show = utils::display_allowed('show_to_visitor', $node);
 		
-		if ($show && $node != $this->sitenode) {
+		if ($show && $node->node_id != $this->sitenode->node_id) {
 			$links['n' . $node->node_id] = array(
 				'href'			=> $this->get_link($node),
 				'text'			=> $node->title,
