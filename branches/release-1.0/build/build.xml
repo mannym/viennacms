@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="/root/checkout/viennacms/" default="test" name="viennacms">
+   <target name="test" description="runs the test suite">
+       <phpunit2 haltonfailure="true" haltonerror="true">
+           <batchtest>
+               <fileset dir="build/tests">
+                   <include name="*.php"/>
+               </fileset>
+           </batchtest>
+       </phpunit2>
+   </target>
+</project>

@@ -1,0 +1,11 @@
+.formfield-required {
+	color: #f00;
+}
+
+.formfield-error {
+	color: #a00;
+}
+
+.formfield-description {
+	font-size: 90%;
+}

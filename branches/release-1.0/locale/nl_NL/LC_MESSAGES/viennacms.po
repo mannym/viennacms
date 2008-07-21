@@ -1,0 +1,1164 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: viennaCMS\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-07-21 14:19+0100\n"
+"PO-Revision-Date: 2008-07-21 14:19+0100\n"
+"Last-Translator: Bas <translation@dotbas.net>\n"
+"Language-Team: viennaCMS developers <developers@viennainfo.nl>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: s\n"
+"X-Poedit-Language: Dutch\n"
+"X-Poedit-Country: NETHERLANDS\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-KeywordsList: __\n"
+"X-Poedit-SearchPath-0: /var/www/vienna\n"
+"X-Poedit-SearchPath-1: /Users/bas/Sites/viennacms\n"
+
+#: /Users/bas/Sites/viennacms/adm/admin_config.php:19
+#: /Users/bas/Sites/viennacms/adm/admin_node.php:16
+#: /Users/bas/Sites/viennacms/adm/header.php:112
+msgid "viennaCMS ACP"
+msgstr "viennaCMS Beheerderspaneel"
+
+#: /Users/bas/Sites/viennacms/adm/admin_config.php:25
+msgid "Page caching"
+msgstr "Paginacache"
+
+#: /Users/bas/Sites/viennacms/adm/admin_config.php:29
+msgid "Caching type"
+msgstr "Cachetype"
+
+#: /Users/bas/Sites/viennacms/adm/admin_config.php:30
+msgid "The 'simple' cache option is the most safe option, and is currently the recommended one. The 'normal' option will cache all page output, except for pages with <em>dynamic modules</em>. Dynamic blocks will still be cached, so minor side-effects may occur. The 'aggressive' cache option will cache every page in the front end, until it expires or is modified."
+msgstr "De 'simpel'-optie is de veiligste optie, en momenteel de aanbevolen optie. De 'normaal'-optie zal alle paginauitvoer cachen, behalve pagina's met <em>dynamische modules</em>. Dynamische blokken zullen nog steeds gecached worden, dus kleine bij-effecten kunnen voorkomen. De 'agressief'-optie zal elke pagina in de site cachen, totdat deze verloopt of aangepast is."
+
+#: /Users/bas/Sites/viennacms/adm/admin_config.php:49
+msgid "Output cache time"
+msgstr "Uitvoer-cachetijd"
+
+#: /Users/bas/Sites/viennacms/adm/admin_config.php:50
+msgid "The time the cache keeps existing if there are no changes."
+msgstr "De tijd dat de cache blijft bestaan als er niks gewijzigd is."
+
+#: /Users/bas/Sites/viennacms/adm/admin_config.php:59
+msgid "Select a configuration page in the menu to your left."
+msgstr "Selecteer in het menu links een configuratiepagina."
+
+#: /Users/bas/Sites/viennacms/adm/admin_config.php:69
+msgid "Settings are saved."
+msgstr "De instellingen zijn opgeslagen."
+
+#: /Users/bas/Sites/viennacms/adm/admin_config.php:75
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:74
+#: /Users/bas/Sites/viennacms/adm/admin_node_content.php:55
+#: /Users/bas/Sites/viennacms/adm/admin_node_modules.php:185
+msgid "Save"
+msgstr "Opslaan"
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:20
+msgid "viennaCMS ACP - File admin"
+msgstr "viennaCMS ACP - Bestandsbeheer"
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:48
+#, php-format
+msgid "Folder %s is not writable"
+msgstr "Map %s is niet schrijfbaar"
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:53
+#, php-format
+msgid "Upload a new file in %s"
+msgstr "Upload een nieuw bestand in %s"
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:71
+msgid "Folder name"
+msgstr "Mapnaam"
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:83
+msgid "Are you sure you want to delete this file? This cannot be undone."
+msgstr "Weet je zeker dat je dit bestand wilt verwijderen? Dit kan niet ongedaan gemaakt worden."
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:85
+#: /Users/bas/Sites/viennacms/adm/admin_node_delete.php:68
+msgid "Submit"
+msgstr "Bevestig"
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:105
+msgid "Do you want to delete the files and folders in this folder, or move them to the parent folder?"
+msgstr "Wil je de bestanden en mappen in deze map wissen, of ze verplaatsen naar de bovenliggende map?"
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:108
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:161
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:167
+#: /Users/bas/Sites/viennacms/adm/admin_node_modules.php:189
+msgid "Delete"
+msgstr "Verwijder"
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:112
+msgid "Move"
+msgstr "Verplaatsen"
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:123
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:132
+msgid "You cannot delete the root"
+msgstr "Je kan de hoofdmap niet verwijderen"
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:158
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:166
+#: /Users/bas/Sites/viennacms/adm/admin_node.php:23
+#, php-format
+msgid "Actions for %s"
+msgstr "Acties voor %s"
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:159
+msgid "Create a new folder"
+msgstr "Maak een nieuwe map"
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:159
+msgid "Create a new folder under this folder."
+msgstr "Voeg een nieuwe map toe onder deze map."
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:160
+msgid "Upload a new file"
+msgstr "Upload een nieuw bestand"
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:160
+msgid "Upload a new file in this folder."
+msgstr "Upload een nieuw bestand in deze map."
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:161
+msgid "Delete this folder from the file system"
+msgstr "Verwijder deze map van het bestandssysteem"
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:167
+msgid "Delete this file from the file system"
+msgstr "Verwijder dit bestand van het bestandssysteem"
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:168
+msgid "Download"
+msgstr "Download"
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:168
+msgid "Download this file"
+msgstr "Download dit bestand"
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:170
+msgid "View all download details"
+msgstr "Bekijk alle downloaddetails."
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:200
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:203
+#, php-format
+msgid "Downloads for %s"
+msgstr "Downloads voor %s"
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:206
+msgid "IP address"
+msgstr "IP-adres"
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:207
+msgid "Referer"
+msgstr "Verwijzer"
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:208
+msgid "User agent"
+msgstr "Browser"
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:209
+msgid "Time"
+msgstr "Tijd"
+
+#: /Users/bas/Sites/viennacms/adm/admin_files.php:225
+msgid "Close window"
+msgstr "Sluit venster"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node.php:25
+msgid "Add new child node"
+msgstr "Voeg hieronder een nieuwe node toe"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node.php:25
+msgid "Add a new child node to this node."
+msgstr "Voeg een nieuwe node onder deze node toe."
+
+#: /Users/bas/Sites/viennacms/adm/admin_node.php:29
+msgid "Edit modules"
+msgstr "Wijzig modules."
+
+#: /Users/bas/Sites/viennacms/adm/admin_node.php:29
+msgid "Add or edit the modules (content) in this node."
+msgstr "Voeg modules (inhoud) toe of wijzig de modules van deze node."
+
+#: /Users/bas/Sites/viennacms/adm/admin_node.php:33
+msgid "Edit content"
+msgstr "Bewerk inhoud"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node.php:33
+msgid "Add or edit the text content in this node."
+msgstr "Wijzig de tekstinhoud van deze node."
+
+#: /Users/bas/Sites/viennacms/adm/admin_node.php:37
+msgid "Edit node details"
+msgstr "Wijzig de details van deze node."
+
+#: /Users/bas/Sites/viennacms/adm/admin_node.php:37
+msgid "Edit the node details like title and description."
+msgstr "Wijzig de nodedetails zoals de titel en de beschrijving."
+
+#: /Users/bas/Sites/viennacms/adm/admin_node.php:41
+msgid "Edit blocks"
+msgstr "Wijzig blokken"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node.php:41
+msgid "Add or edit the blocks for this site."
+msgstr "Wijzig blokken voor deze site of voeg ze toe."
+
+#: /Users/bas/Sites/viennacms/adm/admin_node.php:45
+msgid "Edit options"
+msgstr "Wijzig opties"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node.php:45
+msgid "Configure options in this node."
+msgstr "Configureer de opties van deze node."
+
+#: /Users/bas/Sites/viennacms/adm/admin_node.php:49
+msgid "Older versions"
+msgstr "Oudere versies"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node.php:49
+msgid "View older versions of this node."
+msgstr "Bekijk de oudere versies van deze node."
+
+#: /Users/bas/Sites/viennacms/adm/admin_node.php:53
+msgid "Delete node"
+msgstr "Verwijder de node"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node.php:53
+msgid "Delete this node."
+msgstr "Verwijder deze node."
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_content.php:34
+#, php-format
+msgid "Edit the node content of %s"
+msgstr "Wijzig de inhoud van %s"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_delete.php:19
+msgid "viennaCMS ACP - Delete a node"
+msgstr "viennaCMS ACP - Verwijder een node"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_delete.php:26
+msgid "  not given!"
+msgstr "  niet gegeven!"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_delete.php:49
+msgid "Can't delete the node. Are you trying to delete a site?"
+msgstr "Kan deze node niet verwijderen. Probeer je misschien een site te verwijderen?"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_delete.php:66
+msgid "Are you sure you want to delete this node? This will remove any data and children."
+msgstr "Weet je zeker dat je deze node wilt verwijderen? Dit zal alle data en onderliggende nodes verwijderen."
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_modules.php:24
+msgid "viennaCMS ACP - Edit the node modules"
+msgstr "viennaCMS Beheerderspaneel - Wijzig de modules van deze node."
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_modules.php:174
+#: /Users/bas/Sites/viennacms/adm/admin_node_new.php:210
+msgid "Title"
+msgstr "Titel"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_modules.php:175
+msgid "Enter the title to display"
+msgstr "Geef de titel die weergegeven moet worden op."
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_modules.php:231
+msgid "Select module type"
+msgstr "Selecteer het type module"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_modules.php:246
+msgid "Continue"
+msgstr "Doorgaan"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_modules.php:301
+#: /Users/bas/Sites/viennacms/adm/admin_node_modules.php:316
+msgid "Left"
+msgstr "Links"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_modules.php:305
+msgid "Middle"
+msgstr "Midden"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_modules.php:309
+#: /Users/bas/Sites/viennacms/adm/admin_node_modules.php:326
+msgid "Right"
+msgstr "Rechts"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_modules.php:320
+msgid "Before content"
+msgstr "Voor inhoud"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_modules.php:322
+msgid "After content"
+msgstr "Na inhoud"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_modules.php:367
+#: /Users/bas/Sites/viennacms/adm/admin_node_modules.php:383
+msgid "Add"
+msgstr "Voeg toe"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_new.php:50
+msgid "There is already an node with the same clean title."
+msgstr "Er is al een node met de zelfde schone titel."
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_new.php:68
+#: /Users/bas/Sites/viennacms/adm/admin_node_new.php:161
+#: /Users/bas/Sites/viennacms/adm/admin_node_options.php:49
+#: /Users/bas/Sites/viennacms/adm/admin_node_options.php:86
+msgid "Select"
+msgstr "Selecteer"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_new.php:124
+#: /Users/bas/Sites/viennacms/adm/admin_node_new.php:149
+#: /Users/bas/Sites/viennacms/adm/admin_node_options.php:122
+#, php-format
+msgid "Content wizard, step %d of %d"
+msgstr "Inhoud wizard, stap %d van %d"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_new.php:126
+msgid "Where do you want to place this new node?"
+msgstr "Waar wil je deze nieuwe node plaatsen?"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_new.php:129
+msgid "Next &raquo;"
+msgstr "Volgende &raquo;"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_new.php:140
+msgid "viennaCMS ACP - Edit a node"
+msgstr "viennaCMS Beheerderspaneel - Wijzig een node"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_new.php:140
+msgid "viennaCMS ACP - Add a new node"
+msgstr "viennaCMS Beheerderspaneel - Voeg een nieuwe node toe"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_new.php:144
+#, php-format
+msgid "Add a new node under %s"
+msgstr "Voeg een nieuwe node toe onder %s"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_new.php:146
+#, php-format
+msgid "Edit the node %s"
+msgstr "Wijzig de node %s"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_new.php:187
+msgid "Type"
+msgstr "Type"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_new.php:188
+msgid "Select the type of the node"
+msgstr "Selecteer het type van deze node."
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_new.php:211
+msgid "Enter the title for the node. This title will be automatically cleaned."
+msgstr "Geef de titel van deze node. Deze zal automatisch schoongemaakt worden."
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_new.php:218
+msgid "Clean Title"
+msgstr "Opgeschoonde titel"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_new.php:219
+msgid "The clean title for the node. When changing the title, this will be automatically generated."
+msgstr "Geef de schone titel van deze node. Als je de titel wijzigt, zal deze automatisch gegenereerd worden."
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_new.php:226
+msgid "Extension"
+msgstr "Extensie"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_new.php:227
+msgid "Enter the extension. By example, html. Don't put a dot ('.') at the begin of the extension!."
+msgstr "Geef de bestandsextensie, bijvoorbeeld: html. Voeg geen punt ('.') toe aan het begin!"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_new.php:234
+msgid "Description"
+msgstr "Beschrijving"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_new.php:235
+msgid "Enter the description for the node"
+msgstr "Geef de beschrijving voor deze node."
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_options.php:34
+msgid "Template"
+msgstr "Template"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_options.php:35
+msgid "The template that will be used for this node, and child nodes. Leave empty to use the parent's template."
+msgstr "De template die voor deze node, en de aftakkingen daarvan, moet worden gebruikt. Laat leeg om de template van de ouder te gebruiken."
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_options.php:42
+msgid "viennaCMS ACP - Node options"
+msgstr "viennaCMS Beheerderspaneel - Node opties"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_options.php:120
+#, php-format
+msgid "Edit options for %s"
+msgstr "Wijzig de opties voor %s"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_revisions.php:29
+msgid "viennaCMS ACP - Node revisions"
+msgstr "viennaCMS Beheerderspaneel - Noderevisies"
+
+#: /Users/bas/Sites/viennacms/adm/admin_node_revisions.php:47
+#, php-format
+msgid "View older versions of %s"
+msgstr "Bekijk de oudere versies van %s"
+
+#: /Users/bas/Sites/viennacms/adm/header.php:111
+msgid "View site"
+msgstr "Bekijk de site"
+
+#: /Users/bas/Sites/viennacms/adm/header.php:117
+msgid "Nodes"
+msgstr "Nodes"
+
+#: /Users/bas/Sites/viennacms/adm/header.php:120
+msgid "Files"
+msgstr "Bestand"
+
+#: /Users/bas/Sites/viennacms/adm/header.php:123
+msgid "Configuration"
+msgstr "Configuratie"
+
+#: /Users/bas/Sites/viennacms/adm/header.php:126
+msgid "Log out"
+msgstr "Uitloggen"
+
+#: /Users/bas/Sites/viennacms/adm/header.php:140
+msgid "Performance"
+msgstr "Prestatie"
+
+#: /Users/bas/Sites/viennacms/adm/header.php:150
+msgid "Show/hide tree"
+msgstr "Geef boom weer/verberg boom"
+
+#: /Users/bas/Sites/viennacms/adm/header.php:154
+msgid "Move nodes"
+msgstr "Verplaats nodes"
+
+#: /Users/bas/Sites/viennacms/adm/index.php:24
+msgid "Add new content"
+msgstr "Voeg nieuwe inhoud toe"
+
+#: /Users/bas/Sites/viennacms/adm/index.php:29
+#, php-format
+msgid "Add new %s content item"
+msgstr "Voeg nieuwe %s inhoud toe"
+
+#: /Users/bas/Sites/viennacms/adm/index.php:29
+#, php-format
+msgid "Add a new content item (node) of the type %s"
+msgstr "Voeg een nieuw inhoudsitem (node) van het type %s toe."
+
+#: /Users/bas/Sites/viennacms/adm/login.php:28
+#: /Users/bas/Sites/viennacms/adm/login.php:48
+msgid "Login"
+msgstr "Login"
+
+#: /Users/bas/Sites/viennacms/adm/login.php:40
+msgid "Username"
+msgstr "Gebruikersnaam"
+
+#: /Users/bas/Sites/viennacms/adm/login.php:44
+msgid "Password"
+msgstr "Wachtwoord"
+
+#: /Users/bas/Sites/viennacms/extensions/contact/class.phpmailer.php:646
+msgid "You must provide at least one recipient email address."
+msgstr "Er moet tenmiste &eacute;&eacute;n ontvanger emailadres opgegeven worden."
+
+#: /Users/bas/Sites/viennacms/extensions/contact/class.phpmailer.php:647
+msgid " mailer is not supported."
+msgstr " mailer wordt niet ondersteund."
+
+#: /Users/bas/Sites/viennacms/extensions/contact/class.phpmailer.php:648
+msgid "Could not execute: "
+msgstr "Kon niet uitvoeren:"
+
+#: /Users/bas/Sites/viennacms/extensions/contact/class.phpmailer.php:649
+msgid "Could not instantiate mail function."
+msgstr "Kon mail functie niet initialiseren."
+
+#: /Users/bas/Sites/viennacms/extensions/contact/class.phpmailer.php:650
+msgid "SMTP Error: Could not authenticate."
+msgstr "SMTP Fout: authenticatie mislukt."
+
+#: /Users/bas/Sites/viennacms/extensions/contact/class.phpmailer.php:651
+msgid "The following From address failed: "
+msgstr "De volgende afzender adressen zijn mislukt: "
+
+#: /Users/bas/Sites/viennacms/extensions/contact/class.phpmailer.php:652
+msgid "SMTP Error: The following recipients failed: "
+msgstr "SMTP Fout: De volgende ontvangers zijn mislukt"
+
+#: /Users/bas/Sites/viennacms/extensions/contact/class.phpmailer.php:653
+msgid "SMTP Error: Data not accepted."
+msgstr "SMTP Fout: Data niet geaccepteerd."
+
+#: /Users/bas/Sites/viennacms/extensions/contact/class.phpmailer.php:654
+msgid "SMTP Error: Could not connect to SMTP host."
+msgstr "SMTP Fout: Kon niet verbinden met SMTP host."
+
+#: /Users/bas/Sites/viennacms/extensions/contact/class.phpmailer.php:655
+msgid "Could not access file: "
+msgstr "Kreeg geen toegang tot bestand: "
+
+#: /Users/bas/Sites/viennacms/extensions/contact/class.phpmailer.php:656
+msgid "File Error: Could not open file: "
+msgstr "Bestandsfout: Kon bestand niet openen: "
+
+#: /Users/bas/Sites/viennacms/extensions/contact/class.phpmailer.php:657
+msgid "Unknown encoding: "
+msgstr "Onbekende codering: "
+
+#: /Users/bas/Sites/viennacms/extensions/contact/index.php:25
+msgid "Send the e-mail to"
+msgstr "Verzend de e-mail naar"
+
+#: /Users/bas/Sites/viennacms/extensions/contact/index.php:72
+msgid "Please fill in all fields."
+msgstr "Vul alle velden in."
+
+#: /Users/bas/Sites/viennacms/extensions/contact/index.php:135
+msgid "Your e-mail has been successfully sent."
+msgstr "Uw e-mail is succesvol verzonden."
+
+#: /Users/bas/Sites/viennacms/extensions/contact/index.php:137
+msgid "Your e-mail could not be sent. Please try again later."
+msgstr "Uw e-mail kon niet worden verzonden. Probeer het later nog eens."
+
+#: /Users/bas/Sites/viennacms/extensions/contact/index.php:152
+msgid "Contact extension"
+msgstr "Contactextensie"
+
+#: /Users/bas/Sites/viennacms/extensions/contact/index.php:153
+msgid "Contact extension for sending emails"
+msgstr "Extensie om e-mails te verzenden."
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:30
+msgid "A site is, as the name says, a site. Adding this node will enable multisite features."
+msgstr "Een site is, zoals de naam al aangeeft, een site. Deze node toevoegen zal de multisite-opties inschakelen."
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:31
+msgid "Site"
+msgstr "Site"
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:37
+msgid "A page is the most basic part of a viennaCMS web site. It appears in the menu, and you can add other content to it."
+msgstr "Een pagina is het simpelste onderdeel van een viennaCMS-website. Deze verschijnt in het menu, en je kan er andere inhoud aan toevoegen."
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:38
+msgid "Page"
+msgstr "Pagina"
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:44
+msgid "A link creates a menu option which links through to a selected location."
+msgstr "Een koppeling maakt een menuoptie die de webbrowser van de bezoeker naar een bepaalde locatie stuurt."
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:45
+msgid "Link"
+msgstr "Koppeling"
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:52
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:60
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:508
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:586
+msgid "Content"
+msgstr "Inhoud"
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:90
+msgid "Options for sitemap"
+msgstr "Opties voor sitemap"
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:211
+msgid "Hostname"
+msgstr "Hostnaam"
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:212
+msgid "The hostname where this site node should be displayed. Leave empty if not using a multi-site setup."
+msgstr "De hostnaam waar deze site weergegeven moet worden. Laat deze leeg als er maar 1 site is."
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:220
+msgid "Clean URLs"
+msgstr "Opgeschoonde URL's"
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:221
+msgid "Use clean URLs for this site?"
+msgstr "Gebruik opgeschoonde URL's voor deze site?"
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:236
+msgid "Language"
+msgstr "Taal"
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:237
+msgid "Specify the language to use for this node"
+msgstr "Selecteer de taal die voor deze node gebruikt wordt"
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:249
+msgid "Destination"
+msgstr "Doel"
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:250
+msgid "The URL where the link should go to."
+msgstr "De URL waar de link heen gaat."
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:263
+msgid "Display in menu"
+msgstr "Weergeven in menu"
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:264
+msgid "Select 'No' to hide this item from the menu."
+msgstr "Selecteer 'Nee' om dit item niet in het menu weer te geven."
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:268
+msgid "Yes"
+msgstr "Ja"
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:272
+msgid "No"
+msgstr "Nee"
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:284
+msgid "Core extension"
+msgstr "Kernextensie"
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:285
+msgid "The core extension provides some basic modules."
+msgstr "De kernextensie geeft een paar basismodules."
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:503
+msgid "Site structure"
+msgstr "Sitestructuur"
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:513
+msgid "Config"
+msgstr "Configuratie"
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:518
+msgid "Logout"
+msgstr "Uitloggen"
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:541
+msgid "Options"
+msgstr "Opties"
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:552
+msgid "Edit the details of this node, like the title and description."
+msgstr "Wijzig de details van deze node, zoals de titel en de beschrijving."
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:561
+msgid "Edit the options of this node, like for example the template, or a link target."
+msgstr "Bewerk de opties van deze node, bijvoorbeeld de template, of het doel van een koppeling."
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:566
+msgid "Structure"
+msgstr "Structuur"
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:576
+msgid "Delete this node permanently."
+msgstr "Verwijder deze node permanent."
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:613
+msgid "Add or edit the modules in this node."
+msgstr "Voeg modules toe, of wijzig de modules in deze node."
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:633
+msgid "View older versions"
+msgstr "Bekijk oudere versies"
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:639
+msgid "View older versions of this node, which are saved automatically while editing."
+msgstr "Bekijk oudere versies van deze node, welke automatisch bewaard worden bij bewerken."
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:644
+msgid "Actions"
+msgstr "Acties"
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:1150
+msgid "Cache was succesfully purged."
+msgstr "De buffer is succesvol geleegd."
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:1600
+msgid "Purge cache"
+msgstr "Leeg buffer"
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:1625
+msgid "To edit the site structure, select a node to edit on the left. To add a new node, click the Add button below a node."
+msgstr "Om de sitestructuur aan te passen, moet je links een node kiezen om aan te passen. Je kan ook op Toevoegen klikken bij een node om een nieuwe node toe te voegen."
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:1635
+msgid "In this menu, you can manage the content of your nodes. To begin, select a node on the left."
+msgstr "In dit menu kun je de inhoud van je nodes aanpassen. Kies een node links om te beginnen."
+
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:218
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:597
+msgid "File"
+msgstr "Bestand"
+
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:219
+msgid "The file that should be uploaded"
+msgstr "Het bestand dat geupload moet worden."
+
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:220
+msgid "Upload"
+msgstr "Upload"
+
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:317
+msgid "We need a valid mime content type"
+msgstr "We hebben een geldig inhoudstype nodig."
+
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:324
+msgid "Invalid folder ID"
+msgstr "Ongeldig mapnummer"
+
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:408
+msgid "This file does not exist"
+msgstr "Dit bestand bestaat niet"
+
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:474
+msgid "Files extension"
+msgstr "Bestandsextensie"
+
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:475
+msgid "Extension for uploading and downloading files"
+msgstr "Extensie om bestanden te downloaden en uploaden."
+
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:592
+msgid "View the full image"
+msgstr "Bekijk de volledige afbeelding"
+
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:597
+#, php-format
+msgid "Download %s<br />(%d kB)"
+msgstr "Download %s<br />(%d kB)"
+
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:726
+msgid "Delete folder"
+msgstr "Verwijder deze map"
+
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:733
+msgid "Delete this folder permanently."
+msgstr "Verwijder deze map permanent."
+
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:745
+msgid "Delete file"
+msgstr "Verwijder dit bestand"
+
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:752
+msgid "Delete this file permanently."
+msgstr "Verwijder dit bestand permanent."
+
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:755
+msgid "View downloads"
+msgstr "Bekijk downloads"
+
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:762
+#, php-format
+msgid "View all downloads of this file. Download count: %d"
+msgstr "Bekijk alle downloads van dit bestand. Momenteel %d keer gedownload."
+
+#: /Users/bas/Sites/viennacms/extensions/form/index.php:179
+msgid "Subject"
+msgstr "Onderwerp"
+
+#: /Users/bas/Sites/viennacms/extensions/form/index.php:180
+msgid "Give the subject."
+msgstr "Geef het onderwerp"
+
+#: /Users/bas/Sites/viennacms/extensions/form/index.php:187
+msgid "Your email address:"
+msgstr "Uw e-mailadres:"
+
+#: /Users/bas/Sites/viennacms/extensions/form/index.php:188
+msgid "Give your email address. This will be used to answer your message."
+msgstr "Geef uw e-mailadres. Dit wordt gebruikt om uw bericht te beantwoorden."
+
+#: /Users/bas/Sites/viennacms/extensions/form/index.php:195
+msgid "Message"
+msgstr "Bericht"
+
+#: /Users/bas/Sites/viennacms/extensions/form/index.php:196
+msgid "Give the message to send."
+msgstr "Geef het te verzenden bericht."
+
+#: /Users/bas/Sites/viennacms/extensions/form/index.php:205
+msgid "Send"
+msgstr "Verzend"
+
+#: /Users/bas/Sites/viennacms/extensions/form/index.php:333
+msgid "Form extension"
+msgstr "Formulierextensie"
+
+#: /Users/bas/Sites/viennacms/extensions/form/index.php:334
+msgid "This extension provides a form API to other extensions."
+msgstr "Deze extensie wordt gebruikt om formulieren van andere extensies te genereren."
+
+#: /Users/bas/Sites/viennacms/extensions/news/index.php:36
+msgid "A news folder is a container which contains news items. If you want to place news items on your web sit, you need a news folder."
+msgstr "Een nieuwsmap is een map die nieuwsberichten bevat. Als je nieuws op je website wilt plaatsen, heb je een nieuwsmap nodig."
+
+#: /Users/bas/Sites/viennacms/extensions/news/index.php:37
+#: /Users/bas/Sites/viennacms/extensions/news/index.php:117
+msgid "News folder"
+msgstr "Nieuwsmap"
+
+#: /Users/bas/Sites/viennacms/extensions/news/index.php:44
+msgid "A news item is a small post to announce something new on your web site. These will be displayed on a page with the correct modules."
+msgstr "Een nieuwsbericht is een kleine post om iets nieuws aan te kondigen op je website."
+
+#: /Users/bas/Sites/viennacms/extensions/news/index.php:45
+msgid "News item"
+msgstr "Nieuwsitem"
+
+#: /Users/bas/Sites/viennacms/extensions/news/index.php:128
+msgid "Count of newsitems to display"
+msgstr "De hoeveelheid nieuwsitems die weergegeven moeten worden."
+
+#: /Users/bas/Sites/viennacms/extensions/news/index.php:143
+#: /Users/bas/Sites/viennacms/extensions/news/index.php:180
+msgid "Please select a news folder."
+msgstr "Selecteer een nieuwsmap."
+
+#: /Users/bas/Sites/viennacms/extensions/news/index.php:227
+#, php-format
+msgid "Posted on %s"
+msgstr "Geplaatst op %s"
+
+#: /Users/bas/Sites/viennacms/extensions/news/index.php:256
+msgid "News extension"
+msgstr "Nieuwsextensie"
+
+#: /Users/bas/Sites/viennacms/extensions/news/index.php:257
+msgid "The news extension provides a news system ;)"
+msgstr "De nieuwsextensie bevat een nieuwssysteem ;-)"
+
+#: /Users/bas/Sites/viennacms/extensions/news/index.php:348
+msgid "Add new news item"
+msgstr "Voeg een nieuw nieuwsbericht toe."
+
+#: /Users/bas/Sites/viennacms/extensions/news/index.php:356
+msgid "Add a new news item in this news folder."
+msgstr "Voeg een nieuw nieuwsbericht toe aan deze nieuwsmap."
+
+#: /Users/bas/Sites/viennacms/includes/form.php:60
+#, php-format
+msgid "%s field is required."
+msgstr "Je moet %s invullen."
+
+#: /Users/bas/Sites/viennacms/includes/form.php:65
+#, php-format
+msgid "%s cannot be longer than %d characters."
+msgstr "%s kan niet langer zijn dan %d tekens."
+
+#: /Users/bas/Sites/viennacms/includes/form.php:333
+msgid "This form field is required."
+msgstr "Dit formulierveld is vereist."
+
+#: /Users/bas/Sites/viennacms/includes/functions_install.php:26
+msgid "viennaCMS is already installed there. Please try another database or table prefix."
+msgstr "viennaCMS is al geïnstalleerd in deze database. Probeer een andere database, of gebruik een andere prefix voor de tabellen."
+
+#: /Users/bas/Sites/viennacms/includes/nodetree.php:474
+msgid "This node has no content. Add content in the administration panel."
+msgstr "Deze node heeft geen inhoud. Voeg inhoud toe in het beheerderspaneel."
+
+#: /Users/bas/Sites/viennacms/includes/nodetree.php:475
+msgid "Edit this content title"
+msgstr "Wijzig de titel van de inhoud"
+
+#: /Users/bas/Sites/viennacms/includes/page.php:72
+msgid "Page not found"
+msgstr "Pagina niet gevonden"
+
+#: /Users/bas/Sites/viennacms/includes/page.php:75
+msgid "The page you requested can not be found"
+msgstr "De pagina die je hebt opgevraagd kan niet worden gevonden."
+
+#: /Users/bas/Sites/viennacms/includes/page.php:161
+#, php-format
+msgid "You are currently viewing revision %d of this node, which was made on %s."
+msgstr "Je bekijkt nu revisie %d van deze node, die gemaakt is op %s."
+
+#: /Users/bas/Sites/viennacms/includes/page.php:185
+#, php-format
+msgid "&laquo; Previous (revision %d)"
+msgstr "&laquo; Vorige (revisie %d)"
+
+#: /Users/bas/Sites/viennacms/includes/page.php:192
+#, php-format
+msgid "Next (revision %d) &raquo;"
+msgstr "Volgende (revisie %d) &raquo;"
+
+#: /Users/bas/Sites/viennacms/includes/page.php:437
+msgid "No site node found."
+msgstr "Geen sitenode gevonden."
+
+#: /Users/bas/Sites/viennacms/includes/user.php:176
+msgid "Login limit reached. Please wait 2 minutes before attempting to login again."
+msgstr "De login limiet is bereikt. Wacht aub 2 minuten voor u weer probeert in te loggen."
+
+#: /Users/bas/Sites/viennacms/includes/user.php:180
+msgid "Login incorrect"
+msgstr "Foute inloggegevens"
+
+#: /Users/bas/Sites/viennacms/includes/utils.php:403
+msgid "General Error"
+msgstr "Algemene fout"
+
+#: /Users/bas/Sites/viennacms/includes/utils.php:440
+#: /Users/bas/Sites/viennacms/includes/utils.php:454
+#: /Users/bas/Sites/viennacms/includes/utils.php:469
+msgid "Information"
+msgstr "Informatie"
+
+#: /Users/bas/Sites/viennacms/includes/utils.php:705
+msgid "half an hour"
+msgstr "een half uur"
+
+#: /Users/bas/Sites/viennacms/includes/utils.php:709
+msgid "an hour"
+msgstr "een uur"
+
+#: /Users/bas/Sites/viennacms/includes/utils.php:713
+msgid "two hours"
+msgstr "twee uur"
+
+#: /Users/bas/Sites/viennacms/includes/utils.php:717
+msgid "six hours"
+msgstr "zes uur"
+
+#: /Users/bas/Sites/viennacms/includes/utils.php:721
+msgid "twelve hours"
+msgstr "twaalf uur"
+
+#: /Users/bas/Sites/viennacms/includes/utils.php:725
+msgid "an day"
+msgstr "een dag"
+
+#: /Users/bas/Sites/viennacms/includes/utils.php:729
+msgid "two days"
+msgstr "twee dagen"
+
+#: /Users/bas/Sites/viennacms/install/index.php:50
+msgid "Welcome to the viennaCMS installation"
+msgstr "Welkom bij de installatie van viennaCMS"
+
+#: /Users/bas/Sites/viennacms/install/index.php:51
+msgid "Input your data"
+msgstr "Geef uw gegevens"
+
+#: /Users/bas/Sites/viennacms/install/index.php:52
+msgid "Installation complete!"
+msgstr "De installatie is succesvol afgerond!"
+
+#: /Users/bas/Sites/viennacms/install/index.php:80
+msgid "Does not exist"
+msgstr "Bestaat niet"
+
+#: /Users/bas/Sites/viennacms/install/index.php:92
+#, php-format
+msgid "The current PHP version (%s) is too old to run viennaCMS correctly. The minimum version is 5.2.0."
+msgstr "De huidige PHP versie (%s) is te oud om viennaCMS te kunnen gebruiken. De minimum vereiste versie is 5.2.0."
+
+#: /Users/bas/Sites/viennacms/install/index.php:119
+msgid "Please enter a password"
+msgstr "Voer een wachtwoord in"
+
+#: /Users/bas/Sites/viennacms/install/index.php:128
+msgid "Passwords do not match"
+msgstr "Deze wachtwoorden komen niet overeen"
+
+#: /Users/bas/Sites/viennacms/install/index.php:137
+#, php-format
+msgid "Database information seems to be incorrect, message: %s"
+msgstr "Databaseinformatie lijkt incorrect, bericht: %s"
+
+#: /Users/bas/Sites/viennacms/install/index.php:157
+#: /Users/bas/Sites/viennacms/install/upgrade.php:136
+msgid "Incorrect install step"
+msgstr "Installatiestap bestaat niet"
+
+#: /Users/bas/Sites/viennacms/install/upgrade.php:49
+msgid "Welcome to the viennaCMS upgrade page"
+msgstr "Welkom bij de viennaCMS-upgradepagina"
+
+#: /Users/bas/Sites/viennacms/install/upgrade.php:50
+msgid "Upgrade data"
+msgstr "Data bijwerken"
+
+#: /Users/bas/Sites/viennacms/install/upgrade.php:113
+msgid "Success"
+msgstr "Gelukt"
+
+#: /Users/bas/Sites/viennacms/install/upgrade.php:119
+msgid "Failed"
+msgstr "Mislukt"
+
+#: /Users/bas/Sites/viennacms/install/tpl/install.php:4
+#: /Users/bas/Sites/viennacms/install/tpl/upgrade.php:4
+msgid "Installation wizard"
+msgstr "Installatie wizard"
+
+#: /Users/bas/Sites/viennacms/install/tpl/install.php:4
+#: /Users/bas/Sites/viennacms/install/tpl/upgrade.php:4
+msgid "Step"
+msgstr "Stap"
+
+#: /Users/bas/Sites/viennacms/install/tpl/install.php:17
+msgid "viennaCMS installation wizard!"
+msgstr "viennaCMS installatiewizard!"
+
+#: /Users/bas/Sites/viennacms/install/tpl/install.php:19
+#: /Users/bas/Sites/viennacms/install/tpl/upgrade.php:19
+#, php-format
+msgid "Step %s of %s"
+msgstr "Stap %s van %s"
+
+#: /Users/bas/Sites/viennacms/install/tpl/install.php:27
+msgid "Welcome to the viennaCMS installation wizard."
+msgstr "Welkom bij de installatiewizard van viennaCMS."
+
+#: /Users/bas/Sites/viennacms/install/tpl/install.php:31
+msgid "File rights"
+msgstr "Bestandsrechten"
+
+#: /Users/bas/Sites/viennacms/install/tpl/install.php:34
+msgid "Writable?"
+msgstr "Schrijfbaar?"
+
+#: /Users/bas/Sites/viennacms/install/tpl/install.php:43
+msgid "If one or more of these files or folders are not writable, you cannot install viennaCMS."
+msgstr "Als een of meer van deze bestanden of mappen niet schrijfbaar zijn, kun je viennaCMS niet installeren."
+
+#: /Users/bas/Sites/viennacms/install/tpl/install.php:48
+msgid "Database login data"
+msgstr "Database login gegevens"
+
+#: /Users/bas/Sites/viennacms/install/tpl/install.php:62
+msgid "Database server (mostly localhost)"
+msgstr "Databaseserver (meestal localhost)"
+
+#: /Users/bas/Sites/viennacms/install/tpl/install.php:67
+msgid "Database user name"
+msgstr "Database-gebruikersnaam"
+
+#: /Users/bas/Sites/viennacms/install/tpl/install.php:71
+msgid "Database password"
+msgstr "Databasewachtwoord"
+
+#: /Users/bas/Sites/viennacms/install/tpl/install.php:76
+msgid "Database name"
+msgstr "Databasenaam"
+
+#: /Users/bas/Sites/viennacms/install/tpl/install.php:80
+msgid "Table prefix"
+msgstr "Tabel prefix"
+
+#: /Users/bas/Sites/viennacms/install/tpl/install.php:84
+msgid "Database Type"
+msgstr "Databasetype"
+
+#: /Users/bas/Sites/viennacms/install/tpl/install.php:87
+msgid "MySQL 5 or higher"
+msgstr "MySQL 5 of hoger"
+
+#: /Users/bas/Sites/viennacms/install/tpl/install.php:93
+msgid "Admin information"
+msgstr "Beheerdersinformatie"
+
+#: /Users/bas/Sites/viennacms/install/tpl/install.php:105
+msgid "Confirm password"
+msgstr "Bevestig wachtwoord"
+
+#: /Users/bas/Sites/viennacms/install/tpl/install.php:111
+msgid "The installation of viennaCMS is now complete. Click Next to go to your new site."
+msgstr "De installatie van viennaCMS is nu voltooid. Klik op Volgende om naar je nieuwe site te gaan."
+
+#: /Users/bas/Sites/viennacms/install/tpl/install.php:125
+#: /Users/bas/Sites/viennacms/install/tpl/upgrade.php:45
+msgid "Back"
+msgstr "Terug"
+
+#: /Users/bas/Sites/viennacms/install/tpl/install.php:126
+#: /Users/bas/Sites/viennacms/install/tpl/upgrade.php:46
+msgid "Restart"
+msgstr "Start opnieuw"
+
+#: /Users/bas/Sites/viennacms/install/tpl/install.php:127
+#: /Users/bas/Sites/viennacms/install/tpl/upgrade.php:47
+msgid "Next"
+msgstr "Volgende"
+
+#: /Users/bas/Sites/viennacms/install/tpl/upgrade.php:17
+msgid "viennaCMS upgrade wizard!"
+msgstr "viennaCMS-upgradewizard!"
+
+#: /Users/bas/Sites/viennacms/install/tpl/upgrade.php:27
+msgid "Welcome to the viennaCMS upgrade wizard. This wizard will upgrade your database to the current version. Click Next to start the upgrade."
+msgstr "Welkom bij de upgradewizard van viennaCMS. Deze wizard zal je database naar de huidige versie bijwerken. Klik op Volgende om de upgrade te beginnen."
+
+#: /Users/bas/Sites/viennacms/install/tpl/upgrade.php:31
+#, php-format
+msgid "The upgrade has completed. If there are any errors above, please visit our <a href=\"%s\">support forums</a>."
+msgstr "De upgrade is voltooid. Als hierboven foutmeldingen staan, bezoek onze <a href=\"%s\">supportfora</a>."
+
+#: /Users/bas/Sites/viennacms/styles/blue/index.php:17
+#: /Users/bas/Sites/viennacms/styles/blue/index.php:24
+#: /Users/bas/Sites/viennacms/styles/default/index.php:29
+#: /Users/bas/Sites/viennacms/styles/default/index.php:37
+#: /Users/bas/Sites/viennacms/styles/default/index.php:45
+msgid "Navigation"
+msgstr "Navigatie"
+
+#: /Users/bas/Sites/viennacms/styles/blue/index.php:33
+#: /Users/bas/Sites/viennacms/styles/default/index.php:12
+msgid "ACP"
+msgstr "Beheerderspaneel"
+
+#~ msgid " not given!"
+#~ msgstr "  niet gegeven!"
+#~ msgid ""
+#~ "The clean title for the node. If empty, this will be automatically "
+#~ "generated. Also, when changing the title, this will also be generated."
+#~ msgstr ""
+#~ "Opgeschoonde titel. Als dit leeg is, zal dit automatisch gegenereerd "
+#~ "worden, wat ook gebeurd als de titel wordt veranderd."
+#~ msgid "Options for this node"
+#~ msgstr "Opties voor deze node"
+#~ msgid ""
+#~ "An sql error occurred while fetching this page. Please contact an "
+#~ "administrator if this problem persists."
+#~ msgstr ""
+#~ "Er is een SQL fout opgetreden toen deze pagina werd gegenereerd. Neem "
+#~ "alstublieft contact op met de beheerder als dit probleem zich blijft "
+#~ "voordoen."
+#~ msgid "viennaCMS ACP - Edit node order"
+#~ msgstr "viennaCMS Beheerderspaneel - Wijzig de volgorde van deze nodes"
+#~ msgid "Node"
+#~ msgstr "Node"
+#~ msgid "viennaCMS ACP - Edit this node"
+#~ msgstr "viennaCMS Beheerderspaneel - Wijzig deze node"
+#~ msgid "Parent dir"
+#~ msgstr "Ouder"
+#~ msgid "The parent dir for the new node. This is not required."
+#~ msgstr "Stam van deze node. Dit is niet verplicht."
+#~ msgid "Show example"
+#~ msgstr "Laat voorbeeld zien"
+#~ msgid "Rewrite"
+#~ msgstr "Herschrijf"
+#~ msgid ""
+#~ "Use mod_rewrite for this site? Leave empty to disable, else type \"on\"."
+#~ msgstr ""
+#~ "Gebruik mod_rewrite (mooie URLs)? Laat dit leeg als je dit niet wilt, als "
+#~ "je het wel wilt typ je hier \"on\" in."
+
