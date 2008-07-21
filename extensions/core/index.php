@@ -1144,6 +1144,12 @@ CSS;
 		$do = (isset($args['do'])) ? $args['do'] : 'show';
 		
 		switch ($mode) {
+			case 'purge_cache':
+				global $cache;
+				$cache->purge();
+				echo __('Cache was succesfully purged');
+			break;
+			
 			case 'performance':
 				$forms = array(
 					__('Page caching') => array(
@@ -1588,7 +1594,10 @@ CSS;
 	
 	function admin_left_site_config()
 	{
-		echo '<ul class="nodes" style="display: block;"><li><a href="' . admin::get_callback(array('core', 'admin_config'), array('mode' => 'performance')) . '" class="page">' .  __('Performance') . '</a></li></ul>';
+		echo '<ul class="nodes" style="display: block;">';
+		echo '<li><a href="' . admin::get_callback(array('core', 'admin_config'), array('mode' => 'performance')) . '" class="page">' .  __('Performance') . '</a></li>';
+		echo '<li><a href="' . admin::get_callback(array('core', 'admin_config'), array('mode' => 'purge_cache')) . '" class="page">' .  __('Purge cache') . '</a></li>';
+		echo '</ul>';
 	}
 	
 	
