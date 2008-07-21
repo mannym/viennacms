@@ -195,6 +195,7 @@ function updateNodeLinks() {
 	$('#tree-left li a').after(' <a href="#" class="nudl" style="display: inline; padding: 0px; margin-right: 3px;" onclick="upMyNode(this.parentNode.id, this.parentNode.parentNode.id); return false;">^</a><a href="#" class="nudl" style="display: inline; padding: 0px;" onclick="downMyNode(this.parentNode.id, this.parentNode.parentNode.id); return false;">v</a>');
 	$('a.addnode + .nudl').remove();
 	$('a.addnode + .nudl').remove(); // needs this to get rid of the second one :)
+	orderOn = true;
 }
 
 function downMyNode(id, parent) {
