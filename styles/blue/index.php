@@ -29,8 +29,9 @@
 			<br /><?php endif; ?><?php if ($left) : ?>
 			<?php echo $left ?><?php endif; ?>
 		</div>
-		<div class="header">
-			<h1><?php echo $sitename ?></h1>
+		<div class="header">		
+			<div style="text-align: right; text-decoration: underline;"><a href="adm/" style="color: black;"><?php echo __('ACP'); ?></a></div><br />
+			<h1><?php echo $sitename ?></h1>			
 		</div>
 		<div id="navcontainer">
 			<ul id="navlist">
