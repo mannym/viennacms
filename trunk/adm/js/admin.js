@@ -114,6 +114,29 @@ function reload_contents(id) {
         return false;
 	});
 	
+	$('form.upload').submit(function() {
+		loading();
+		$.ajaxFileUpload
+		(
+		    {
+		        url: $(this).attr('action'),
+		        fileElementId: 'file',
+		        dataType: 'json',
+		        success: function (data, status)
+		        {
+		            $('#system-right').html(output);
+					if (output == 'reload') {
+						reload_topbar();
+						load_main_option(id);
+					}
+					reload_contents(id);
+                	unloading();
+		        }
+		    }
+		);
+		return false;
+	});
+	
 	$("#system-right .nodes").treeview({
 				persist: "cookie",
 				collapsed: true,

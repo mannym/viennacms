@@ -65,7 +65,6 @@ class admin {
 				<?php
 			}
 			?>
-			</ul>
 			</div>
 			<?php
 		}
@@ -114,6 +113,7 @@ class admin {
 	<script type="text/javascript" src="js/jquery.cookie.js"></script>
 	<script type="text/javascript" src="js/jquery.form.js"></script>
 	<script type="text/javascript" src="js/jquery.treeview.js"></script>
+	<script type="text/javascript" src="js/jquery.upload.js"></script>
 	<script type="text/javascript" src="js/admin.js"></script>
 	<script type="text/javascript" src="js/selectnode.js"></script>
 		<script language="javascript" type="text/javascript" src="../includes/js/tinymce/tiny_mce.js"></script>

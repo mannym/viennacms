@@ -162,7 +162,7 @@ CSS;
 		
 		if ($show) {
 			if ($node->node_id != 0) {
-				$list .= '<li><a href="admin_files.php?mode=options&amp;node=' . $node->node_id . '" class="' . $node->type . '">' . $node->title . '</a>' . "\r\n";			
+				$list .= '<li><a href="index.php?action=show_actions&amp;id=files&amp;node=' . $node->node_id . '" class="' . $node->type . '">' . $node->title . '</a>' . "\r\n";			
 			}
 			
 			$nodes = $node->get_children();
@@ -218,8 +218,12 @@ CSS;
 		$txt_file = __ ( 'File' ) ;
 		$txt_desc = __ ( 'The file that should be uploaded' ) ;
 		$txt_save = __ ( "Upload" ) ;
+		$action	= admin::get_callback(array('files', 'admin_files'), array(
+			'folder' => $folder_id,
+			'mode' => 'save'
+		));
 		$content = <<<CONTENT
-		 <form enctype="multipart/form-data" action="?mode=save" method="post">
+		 <form enctype="multipart/form-data" action="$action" class="upload" method="post">
 			<table>
 				<tr>
 					<td width="70%">
@@ -228,9 +232,7 @@ CSS;
 					</td>
 					
 					<td width="30%">
-						<input type="hidden" name="MAX_FILE_SIZE" value="10000000">
-						<input type="hidden" name="folder" value="$folder_id" />
-						<input name="file" type="file">
+						<input name="file" id="file" type="file" />
 					</td>
 				</tr>
 				<tr>
@@ -304,7 +306,7 @@ CONTENT;
 			if ($file['error'] == 1) {
 				$file['error'] = 'File too big.';
 			}
-			trigger_error($file [ 'error' ]);
+			echo($file [ 'error' ]);
 			return false ;
 		}
 		$md5 = $this->upload_file ( $file ) ;
@@ -312,14 +314,14 @@ CONTENT;
 			return false;
 		}
 		if (empty ( $file [ 'type' ] ) || strlen ( $file [ 'type' ] ) < 5) {
-			trigger_error ( __ ( "We need a valid mime content type" ), E_USER_ERROR ) ;
+			echo ( __ ( "We need a valid mime content type" ) ) ;
 			return false ;
 		}
 		$type = $file [ 'type' ];
 		$name = $file [ 'name' ];
 		
 		if ($folder->type != 'fileroot') {
-			trigger_error(__('Invalid folder ID'), E_USER_ERROR);
+			echo(__('Invalid folder ID'));
 			return false;
 		}
 		
@@ -680,6 +682,345 @@ CONTENT;
 		$text .= '<input type="hidden" name="' . $name . '" id="' . $name . '" />';
 		
 		return $text;
+	}
+
+	function admin_get_actions($id) {
+		utils::get_types();
+		$node = new CMS_Node();
+		$node->node_id = intval($_GET['node']);
+		$node->read();	
+		if ($id == 'files') {
+			if ($node->type == 'fileroot') {
+				return array(
+					'options' => array(
+						'title' => __('Options'),
+						'image' => 'adm/style/images/applications.png',
+						'data' => array(
+							'newfolder' => array(
+								'title' => __('Create a new folder'),
+								'callback' => array('files', 'admin_files'),
+								'params' => array(
+									'mode' => 'folder'
+								),
+								'image' => 'adm/images/add.png',
+								'description' => __('Create a new folder under this folder.')
+							),
+							'upload_file' => array(
+								'title' => __('Upload a new file'),
+								'callback' => array('files', 'admin_files'),
+								'params' => array(
+									'mode' => 'upload'
+								),
+								'image' => 'adm/images/edit.png',
+								'description' => __('Upload a new file in this folder.')
+							),
+						)
+					),
+					'structure' => array(
+						'title' => __('Structure'),
+						'image' => 'adm/style/images/applications.png',
+						'data' => array(
+							'folder_delete' => array(
+								'title' => __('Delete folder'),
+								'callback' => array('files', 'admin_files'),
+								'params' => array(
+									'node' => $_GET['node'],
+									'mode' => 'deletefolder'
+								),
+								'image' => 'adm/images/edit_remove.png',
+								'description' => __('Delete this folder permanently.')
+							)
+						)
+					),
+				);
+			} else if ($node->type == 'file') {
+				return array(
+					'options' => array(
+						'title' => __('Options'),
+						'image' => 'adm/style/images/applications.png',
+						'data' => array(
+							'file_delete' => array(
+								'title' => __('Delete file'),
+								'callback' => array('files', 'admin_files'),
+								'params' => array(
+									'node' => $_GET['node'],
+									'mode' => 'deletefile'
+								),
+								'image' => 'adm/images/edit_remove.png',
+								'description' => __('Delete this file permanently.')
+							),
+							'file_downloads' => array(
+								'title' => __('View downloads'),
+								'callback' => array('files', 'admin_files'),
+								'params' => array(
+									'node' => $_GET['node'],
+									'mode' => 'downloadpopup'
+								),
+								'image' => 'adm/images/revisions.png',
+								'description' => sprintf(__('View all downloads of this file. Download count: %d'), $node->options['downloads'])
+							),
+						)
+					)
+				);
+			}
+		}
+	}
+	
+	function admin_get_mainitems() {
+		return array(
+			'files'	=> array(
+				'image' => 'adm/style/images/files.png',
+				'title'	=> __('Files'),
+				'extension'	=> 'files',
+			),
+		);
+	}
+	
+	function admin_files($args)
+	{
+		global $cache;
+		//$files = utils::load_extension('files');
+		
+		if(isset($args['mode']))
+			$mode = $args['mode'];
+		else
+			$mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'detail';
+
+		switch($mode) {
+			case 'save':
+				$folder_id = $args['folder'];
+				$folder = new CMS_Node();
+				$folder->node_id = $folder_id;
+				$folder->read();
+				
+				$new = $this->handle_file_upload($folder, 'file');
+				$cache->destroy('_url_callbacks_' . md5(''));
+				$cache->destroy('_url_callbacks_' . md5($_SERVER['HTTP_HOST']));
+				echo 'reload';
+				//header('Location: admin_files.php?mode=options&node=' . $new->node_id);
+				exit;
+			break;
+				
+			case 'upload':
+				if (isset($args['node'])) {
+					$folder_id = intval($args['node']);
+					$folder = new CMS_Node();
+					$folder->node_id = $folder_id;
+					$folder->read();
+				} else {
+					$folder = $this->get_root();
+				}
+				if(!is_writable(ROOT_PATH . 'files/')) {
+					echo '<div style="color: red;">' . 
+					sprintf(__('Folder %s is not writable'), 'files/') . 
+					'</div>';
+					return false;
+				}
+				echo '<h1>' . sprintf(__('Upload a new file in %s'), $folder->title) . '</h1>';
+				$this->upload_form($folder->node_id);
+			break;
+			case 'savefolder':
+				$node_id = $_POST['parent'];
+				$node = new CMS_Node();
+				$node->node_id = intval($node_id);
+				$node->read();
+				$new = $this->create_folder($_POST['name'], $node);
+				
+				echo 'reload';
+				exit;
+			break;
+			case 'folder':
+				?>
+				<form action="<?php echo admin::get_callback(array('files', 'admin_files'), array('mode' => 'savefolder')); ?>" method="post" style="padding-top: 10px;">
+					<?php echo __('Folder name') ?>: 
+					<input type="text" name="name" /><br />
+					<input type="hidden" name="parent" value="<?php echo $args['node'] ?>" />
+					<input type="submit" value="<?php echo __('Save') ?>" />
+				</form>
+				<?php
+			break;
+			case 'deletefile':
+				?>
+				<form action="<?php echo admin::get_callback(array('files', 'admin_files'), array('mode' => 'deletefiledo')); ?>" method="post">
+					<div style="color: red;"><?php echo __("Are you sure you want to delete this file? This cannot be undone."); ?></div>
+					<input type="hidden" name="node" value="<?php echo $args['node']; ?>" />
+					<input type="submit" name="submit" value="<?php echo __("Submit"); ?>" />
+				</form>
+				<?php
+			break;
+			
+			case 'deletefiledo':
+				$node_id = $_POST['node'];
+				$node = new CMS_Node();
+				$node->node_id = intval($node_id);
+				$node->read();
+				@unlink($this->getuploaddir ( ROOT_PATH ) . $node->description . '.upload');
+				$sql = "DELETE FROM " . NODES_TABLE . "
+						 WHERE node_id = " . $node->$node_id;
+				$db->sql_query($sql);
+		
+				echo 'reload';
+				exit;		
+			break;
+			case 'deletefolder':
+				?>
+					<div style="color: red;"><?php echo __("Do you want to delete the files and folders in this folder, or move them to the parent folder?"); ?></div>
+				<form action="<?php echo admin::get_callback(array('files', 'admin_files'), array('mode' => 'deletefolderdo', 'do' => 'delete')); ?>" method="post" style="display: inline;">
+					<input type="hidden" name="node" value="<?php echo $args['node']; ?>" />
+					<input type="submit" name="submit" value="<?php echo __("Delete"); ?>" />
+				</form>
+				<form action="<?php echo admin::get_callback(array('files', 'admin_files'), array('mode' => 'deletefolderdo', 'do' => 'move')); ?>" method="post" style="display: inline;">
+					<input type="hidden" name="node" value="<?php echo $args['node']; ?>" />
+					<input type="submit" name="submit" value="<?php echo __("Move"); ?>" />
+				</form>
+				<?php
+			break;
+			case 'deletefolderdo':
+				$node_id = intval($_POST['node']);
+				$node = new CMS_Node();
+				$node->node_id = $node_id;
+				$node->read();
+				if ($args['do'] == 'move') {
+					if ($node->parent_id == 0) {
+						echo __('You cannot delete the root');
+						exit;
+					}
+					$sql = "DELETE FROM " . NODES_TABLE . "
+							WHERE node_id = " . $node_id;
+					$db->sql_query($sql);
+					$sql = "UPDATE " . NODES_TABLE . " SET parent_id = {$node->parent_id} WHERE parent_id = {$node_id}";
+					$db->sql_query($sql);
+				} else if ($args['do'] == 'delete') {
+					if ($node->parent_id == 0) {
+						echo __('You cannot delete the root');
+						exit;
+					}
+					
+					$this->recursive_delete($node);
+				}
+		
+				echo 'reload';
+				exit;
+				return;
+			break;
+			
+			case 'options':
+			default:
+				if (!isset($args['node'])) {
+					$node = $this->get_root();
+				} else {
+					$node_id = intval($args['node']);
+					$node = new CMS_Node();
+					$node->node_id = $node_id;
+					$node->read();
+				}
+				$page = page::getnew(false);
+				
+				switch ($node->type) {
+					case 'fileroot':
+						?>
+						<h1><?php echo sprintf(__('Actions for %s'), $node->title); ?></h1>
+						<p class="icon_p"><a href="admin_files.php?node=<?php echo $node->node_id ?>&amp;mode=folder"><img src="images/add.png" /><br /><?php echo __('Create a new folder') ?></a><br /><?php echo __('Create a new folder under this folder.') ?></p>
+						<p class="icon_p"><a href="admin_files.php?node=<?php echo $node->node_id ?>&amp;mode=upload"><img src="images/edit.png" /><br /><?php echo __('Upload a new file') ?></a><br /><?php echo __('Upload a new file in this folder.') ?></p>
+						<p class="icon_p"><a href="admin_files.php?node=<?php echo $node->node_id ?>&amp;mode=deletefolder"><img src="images/edit_remove.png" /><br /><?php echo __('Delete') ?></a><br /><?php echo __('Delete this folder from the file system') ?></p>
+						<?php
+					break;
+					case 'file':
+						?>
+						<h1><?php echo sprintf(__('Actions for %s'), $node->title); ?></h1>
+						<p class="icon_p"><a href="admin_files.php?node=<?php echo $node->node_id ?>&amp;mode=deletefile"><img src="images/edit_remove.png" /><br /><?php echo __('Delete') ?></a><br /><?php echo __('Delete this file from the file system') ?></p>
+						<p class="icon_p"><a href="<?php echo '../' . $page->get_link($node) ?>"><img src="images/revisions.png" /><br /><?php echo __('Download') ?></a><br /><?php echo __('Download this file') ?></p>
+						<div>Total downloads: <?php echo $node->options['downloads'] ?>.<p />
+						<a href="#" onclick="window.open('./admin_files.php?mode=downloadpopup&node=<?php echo $node->node_id ?>', 'downloadpopup', 'height=500px,scrollbars=yes,width=800px');"><?php echo __('View all download details'); ?></a>
+						<?php
+					break;
+				}
+			break;
+			
+			case 'downloadpopup':
+				if (!isset($args['node'])) {
+					$node = $this->get_root();
+				} else {
+					$node_id = intval($args['node']);
+					$node = new CMS_Node();
+					$node->node_id = $node_id;
+					$node->read();
+				}
+				$start = empty($args['start']) ? 0 : intval($args['start']);
+				$end = $start + 10;
+				$db = database::getnew();
+				$dl_count = $node->options['downloads'];
+				$page = page::getnew(false);
+				$page->sitenode->options['rewrite'] = 'on';
+				$sql = 'SELECT *
+						FROM ' . DOWNLOADS_TABLE . '
+						WHERE file_id = ' . intval($node->node_id) . "
+						ORDER BY time DESC
+						LIMIT $start,$end";
+				$result = $db->sql_query($sql);
+				?>
+				<h1><?php echo sprintf(__('Downloads for %s'), $node->title); ?></h1>
+				<table>
+					<tr>
+						<th width="100px"><?php echo __('IP address') ?></th>
+						<th width="200px"><?php echo __('Referer') ?></th>
+						<th width="200px;"><?php echo __('User agent') ?></th>
+						<th width="100px"><?php echo __('Time') ?></th>
+					</tr>
+					<?php
+					while ($row = $db->sql_fetchrow($result)) {
+						?>
+					<tr>
+						<td><?php echo (!empty($row['forwarded_for'])) ? $row['forwarded_for'] : $row['ip'] ?></td>
+						<td><?php echo wordwrap(htmlspecialchars($row['referer']), 30, "<br />\r\n", true) ?></td>
+						<td><?php echo htmlspecialchars($row['user_agent']) ?></td>
+						<td> <?php echo date('d-m-Y G:i:s', $row['time']) ?></td>
+					</tr><?php
+					}?>
+				</table>
+				<?php if(!$start < $dl_count) {
+					$pargs = $args;
+					$pargs['start'] = $start - 10;
+				?>
+				<a href="<?php echo admin::get_callback(array('files', 'admin_files'), $pargs) ?>">&laquo;&laquo;</a> 
+				<?php } ?>
+				<?php if($dl_count > $end) {
+					$pargs = $args;
+					$pargs['start'] = $start + 10;
+				?>
+				<div style="text-align: right; padding-right: 50px;"><a href="<?php echo admin::get_callback(array('files', 'admin_files'), $pargs) ?>">&raquo;&raquo;</a></div>
+				<?php }
+			break;
+		}		
+	}
+
+		
+	function recursive_delete($node) {
+		global $files;
+		
+		$db = database::getnew();
+		@unlink($files->getuploaddir ( ROOT_PATH ) . $node->description . '.upload');
+		$sql = "DELETE FROM " . NODES_TABLE . "
+				 WHERE node_id = " . $node->node_id;
+		$db->sql_query($sql);
+	
+		$nodes = $node->get_children();
+		foreach ($nodes as $cnode) {
+			recursive_delete($cnode);
+		}
+		
+	}
+	
+	function admin_left_files()
+	{
+		define('IN_FILES', true); // this is why it wouldn't work
+		?>
+		<ul class="nodes">
+		<?php
+		$this->get_admin_tree();
+		?>
+		</ul>
+		<?php
 	}
 }
 ?>
