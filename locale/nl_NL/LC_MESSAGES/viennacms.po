@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: viennaCMS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-20 21:09+0100\n"
-"PO-Revision-Date: 2008-07-20 21:10+0100\n"
+"POT-Creation-Date: 2008-07-21 12:13+0100\n"
+"PO-Revision-Date: 2008-07-21 12:14+0100\n"
 "Last-Translator: Bas <translation@dotbas.net>\n"
 "Language-Team: viennaCMS developers <developers@viennainfo.nl>\n"
 "MIME-Version: 1.0\n"
@@ -572,7 +572,7 @@ msgstr "Koppeling"
 #: /Users/bas/Sites/viennacms/extensions/core/index.php:52
 #: /Users/bas/Sites/viennacms/extensions/core/index.php:60
 #: /Users/bas/Sites/viennacms/extensions/core/index.php:508
-#: /Users/bas/Sites/viennacms/extensions/core/index.php:579
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:586
 msgid "Content"
 msgstr "Inhoud"
 
@@ -648,52 +648,55 @@ msgstr "Configuratie"
 msgid "Logout"
 msgstr "Uitloggen"
 
-#: /Users/bas/Sites/viennacms/extensions/core/index.php:534
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:541
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:696
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:741
 msgid "Options"
 msgstr "Opties"
 
-#: /Users/bas/Sites/viennacms/extensions/core/index.php:545
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:552
 msgid "Edit the details of this node, like the title and description."
 msgstr "Wijzig de details van deze node, zoals de titel en de beschrijving."
 
-#: /Users/bas/Sites/viennacms/extensions/core/index.php:554
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:561
 msgid "Edit the options of this node, like for example the template, or a link target."
 msgstr "Bewerk de opties van deze node, bijvoorbeeld de template, of het doel van een koppeling."
 
-#: /Users/bas/Sites/viennacms/extensions/core/index.php:559
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:566
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:722
 msgid "Structure"
 msgstr "Structuur"
 
-#: /Users/bas/Sites/viennacms/extensions/core/index.php:569
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:576
 msgid "Delete this node permanently."
 msgstr "Verwijder deze node permanent."
 
-#: /Users/bas/Sites/viennacms/extensions/core/index.php:606
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:613
 msgid "Add or edit the modules in this node."
 msgstr "Voeg modules toe, of wijzig de modules in deze node."
 
-#: /Users/bas/Sites/viennacms/extensions/core/index.php:626
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:633
 msgid "View older versions"
 msgstr "Bekijk oudere versies"
 
-#: /Users/bas/Sites/viennacms/extensions/core/index.php:632
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:639
 msgid "View older versions of this node, which are saved automatically while editing."
 msgstr "Bekijk oudere versies van deze node, welke automatisch bewaard worden bij bewerken."
 
-#: /Users/bas/Sites/viennacms/extensions/core/index.php:637
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:644
 msgid "Actions"
 msgstr "Acties"
 
-#: /Users/bas/Sites/viennacms/extensions/core/index.php:1590
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:1613
 msgid "To edit the site structure, select a node to edit on the left. To add a new node, click the Add button below a node."
 msgstr "Om de sitestructuur aan te passen, moet je links een node kiezen om aan te passen. Je kan ook op Toevoegen klikken bij een node om een nieuwe node toe te voegen."
 
-#: /Users/bas/Sites/viennacms/extensions/core/index.php:1600
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:1623
 msgid "In this menu, you can manage the content of your nodes. To begin, select a node on the left."
 msgstr "In dit menu kun je de inhoud van je nodes aanpassen. Kies een node links om te beginnen."
 
 #: /Users/bas/Sites/viennacms/extensions/files/index.php:218
-#: /Users/bas/Sites/viennacms/extensions/files/index.php:595
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:597
 msgid "File"
 msgstr "Bestand"
 
@@ -705,34 +708,59 @@ msgstr "Het bestand dat geupload moet worden."
 msgid "Upload"
 msgstr "Upload"
 
-#: /Users/bas/Sites/viennacms/extensions/files/index.php:315
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:317
 msgid "We need a valid mime content type"
 msgstr "We hebben een geldig inhoudstype nodig."
 
-#: /Users/bas/Sites/viennacms/extensions/files/index.php:322
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:324
 msgid "Invalid folder ID"
 msgstr "Ongeldig mapnummer"
 
-#: /Users/bas/Sites/viennacms/extensions/files/index.php:406
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:408
 msgid "This file does not exist"
 msgstr "Dit bestand bestaat niet"
 
-#: /Users/bas/Sites/viennacms/extensions/files/index.php:472
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:474
 msgid "Files extension"
 msgstr "Bestandsextensie"
 
-#: /Users/bas/Sites/viennacms/extensions/files/index.php:473
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:475
 msgid "Extension for uploading and downloading files"
 msgstr "Extensie om bestanden te downloaden en uploaden."
 
-#: /Users/bas/Sites/viennacms/extensions/files/index.php:590
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:592
 msgid "View the full image"
 msgstr "Bekijk de volledige afbeelding"
 
-#: /Users/bas/Sites/viennacms/extensions/files/index.php:595
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:597
 #, php-format
 msgid "Download %s<br />(%d kB)"
 msgstr "Download %s<br />(%d kB)"
+
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:726
+msgid "Delete folder"
+msgstr "Verwijder deze map"
+
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:733
+msgid "Delete this folder permanently."
+msgstr "Verwijder deze map permanent."
+
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:745
+msgid "Delete file"
+msgstr "Verwijder dit bestand"
+
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:752
+msgid "Delete this file permanently."
+msgstr "Verwijder dit bestand permanent."
+
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:755
+msgid "View downloads"
+msgstr "Bekijk downloads"
+
+#: /Users/bas/Sites/viennacms/extensions/files/index.php:762
+#, php-format
+msgid "View all downloads of this file. Download count: %d"
+msgstr "Bekijk alle downloads van dit bestand. Momenteel %d keer gedownload."
 
 #: /Users/bas/Sites/viennacms/extensions/form/index.php:179
 msgid "Subject"
@@ -883,36 +911,36 @@ msgid "General Error"
 msgstr "Algemene fout"
 
 #: /Users/bas/Sites/viennacms/includes/utils.php:440
-#: /Users/bas/Sites/viennacms/includes/utils.php:457
-#: /Users/bas/Sites/viennacms/includes/utils.php:468
+#: /Users/bas/Sites/viennacms/includes/utils.php:454
+#: /Users/bas/Sites/viennacms/includes/utils.php:469
 msgid "Information"
 msgstr "Informatie"
 
-#: /Users/bas/Sites/viennacms/includes/utils.php:704
+#: /Users/bas/Sites/viennacms/includes/utils.php:705
 msgid "half an hour"
 msgstr "een half uur"
 
-#: /Users/bas/Sites/viennacms/includes/utils.php:708
+#: /Users/bas/Sites/viennacms/includes/utils.php:709
 msgid "an hour"
 msgstr "een uur"
 
-#: /Users/bas/Sites/viennacms/includes/utils.php:712
+#: /Users/bas/Sites/viennacms/includes/utils.php:713
 msgid "two hours"
 msgstr "twee uur"
 
-#: /Users/bas/Sites/viennacms/includes/utils.php:716
+#: /Users/bas/Sites/viennacms/includes/utils.php:717
 msgid "six hours"
 msgstr "zes uur"
 
-#: /Users/bas/Sites/viennacms/includes/utils.php:720
+#: /Users/bas/Sites/viennacms/includes/utils.php:721
 msgid "twelve hours"
 msgstr "twaalf uur"
 
-#: /Users/bas/Sites/viennacms/includes/utils.php:724
+#: /Users/bas/Sites/viennacms/includes/utils.php:725
 msgid "an day"
 msgstr "een dag"
 
-#: /Users/bas/Sites/viennacms/includes/utils.php:728
+#: /Users/bas/Sites/viennacms/includes/utils.php:729
 msgid "two days"
 msgstr "twee dagen"
 
