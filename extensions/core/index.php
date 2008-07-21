@@ -1147,7 +1147,8 @@ CSS;
 			case 'purge_cache':
 				global $cache;
 				$cache->purge();
-				echo __('Cache was succesfully purged');
+				echo __('Cache was succesfully purged.');
+				return;
 			break;
 			
 			case 'performance':
