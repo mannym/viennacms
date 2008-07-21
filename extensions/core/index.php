@@ -1194,8 +1194,10 @@ CSS;
 			break;
 			case 'show':
 				$form = utils::load_extension('form');
+				$sargs = $args;
+				$sargs['do'] = 'save';
 				foreach ($forms as $title => $frm) {
-					$form->action = admin::get_callback(array('core', 'admin_config'), $args);
+					$form->action = admin::get_callback(array('core', 'admin_config'), $sargs);
 					$form->submit = __('Save');
 					$form->setformfields($frm);
 					$form->title = $title;
@@ -1586,7 +1588,7 @@ CSS;
 	
 	function admin_left_site_config()
 	{
-		echo '<ul class="nodes" style="display: block;"><li><a href="admin_config.php?mode=performance" class="page">' .  __('Performance') . '</a></li></ul>';
+		echo '<ul class="nodes" style="display: block;"><li><a href="' . admin::get_callback(array('core', 'admin_config'), array('mode' => 'performance')) . '" class="page">' .  __('Performance') . '</a></li></ul>';
 	}
 	
 	
