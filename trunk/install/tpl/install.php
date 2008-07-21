@@ -86,7 +86,7 @@
 				<select name="dbms">
 					<option value="mysql"><?php echo __('MySQL 5 or higher') ?></option>
 					<option value="sqlite">SQLite</option>
-					<option value="postgres">PostgreSQL</option>
+					<!-- <option value="postgres">PostgreSQL</option> -->
 				</select>
 			</td>
 		</tr>
