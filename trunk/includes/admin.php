@@ -15,8 +15,12 @@ class admin {
 	static function get_main() {
 		$items = utils::run_hook_all('admin_get_mainitems');
 		foreach ($items as $id => $item) {
+			$class = '';
+			if (!empty($item['class'])) {
+				$class = ' class="' . $item['class'] . '"';
+			}
 			?>
-			<a href="#" onclick="load_main_option('<?php echo $id ?>'); return false;">
+			<a href="#" onclick="load_main_option('<?php echo $id ?>'); return false;"<?php echo $class ?>>
 				<img src="../<?php echo $item['image'] ?>" alt="<?php echo $item['title'] ?>" />
 				<span><?php echo $item['title'] ?></span>
 			</a>	
