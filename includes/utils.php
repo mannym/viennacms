@@ -443,20 +443,23 @@ HTML;
 					echo <<<HTML
 <html>
 	<head>
-		<title>$header_title &bull; $page_title</title>
-		<link rel="stylesheet" href="admin.css" />
+		<title><?php echo __("Login") ?></title>
+		<link rel="stylesheet" href="style/style.css" />
 	</head>
 	<body>
-		<div id="wrap">
-			<div id="header">
-				<div style="text-align: right; color: black !important;"><a href="../">$view_site</a></div>
-				<h1>$header_title</h1>
-			</div>
-			<div id="right">
+<div id="main-items">
+</div>
+<div id="tree-left">
+</div>
+<div id="system-right">
 HTML;
 					echo '<h1>' . __('Information') . "</h1>\r\n<div>";
 					echo $msg_text . '<br /><br /></div>';
-					include('./footer.php');
+					echo <<<HTML
+		</div>
+	</body>
+</html>
+HTML;
 					exit;
 				}
 				
