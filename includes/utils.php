@@ -438,12 +438,10 @@ HTML;
 			case E_USER_NOTICE:
 				if (defined('IN_ADMIN')) {
 					$page_title = __('Information');
-					$header_title = __('viennaCMS ACP');
-					$view_site = __('View site');
 					echo <<<HTML
 <html>
 	<head>
-		<title><?php echo __("Login") ?></title>
+		<title><$page_title</title>
 		<link rel="stylesheet" href="style/style.css" />
 	</head>
 	<body>
