@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: viennaCMS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-21 12:13+0100\n"
-"PO-Revision-Date: 2008-07-21 12:14+0100\n"
+"POT-Creation-Date: 2008-07-21 14:19+0100\n"
+"PO-Revision-Date: 2008-07-21 14:19+0100\n"
 "Last-Translator: Bas <translation@dotbas.net>\n"
 "Language-Team: viennaCMS developers <developers@viennainfo.nl>\n"
 "MIME-Version: 1.0\n"
@@ -649,8 +649,6 @@ msgid "Logout"
 msgstr "Uitloggen"
 
 #: /Users/bas/Sites/viennacms/extensions/core/index.php:541
-#: /Users/bas/Sites/viennacms/extensions/files/index.php:696
-#: /Users/bas/Sites/viennacms/extensions/files/index.php:741
 msgid "Options"
 msgstr "Opties"
 
@@ -663,7 +661,6 @@ msgid "Edit the options of this node, like for example the template, or a link t
 msgstr "Bewerk de opties van deze node, bijvoorbeeld de template, of het doel van een koppeling."
 
 #: /Users/bas/Sites/viennacms/extensions/core/index.php:566
-#: /Users/bas/Sites/viennacms/extensions/files/index.php:722
 msgid "Structure"
 msgstr "Structuur"
 
@@ -687,11 +684,19 @@ msgstr "Bekijk oudere versies van deze node, welke automatisch bewaard worden bi
 msgid "Actions"
 msgstr "Acties"
 
-#: /Users/bas/Sites/viennacms/extensions/core/index.php:1613
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:1150
+msgid "Cache was succesfully purged."
+msgstr "De buffer is succesvol geleegd."
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:1600
+msgid "Purge cache"
+msgstr "Leeg buffer"
+
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:1625
 msgid "To edit the site structure, select a node to edit on the left. To add a new node, click the Add button below a node."
 msgstr "Om de sitestructuur aan te passen, moet je links een node kiezen om aan te passen. Je kan ook op Toevoegen klikken bij een node om een nieuwe node toe te voegen."
 
-#: /Users/bas/Sites/viennacms/extensions/core/index.php:1623
+#: /Users/bas/Sites/viennacms/extensions/core/index.php:1635
 msgid "In this menu, you can manage the content of your nodes. To begin, select a node on the left."
 msgstr "In dit menu kun je de inhoud van je nodes aanpassen. Kies een node links om te beginnen."
 
@@ -1115,6 +1120,7 @@ msgstr "De upgrade is voltooid. Als hierboven foutmeldingen staan, bezoek onze <
 msgid "Navigation"
 msgstr "Navigatie"
 
+#: /Users/bas/Sites/viennacms/styles/blue/index.php:33
 #: /Users/bas/Sites/viennacms/styles/default/index.php:12
 msgid "ACP"
 msgstr "Beheerderspaneel"
