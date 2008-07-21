@@ -700,7 +700,8 @@ CONTENT;
 								'title' => __('Create a new folder'),
 								'callback' => array('files', 'admin_files'),
 								'params' => array(
-									'mode' => 'folder'
+									'mode' => 'folder',
+									'node' => $_GET['node']
 								),
 								'image' => 'adm/images/add.png',
 								'description' => __('Create a new folder under this folder.')
@@ -709,7 +710,8 @@ CONTENT;
 								'title' => __('Upload a new file'),
 								'callback' => array('files', 'admin_files'),
 								'params' => array(
-									'mode' => 'upload'
+									'mode' => 'upload',
+									'node' => $_GET['node']
 								),
 								'image' => 'adm/images/edit.png',
 								'description' => __('Upload a new file in this folder.')
@@ -778,7 +780,7 @@ CONTENT;
 	
 	function admin_files($args)
 	{
-		global $cache;
+		global $cache, $db;
 		//$files = utils::load_extension('files');
 		
 		if(isset($args['mode']))
@@ -825,7 +827,6 @@ CONTENT;
 				$node->node_id = intval($node_id);
 				$node->read();
 				$new = $this->create_folder($_POST['name'], $node);
-				
 				echo 'reload';
 				exit;
 			break;
@@ -996,17 +997,15 @@ CONTENT;
 
 		
 	function recursive_delete($node) {
-		global $files;
-		
 		$db = database::getnew();
-		@unlink($files->getuploaddir ( ROOT_PATH ) . $node->description . '.upload');
+		@unlink($this->getuploaddir ( ROOT_PATH ) . $node->description . '.upload');
 		$sql = "DELETE FROM " . NODES_TABLE . "
 				 WHERE node_id = " . $node->node_id;
 		$db->sql_query($sql);
 	
 		$nodes = $node->get_children();
 		foreach ($nodes as $cnode) {
-			recursive_delete($cnode);
+			$this->recursive_delete($cnode);
 		}
 		
 	}

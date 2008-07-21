@@ -513,18 +513,19 @@ CSS;
 				'title' => __('Config'),
 				'extension' => 'core',
 			),
-			'viewsite'	=> array(
-				'image' => 'adm/style/images/viewsite.png',
-				'title'	=> __('View site'),
-				'extension'	=> 'core',
-			),
-			
 			'logout'	=> array(
 				'image' => 'adm/style/images/logout.png',
 				'title'	=> __('Logout'),
 				'extension' => 'core',
 				'no_load'	=> true,
-			)
+				'class' => 'right'
+			),
+			'viewsite'	=> array(
+				'image' => 'adm/style/images/viewsite.png',
+				'title'	=> __('View site'),
+				'extension'	=> 'core',
+				'class' => 'right'
+			),
 		);
 	}
 	

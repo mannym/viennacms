@@ -26,6 +26,12 @@ body {
 	height: 147px;
 }
 
+#main-items a.right {
+	float: right;
+	border-right: none;
+	border-left: 1px solid #fff;
+}
+
 #main-items a:hover {
 	background-image: url(images/mainbg-hover.png);
 }
