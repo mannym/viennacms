@@ -1903,18 +1903,20 @@ CSS;
 		</script>';
 	}
 	
-	static function admin_default_viewsite()
+	static function admin_left_viewsite()
 	{
 		echo '
 		<script type="text/javascript">
-			location.href = ' . utils::base() . '";
+			location.href = "' . utils::base() . '";
 		</script>';
 	}
 	
 	function admin_left_files()
 	{
 		$files = utils::load_extension('files');
-		$files->get_admin_tree();
+		echo '<ul class="nodes" id="tree" style="display: block;">';
+		echo $files->get_admin_tree();
+		echo '</ul>';
 	}
 	
 }
