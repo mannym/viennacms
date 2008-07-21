@@ -37,6 +37,11 @@ class acm
 	function acm()
 	{
 		$this->cache_dir = ROOT_PATH . 'cache/';
+
+		if (!@is_writable($this->cache_dir))
+		{
+			trigger_error($this->cache_dir . ' is NOT writable.', E_USER_ERROR);
+		}
 	}
 
 	/**
