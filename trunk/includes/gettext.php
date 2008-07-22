@@ -677,11 +677,11 @@ class StreamReader {
   }
 }
 
-class StringReader {
+class VStringReader {
   var $_pos;
   var $_str;
 
-  function StringReader($str='') {
+  function VStringReader($str='') {
     $this->_str = $str;
     $this->_pos = 0;
   }
@@ -785,7 +785,7 @@ function _e($msgid)
 
 // Preloads entire file in memory first, then creates a StringReader 
 // over it (it assumes knowledge of StringReader internals)
-class CachedFileReader extends StringReader {
+class CachedFileReader extends VStringReader {
   function CachedFileReader($filename) {
     if (file_exists($filename)) {
 
