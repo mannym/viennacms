@@ -58,7 +58,7 @@ function _get_reader($domain=null, $category=5, $enable_cache=true) {
 		$p = isset($text_domains[$domain]->path) ? $text_domains[$domain]->path : './';
 		$path = $p . "$locale/". $LC_CATEGORIES[$category] ."/$domain.mo";
 		if (file_exists($path)) {
-			$input = new FileReader($path);
+			$input = new VFileReader($path);
 		}
 		else {
 			$input = null;
@@ -713,12 +713,12 @@ class VStringReader {
 }
 
 
-class FileReader {
+class VFileReader {
   var $_pos;
   var $_fd;
   var $_length;
 
-  function FileReader($filename) {
+  function VFileReader($filename) {
     if (file_exists($filename)) {
 
       $this->_length=filesize($filename);
@@ -785,8 +785,8 @@ function _e($msgid)
 
 // Preloads entire file in memory first, then creates a StringReader 
 // over it (it assumes knowledge of StringReader internals)
-class CachedFileReader extends VStringReader {
-  function CachedFileReader($filename) {
+class VCachedFileReader extends VStringReader {
+  function VCachedFileReader($filename) {
     if (file_exists($filename)) {
 
       $length=filesize($filename);
