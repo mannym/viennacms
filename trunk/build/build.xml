@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="/root/checkout/viennacms/" default="test" name="viennacms">
+   <target name="syntax" description="runs phplint">
+	<fileset dir="." id="src">
+		<exclude name="**/.svn" />
+		<include name="**/*.php" />
+	</fileset>
+	<phplint>
+		<fileset refid="src" />
+	</phplint>
+   </target>
+
    <target name="test" description="runs the test suite">
        <phpunit2 haltonfailure="true" haltonerror="true">
            <batchtest>
