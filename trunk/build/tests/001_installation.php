@@ -31,18 +31,20 @@ class TestCase_start extends PHPUnit_Framework_TestCase {
 \$dbuser = 'root';
 \$dbpasswd = '';
 \$dbname = 'viennacms_unittest';
+\$dbms = 'mysql';
 
 \$table_prefix = 'viennacms_';
 
 define('CMS_INSTALLED', true);
 ?>
 CONFIG;
-		$this->assertEquals(strlen($correct), utils::config_file_write('localhost', 'root', '', 'viennacms_unittest', 'viennacms_'), 'config file writing failed');
+		$this->assertEquals(strlen($correct), utils::config_file_write('localhost', 'root', '', 'viennacms_unittest', 'viennacms_', 'mysql'), 'config file writing failed');
 		$this->assertFileExists(ROOT_PATH . 'config.php', 'config file does not exist');
 		$this->assertEquals(file_get_contents(ROOT_PATH . 'config.php'), $correct, 'config file does not contain correct data');
 	}
 	
 	public function testInstallDB() {
+		include(ROOT_PATH . 'includes/db/mysql.php');
 		$db = database::getnew();
 		$db->sql_connect('localhost', 'root', '', 'viennacms_unittest');
 		$db->prefix = 'viennacms_';
