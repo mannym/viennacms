@@ -11,7 +11,7 @@
    </target>
 
    <target name="test" description="runs the test suite">
-       <phpunit2 haltonfailure="true" haltonerror="true" codecoverage="true">
+       <phpunit2 haltonfailure="true" haltonerror="true">
            <batchtest>
                <fileset dir="build/tests">
                    <include name="*.php"/>
@@ -19,7 +19,6 @@
            </batchtest>
 
 	   <formatter type="xml" todir="." outfile="logfile.xml"/>
-           <coverage-report outfile="coverage.xml"/>
        </phpunit2>
    </target>
 </project>
