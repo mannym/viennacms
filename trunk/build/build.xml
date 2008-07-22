@@ -14,7 +14,8 @@
        <phpunit2 haltonfailure="true" haltonerror="true">
            <batchtest>
                <fileset dir="build/tests">
-                   <include name="*.php"/>
+                   <include name="002_nodesystem.php"/>
+	           <include name="001_installation.php"/>
                </fileset>
            </batchtest>
 
