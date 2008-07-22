@@ -35,7 +35,7 @@ class TestCase_start extends PHPUnit_Framework_TestCase {
 
 \$table_prefix = 'viennacms_';
 
-define('CMS_INSTALLED', true);
+@define('CMS_INSTALLED', true);
 ?>
 CONFIG;
 		$this->assertEquals(strlen($correct), utils::config_file_write('localhost', 'root', '', 'viennacms_unittest', 'viennacms_', 'mysql'), 'config file writing failed');
