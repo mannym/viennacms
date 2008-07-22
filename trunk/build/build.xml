@@ -19,7 +19,7 @@
            </batchtest>
 
 	   <formatter type="xml" todir="." outfile="logfile.xml"/>
-           <coverage-report outfile="coverage.xml">
+           <coverage-report outfile="coverage.xml"/>
        </phpunit2>
    </target>
 </project>
