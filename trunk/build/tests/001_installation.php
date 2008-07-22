@@ -11,10 +11,10 @@ class TestCase_start extends PHPUnit_Framework_TestCase {
     }
 
     public function testStartSystem() {
-    	global $cache; // for not die-ing with a fatal error
+    	global $cache, $db, $template; // for not die-ing with a fatal error
         define('IN_VIENNACMS', true);
 		define('IN_INSTALL', true);
-		require_once("../../start.php");
+		require_once("./start.php");
 		$this->assertNotNull($db, 'database class not created');
 		$this->assertNotNull($template, 'template class not created');
 		$this->assertNotNull($cache, 'acm class not created');
