@@ -1,7 +1,7 @@
 <?php
 require_once("PHPUnit/Framework/TestCase.php");
 
-class TestCase_start extends PHPUnit_Framework_TestCase {
+class TestCase_001_install extends PHPUnit_Framework_TestCase {
     protected function setUp() {
 
     }
@@ -57,7 +57,9 @@ CONFIG;
 	}
 	
 	public function testInstall() {
-		include(ROOT_PATH . 'includes/db/mysql.php');
+		include_once(ROOT_PATH . 'includes/db/mysql.php');
+		`mysqladmin -u root -f drop viennacms_unittest`;
+		`mysqladmin -u root create viennacms_unittest`;
 		$db = database::getnew();
 		$db->sql_connect('localhost', 'root', '', 'viennacms_unittest');
 		$db->prefix = 'viennacms_';
@@ -66,6 +68,7 @@ CONFIG;
 		$this->assertEquals(true, function_exists('install_database'), 'function for installing not correct?');
 		$dbresult = install_database('viennacms_', 'admin', md5('admin'), 'mysql');
 		$this->assertEquals(false, $dbresult, 'database not created correctly, returned: ' . $dbresult);
+
 	}
 }
 ?>
