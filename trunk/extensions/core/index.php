@@ -674,6 +674,7 @@ CSS;
 			case 'form':
 				$thisargs = $args;
 				$thisargs['mode'] = 'save';
+				echo sprintf(__('This form allows you to edit the content of the node %s. When done, click Save.'), $node->title);
 				?>
 				<form action="<?php echo admin::get_callback(array('core', 'admin_node_content'), $thisargs) ?>" method="post">
 					<?php
