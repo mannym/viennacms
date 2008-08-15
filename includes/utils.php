@@ -280,6 +280,10 @@ class utils {
 		foreach ($files as $file) {
 			$rfile = ROOT_PATH . 'extensions/' . $file;
 			if ($file != '.' && $file != '..' && is_dir($rfile) && file_exists($rfile . '/index.php')) {
+				if ($file == 'install') {
+					continue;
+				}
+				
 				include_once($rfile . '/index.php');
 				$class = 'extension_' . $file;
 				
@@ -339,7 +343,12 @@ class utils {
 		$args = func_get_args();
 		$hook_name = array_shift($args);
 		$return = array();
-		$extensions = self::load_all_exts();
+		if (defined('IN_INSTALL') && strlen($hook_name) >= 6 && substr_compare($hook_name, 'admin_', 0, 6) !== false) {
+			$extensions = array(self::load_extension('install'));
+		} else {
+			$extensions = self::load_all_exts();
+		}
+		 
 		foreach ($extensions as $ext) {
 			if (method_exists($ext, $hook_name)) {
 				$result = call_user_func_array(array($ext, $hook_name), $args);
