@@ -67,7 +67,7 @@ var TinyMCE_NodeLinkPlugin = {
 	getControlHTML : function(cn) {
 		switch (cn) {
 			case "nodelink":
-				return tinyMCE.getButtonHTML(cn, 'Link to a node', '{$pluginurl}/images/flash.gif', 'mceLinkNode');
+				return tinyMCE.getButtonHTML(cn, 'Link to a node', '{$pluginurl}/images/nodelink.png', 'mceLinkNode');
 		}
 
 		return "";
