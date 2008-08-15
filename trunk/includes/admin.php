@@ -129,8 +129,58 @@ class admin {
 		plugins : "nodelink,viennafiles",
 		theme_advanced_buttons3_add_before : "nodelink,viennafiles"
 	});
+	
+	var default_option = 'site_structure';
 </script>
 	<?php echo $Header; ?>
+</head>
+
+<body>
+<div id="main-items">
+</div>
+<div id="tree-left">
+</div>
+<div id="system-right">
+</div>
+</body>
+</html>
+		
+		<?php
+		exit;
+	}
+	
+	static function load_install() {
+		global $Header;
+		
+		if (isset($_GET['action'])) {
+			self::do_action($_GET['action']);
+			exit;
+		}
+		
+		?> 
+<html>
+<head>
+	<title><?php echo __('viennaCMS installation') ?></title>
+	<link rel="stylesheet" href="../adm/style/style.css" />
+	<script type="text/javascript" src="../adm/js/jquery.js"></script>
+	<script type="text/javascript" src="../adm/js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="../adm/js/jquery.form.js"></script>
+	<script type="text/javascript" src="../adm/js/jquery.treeview.js"></script>
+	<script type="text/javascript" src="../adm/js/jquery.upload.js"></script>
+	<script type="text/javascript" src="../adm/js/admin.js"></script>
+	<script type="text/javascript" src="../adm/js/selectnode.js"></script>
+		<script language="javascript" type="text/javascript" src="../includes/js/tinymce/tiny_mce.js"></script>
+<script language="javascript" type="text/javascript">
+	tinyMCE.init({
+		mode : "textareas",
+		theme : "advanced",
+		editor_selector : "wysiwyg",
+		plugins : "nodelink,viennafiles",
+		theme_advanced_buttons3_add_before : "nodelink,viennafiles"
+	});
+	
+	var default_option = 'welcome';
+</script>
 </head>
 
 <body>

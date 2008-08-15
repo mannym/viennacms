@@ -184,6 +184,9 @@ table {
 .nodes a:visited { color: #0066ff; }
 .nodes a.site { background: url(../images/site.png) 0 0 no-repeat; }
 .nodes a.page { background: url(../images/page.png) 0 0 no-repeat; }
+.nodes a.done { background: url(../images/done.png) 0 0 no-repeat; }
+.nodes a.notdone { background: url(../images/notdone.png) 0 0 no-repeat; }
+.nodes a.current { background: url(../images/current.png) 0 0 no-repeat; }
 .nodes a.addnode { background: url(images/add.png) 0 0 no-repeat; }
 .nodes .selected > a {
 	text-decoration: underline;

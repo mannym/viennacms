@@ -11,34 +11,28 @@ define('IN_VIENNACMS', true);
 define('IN_INSTALL', true);
 include('../start.php');
 include(ROOT_PATH . 'includes/functions_install.php');
+include(ROOT_PATH . 'includes/admin.php');
 
-
-// check language
-if (isset($_GET['language'])) {
-	setcookie('language', $_GET['language'], time() + 3600, '/', '');
-}
-
-if (isset($_COOKIE['language']) || isset($_GET['language'])) {
-	$language = (isset($_GET['language'])) ? $_GET['language'] : $_COOKIE['language'];
-
-	if ($language != 'english') {
-		// Set language to $language
-		_setlocale(LC_ALL, $language);
-		// Specify location of translation tables
-		_bindtextdomain("viennacms", ROOT_PATH . "locale");
-		// Choose domain
-		_textdomain("viennacms");
+function load_language() {
+	if (isset($_COOKIE['language']) || isset($_GET['language'])) {
+		$language = (isset($_GET['language'])) ? $_GET['language'] : $_COOKIE['language'];
+	
+		if ($language != 'english') {
+			// Set language to $language
+			_setlocale(LC_ALL, $language);
+			// Specify location of translation tables
+			_bindtextdomain("viennacms", ROOT_PATH . "locale");
+			// Choose domain
+			_textdomain("viennacms");
+		}
 	}
 }
 
-$dir = scandir(ROOT_PATH . 'locale');
-$languages = array();
+load_language();
 
-foreach ($dir as $file) {
-	if (file_exists(ROOT_PATH . 'locale/' . $file . '/LC_MESSAGES')) {
-		$languages[] = $file;
-	}
-}
+admin::load_install();
+// nightynight, legacy installer :)
+exit;
 
 if (!file_exists(ROOT_PATH . 'config.php') && is_writeable(ROOT_PATH)) {
 	@fclose(@fopen(ROOT_PATH . 'config.php','w'));

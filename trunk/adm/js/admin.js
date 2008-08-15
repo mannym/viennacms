@@ -13,7 +13,7 @@ function reload_topbar() {
 	});
 }
 
-function load_main_option(id) {
+function load_main_option(id, noreload) {
 	loading();
 	$.ajax({
 		cache: false,
@@ -27,8 +27,11 @@ function load_main_option(id) {
 				unique: true
 			});
 	
-			load_option_default(id);
-			curMain = id;
+			if (!noreload) {
+				load_option_default(id);
+				curMain = id;
+			}	
+			
 			unloading();
 		}
 	});
@@ -59,7 +62,7 @@ var loadCount = 0;
 
 function loading() {
 	if (loadCount == 0) {
-		$('#tree-left').append('<div class="firing"><img src="style/images/loading.gif" /></div>');
+		$('#tree-left').append('<div class="firing"><img src="../adm/style/images/loading.gif" /></div>');
 	}
 	
 	loadCount++;
@@ -181,7 +184,7 @@ $(document).ready(function() {
 		$('#tree-left, #system-right').height(docheight);
 	}
 	reload_topbar();
-	load_main_option('site_structure');
+	load_main_option(default_option);
 });
 
 function reinit_wysiwyg() {
