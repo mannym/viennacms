@@ -31,6 +31,8 @@ class node_add_form extends form {
 			$node->parent_id = ($newnode_type == 'site' ? 0 : $parent->node_id);
 			$node->type = ($newnode_type == '--' . __('Select') . '--') ? 'page' : $newnode_type;
 		}
+
+		$newnode_parentdir = '';
 		
 		if ($parent) {
 			$parents = $page->get_parents($parent);
@@ -44,6 +46,7 @@ class node_add_form extends form {
 			// strip trailing slash
 			$newnode_parentdir = substr($newnode_parentdir, 0, -1);
 		}
+
 		$newnode_title_clean = (empty($newnode_title_clean)) ? utils::clean_title($newnode_title) : $newnode_title_clean;
 		
 		$node->created = time();
