@@ -226,7 +226,7 @@ class page {
 				'description'	=> $node->description,
 				'children'		=> $sublinks,
 			);
-		} else if ($node == $this->sitenode) {
+		} else if ($node->node_id == $this->sitenode->node_id) {
 			$links = $sublinks;
 		}
 		
