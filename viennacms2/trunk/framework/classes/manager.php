@@ -8,7 +8,7 @@ class Manager {
 	}
 	
 	public function run() {
-		$router = new Router($this->global);
+		$this->global['router'] = new Router($this->global);
 		
 		$query = $_GET['q'];
 		
@@ -17,11 +17,13 @@ class Manager {
 			$query = 'index/main';
 		}
 		
-		$parts = $router->route($query);
+		$this->global['router']->route($query);
+		$parts = $this->global['router']->parts;
 		$action = (!empty($parts['action'])) ? $parts['action'] : 'main';
 		
 		$controller = $this->get_controller($parts['controller']);
 		$controller->arguments = explode('/', $parts['params']);
+		$controller->view = new View($this->global);
 		$controller->$action();
 	}
 	

@@ -1,7 +1,8 @@
 <?php
 class NodeController {
 	public function show() {
-		echo 'Showing node ' . $this->arguments[0];
+		$this->view['node_id'] = $this->arguments[0];
+		$this->view->display();
 	}
 	
 	public function delete() {

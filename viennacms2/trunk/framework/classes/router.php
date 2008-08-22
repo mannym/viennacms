@@ -3,6 +3,7 @@
 class Router {
 	private $global;
 	public $routes;
+	public $parts;
 	
 	public function __construct($global) {
 		$this->global = $global;
@@ -20,7 +21,8 @@ class Router {
 					$parts[$part] = $regs[$key + 1];
 				}
 				
-				return $parts;
+				$this->parts = $parts;
+				break;
 			}
 		}
 	}
