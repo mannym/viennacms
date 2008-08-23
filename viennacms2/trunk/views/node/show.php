@@ -1,1 +1,2 @@
-Hi, I am a lonely node. I am named <?php echo $this['node_title'] ?>.
+<h1><?php echo $this['title'] ?></h1>
+<?php echo $this['node']->revision->content ?>

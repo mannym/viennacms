@@ -326,12 +326,13 @@ class ADODB_Active_Record {
 	function DB()
 	{
 	global $_ADODB_ACTIVE_DBS;
-	
+
 		if ($this->_dbat < 0) {
 			$false = false;
 			$this->Error("No database connection set: use ADOdb_Active_Record::SetDatabaseAdaptor(\$db)", "DB");
 			return $false;
 		}
+
 		$activedb = $_ADODB_ACTIVE_DBS[$this->_dbat];
 		$db = $activedb->db;
 		return $db;

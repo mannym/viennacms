@@ -1,6 +1,6 @@
 <?php
 class Controller {
-	private $global;
+	protected $global;
 	public $arguments;
 	public $view;
 	
