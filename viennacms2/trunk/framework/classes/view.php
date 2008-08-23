@@ -46,10 +46,6 @@ class View implements ArrayAccess {
 			trigger_error('View path does not exist!', E_USER_ERROR);
 		}
 		
-		foreach ($this->vars as $key => $value) {
-			$$key = $value;
-		}
-		
 		include($view_path);
 	}
 	

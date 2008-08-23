@@ -12,12 +12,20 @@ define('ROOT_PATH', dirname(dirname(__FILE__)) . '/');
 function __autoload($class_name) {
 	$filename = ROOT_PATH . 'framework/classes/' . strtolower($class_name) . '.php';
 	
-	if (!file_exists($filename)) {
-		return false;
+	if (file_exists($filename)) {
+		include_once($filename);
+		return true;
 	}
 	
-	include_once($filename);
+	$filename = ROOT_PATH . 'models/' . strtolower($class_name) . '.php';
+	
+	if (file_exists($filename)) {
+		include_once($filename);
+		return true;
+	}
 }
+
+set_error_handler(array('Manager', 'handle_error'));
 
 if (version_compare(phpversion(), '6.0.0-dev', '<') && get_magic_quotes_gpc()) {
 	define('STRIP', true);
@@ -26,3 +34,23 @@ if (version_compare(phpversion(), '6.0.0-dev', '<') && get_magic_quotes_gpc()) {
 }
 
 $global = new GlobalStore();
+
+include(ROOT_PATH . 'framework/db/adodb-exceptions.inc.php');
+include(ROOT_PATH . 'framework/db/adodb.inc.php');
+include(ROOT_PATH . 'framework/db/adodb-active-record.inc.php');
+@include(ROOT_PATH . 'framework/config/basic.php');
+
+if (empty($dbms)) {
+	die();
+}
+
+try {
+	$global['db'] = newADOConnection($dbms);
+	$global['db']->connect($dbhost, $dbuser, $dbpasswd, $dbname);
+} catch (ADODB_Exception $e) {
+	trigger_error('Could not connect to the database at this moment.', E_USER_ERROR);
+}
+
+unset($dbpasswd);
+
+ADOdb_Active_Record::SetDatabaseAdapter($global['db']);

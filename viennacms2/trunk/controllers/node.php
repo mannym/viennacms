@@ -10,7 +10,11 @@ class NodeController {
 	}
 	
 	public function main() {
-		echo 'Hi!';
+		$node = new Node();
+		$node->load('id = 2');
+		var_dump($node->title);
+		$parent = $node->get_parent();
+		var_dump($parent->title);
 	}
 }
 ?>
