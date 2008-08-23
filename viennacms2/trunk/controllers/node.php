@@ -1,7 +1,10 @@
 <?php
 class NodeController {
 	public function show() {
-		$this->view['node_id'] = $this->arguments[0];
+		$node = new Node();
+		$node->load('id = ?', intval($this->arguments[0]));
+	
+		$this->view['node_title'] = $node->title;
 		$this->view->display();
 	}
 	

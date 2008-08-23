@@ -1,3 +1,1 @@
-<?php
-echo 'Node ID: ' . $this['node_id'];
-?>
+Hi, I am a lonely node. I am named <?php echo $this['node_title'] ?>.
