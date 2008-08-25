@@ -4,6 +4,11 @@ class Manager {
 	private $global;
 	public static $extpaths = array();
 	
+	/**
+	 * Constructor of Manager
+	 *
+	 * @param GlobalStore $global
+	 */
 	public function __construct($global) {
 		$this->global = $global;
 		$this->global['manager'] = $this;
@@ -11,6 +16,11 @@ class Manager {
 		self::$extpaths['core'] = 'extensions/core/core.ext.php';
 	}
 	
+	/**
+	 * Runs the page.
+	 *
+	 * @param string $query URL to parse and run, if empty, the current URL is used.
+	 */
 	public function run($query = '') {
 		$this->global['router'] = new Router($this->global);
 		
@@ -50,11 +60,10 @@ class Manager {
 	}
 	
 	/**
-	 * get sitenode
+	 * Retrieves the site node of this web site.
 	 *
-	 * @return Node current sitenode
+	 * @return Node site node
 	 */
-	
 	public function get_sitenode() {
 		// create a temporary node to serve as the main root
 		$node = new Node();
@@ -74,6 +83,12 @@ class Manager {
 		return $default;
 	}
 	
+	/**
+	 * Loads the controller with name $name.
+	 *
+	 * @param string $name
+	 * @return Controller the controller
+	 */
 	public function get_controller($name) {
 		$name = strtolower($name);
 	
@@ -91,6 +106,10 @@ class Manager {
 		return new $class_name($this->global);
 	}
 
+	/**
+	 * Show a 404 page.
+	 *
+	 */
 	public function page_not_found() {
 		if (!isset($this->global['404_done']) && isset($this->global['sitenode']->options['404_url'])) {
 			$this->global['404_done'] = true;
@@ -127,6 +146,15 @@ class Manager {
 	    return $arr1;
 	}
 	
+	/**
+	 * Runs a hook on all extensions.
+	 *
+	 * @example
+	 * <code>
+	 * manager::run_hook_all('hook', 'parameter', true);
+	 * </code>
+	 * @return mixed hook results
+	 */
 	static function run_hook_all() {
 		$args = func_get_args();
 		$hook_name = array_shift($args);
@@ -147,6 +175,11 @@ class Manager {
 		return $return;
 	}
 	
+	/**
+	 * Loads all extensions.
+	 *
+	 * @return array with extension objects
+	 */
 	static function load_all_extensions() {
 		$return = array();
 		
@@ -157,6 +190,12 @@ class Manager {
 		return $return;
 	}
 	
+	/**
+	 * Loads a specific extension
+	 *
+	 * @param string $name
+	 * @return extension object
+	 */
 	static function load_extension($name) {
 		include_once(self::$extpaths[$name]);
 		$classname = 'extension_' . $name;
@@ -167,7 +206,7 @@ class Manager {
 		
 		return new $classname($this->global);
 	}
-	
+
 	static function handle_error($errno, $msg_text, $errfile, $errline)
 	{
 		global $msg_title, $msg_long_text;
@@ -255,6 +294,12 @@ HTML;
 		return false;
 	}
 	
+	/**
+	 * Searches for a specific file in an array.
+	 *
+	 * @param array $array
+	 * @return string fiilename
+	 */
 	static public function scan_files($array) {
 		foreach ($array as $file) {
 			if (file_exists(ROOT_PATH . $file)) {
