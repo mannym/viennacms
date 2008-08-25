@@ -11,15 +11,20 @@ class Manager {
 		$this->extpaths['core'] = ROOT_PATH . 'extensions/core/core.ext.php';
 	}
 	
-	public function run() {
+	public function run($query = '') {
 		$this->global['router'] = new Router($this->global);
 		
-		$query = $_GET['q'];
+		if (empty($query)) {
+			$query = $_GET['q'];
+		}
 		
 		// TODO: change this
 		if (empty($query)) {
 			$query = 'index/main';
 		}
+		
+		// some init-ing
+		$this->global['sitenode'] = $this->get_sitenode();
 		
 		$this->global['router']->route($query);
 		// TODO: create selection
@@ -44,16 +49,50 @@ class Manager {
 		echo $layout->view->display();
 	}
 	
+	public function get_sitenode() {
+		// create a temporary node to serve as the main root
+		$node = new Node();
+		$node->id = 0;
+		$sites = $node->get_children();
+		
+		// now check the hostname
+		foreach ($sites as $node) {
+			if ($node->options['hostname'] == '' && !isset($default)) {
+				// save it for the default
+				$default = $node;
+			} else if ($_SERVER['HTTP_HOST'] == $node->options['hostname']) {
+				return $node; // return immediately
+			}
+		}
+		
+		return $default;
+	}
+	
 	public function get_controller($name) {
-		include(ROOT_PATH . 'controllers/' . strtolower($name) . '.php');
+		include_once(ROOT_PATH . 'controllers/' . strtolower($name) . '.php');
 		$class_name = ucfirst(strtolower($name)) . 'Controller';
 		
 		return new $class_name($this->global);
 	}
 
 	public function page_not_found() {
+		if (!isset($this->global['404_done']) && isset($this->global['sitenode']->options['404_url'])) {
+			$this->global['404_done'] = true;
+			$this->run($this->global['sitenode']->options['404_url']);
+			exit;
+			/*$controller = $this->get_controller('node');
+			$controller->view = new View($this->global);
+			$this->global['router']->parts['controller'] = 'node';
+			$this->global['router']->parts['action'] = 'show';
+			$controller->view->reset_path();
+			$controller->arguments = array($this->global['sitenode']->options['404_node']);
+			$controller->show();
+			$content = $controller->view->display();*/
+		}
+		
 		$this->global['layout']->view['title'] = __('Page not found');
- 		$this->global['layout']->page(__('This page could not be found.'));
+		$content = __('This page could not be found.');			
+		$this->global['layout']->page($content);
 		echo $this->global['layout']->view->display();
 		exit;
 	}
