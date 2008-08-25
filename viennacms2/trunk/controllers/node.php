@@ -2,24 +2,12 @@
 class NodeController extends Controller {
 	public function show() {
 		$node = new Node();
+		$node->load('id = ?', array(intval($this->arguments[0])));
+		
+		if (!$node->id) {
+			Manager::page_not_found();
+		}
 
-		$node_id = intval($this->arguments[0]);
-		try 
-		{
-			$node->load('id = ?', $node_id);
-		}
-		catch(ADODB_Exception $e)
-		{
-			// Most likely this means we got a wrong node, but we do want to perform a check
-			if(!preg_match('#id = \?#', $e->getMessage()))
-			{
-				// Oh oh, we got an error
-				// return to default error handler
-				return;
-			}
-			throw new viennaCMS_Exception('Node not found');
-		}
-	
 		$this->view['node'] = $node;
 		$this->global['layout']->view['title'] = $node->title;
 	}
@@ -69,4 +57,3 @@ class NodeController extends Controller {
 		return $default;
 	}
 }
-?>
