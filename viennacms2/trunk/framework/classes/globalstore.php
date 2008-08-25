@@ -3,6 +3,7 @@
  * Global storage class file
  * 
  * @package framework
+ * @version $Id$
  * @copyright (c) 2008 viennaCMS group
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
