@@ -63,3 +63,12 @@ CREATE TABLE IF NOT EXISTS `node_revisions` (
 INSERT INTO `node_revisions` (`id`, `node`, `number`, `content`, `time`) VALUES
 (2, 7, 1, 'Woef :D', 1219519471),
 (3, 7, 2, 'Woef x2', 1219520373);
+
+
+CREATE TABLE IF NOT EXISTS `node_options` (
+  `id` int(11) NOT NULL auto_increment,
+  `node` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `value` longtext NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;

@@ -3,7 +3,7 @@ class NodeController extends Controller {
 	public function show() {
 		$node = new Node();
 		$node->load('id = ?', intval($this->arguments[0]));
-	
+
 		$this->view['node'] = $node;
 		$this->global['layout']->view['title'] = $node->title;
 	}

@@ -2,9 +2,12 @@
 
 class Manager {
 	private $global;
+	private $extpaths = array();
 	
 	public function __construct($global) {
 		$this->global = $global;
+		// TODO: dynamically load this
+		$this->extpaths['core'] = ROOT_PATH . 'extensions/core/core.ext.php';
 	}
 	
 	public function run() {
@@ -45,6 +48,15 @@ class Manager {
 		$class_name = ucfirst(strtolower($name)) . 'Controller';
 		
 		return new $class_name($this->global);
+	}
+	
+	static function load_extension($name) {
+		include_once(self::$extpaths[$name]);
+		$classname = 'extension_' . $name;
+		
+		if (!class_exists($classname)) {
+			throw new Exception('This extension does not exist!');
+		}
 	}
 	
 	static function handle_error($errno, $msg_text, $errfile, $errline)

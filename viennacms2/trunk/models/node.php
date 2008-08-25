@@ -19,9 +19,28 @@ class Node extends ADOdb_Active_Record {
 	public function Set(&$row) {
 		parent::Set($row);
 		
+		// get revision
 		$this->revision = new Node_Revision();
+		$this->revision->content = '';
 		$this->revision->load('node = ? AND number = ?', array($this->id, $this->revision_num));
 		$this->revision->node_obj = $this;
+		
+		// get options
+		$options = new Node_Option();
+		$this->options = new Node_Options();
+		$this->options->node = $this;
+		$options = $options->find('node = ?', array($this->id));
+		foreach ($options as $key => $value) {
+			$this->options[$value->name] = $value;
+		}
+	}
+	
+	public function Save() {
+		parent::Save();
+		
+		foreach ($this->options->data as $option) {
+			$option->save();
+		}
 	}
 	
 	public function Insert() {
