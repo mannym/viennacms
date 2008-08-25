@@ -5,7 +5,7 @@ class NodeController extends Controller {
 		$node->load('id = ?', array(intval($this->arguments[0])));
 		
 		if (!$node->id) {
-			Manager::page_not_found();
+			$this->global['manager']->page_not_found();
 		}
 
 		$this->view['node'] = $node;

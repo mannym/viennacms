@@ -6,6 +6,7 @@ class Manager {
 	
 	public function __construct($global) {
 		$this->global = $global;
+		$this->global['manager'] = $this;
 		// TODO: dynamically load this
 		$this->extpaths['core'] = ROOT_PATH . 'extensions/core/core.ext.php';
 	}
@@ -48,6 +49,13 @@ class Manager {
 		$class_name = ucfirst(strtolower($name)) . 'Controller';
 		
 		return new $class_name($this->global);
+	}
+
+	public function page_not_found() {
+		$this->global['layout']->view['title'] = __('Page not found');
+ 		$this->global['layout']->page(__('This page could not be found.'));
+		echo $this->global['layout']->view->display();
+		exit;
 	}
 	
 	static function load_extension($name) {
