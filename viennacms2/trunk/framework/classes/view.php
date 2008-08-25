@@ -2,9 +2,14 @@
 class View implements ArrayAccess {
 	private $global;
 	private $vars;
+	public $path;
 	
 	public function __construct($global) {
 		$this->global = $global;
+		
+		$this->path  = $this->global['router']->parts['controller'] . '/';
+		$this->path .= $this->global['router']->parts['action'] . '.php';
+		
 	}
 	
 	public function set($var, $value) {
@@ -38,15 +43,27 @@ class View implements ArrayAccess {
 	}
 	
 	public function display() {
-		$view_path = ROOT_PATH . 'views/';
-		$view_path .= $this->global['router']->parts['controller'] . '/';
-		$view_path .= $this->global['router']->parts['action'] . '.php';
-		
+		ob_start();
+		$view_path = $this->scan_themes($this->path);
+
 		if (!file_exists($view_path)) {
 			trigger_error('View path does not exist!', E_USER_ERROR);
 		}
 		
 		include($view_path);
+		$contents = ob_get_contents();
+		ob_end_clean();
+		
+		return $contents;
+	}
+	
+	public function scan_themes($path) {
+		$files = array(
+			'layouts/' . $this->global['style'] . '/' . $path,
+			'views/' . $path
+		);
+		
+		return Manager::scan_files($files);
 	}
 	
 	public function offsetExists($key) {

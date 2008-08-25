@@ -18,13 +18,26 @@ class Manager {
 		}
 		
 		$this->global['router']->route($query);
+		// TODO: create selection
+		$this->global['style'] = 'default';
 		$parts = $this->global['router']->parts;
 		$action = (!empty($parts['action'])) ? $parts['action'] : 'main';
+
+		// get the layout
+		$layout = $this->get_controller('layout');
+		$layout->view = new View($this->global);
+		$layout->view->path = 'style/page.php';
+		$this->global['layout'] = $layout;
 		
 		$controller = $this->get_controller($parts['controller']);
 		$controller->arguments = explode('/', $parts['params']);
 		$controller->view = new View($this->global);
 		$controller->$action();
+		$content = $controller->view->display();
+		
+		// create layout
+		$layout->page($content);
+		echo $layout->view->display();
 	}
 	
 	public function get_controller($name) {
@@ -119,6 +132,17 @@ HTML;
 		// If we notice an error not handled here we pass this back to PHP by returning false
 		// This may not work for all php versions
 		return false;
+	}
+	
+	static public function scan_files($array) {
+		foreach ($array as $file) {
+			if (file_exists(ROOT_PATH . $file)) {
+				// TODO: cache the result
+				return ROOT_PATH . $file;
+			}
+		}
+		
+		throw new Exception('Could not find files.');
 	}
 }
 

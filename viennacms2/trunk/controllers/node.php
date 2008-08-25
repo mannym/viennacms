@@ -5,8 +5,7 @@ class NodeController extends Controller {
 		$node->load('id = ?', intval($this->arguments[0]));
 	
 		$this->view['node'] = $node;
-		$this->view['title'] = $node->title;
-		$this->view->display();
+		$this->global['layout']->view['title'] = $node->title;
 	}
 	
 	public function main() {
