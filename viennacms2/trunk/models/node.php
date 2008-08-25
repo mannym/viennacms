@@ -4,6 +4,10 @@ class Node extends ADOdb_Active_Record {
 		$this->revision = new Node_Revision();
 		$this->revision->node_obj = $this;
 		
+		$options = new Node_Option();
+		$this->options = new Node_Options();
+		$this->options->node = $this;
+		
 		parent::__construct($table, $pkeyarr, $db);
 		
 		$this->revision_num = 0;

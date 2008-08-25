@@ -2,13 +2,13 @@
 
 class Manager {
 	private $global;
-	private $extpaths = array();
+	public static $extpaths = array();
 	
 	public function __construct($global) {
 		$this->global = $global;
 		$this->global['manager'] = $this;
 		// TODO: dynamically load this
-		$this->extpaths['core'] = ROOT_PATH . 'extensions/core/core.ext.php';
+		self::$extpaths['core'] = 'extensions/core/core.ext.php';
 	}
 	
 	public function run($query = '') {
@@ -69,7 +69,17 @@ class Manager {
 	}
 	
 	public function get_controller($name) {
-		include_once(ROOT_PATH . 'controllers/' . strtolower($name) . '.php');
+		$name = strtolower($name);
+	
+		$files = array(
+			'controllers/' . $name . '.php'
+		);
+		
+		foreach (self::$extpaths as $extension => $path) {
+			$files[] = dirname($path) . '/controllers/' . $name . '.php';
+		}
+		
+		include_once(self::scan_files($files));
 		$class_name = ucfirst(strtolower($name)) . 'Controller';
 		
 		return new $class_name($this->global);
@@ -97,6 +107,50 @@ class Manager {
 		exit;
 	}
 	
+	static function array_merge_keys($arr1, $arr2) {
+	    foreach ($arr2 as $k=>$v) {
+	        if (!array_key_exists($k, $arr1)) {
+	            $arr1[$k] = $v;
+	        }
+	        else {
+	            if (is_array($v)) {
+	                $arr1[$k] = self::array_merge_keys($arr1[$k], $arr2[$k]);
+	            }
+	        }
+	    }
+	    return $arr1;
+	}
+	
+	static function run_hook_all() {
+		$args = func_get_args();
+		$hook_name = array_shift($args);
+		$return = array();
+		$extensions = self::load_all_extensions();
+		 
+		foreach ($extensions as $ext) {
+			if (method_exists($ext, $hook_name)) {
+				$result = call_user_func_array(array($ext, $hook_name), $args);
+			    if (isset($result) && is_array($result)) {
+					//$return = array_merge($return, $result);
+					$return = self::array_merge_keys($return, $result);
+			    } else if (isset($result)) {
+					$return[] = $result;
+				}
+			}
+		}
+		return $return;
+	}
+	
+	static function load_all_extensions() {
+		$return = array();
+		
+		foreach (self::$extpaths as $name => $dummy) {
+			$return[] = self::load_extension($name);
+		}
+		
+		return $return;
+	}
+	
 	static function load_extension($name) {
 		include_once(self::$extpaths[$name]);
 		$classname = 'extension_' . $name;
@@ -104,6 +158,8 @@ class Manager {
 		if (!class_exists($classname)) {
 			throw new Exception('This extension does not exist!');
 		}
+		
+		return new $classname($this->global);
 	}
 	
 	static function handle_error($errno, $msg_text, $errfile, $errline)

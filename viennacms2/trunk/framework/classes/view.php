@@ -83,6 +83,10 @@ class View implements ArrayAccess {
 			'views/' . $path
 		);
 		
+		foreach (manager::$extpaths as $extension => $extpath) {
+			$files[] = dirname($extpath) . '/views/' . $path;
+		}
+		
 		return Manager::scan_files($files);
 	}
 	
