@@ -2,7 +2,7 @@
 /**
 *
 * @package dbal
-* @version $Id: postgres.php 8572 2008-05-29 12:25:56Z acydburn $
+* @version $Id$
 * @copyright (c) 2005 phpBB Group
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
