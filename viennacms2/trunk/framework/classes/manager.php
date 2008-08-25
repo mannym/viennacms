@@ -17,14 +17,14 @@ class Manager {
 		if (empty($query)) {
 			$query = $_GET['q'];
 		}
-		
-		// TODO: change this
-		if (empty($query)) {
-			$query = 'index/main';
-		}
-		
 		// some init-ing
 		$this->global['sitenode'] = $this->get_sitenode();
+				
+		// TODO: change this to configable in acp
+		if (empty($query)) {
+			$query = 'node/show/' . $this->global['sitenode']->node_id;
+		}
+		
 		
 		$this->global['router']->route($query);
 		// TODO: create selection
@@ -48,6 +48,12 @@ class Manager {
 		$layout->page($content);
 		echo $layout->view->display();
 	}
+	
+	/**
+	 * get sitenode
+	 *
+	 * @return Node current sitenode
+	 */
 	
 	public function get_sitenode() {
 		// create a temporary node to serve as the main root
