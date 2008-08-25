@@ -102,8 +102,8 @@ class ADODB_Active_Record {
 		}
 		
 		if (!$table) { 
-			if (!empty($this->_table)) $table = $this->_table;
-			else $table = $this->_pluralize(get_class($this));
+			if (!empty($this->_table)) $table = strtolower($this->_table);
+			else $table = strtolower($this->_pluralize(get_class($this)));
 		}
 		if ($db) {
 			$this->_dbat = ADODB_Active_Record::SetDatabaseAdapter($db);
