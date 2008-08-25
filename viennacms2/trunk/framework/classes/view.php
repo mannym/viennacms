@@ -25,7 +25,7 @@ class View implements ArrayAccess {
 	public function clean($contents)
 	{
 		$search = array(
-			'#<!-- \$(.*)+\$ -->(\s)*?(<!DOCTYPE)+#', // Newlines
+			'#<!-- \$(.*)+\$ -->(\s)*?(<)+#', // Newlines
 		);
 		$replace = array(
 			'$3',
