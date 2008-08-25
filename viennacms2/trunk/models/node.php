@@ -21,6 +21,11 @@ class Node extends ADOdb_Active_Record {
 		return $node->find('parent = ?', array($this->id));
 	}
 	
+	public function get_siblings_all() {
+		$node = new Node();
+		return $node->find('parent = ?', array($this->parent));
+	}
+	
 	public function Set(&$row) {
 		parent::Set($row);
 		

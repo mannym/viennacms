@@ -15,6 +15,7 @@
 	<div id="menucontainer">
 	<div>
 	<ul id="menu">
+		<?php echo $this['nav'][1] ?>
 	</ul>
 	</div>
 	</div>
