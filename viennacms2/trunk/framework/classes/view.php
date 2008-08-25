@@ -13,9 +13,12 @@ class View implements ArrayAccess {
 	public function __construct($global) {
 		$this->global = $global;
 		
+		$this->reset_path();
+	}
+	
+	public function reset_path() {
 		$this->path  = $this->global['router']->parts['controller'] . '/';
 		$this->path .= $this->global['router']->parts['action'] . '.php';
-		
 	}
 	
 	public function set($var, $value) {

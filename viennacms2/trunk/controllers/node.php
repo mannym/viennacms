@@ -2,7 +2,11 @@
 class NodeController extends Controller {
 	public function show() {
 		$node = new Node();
-		$node->load('id = ?', intval($this->arguments[0]));
+		$node->load('id = ?', array(intval($this->arguments[0])));
+		
+		if (!$node->id) {
+			Manager::page_not_found();
+		}
 
 		$this->view['node'] = $node;
 		$this->global['layout']->view['title'] = $node->title;
@@ -28,8 +32,29 @@ class NodeController extends Controller {
 		*/
 
 		$this->global['router']->parts['action'] = 'show';
-		$this->arguments = array(1);
+		$this->global['sitenode'] = $this->get_sitenode();
+		$this->view->reset_path();
+		$this->arguments = array((string) $this->global['sitenode']->options['homepage']);
 		$this->show();
+	}
+	
+	public function get_sitenode() {
+		// create a temporary node to serve as the main root
+		$node = new Node();
+		$node->id = 0;
+		$sites = $node->get_children();
+		
+		// now check the hostname
+		foreach ($sites as $node) {
+			if ($node->options['hostname'] == '' && !isset($default)) {
+				// save it for the default
+				$default = $node;
+			} else if ($_SERVER['HTTP_HOST'] == $node->options['hostname']) {
+				return $node; // return immediately
+			}
+		}
+		
+		return $default;
 	}
 }
 ?>

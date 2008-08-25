@@ -16,6 +16,11 @@ class Node extends ADOdb_Active_Record {
 		return $node;
 	}
 	
+	public function get_children() {
+		$node = new Node();
+		return $node->find('parent = ?', array($this->id));
+	}
+	
 	public function Set(&$row) {
 		parent::Set($row);
 		
