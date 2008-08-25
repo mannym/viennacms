@@ -1,4 +1,10 @@
 <?php
+/**
+* @package framework
+* @version $Id$
+* @copyright (c) 2008 viennaCMS group
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
+*/
 class View implements ArrayAccess {
 	private $global;
 	private $vars;
@@ -14,6 +20,17 @@ class View implements ArrayAccess {
 	
 	public function set($var, $value) {
 		$this->vars[$var] = $value;
+	}
+	
+	public function clean($contents)
+	{
+		$search = array(
+			'#<!-- \$(.*)+\$ -->(\s)*?(<!DOCTYPE)+#', // Newlines
+		);
+		$replace = array(
+			'$3',
+		);
+		return preg_replace($search, $replace, $contents);
 	}
 	
 	public function url($data) {
@@ -54,7 +71,7 @@ class View implements ArrayAccess {
 		$contents = ob_get_contents();
 		ob_end_clean();
 		
-		return $contents;
+		return self::clean($contents);
 	}
 	
 	public function scan_themes($path) {
