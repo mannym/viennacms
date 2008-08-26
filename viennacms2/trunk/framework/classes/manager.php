@@ -1,5 +1,21 @@
 <?php
+/**
+ * The holy manager :D
+ * 
+ * @package framework
+ * @version $Id$
+ * @copyright (c) 2008 viennaCMS group
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
 
+
+/**
+ * Manager
+ * The start of... everything.
+ *
+ * @package framework
+ * @access public
+ */
 class Manager {
 	private $global;
 	public static $extpaths = array();
@@ -102,7 +118,10 @@ class Manager {
 		
 		include_once(self::scan_files($files));
 		$class_name = ucfirst(strtolower($name)) . 'Controller';
-		
+		if(!class_exists($class_name))
+		{
+			throw new ViennaCMSException('Unknown controller');
+		}
 		return new $class_name($this->global);
 	}
 
