@@ -1,7 +1,10 @@
 <?php
 class HTMLContentController extends Controller {
 	public function run() {
-		$this->view['content'] = $this->arguments['content']; 
+		return array(
+			'title' => $this->arguments['title'],
+			'content' => $this->arguments['content']
+		);
 	}
 }
 ?>

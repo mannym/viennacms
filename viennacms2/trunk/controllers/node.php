@@ -29,12 +29,17 @@ class NodeController extends Controller {
 		$content = '';
 	
 		foreach ($this->modules[$location] as $module) {
+			$box = new View($this->global);
+			$box->path = 'style/box.php';
 			$controller = $this->global['manager']->get_controller($module['controller']);
 			$controller->view = new View($this->global);
 			$controller->view->path = $module['controller'] . '.php';
 			$controller->arguments = $module['arguments'];
-			$controller->run();
-			$content .= $controller->view->display();
+			$return = $controller->run();
+			$box['controller'] = $module['controller'];
+			$box['title'] = $return['title'];
+			$box['content'] = $return['content'];
+			$content .= $box->display();
 		}
 		
 		return $content;
