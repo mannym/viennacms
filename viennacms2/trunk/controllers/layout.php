@@ -7,7 +7,7 @@ class LayoutController extends Controller {
 		} else {
 			$this->parents = array();
 		}
-			
+		
 		$this->view['nav'] = array(
 			1 => $this->get_nav(1),
 			2 => $this->get_nav(2)
@@ -41,6 +41,7 @@ class LayoutController extends Controller {
 	public function get_parents($node) {
 		$array = array($node);
 		$array = array_merge($array, $this->_get_parents($node));
+		array_pop($array); // remove the main node
 		$parents = array_reverse($array);
 		return $parents;
 	}
