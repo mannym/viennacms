@@ -39,7 +39,7 @@ class View implements ArrayAccess {
 	public function url($data) {
 		if (!is_array($data)) {
 			if (strpos($data, '://') === false) {
-				return '?q=' . $data;
+				return manager::base() . '?q=' . $data;
 			} else {
 				return $data;
 			}
@@ -58,7 +58,7 @@ class View implements ArrayAccess {
 				$url .= '/' . implode('/', $data['parameters']);
 			}
 			
-			return $url;
+			return manager::base() . $url;
 		}
 	}
 	

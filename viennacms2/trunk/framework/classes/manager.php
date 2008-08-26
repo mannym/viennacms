@@ -41,7 +41,15 @@ class Manager {
 		$this->global['router'] = new Router($this->global);
 		
 		if (empty($query)) {
-			$query = $_GET['q'];
+			$uri_no_qs = explode('?', $_SERVER['REQUEST_URI']);
+			$uri_no_qs = $uri_no_qs[0];
+
+			if (strpos($_SERVER['REQUEST_URI'], '.php') === false
+				&& $uri_no_qs != manager::basepath(true) && !isset($_GET['q'])) {
+				$query = preg_replace('@^' . preg_quote(manager::basepath(), '@') . '@', '', $uri_no_qs);
+			} else {
+				$query = $_GET['q'];
+			}
 		}
 		// some init-ing
 		$this->global['sitenode'] = $this->get_sitenode();
@@ -207,6 +215,24 @@ class Manager {
 		}
 		
 		return $return;
+	}
+	
+	static function basepath() {
+		$url = dirname($_SERVER['SCRIPT_NAME']);
+		if (dirname($_SERVER['SCRIPT_NAME']) != '/') {
+			$url .= '/';
+		}	
+		return $url;		
+	}
+	
+	static function base() {
+		$url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';
+		$url .= '://' . $_SERVER['HTTP_HOST'];
+		$url .= dirname($_SERVER['SCRIPT_NAME']);
+		if (dirname($_SERVER['SCRIPT_NAME']) != '/') {
+			$url .= '/';
+		}
+		return $url;		
 	}
 	
 	/**

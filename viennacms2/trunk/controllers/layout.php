@@ -24,7 +24,7 @@ class LayoutController extends Controller {
 		$return = '';
 		
 		foreach ($styles as $style) {
-			$return .= '<link href="' . $style . '" rel="stylesheet" type="text/css" />';
+			$return .= '<link href="' . manager::base() . $style . '" rel="stylesheet" type="text/css" />';
 		}
 		
 		return $return;
