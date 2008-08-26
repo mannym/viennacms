@@ -48,7 +48,7 @@ try {
 	$global['db'] = newADOConnection($dbms);
 	$global['db']->connect($dbhost, $dbuser, $dbpasswd, $dbname);
 } catch (ADODB_Exception $e) {
-	trigger_error('Could not connect to the database at this moment.', E_USER_ERROR);
+	throw new ViennaCMSException('Could not connect to the database at this moment.');
 }
 
 unset($dbpasswd);
