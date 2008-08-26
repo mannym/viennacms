@@ -2,11 +2,15 @@
 class NodeController extends Controller {
 	public $modules;
 
-	public function show() {
+	public function show($id = false) {
 		$node = new Node();
-		$node->load('id = ?', array(intval($this->arguments[0])));
+		if (!$id) {
+			$node->load('id = ?', array(intval($this->arguments[0])));
+		} else {
+			$node->load('id = ?', array(intval($id)));
+		}
 		
-		if (!$node->id) {
+		if (!$node->id && !$id) {
 			$this->global['manager']->page_not_found();
 		}
 		
@@ -20,9 +24,30 @@ class NodeController extends Controller {
 			// TODO: make left and such
 		}
 
-		$this->view['node'] = $node;		
-		$this->global['node'] = $node;
-		$this->global['layout']->view['title'] = $node->title;
+		$this->view['node'] = $node;	
+
+		if (!$id) {
+			$this->global['node'] = $node;
+			$this->global['layout']->view['title'] = $node->title;
+		}
+	}
+	
+	/**
+	 * Display an embedded node.
+	 *
+	 * @param int $id Node ID
+	 * @param GlobalStore $global the global storage
+	 * @return string node output
+	 * @example
+	 * <code>
+	 * NodeController::node(7, $this->global);
+	 * </code>
+	 */
+	static function node($id, $global) {
+		$controller = new NodeController($global);
+		$controller->view = new View($global);
+		$controller->show($id);
+		return $controller->view->display();
 	}
 	
 	public function get_modules($location) {
