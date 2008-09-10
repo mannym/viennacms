@@ -1,10 +1,9 @@
--- $Id$
 -- phpMyAdmin SQL Dump
 -- version 2.11.7
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generatie Tijd: 25 Aug 2008 om 09:32
+-- Generatie Tijd: 10 Sept 2008 om 14:54
 -- Server versie: 5.0.51
 -- PHP Versie: 5.2.6
 
@@ -21,25 +20,46 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 --
 
 CREATE TABLE IF NOT EXISTS `nodes` (
-  `id` int(11) NOT NULL auto_increment,
+  `node_id` int(11) NOT NULL auto_increment,
   `title` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
   `type` varchar(50) NOT NULL,
   `parent` int(11) NOT NULL,
   `revision_num` int(11) NOT NULL,
   `created` int(11) NOT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY  (`node_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
 -- Gegevens worden uitgevoerd voor tabel `nodes`
 --
 
-INSERT INTO `nodes` (`id`, `title`, `description`, `type`, `parent`, `revision_num`, `created`) VALUES
+INSERT INTO `nodes` (`node_id`, `title`, `description`, `type`, `parent`, `revision_num`, `created`) VALUES
 (1, 'The root node', 'The root of all nodes', 'site', 0, 0, 0),
-(2, 'First child node', 'The child of the root node.', 'page', 1, 0, 0),
-(3, 'Second child node', 'The child of the root node.', 'page', 1, 0, 0),
+(2, 'First child node', 'The child of the root node.', 'page', 1, 1, 0),
+(3, 'Second child node', 'The child of the root node.', 'page', 1, 2, 0),
 (7, 'Woef!', 'De blafnode :D', 'page', 2, 2, 1219519471);
+
+-- --------------------------------------------------------
+
+--
+-- Tabel structuur voor tabel `node_options`
+--
+
+CREATE TABLE IF NOT EXISTS `node_options` (
+  `id` int(11) NOT NULL auto_increment,
+  `node_id` int(11) NOT NULL,
+  `option_name` varchar(255) NOT NULL,
+  `option_value` longtext NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+
+--
+-- Gegevens worden uitgevoerd voor tabel `node_options`
+--
+
+INSERT INTO `node_options` (`id`, `node_id`, `option_name`, `option_value`) VALUES
+(4, 1, 'homepage', '2');
 
 -- --------------------------------------------------------
 
@@ -54,21 +74,13 @@ CREATE TABLE IF NOT EXISTS `node_revisions` (
   `content` longtext NOT NULL,
   `time` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Gegevens worden uitgevoerd voor tabel `node_revisions`
 --
 
 INSERT INTO `node_revisions` (`id`, `node`, `number`, `content`, `time`) VALUES
-(2, 7, 1, 'Woef :D', 1219519471),
-(3, 7, 2, 'Woef x2', 1219520373);
-
-
-CREATE TABLE IF NOT EXISTS `node_options` (
-  `id` int(11) NOT NULL auto_increment,
-  `node` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `value` longtext NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+(2, 2, 1, 'Woef :D', 1219519471),
+(3, 3, 1, 'Woef x2', 1219520373),
+(4, 3, 2, 'Woef x23', 1219520373);
