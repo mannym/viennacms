@@ -1,7 +1,7 @@
 <?php
 class Node_Option extends ADOdb_Active_Record {
 	public function __toString() {
-		return $this->value;
+		return $this->option_value;
 	}
 }
 
@@ -12,13 +12,13 @@ class Node_Options implements ArrayAccess {
 	public function set($key, $value) {
 		if (!isset($this->data[$key]) && !is_a($value, 'Node_Option')) {
 			$new = new Node_Option();
-			$new->node = $this->node->id;
-			$new->name = $key;
-			$new->value = $value;
+			$new->node_id = $this->node->node_id;
+			$new->option_name = $key;
+			$new->option_value = $value;
 			$this->data[$key] = $new;
 		} else {
 			if (isset($this->data[$key])) {
-				$this->data[$key]->value = $value;
+				$this->data[$key]->option_value = $value;
 			} else {
 				$this->data[$key] = $value;
 			}

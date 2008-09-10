@@ -55,7 +55,7 @@ class LayoutController extends Controller {
 	private function _get_parents($node) {
 		$nodes = array($node->get_parent());
 
-		if ($nodes[0]->id) {
+		if ($nodes[0]->node_id) {
 			$newnode = $nodes[0];
 			$nodes = array_merge($nodes, $this->_get_parents($newnode));
 		}
@@ -77,7 +77,7 @@ class LayoutController extends Controller {
 			}
 		}
 		foreach ($this->parents as $parent) {
-			$active[] = $parent->id;
+			$active[] = $parent->node_id;
 		}
 				
 		$links = array();
@@ -90,7 +90,7 @@ class LayoutController extends Controller {
 		
 		foreach ($nodes as $node) {
 			$text = $node->title;
-			$link = $this->view->url('node/show/' . $node->id);
+			$link = $this->view->url('node/show/' . $node->node_id);
 		
 			$class = '';
 				

@@ -15,14 +15,14 @@ class Node extends ADOdb_Active_Record {
 
 	public function get_parent() {
 		$node = new Node();
-		$node->load('id = ?', array($this->parent));
+		$node->load('node_id = ?', array($this->parent));
 		
 		return $node;
 	}
 	
 	public function get_children() {
 		$node = new Node();
-		return $node->find('parent = ?', array($this->id));
+		return $node->find('parent = ?', array($this->node_id));
 	}
 	
 	public function get_siblings_all() {
@@ -36,16 +36,16 @@ class Node extends ADOdb_Active_Record {
 		// get revision
 		$this->revision = new Node_Revision();
 		$this->revision->content = '';
-		$this->revision->load('node = ? AND number = ?', array($this->id, $this->revision_num));
+		$this->revision->load('node = ? AND number = ?', array($this->node_id, $this->revision_num));
 		$this->revision->node_obj = $this;
 		
 		// get options
 		$options = new Node_Option();
 		$this->options = new Node_Options();
 		$this->options->node = $this;
-		$options = $options->find('node = ?', array($this->id));
+		$options = $options->find('node_id = ?', array($this->node_id));
 		foreach ($options as $key => $value) {
-			$this->options[$value->name] = $value;
+			$this->options[$value->option_name] = $value;
 		}
 	}
 	

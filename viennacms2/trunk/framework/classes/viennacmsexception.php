@@ -16,7 +16,7 @@
  * @package framework
  * @access public
  */
-class ViennaCMSException extends Exception {
+class viennaCMSException extends Exception {
 	public function __construct($message, $code = 0)
 	{
 		// @TODO: Do something usefull, such as storing it

@@ -25,7 +25,11 @@
 		<?php echo $this['content'] ?>
 	</div>
 	<div id="footer">
-		Powered by <a href="http://www.viennacms.nl/">viennaCMS</a> &copy; 2008 viennaCMS Group
+		Powered by <a href="http://www.viennacms.nl/">viennaCMS</a> &copy; 2008 viennaCMS Group | 
+		<?php
+		global $queriesC;
+		echo $queriesC;
+		?>
 	</div>
 	</div>
 	</body>

@@ -47,8 +47,8 @@ class Manager {
 			if (strpos($_SERVER['REQUEST_URI'], '.php') === false
 				&& $uri_no_qs != manager::basepath(true) && !isset($_GET['q'])) {
 				$query = preg_replace('@^' . preg_quote(manager::basepath(), '@') . '@', '', $uri_no_qs);
-			} else {
-				$query = $_GET['q'];
+			} else if (!empty($_SERVER['PATH_INFO'])) {
+				$query = substr($_SERVER['PATH_INFO'], 1);
 			}
 		}
 		// some init-ing
@@ -56,9 +56,8 @@ class Manager {
 				
 		// TODO: change this to configable in acp
 		if (empty($query)) {
-			$query = 'node/show/' . $this->global['sitenode']->node_id;
+			$query = 'node';
 		}
-		
 		
 		$this->global['router']->route($query);
 		// TODO: create selection
@@ -91,7 +90,7 @@ class Manager {
 	public function get_sitenode() {
 		// create a temporary node to serve as the main root
 		$node = new Node();
-		$node->id = 0;
+		$node->node_id = 0;
 		$sites = $node->get_children();
 		
 		// now check the hostname

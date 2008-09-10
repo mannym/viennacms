@@ -37,17 +37,22 @@ class View implements ArrayAccess {
 	}
 	
 	public function url($data) {
+		$prefix = '';
+		if (!$global['config']['rewrite']) {
+			$prefix .= 'index.php/';
+		}
+		
 		if (!is_array($data)) {
 			if (strpos($data, '://') === false) {
-				return manager::base() . '?q=' . $data;
+				return manager::base() . $prefix . $data;
 			} else {
 				return $data;
 			}
 		} else {
-			$url = '';
+			$url = $prefix;
 			
 			if (!empty($data['controller'])) {
-				$url .= '?q=' . $data['controller'];
+				$url .= $data['controller'];
 			}
 			
 			if (!empty($data['action'])) {
