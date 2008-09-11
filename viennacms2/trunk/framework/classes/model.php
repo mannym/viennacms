@@ -150,7 +150,7 @@ abstract class Model {
 			settype($temp, $field['type']);
 			$data[$id] = $temp;
 		}
-		
+
 		$sql_data = $this->global['db']->sql_build_array($type, $data);
 		$sql .= $this->table . (($type == 'UPDATE') ? ' SET ' : ' ');
 		$sql .= $sql_data . $end;
@@ -158,7 +158,9 @@ abstract class Model {
 		$this->global['db']->sql_query($sql);
 		
 		$key = $this->keys[0];
-		$this->$key = $this->global['db']->sql_nextid();
+		if ($this->fields[$key]['type'] == 'int') {
+			$this->$key = $this->global['db']->sql_nextid();
+		}
 
 		$this->hook_save();
 		
