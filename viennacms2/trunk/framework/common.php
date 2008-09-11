@@ -78,13 +78,45 @@ class Node extends Model {
 			'their_fields' => array('node', 'number'),
 			'checks' => array(
 				'other.number' => 'revnum'
-			)
+			),
+			'object' => array('class' => 'Node_Revision', 'property' => 'revision')
+		),
+		'node_to_options' => array(
+			'type' => 'one_to_many',
+			'my_fields' => array('node_id'),
+			'table' => 'node_options',
+			'their_fields' => array('node_id'),
+			'object' => array('class' => 'Node_Option', 'property' => '_options')
 		)
 	);
 }
 
+class Node_Revision extends Model {
+	protected $table = 'node_revisions';
+	protected $fields = array(
+		'id' => array('type' => 'int'),
+		'node' => array('type' => 'int'),
+		'number' => array('type' => 'int'),
+		'content' => array('type' => 'string'),
+		'time' => array('type' => 'int'),
+	);
+	protected $relations = array();
+}
+
+class Node_Option extends Model {
+	protected $table = 'node_options';
+	protected $fields = array(
+		'id' => array('type' => 'int'),
+		'node_id' => array('type' => 'int'),
+		'option_name' => array('type' => 'string'),
+		'option_value' => array('type' => 'string'),
+	);
+	protected $relations = array();	
+}
+
 $node = new Node($global);
-$node->node_id = 3;
+$node->parent = 1;
 //$node->revnum = 1;
 $node->type = 'page';
-$node->read();
+var_dump($node->read());
+var_dump($global['db']->num_queries);

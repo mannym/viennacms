@@ -6,7 +6,7 @@ abstract class Model {
 		$this->global = $global;
 	}
 	
-	public function read() {
+	public function read($single = false) {
 		$my_id = $this->get_table_name($this->table);
 		$this->tables = array($this->get_table_name($this->table) => $this->table);
 		$where = array();
@@ -37,6 +37,7 @@ abstract class Model {
 		}
 		
 		$after_table = '';
+		$objects = array();
 		
 		foreach ($this->relations as $key => $parameters) {
 			switch ($parameters['type']) {
@@ -52,6 +53,8 @@ abstract class Model {
 						}
 					}
 					$after_table .= implode(' AND ', $mywheres);
+					
+					$objects[] = $parameters['object'];
 				break;
 			}
 		}
@@ -64,9 +67,90 @@ abstract class Model {
 		
 		$sql  = 'SELECT * FROM ' . implode(', ', $qtables) . $after_table;
 		$sql .= ' WHERE ' . implode(' AND ', $wheres);
+		$sql .= ($single) ? ' LIMIT 1' : '';
 		
 		$result = $this->global['db']->sql_query($sql);
-		var_dump($sql);
+		$rowset = $this->global['db']->sql_fetchrowset($result);
+		
+		if (!$single) {
+			$class = get_class($this);
+			$return = array();
+			
+			foreach ($rowset as $i => $row) {
+				$return[$i] = new $class($this->global);
+				$return[$i]->set_row($row);
+				
+				foreach ($objects as $parameters) {
+					$name = $parameters['class'];
+					$property = $parameters['property'];
+					
+					$return[$i]->$property = new $name($this->global);
+					$return[$i]->$property->set_row($row);
+				}
+				
+				$return[$i]->handle_otm();
+			}
+			
+			return $return;
+		} else {
+			$row = $rowset[0];
+			
+			$this->set_row($row);
+			
+			foreach ($objects as $parameters) {
+				$name = $parameters['class'];
+				$property = $parameters['property'];
+				
+				$this->$property = new $name($this->global);
+				$this->$property->set_row($row);
+			}
+			
+			$this->handle_otm();
+		}
+	}
+	
+	public function set_row($row) {
+		foreach ($row as $field => $value) {
+			if (isset($this->fields[$field])) {
+				$this->$field = $value;
+			}
+		}
+	}
+	
+	public function handle_otm() {
+		foreach ($this->relations as $key => $parameters) {
+			switch ($parameters['type']) {
+				case 'one_to_many':
+					$mywheres = array();
+					foreach ($parameters['my_fields'] as $i => $field) {
+						$check = $this->$field;
+						
+						switch ($this->fields[$field]['type']) {
+							case 'int':
+								$value = intval($check);
+							break;
+							case 'string':
+								$value = "'" . $this->global['db']->sql_escape($check) . "'";
+							break;
+						}
+						$mywheres[] = $parameters['their_fields'][$i] . ' = ' . $value;
+					}
+					$where .= implode(' AND ', $mywheres);
+					
+					$sql = 'SELECT * FROM ' . $parameters['table'] . ' WHERE ' . $where;
+					$result = $this->global['db']->sql_query($sql);
+					$name = $parameters['object']['class'];
+					$property = $parameters['object']['property'];
+					$this->$property = array();
+					$rowset = $this->global['db']->sql_fetchrowset($result);
+					
+					foreach ($rowset as $i => $row) {
+						$this->$property[$i] = new $name();
+						$this->$property[$i]->set_row($row);
+					}
+				break;
+			}
+		}
 	}
 	
 	public function get_table_name($table) {
