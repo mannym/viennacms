@@ -199,9 +199,11 @@ abstract class Model {
 	}
 	
 	public function set_row($row) {
-		foreach ($row as $field => $value) {
-			if (isset($this->fields[$field])) {
-				$this->$field = $value;
+		if ($row) {	
+			foreach ($row as $field => $value) {
+				if (isset($this->fields[$field])) {
+					$this->$field = $value;
+				}
 			}
 		}
 		

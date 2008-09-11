@@ -3,12 +3,14 @@ class NodeController extends Controller {
 	public $modules;
 
 	public function show($id = false) {
-		$node = new Node();
+		$node = new Node($this->global);
 		if (!$id) {
-			$node->load('node_id = ?', array(intval($this->arguments[0])));
+			$node->node_id = $this->arguments[0];
 		} else {
-			$node->load('node_id = ?', array(intval($id)));
+			$node->node_id = $id;
 		}
+		
+		$node->read(true);
 		
 		if (!$node->node_id && !$id) {
 			$this->global['manager']->page_not_found();

@@ -89,7 +89,7 @@ class Manager {
 	 */
 	public function get_sitenode() {
 		// create a temporary node to serve as the main root
-		$node = new Node();
+		$node = new Node($this->global);
 		$node->node_id = 0;
 		$sites = $node->get_children();
 		

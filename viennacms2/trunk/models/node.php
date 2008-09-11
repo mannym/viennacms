@@ -64,4 +64,23 @@ class Node extends Model {
 		$this->revision->number = $this->revision_num;
 		$this->revision->time = time();
 	}
+	
+	public function get_children() {
+		$node = new Node($this->global);
+		$node->parent = $this->node_id;
+		return $node->read();
+	}
+	
+	public function get_parent() {
+		$node = new Node($this->global);
+		$node->node_id = $this->parent;
+		$node->read(true);
+		return $node;
+	}
+	
+	public function get_siblings_all() {
+		$node = new Node($this->global);
+		$node->parent = $this->parent;
+		return $node->read();
+	}
 }
