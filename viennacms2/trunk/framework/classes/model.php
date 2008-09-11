@@ -1,9 +1,28 @@
 <?php
 abstract class Model {
 	protected $global;
-	
+	public $written = false;
+
 	public function __construct($global) {
 		$this->global = $global;
+	}
+	
+	public static function create($name, $global) {
+		$model = new $name($global);
+		foreach ($model->relations as $parameters) {
+			switch ($parameters['type']) {
+				case 'one_to_one':
+					$property = $parameters['object']['property'];
+					$class = $parameters['object']['class'];
+					
+					$model->$property = new $class($global);
+				break;
+			}
+		}
+		
+		$model->hook_new();
+		
+		return $model;
 	}
 	
 	public function read($single = false) {
@@ -24,14 +43,7 @@ abstract class Model {
 				continue;
 			}
 			
-			switch ($this->fields[$field]['type']) {
-				case 'int':
-					$value = intval($check);
-				break;
-				case 'string':
-					$value = "'" . $this->global['db']->sql_escape($check) . "'";
-				break;
-			}
+			$value = $this->sql_value($field);
 			
 			$wheres[] = $my_id . '.' . $field . ' = ' . $value;
 		}
@@ -89,6 +101,7 @@ abstract class Model {
 				}
 				
 				$return[$i]->handle_otm();
+				$return[$i]->hook_read();
 			}
 			
 			return $return;
@@ -106,7 +119,83 @@ abstract class Model {
 			}
 			
 			$this->handle_otm();
+			$this->hook_read();
 		}
+	}
+	
+	public function write() {
+		$this->hook_presave();
+		
+		$where = $end = '';		
+		
+		if ($this->written) {
+			$type = 'UPDATE';
+			$sql = 'UPDATE ';
+			$wheres = array();
+			
+			foreach ($this->keys as $key) {
+				$wheres[] = $key . ' = ' . $this->sql_value($key);
+			}
+			
+			$where = implode(' AND ', $wheres);
+			$end = ' WHERE ' . $where;
+		} else {
+			$type = 'INSERT';
+			$sql = 'INSERT INTO ';
+		}
+		
+		$data = array();
+		foreach ($this->fields as $id => $field) {
+			$temp = $this->$id;
+			settype($temp, $field['type']);
+			$data[$id] = $temp;
+		}
+		
+		$sql_data = $this->global['db']->sql_build_array($type, $data);
+		$sql .= $this->table . (($type == 'UPDATE') ? ' SET ' : ' ');
+		$sql .= $sql_data . $end;
+	
+		$this->global['db']->sql_query($sql);
+		
+		$key = $this->keys[0];
+		$this->$key = $this->global['db']->sql_nextid();
+
+		$this->hook_save();
+		
+		foreach ($this->relations as $parameters) {
+			$property = $parameters['object']['property'];
+			
+			switch ($parameters['type']) {
+				case 'one_to_one':
+					$this->$property->write();
+				break;
+				case 'one_to_many':
+					foreach ($this->$property as $thing) {
+						$thing->write();
+					}
+				break;
+			}
+		}
+		
+		$this->written = true;
+	}
+
+	protected function hook_read() { }
+	protected function hook_presave() { }
+	protected function hook_save() { }
+	protected function hook_new() { }
+	
+	public function sql_value($field) {
+		switch ($this->fields[$field]['type']) {
+			case 'int':
+				$value = intval($this->$field);
+			break;
+			case 'string':
+				$value = "'" . $this->global['db']->sql_escape($this->$field) . "'";
+			break;
+		}
+		
+		return $value;
 	}
 	
 	public function set_row($row) {
@@ -115,6 +204,8 @@ abstract class Model {
 				$this->$field = $value;
 			}
 		}
+		
+		$this->written = true;
 	}
 	
 	public function handle_otm() {
@@ -123,16 +214,7 @@ abstract class Model {
 				case 'one_to_many':
 					$mywheres = array();
 					foreach ($parameters['my_fields'] as $i => $field) {
-						$check = $this->$field;
-						
-						switch ($this->fields[$field]['type']) {
-							case 'int':
-								$value = intval($check);
-							break;
-							case 'string':
-								$value = "'" . $this->global['db']->sql_escape($check) . "'";
-							break;
-						}
+						$value = $this->sql_value($field);
 						$mywheres[] = $parameters['their_fields'][$i] . ' = ' . $value;
 					}
 					$where .= implode(' AND ', $mywheres);
@@ -143,10 +225,9 @@ abstract class Model {
 					$property = $parameters['object']['property'];
 					$this->$property = array();
 					$rowset = $this->global['db']->sql_fetchrowset($result);
-					
 					foreach ($rowset as $i => $row) {
-						$this->$property[$i] = new $name();
-						$this->$property[$i]->set_row($row);
+						$this->{$property}[$i] = new $name($this->global);
+						$this->{$property}[$i]->set_row($row);
 					}
 				break;
 			}
