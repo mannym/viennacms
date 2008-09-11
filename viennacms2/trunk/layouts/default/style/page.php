@@ -11,6 +11,7 @@
 	<div id="wrap">
 	<div id="header">
 		<a href="" class="logo"></a>
+		<span><a href="<?php echo $this['login_logout_url'] ?>"><?php echo $this['login_logout'] ?></a></span>
 	</div>
 	<div id="menucontainer">
 	<div>

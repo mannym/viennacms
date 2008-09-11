@@ -123,7 +123,7 @@ abstract class Model {
 		}
 	}
 	
-	public function write() {
+	public function write($relations = true) {
 		$this->hook_presave();
 		
 		$where = $end = '';		
@@ -162,18 +162,22 @@ abstract class Model {
 
 		$this->hook_save();
 		
-		foreach ($this->relations as $parameters) {
-			$property = $parameters['object']['property'];
-			
-			switch ($parameters['type']) {
-				case 'one_to_one':
-					$this->$property->write();
-				break;
-				case 'one_to_many':
-					foreach ($this->$property as $thing) {
-						$thing->write();
+		if ($relations) {		
+			foreach ($this->relations as $parameters) {
+				$property = $parameters['object']['property'];
+				
+				if (!empty($this->$property)) {
+					switch ($parameters['type']) {
+						case 'one_to_one':
+							$this->$property->write();
+						break;
+						case 'one_to_many':
+							foreach ($this->$property as $thing) {
+								$thing->write();
+							}
+						break;
 					}
-				break;
+				}
 			}
 		}
 		

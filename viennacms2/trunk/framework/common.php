@@ -81,3 +81,6 @@ $node->write();
 echo $node->node_id;
 var_dump($global['db']->num_queries);
 */
+
+$global['user'] = new Users($global);
+$global['user']->initialize();

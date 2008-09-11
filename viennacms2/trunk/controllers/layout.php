@@ -15,6 +15,18 @@ class LayoutController extends Controller {
 	
 		$this->view['content'] = $content;
 		$this->view['styles'] = $this->get_styles();
+		
+		// user stuff
+		if ($this->global['user']->logged_in) {
+			$u_lilo = 'user/logout/' . $this->global['user']->session->session_id;
+			$l_lilo = sprintf(__('Logout [ %s ]'), $this->global['user']->user->username);
+		} else {
+			$u_lilo = 'user/login';
+			$l_lilo = __('Login');
+		}
+		$this->view['user'] = $this->global['user']->user;
+		$this->view['login_logout_url'] = $this->view->url($u_lilo);
+		$this->view['login_logout'] = $l_lilo;
 	}
 	
 	private function get_styles() {
