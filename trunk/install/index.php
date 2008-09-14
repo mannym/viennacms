@@ -84,7 +84,7 @@ switch ($step) {
 		if (!version_compare(phpversion(), "5.2.0", ">=")) {
 			$mes .= "<br /><strong><div style='color:red;'>";
 			$mes .= sprintf(__('The current PHP version (%s) is too old to run viennaCMS correctly. The minimum version is 5.2.0.'),phpversion());
-			$mes .= "</div></string>";
+			$mes .= "</div></strong>";
 			$disabled = true;
 		}
 		$template->assign_vars(array(
