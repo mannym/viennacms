@@ -114,3 +114,20 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT INTO `users` (`user_id`, `username`, `user_password`, `user_email`, `user_active`) VALUES
 (1, 'admin', '200ceb26807d6bf99fd6f4f0d1ca54d4', 'foo@bar.com', 1);
+
+
+CREATE TABLE IF NOT EXISTS `permission_objects` (
+  `id` int(11) NOT NULL auto_increment,
+  `resource` varchar(40) NOT NULL,
+  `owner_id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  `permission_mask` varchar(60) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Gegevens worden uitgevoerd voor tabel `permission_objects`
+--
+
+INSERT INTO `permission_objects` (`id`, `resource`, `owner_id`, `group_id`, `permission_mask`) VALUES
+(1, 'node:3', 1, 0, 'rwdv----r--v');

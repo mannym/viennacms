@@ -6,12 +6,10 @@ class Users {
 	public $session;
 	private $global;
 	
-	public function __construct($global) {
+	public function __construct() {
 		@define('USER_OK', 0);
 		@define('USER_NOT_FOUND', 1);
 		@define('USER_WRONG_PASSWORD', 2);
-		
-		$this->global = $global;
 	}
 	
 	public function initialize() {

@@ -2,7 +2,7 @@
 class UserController extends Controller {
 	public function login() {
 		if (isset($_POST['submit'])) {
-			$result = $this->global['user']->login($_POST['username'], $_POST['password']);
+			$result = cms::$user->login($_POST['username'], $_POST['password']);
 			if ($result != USER_OK) {
 				trigger_error(__('The entered username and/or password are incorrect.'));
 			} else {
@@ -13,8 +13,8 @@ class UserController extends Controller {
 	}
 	
 	public function logout() {
-		if ($this->arguments[0] == $this->global['user']->session->session_id) {
-			$this->global['user']->logout();
+		if ($this->arguments[0] == cms::$user->session->session_id) {
+			cms::$user->logout();
 		}
 		
 		header('Location: ' . $this->view->url('node'));

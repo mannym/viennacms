@@ -1,13 +1,10 @@
 <?php
 
 class Router {
-	private $global;
 	public $routes;
 	public $parts;
 	
-	public function __construct($global) {
-		$this->global = $global;
-		
+	public function __construct() {
 		include(ROOT_PATH . 'framework/config/router.php');
 		$this->routes = $routes;
 	}

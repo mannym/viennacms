@@ -3,7 +3,7 @@ class NodeController extends Controller {
 	public $modules;
 
 	public function show($id = false) {
-		$node = new Node($this->global);
+		$node = new Node();
 		if (!$id) {
 			$node->node_id = $this->arguments[0];
 		} else {
@@ -13,7 +13,7 @@ class NodeController extends Controller {
 		$node->read(true);
 		
 		if (!$node->node_id && !$id) {
-			$this->global['manager']->page_not_found();
+			cms::$manager->page_not_found();
 		}
 		
 		$types = manager::run_hook_all('get_node_types');
@@ -29,8 +29,8 @@ class NodeController extends Controller {
 		$this->view['node'] = $node;	
 
 		if (!$id) {
-			$this->global['node'] = $node;
-			$this->global['layout']->view['title'] = $node->title;
+			cms::$vars['node'] = $node;
+			cms::$layout->view['title'] = $node->title;
 		}
 	}
 	
@@ -45,9 +45,9 @@ class NodeController extends Controller {
 	 * NodeController::node(7, $this->global);
 	 * </code>
 	 */
-	static function node($id, $global) {
-		$controller = new NodeController($global);
-		$controller->view = new View($global);
+	static function node($id) {
+		$controller = new NodeController();
+		$controller->view = new View();
 		$controller->show($id);
 		return $controller->view->display();
 	}
@@ -58,8 +58,8 @@ class NodeController extends Controller {
 		foreach ($this->modules[$location] as $module) {
 			$box = new View($this->global);
 			$box->path = 'style/box.php';
-			$controller = $this->global['manager']->get_controller($module['controller']);
-			$controller->view = new View($this->global);
+			$controller = cms::$manager->get_controller($module['controller']);
+			$controller->view = new View();
 			$controller->view->path = $module['controller'] . '.php';
 			$controller->arguments = $module['arguments'];
 			$return = $controller->run();
@@ -110,9 +110,9 @@ class NodeController extends Controller {
 		$node->save();
 		*/
 
-		$this->global['router']->parts['action'] = 'show';
+		cms::$router->parts['action'] = 'show';
 		$this->view->reset_path();
-		$this->arguments = array((string) $this->global['sitenode']->options['homepage']);
+		$this->arguments = array((string) cms::$vars['sitenode']->options['homepage']);
 		$this->show();
 	}
 }

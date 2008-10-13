@@ -33,7 +33,8 @@ if (version_compare(phpversion(), '6.0.0-dev', '<') && get_magic_quotes_gpc()) {
 	define('STRIP', false);
 }
 
-$global = new GlobalStore();
+cms::$vars = new GlobalStore();
+//$global = cms::$vars;
 
 //include(ROOT_PATH . 'framework/db/adodb-exceptions.inc.php');
 //include(ROOT_PATH . 'framework/db/adodb.inc.php');
@@ -45,8 +46,8 @@ if (empty($dbms)) {
 	die('You should install viennaCMS2 first.');
 }
 
-$global['db'] = new database();
-$global['db']->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname);
+cms::register('db', new database());
+cms::$db->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname);
 
 //try {
 //	$global['db'] = newADOConnection($dbms);
@@ -82,5 +83,5 @@ echo $node->node_id;
 var_dump($global['db']->num_queries);
 */
 
-$global['user'] = new Users($global);
-$global['user']->initialize();
+cms::register('user', new Users());
+cms::$user->initialize();

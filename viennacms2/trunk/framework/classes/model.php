@@ -1,11 +1,6 @@
 <?php
 abstract class Model {
-	protected $global;
 	public $written = false;
-
-	public function __construct($global) {
-		$this->global = $global;
-	}
 	
 	public static function create($name, $global) {
 		$model = new $name($global);
@@ -59,7 +54,7 @@ abstract class Model {
 					foreach ($parameters['my_fields'] as $i => $field) {
 						if (isset($parameters['checks']['other.' . $parameters['their_fields'][$i]]) &&
 							!empty($this->{$parameters['checks']['other.' . $parameters['their_fields'][$i]]})) {
-							$wheres[] = $this->get_table_name($parameters['table']) . '.' . $parameters['their_fields'][$i] . " = '" . $this->global['db']->sql_escape($this->{$parameters['checks']['other.' . $parameters['their_fields'][$i]]}) . "'";
+							$wheres[] = $this->get_table_name($parameters['table']) . '.' . $parameters['their_fields'][$i] . " = '" . cms::$db->sql_escape($this->{$parameters['checks']['other.' . $parameters['their_fields'][$i]]}) . "'";
 						} else {
 							$mywheres[] = $my_id . '.' . $field . ' = ' . $this->get_table_name($parameters['table']) . '.' . $parameters['their_fields'][$i];
 						}
@@ -81,22 +76,22 @@ abstract class Model {
 		$sql .= ' WHERE ' . implode(' AND ', $wheres);
 		$sql .= ($single) ? ' LIMIT 1' : '';
 		
-		$result = $this->global['db']->sql_query($sql);
-		$rowset = $this->global['db']->sql_fetchrowset($result);
+		$result = cms::$db->sql_query($sql);
+		$rowset = cms::$db->sql_fetchrowset($result);
 		
 		if (!$single) {
 			$class = get_class($this);
 			$return = array();
 			
 			foreach ($rowset as $i => $row) {
-				$return[$i] = new $class($this->global);
+				$return[$i] = new $class();
 				$return[$i]->set_row($row);
 				
 				foreach ($objects as $parameters) {
 					$name = $parameters['class'];
 					$property = $parameters['property'];
 					
-					$return[$i]->$property = new $name($this->global);
+					$return[$i]->$property = new $name();
 					$return[$i]->$property->set_row($row);
 				}
 				
@@ -114,7 +109,7 @@ abstract class Model {
 				$name = $parameters['class'];
 				$property = $parameters['property'];
 				
-				$this->$property = new $name($this->global);
+				$this->$property = new $name();
 				$this->$property->set_row($row);
 			}
 			
@@ -151,15 +146,15 @@ abstract class Model {
 			$data[$id] = $temp;
 		}
 
-		$sql_data = $this->global['db']->sql_build_array($type, $data);
+		$sql_data = cms::$db->sql_build_array($type, $data);
 		$sql .= $this->table . (($type == 'UPDATE') ? ' SET ' : ' ');
 		$sql .= $sql_data . $end;
 	
-		$this->global['db']->sql_query($sql);
+		cms::$db->sql_query($sql);
 		
 		$key = $this->keys[0];
 		if ($this->fields[$key]['type'] == 'int') {
-			$this->$key = $this->global['db']->sql_nextid();
+			$this->$key = cms::$db->sql_nextid();
 		}
 
 		$this->hook_save();
@@ -197,7 +192,7 @@ abstract class Model {
 				$value = intval($this->$field);
 			break;
 			case 'string':
-				$value = "'" . $this->global['db']->sql_escape($this->$field) . "'";
+				$value = "'" . cms::$db->sql_escape($this->$field) . "'";
 			break;
 		}
 		
@@ -228,13 +223,13 @@ abstract class Model {
 					$where .= implode(' AND ', $mywheres);
 					
 					$sql = 'SELECT * FROM ' . $parameters['table'] . ' WHERE ' . $where;
-					$result = $this->global['db']->sql_query($sql);
+					$result = cms::$db->sql_query($sql);
 					$name = $parameters['object']['class'];
 					$property = $parameters['object']['property'];
 					$this->$property = array();
-					$rowset = $this->global['db']->sql_fetchrowset($result);
+					$rowset = cms::$db->sql_fetchrowset($result);
 					foreach ($rowset as $i => $row) {
-						$this->{$property}[$i] = new $name($this->global);
+						$this->{$property}[$i] = new $name();
 						$this->{$property}[$i]->set_row($row);
 					}
 				break;

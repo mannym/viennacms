@@ -17,21 +17,18 @@
  * @access public
  */
 class cache {
-	private $global;
-	
 	/**
 	 * Construct
 	 *
 	 * @param GlobalStore $global
 	 */
-	public function __construct($global)
+	public function __construct()
 	{
-		$this->global = $global;
 		// @TODO: load this from somewhere else
-		$this->global['cachedir'] = ROOT_PATH . 'cache/';
+		cms::$vars['cachedir'] = ROOT_PATH . 'cache/';
 		
 		// Writable?
-		if(!is_writable($this->global['cachedir']))
+		if(!is_writable(cms::$vars['cachedir']))
 		{
 			throw new viennaCMSException('Cache dir is not writeable');
 		}

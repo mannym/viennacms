@@ -2,8 +2,8 @@
 class LayoutController extends Controller {
 	public function page($content) {
 		// assign navigation
-		if (isset($this->global['node'])) {
-			$this->parents = $this->get_parents($this->global['node']);
+		if (isset(cms::$vars['node'])) {
+			$this->parents = $this->get_parents(cms::$vars['node']);
 		} else {
 			$this->parents = array();
 		}
@@ -17,21 +17,24 @@ class LayoutController extends Controller {
 		$this->view['styles'] = $this->get_styles();
 		
 		// user stuff
-		if ($this->global['user']->logged_in) {
-			$u_lilo = 'user/logout/' . $this->global['user']->session->session_id;
-			$l_lilo = sprintf(__('Logout [ %s ]'), $this->global['user']->user->username);
+		if (cms::$user->logged_in) {
+			$u_lilo = 'user/logout/' . cms::$user->session->session_id;
+			$l_lilo = sprintf(__('Logout [ %s ]'), cms::$user->user->username);
 		} else {
 			$u_lilo = 'user/login';
 			$l_lilo = __('Login');
 		}
-		$this->view['user'] = $this->global['user']->user;
+		$this->view['user'] = cms::$user->user;
 		$this->view['login_logout_url'] = $this->view->url($u_lilo);
 		$this->view['login_logout'] = $l_lilo;
+		$this->view['siteurl'] = manager::base();
+		$this->view['sitename'] = cms::$vars['sitenode']->title;
+		$this->view['sitedescription'] = cms::$vars['sitenode']->description;		
 	}
 	
 	private function get_styles() {
 		$styles = array(
-			'layouts/' . $this->global['style'] . '/stylesheet.css'
+			'layouts/' . cms::$vars['style'] . '/stylesheet.css'
 		);
 		$return = '';
 		
@@ -79,7 +82,7 @@ class LayoutController extends Controller {
 		$active = array();
 		
 		if ($level == 1) {
-			$node = $this->global['sitenode'];
+			$node = cms::$vars['sitenode'];
 			$nodes = $node->get_children();
 		} else if ($level > 1) {
 			if (isset($this->parents[$level])) {

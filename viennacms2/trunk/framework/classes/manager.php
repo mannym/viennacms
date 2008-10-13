@@ -25,9 +25,8 @@ class Manager {
 	 *
 	 * @param GlobalStore $global
 	 */
-	public function __construct($global) {
-		$this->global = $global;
-		$this->global['manager'] = $this;
+	public function __construct() {
+		cms::register('manager', $this);
 		// TODO: dynamically load this
 		self::$extpaths['core'] = 'extensions/core/core.ext.php';
 	}
@@ -38,7 +37,7 @@ class Manager {
 	 * @param string $query URL to parse and run, if empty, the current URL is used.
 	 */
 	public function run($query = '') {
-		$this->global['router'] = new Router($this->global);
+		cms::register('router', new Router());
 		
 		if (empty($query)) {
 			$uri_no_qs = explode('?', $_SERVER['REQUEST_URI']);
@@ -52,28 +51,28 @@ class Manager {
 			}
 		}
 		// some init-ing
-		$this->global['sitenode'] = $this->get_sitenode();
+		cms::$vars['sitenode'] = $this->get_sitenode();
 				
 		// TODO: change this to configable in acp
 		if (empty($query)) {
 			$query = 'node';
 		}
 		
-		$this->global['router']->route($query);
+		cms::$router->route($query);
 		// TODO: create selection
-		$this->global['style'] = 'default';
-		$parts = $this->global['router']->parts;
+		cms::$vars['style'] = 'default';
+		$parts = cms::$router->parts;
 		$action = (!empty($parts['action'])) ? $parts['action'] : 'main';
 
 		// get the layout
 		$layout = $this->get_controller('layout');
-		$layout->view = new View($this->global);
+		$layout->view = new View();
 		$layout->view->path = 'style/page.php';
-		$this->global['layout'] = $layout;
+		cms::register('layout', $layout);
 		
 		$controller = $this->get_controller($parts['controller']);
 		$controller->arguments = explode('/', $parts['params']);
-		$controller->view = new View($this->global);
+		$controller->view = new View();
 		$controller->$action();
 		$content = $controller->view->display();
 		
@@ -89,7 +88,7 @@ class Manager {
 	 */
 	public function get_sitenode() {
 		// create a temporary node to serve as the main root
-		$node = new Node($this->global);
+		$node = new Node();
 		$node->node_id = 0;
 		$sites = $node->get_children();
 		
@@ -129,7 +128,7 @@ class Manager {
 		{
 			throw new ViennaCMSException('Unknown controller');
 		}
-		return new $class_name($this->global);
+		return new $class_name();
 	}
 
 	/**
@@ -137,9 +136,9 @@ class Manager {
 	 *
 	 */
 	public function page_not_found() {
-		if (!isset($this->global['404_done']) && isset($this->global['sitenode']->options['404_url'])) {
-			$this->global['404_done'] = true;
-			$this->run($this->global['sitenode']->options['404_url']);
+		if (!isset(cms::$vars['404_done']) && isset(cms::$vars['sitenode']->options['404_url'])) {
+			cms::$vars['404_done'] = true;
+			$this->run(cms::$vars['sitenode']->options['404_url']);
 			exit;
 			/*$controller = $this->get_controller('node');
 			$controller->view = new View($this->global);
@@ -151,10 +150,10 @@ class Manager {
 			$content = $controller->view->display();*/
 		}
 		
-		$this->global['layout']->view['title'] = __('Page not found');
+		cms::$layout->view['title'] = __('Page not found');
 		$content = __('This page could not be found.');			
-		$this->global['layout']->page($content);
-		echo $this->global['layout']->view->display();
+		cms::$layout->page($content);
+		echo cms::$layout->view->display();
 		exit;
 	}
 	

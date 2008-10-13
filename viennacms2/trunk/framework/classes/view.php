@@ -6,19 +6,16 @@
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 */
 class View implements ArrayAccess {
-	private $global;
 	private $vars;
 	public $path;
 	
-	public function __construct($global) {
-		$this->global = $global;
-		
+	public function __construct() {
 		$this->reset_path();
 	}
 	
 	public function reset_path() {
-		$this->path  = $this->global['router']->parts['controller'] . '/';
-		$this->path .= $this->global['router']->parts['action'] . '.php';
+		$this->path  = cms::$router->parts['controller'] . '/';
+		$this->path .= cms::$router->parts['action'] . '.php';
 	}
 	
 	public function set($var, $value) {
@@ -38,7 +35,7 @@ class View implements ArrayAccess {
 	
 	public function url($data) {
 		$prefix = '';
-		if (!$global['config']['rewrite']) {
+		if (!cms::$vars['config']['rewrite']) {
 			$prefix .= 'index.php/';
 		}
 		
@@ -84,7 +81,7 @@ class View implements ArrayAccess {
 	
 	public function scan_themes($path) {
 		$files = array(
-			'layouts/' . $this->global['style'] . '/' . $path,
+			'layouts/' . cms::$vars['style'] . '/' . $path,
 			'views/' . $path
 		);
 		
