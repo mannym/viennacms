@@ -42,7 +42,7 @@ class NodeController extends Controller {
 	 * @return string node output
 	 * @example
 	 * <code>
-	 * NodeController::node(7, $this->global);
+	 * NodeController::node(7);
 	 * </code>
 	 */
 	static function node($id) {
@@ -56,7 +56,7 @@ class NodeController extends Controller {
 		$content = '';
 	
 		foreach ($this->modules[$location] as $module) {
-			$box = new View($this->global);
+			$box = new View();
 			$box->path = 'style/box.php';
 			$controller = cms::$manager->get_controller($module['controller']);
 			$controller->view = new View();

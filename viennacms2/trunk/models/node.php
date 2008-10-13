@@ -33,7 +33,7 @@ class Node extends Model {
 	
 	protected function hook_read() {
 		$this->revision->node_obj = $this;
-		$this->options = new Node_Options($this->global);
+		$this->options = new Node_Options();
 		$this->options->node = $this;
 		foreach ($this->_options as $value) {
 			$this->options[$value->option_name] = $value;
@@ -41,7 +41,7 @@ class Node extends Model {
 	}
 	
 	protected function hook_new() {
-		$this->options = new Node_Options($this->global);
+		$this->options = new Node_Options();
 		$this->options->node = $this;
 		$this->_options = array();
 	}
@@ -66,20 +66,20 @@ class Node extends Model {
 	}
 	
 	public function get_children() {
-		$node = new Node($this->global);
+		$node = new Node();
 		$node->parent = $this->node_id;
 		return $node->read();
 	}
 	
 	public function get_parent() {
-		$node = new Node($this->global);
+		$node = new Node();
 		$node->node_id = $this->parent;
 		$node->read(true);
 		return $node;
 	}
 	
 	public function get_siblings_all() {
-		$node = new Node($this->global);
+		$node = new Node();
 		$node->parent = $this->parent;
 		return $node->read();
 	}

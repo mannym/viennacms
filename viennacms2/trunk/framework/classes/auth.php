@@ -4,12 +4,6 @@ define('AUTH_GROUP', 2);
 define('AUTH_ALL', 4);
 
 class Auth {
-	private $global;
-	
-	function __construct($global) {
-		$this->global = $global;
-	}
-	
 	function parse_permission_string($string) {
 		// determine length of every part of the string, and split the string in 3 parts
 		$partlen = strlen($string) / 3;
@@ -51,7 +45,7 @@ class Auth {
 		}
 		
 		// read the database
-		$data = new Permission_Object($this->global);
+		$data = new Permission_Object();
 		$data->resource = $resource;
 		$data->read(true);
 		

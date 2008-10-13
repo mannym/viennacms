@@ -4,7 +4,6 @@ class Users {
 	public $user;
 	public $logged_in;
 	public $session;
-	private $global;
 	
 	public function __construct() {
 		@define('USER_OK', 0);
@@ -23,7 +22,7 @@ class Users {
 		}
 		
 		if ($this->cookie['u'] && $this->cookie['s']) {
-			$this->session = new Session($this->global);
+			$this->session = new Session();
 			$this->session->session_id = $this->cookie['s'];
 			$this->session->read(true);
 			
@@ -37,13 +36,13 @@ class Users {
 		}
 		
 		$this->logged_in = false;
-		$this->user = new User($this->global);
+		$this->user = new User();
 		$this->user->user_id = 0;
 		$this->user->username = 'Anonymous';
 	}
 	
 	public function login($username, $password) {
-		$user = new User($this->global);
+		$user = new User();
 		$user->username = $username;
 		$user->read(true);
 		
@@ -57,7 +56,7 @@ class Users {
 		
 		$sid = md5(uniqid(time()));
 		
-		$this->session = new Session($this->global);
+		$this->session = new Session();
 		$this->session->user_id = $user->user_id;
 		$this->session->session_id = $sid;
 		$this->session->session_time = time();
@@ -80,7 +79,7 @@ class Users {
 	public function logout() {
 		// TODO: replace with model delete() function
 		$sql = 'DELETE FROM sessions WHERE session_id = \'' . $this->session->session_id . '\'';
-		$this->global['db']->sql_query($sql);
+		cms::$db->sql_query($sql);
 		setcookie('viennacms2_id', '', (time() - 3600), '/', '');
 		$this->logged_in = false;
 	}
