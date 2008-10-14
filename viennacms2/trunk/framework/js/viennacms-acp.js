@@ -1,6 +1,25 @@
 var dragging = false;
 
+function create_init_panes(loc, data) {
+	for (i = 0; i < data.length; i++) {
+		loc.append('<li><a href="' + data[i].href + '">' + data[i].title + '</a></li>');
+	}
+	
+	loc.find('li:last').addClass('active');
+}
+
 $(function() {
+	$.getJSON(
+		pane_url,
+		function(data) {
+			create_init_panes($('#panes-left ul.tabs'), data.left);
+			init_rest();
+		}
+	);
+});
+
+function init_rest() {
+		
 	$('.panes .pane .tabs').sortable({
 		'revert': true,
 		'connectWith': ['.panes .pane .tabs'],
@@ -43,7 +62,8 @@ $(function() {
 	
 	load_active_panes();
 	reload_pane_containers(false);
-});
+
+}
 
 function load_active_panes() {
 	$('.panes').each(function() {
