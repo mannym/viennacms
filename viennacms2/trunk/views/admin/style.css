@@ -1,0 +1,113 @@
+body {
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 12px;
+}
+
+#main-menu {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	height: 50px;
+	background-color: #09f;
+}
+
+#main-menu ul {
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+#main-menu ul li {
+	display: block;
+	float: left;
+	height: 18px;
+	padding: 16px 13px;
+	border-right: 1px solid #000;
+}
+
+#main-menu ul li a {
+	color: #fff;
+	text-decoration: none;
+	text-transform: uppercase;
+	font: 14px "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+
+#main-content {
+	position: absolute;
+	top: 52px;
+}
+
+#panes-left {
+	position: absolute;
+	left: 0px;
+	top: 50px;
+	width: 180px;
+	border-right: 1px solid #02a;
+}
+
+#panes-right {
+	position: absolute;
+	right: 0px;
+	top: 50px;
+	width: 180px;
+	border-left: 1px solid #02a;
+}
+
+#panes-bottom {
+	position: absolute;
+	left: 0px;
+	bottom: 0px;
+	height: 135px;
+	width: 100%;
+	/*overflow: auto;*/
+	background-color: #fff;
+}
+
+#panes-left, #panes-right {
+	bottom: 135px;
+	/*overflow: auto;*/
+}
+
+.panes .pane {
+	width: 100%;
+	border-bottom: 1px solid #02a;
+}
+
+#panes-bottom .pane {
+	height: 100%;
+	border: 0;
+}
+
+.panes .pane h1 {
+	margin: 0px;
+	background-color: #00a;
+	color: #fff;
+	font-size: 11px;
+	font-weight: normal;
+}
+
+.panes .pane ul.tabs {
+	margin: 0px;
+	padding: 0px;
+	background-color: #e4e0d8;
+	height: 16px;
+}
+
+.panes .pane ul.tabs li {
+	display: inline;
+	border-right: 1px solid #a4a098;
+	padding-left: 3px;
+	padding-right: 3px;
+	background-color: #d4d0c8;
+	cursor: pointer;
+}
+
+.panes .pane ul.tabs li a {
+	color: #000;
+	text-decoration: none;
+}
+
+.panes .pane ul.tabs li.active {
+	background-color: #e4e0d8;
+}

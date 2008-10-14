@@ -73,12 +73,16 @@ class Manager {
 		$controller = $this->get_controller($parts['controller']);
 		$controller->arguments = explode('/', $parts['params']);
 		$controller->view = new View();
-		$controller->$action();
+		$no_show_layout = $controller->$action();
 		$content = $controller->view->display();
 		
 		// create layout
-		$layout->page($content);
-		echo $layout->view->display();
+		if (!$no_show_layout) {
+			$layout->page($content);
+			echo $layout->view->display();
+		} else {
+			echo $content;
+		}
 	}
 	
 	/**
@@ -150,11 +154,8 @@ class Manager {
 			$content = $controller->view->display();*/
 		}
 		
-		cms::$layout->view['title'] = __('Page not found');
-		$content = __('This page could not be found.');			
-		cms::$layout->page($content);
-		echo cms::$layout->view->display();
-		exit;
+		cms::$vars['error_title'] = __('Page not found');
+		trigger_error(__('The requested page could not be found.'));
 	}
 	
 	static function array_merge_keys($arr1, $arr2) {
@@ -328,6 +329,10 @@ HTML;
 			
 			case E_USER_WARNING:
 			case E_USER_NOTICE:
+				cms::$layout->view['title'] = cms::$vars['error_title'];
+				$content = $msg_text;			
+				cms::$layout->page($content);
+				echo cms::$layout->view->display();
 				exit;
 			break;
 		}

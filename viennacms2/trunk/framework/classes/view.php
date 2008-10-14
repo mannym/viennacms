@@ -15,7 +15,11 @@ class View implements ArrayAccess {
 	
 	public function reset_path() {
 		$this->path  = cms::$router->parts['controller'] . '/';
-		$this->path .= cms::$router->parts['action'] . '.php';
+		if (!empty(cms::$router->parts['action'])) {
+			$this->path .= cms::$router->parts['action'] . '.php';
+		} else {
+			$this->path .= 'main.php';			
+		}
 	}
 	
 	public function set($var, $value) {

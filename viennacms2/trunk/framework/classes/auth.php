@@ -5,6 +5,14 @@ define('AUTH_ALL', 4);
 
 class Auth {
 	function parse_permission_string($string) {
+		if (empty($string)) {
+			return array(
+				'owner' => array(),
+				'group' => array(),
+				'other' => array()
+			);
+		}
+		
 		// determine length of every part of the string, and split the string in 3 parts
 		$partlen = strlen($string) / 3;
 		$parts = str_split($string, $partlen);
