@@ -2,15 +2,15 @@
 abstract class Model {
 	public $written = false;
 	
-	public static function create($name, $global) {
-		$model = new $name($global);
+	public static function create($name) {
+		$model = new $name();
 		foreach ($model->relations as $parameters) {
 			switch ($parameters['type']) {
 				case 'one_to_one':
 					$property = $parameters['object']['property'];
 					$class = $parameters['object']['class'];
 					
-					$model->$property = new $class($global);
+					$model->$property = new $class();
 				break;
 			}
 		}

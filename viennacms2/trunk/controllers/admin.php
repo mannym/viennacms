@@ -30,6 +30,20 @@ class AdminController extends Controller {
 		return true;
 	}
 	
+	public function controller() {
+		$controllern = array_shift($this->arguments);
+		$method = array_shift($this->arguments);
+		
+		$controller = cms::$manager->get_controller('admin/' . $controllern); // array_shift to remove the original argument.
+		$controller->view = new View();
+		$controller->view->path = 'admin/' . $controllern . '/' . $method . '.php';
+		$controller->arguments = $this->arguments;
+		$controller->$method();
+		echo $controller->view->display();
+		
+		exit;
+	}
+	
 	public function panes() {
 		$this->check_auth();
 		echo json_encode($this->get_panes());

@@ -89,6 +89,32 @@ function load_pane(url, object) {
 				collapsed: true,
 				unique: true
 			});
+			
+			object.parents('.pane').find('.content a').click(function() {
+				load_content($(this).attr('href'));
+				return false;
+			});
+		}
+	});
+}
+
+function load_content(url){
+	$.ajax({
+		cache: false,
+		type: "GET",
+		url: url,
+		success: function(output){
+			$('#main-content').html(output);
+			
+			$('fieldset legend').each(function() {
+				$(this).html('<a class="toggle-me" href="#">' + $(this).html() + '</a>');
+			});
+			$('fieldset legend a.toggle-me').click(function() {
+				$(this).parents('fieldset').find('div').toggle("fast");
+				return false;
+			});
+
+			$('fieldset.contracted > div').toggle();
 		}
 	});
 }
