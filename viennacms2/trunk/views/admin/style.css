@@ -90,7 +90,7 @@ body {
 .panes .pane ul.tabs {
 	margin: 0px;
 	padding: 0px;
-	background-color: #e4e0d8;
+	background-color: #d4d0c8;
 	height: 16px;
 }
 
@@ -111,3 +111,82 @@ body {
 .panes .pane ul.tabs li.active {
 	background-color: #e4e0d8;
 }
+
+ul.toolbar {
+	list-style-type: none;
+	background-color: #e4e0d8;
+	margin: 0px;
+	padding: 0px;
+	height: 25px;
+}
+
+ul.toolbar li {
+	float: left;
+	margin: 2px;
+	width: 22px;
+	height: 22px;
+	cursor: pointer;
+}
+
+ul.toolbar li span {
+	display: none;
+}
+
+/* leave this here for now */
+
+.treeview, .treeview ul { 
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.treeview div.hitarea {
+	height: 15px;
+	width: 15px;
+	margin-left: -15px;
+	float: left;
+	cursor: pointer;
+}
+/* fix for IE6 */
+* html div.hitarea {
+	background: #fff;
+	filter: alpha(opacity=0);
+	display: inline;
+	float:none;
+}
+
+.treeview li { 
+	margin: 0;
+	padding: 3px 0pt 3px 16px;
+}
+
+.treeview a.selected {
+	background-color: #eee;
+}
+
+#treecontrol { margin: 1em 0; }
+
+.treeview .hover { color: red; cursor: pointer; }
+	
+.treeview li { background: url(images/tv-item.gif) 0 0 no-repeat; }
+.treeview .collapsable { background-image: url(images/tv-collapsable.gif); }
+.treeview .expandable { background-image: url(images/tv-expandable.gif); }
+.treeview .last { background-image: url(images/tv-item-last.gif); }
+.treeview .lastCollapsable { background-image: url(images/tv-collapsable-last.gif); }
+.treeview .lastExpandable { background-image: url(images/tv-expandable-last.gif); }
+
+.treeview {
+	margin-top: 15px;
+	margin-left: 10px;
+}
+	
+.treeview a { padding-left: 19px; display: inline-block; height: 16px; text-decoration: none; color: #0066ff; }
+.treeview a:visited { color: #0066ff; }
+.treeview .selected > a {
+	text-decoration: underline;
+	background-color: #eee;
+}
+
+/* we should move this to extensions */
+.treeview a.site { background: url(images/icons/site.png) 0 0 no-repeat; }
+.treeview a.page { background: url(images/icons/page.png) 0 0 no-repeat; }

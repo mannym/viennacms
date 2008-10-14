@@ -83,7 +83,12 @@ function load_pane(url, object) {
 		type: "GET",
 		url: url,
 		success: function(output) {
-			object.parents('.pane').find('.content').html(output);
+			object.parents('.pane').find('.content').html(output);		
+
+			$(".treeview").treeview({
+				collapsed: true,
+				unique: true
+			});
 		}
 	});
 }
@@ -103,10 +108,10 @@ function reload_pane_containers(nicely) {
 			else {
 				$(this).hide();
 			}
-		} else {
-			percentage = 100 / $(this).find('.pane').length;
-			$(this).find('.pane').height(percentage + '%');
 		}
+		
+		percentage = 100 / $(this).find('.pane').length;
+		$(this).find('.pane').height(percentage + '%');
 	});
 	
 	if (waitForHide == 0) {

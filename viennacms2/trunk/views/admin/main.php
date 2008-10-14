@@ -4,6 +4,8 @@
 		<link rel="stylesheet" href="views/admin/style.css" />
 		<script type="text/javascript" src="framework/js/jquery.js"></script>
 		<script type="text/javascript" src="framework/js/jquery.ui.js"></script>
+		<script type="text/javascript" src="framework/js/jquery.treeview.js"></script>
+		<script type="text/javascript" src="framework/js/jquery.cookie.js"></script>
 		<script type="text/javascript" src="framework/js/viennacms-acp.js"></script>
 		<script type="text/javascript">
 			var pane_url = '<?php echo $this['pane_url'] ?>';
@@ -23,14 +25,19 @@
 				</div>
 			</div>
 		</div>
-		<div id="panes-bottom" class="panes">
+		<div id="panes-right" class="panes">
 			<div class="pane">
 				<ul class="tabs">
 				</ul>
 				<div class="content"></div>
 			</div>
 		</div>
-		<div id="panes-right" class="panes">
+		<div id="panes-bottom" class="panes">
+			<div class="pane">
+				<ul class="tabs">
+				</ul>
+				<div class="content"></div>
+			</div>
 		</div>
 	</body>
 </html>

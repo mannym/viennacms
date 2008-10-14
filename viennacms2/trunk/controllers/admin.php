@@ -29,7 +29,13 @@ class AdminController extends Controller {
 	}
 	
 	public function pane() {
-		echo $this->arguments[0];
+		$pane = array_shift($this->arguments);
+		
+		$controller = cms::$manager->get_controller('admin/' . $pane . 'pane'); // array_shift to remove the original argument.
+		$controller->view = new View();
+		$controller->view->path = 'admin/panes/' . $pane . '.php';
+		$controller->main();
+		echo $controller->view->display();
 		exit;
 	}
 	

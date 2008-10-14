@@ -117,9 +117,9 @@ class Manager {
 	 */
 	public function get_controller($name) {
 		$name = strtolower($name);
-	
+
 		$files = array(
-			'controllers/' . $name . '.php'
+			'controllers/' . $name . '.php',
 		);
 		
 		foreach (self::$extpaths as $extension => $path) {
@@ -127,7 +127,7 @@ class Manager {
 		}
 		
 		include_once(self::scan_files($files));
-		$class_name = ucfirst(strtolower($name)) . 'Controller';
+		$class_name = ucfirst(strtolower(str_replace('/', '', $name))) . 'Controller';
 		if(!class_exists($class_name))
 		{
 			throw new ViennaCMSException('Unknown controller');
