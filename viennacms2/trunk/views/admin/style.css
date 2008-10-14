@@ -186,7 +186,3 @@ ul.toolbar li span {
 	text-decoration: underline;
 	background-color: #eee;
 }
-
-/* we should move this to extensions */
-.treeview a.site { background: url(images/icons/site.png) 0 0 no-repeat; }
-.treeview a.page { background: url(images/icons/page.png) 0 0 no-repeat; }

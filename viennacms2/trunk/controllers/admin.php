@@ -19,6 +19,14 @@ class AdminController extends Controller {
 		$this->check_auth();
 		$this->view['pane_url'] = $this->view->url('admin/panes');
 		
+		$node_types = manager::run_hook_all('get_node_types');
+		$icons = array();
+		foreach ($node_types as $id => $data) {
+			$icons[$id] = str_replace('~/', manager::base(), $data['icon']);
+		}
+		
+		$this->view['icons'] = $icons;
+		
 		return true;
 	}
 	
@@ -34,6 +42,7 @@ class AdminController extends Controller {
 		$controller = cms::$manager->get_controller('admin/' . $pane . 'pane'); // array_shift to remove the original argument.
 		$controller->view = new View();
 		$controller->view->path = 'admin/panes/' . $pane . '.php';
+		$controller->arguments = $this->arguments;
 		$controller->main();
 		echo $controller->view->display();
 		exit;

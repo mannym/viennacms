@@ -10,6 +10,15 @@
 		<script type="text/javascript">
 			var pane_url = '<?php echo $this['pane_url'] ?>';
 		</script>
+		<style type="text/css">
+			<?php
+			foreach ($this['icons'] as $key => $icon) {
+				?>
+				.treeview a.<?php echo $key ?> { background: url(<?php echo $icon ?>) 0 0 no-repeat; }
+				<?php
+			}
+			?>
+		</style>
 	</head>
 	<body>
 		<div id="main-menu">
