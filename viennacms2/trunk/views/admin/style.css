@@ -201,3 +201,27 @@ label.form-title {
 .form-description {
 	font-size: 90%;
 }
+
+fieldset {
+	border-bottom: none;
+	border-left: none;
+	border-right: none;
+}
+
+fieldset legend {
+	margin-left: -10px;
+}
+
+fieldset legend a {
+	padding-left: 19px;
+	height: 19px;
+	background-repeat: no-repeat;
+}
+
+fieldset.contracted legend a {
+	background-image: url(images/contracted.png);
+}
+
+fieldset.expanded legend a {
+	background-image: url(images/expanded.png);
+}

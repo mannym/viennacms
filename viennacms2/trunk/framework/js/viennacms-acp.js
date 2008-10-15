@@ -110,7 +110,10 @@ function load_content(url){
 				$(this).html('<a class="toggle-me" href="#">' + $(this).html() + '</a>');
 			});
 			$('fieldset legend a.toggle-me').click(function() {
-				$(this).parents('fieldset').find('div').toggle("fast");
+				$(this).parents('fieldset').find('div').toggle("fast", function() {
+					$('fieldset div:hidden').parents('fieldset').addClass('contracted').removeClass('expanded');
+					$('fieldset div:visible').parents('fieldset').addClass('expanded').removeClass('contracted');
+				});
 				return false;
 			});
 

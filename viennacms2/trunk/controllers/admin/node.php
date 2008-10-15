@@ -15,8 +15,7 @@ class AdminNodeController {
 			$node = Node::create('Node');
 		}
 		
-		$form = new Form();
-		$form->handle_form('node_edit', array(
+		$form_data = array(
 			'fields' => array(
 				'title' => array(
 					'label' => __('Title'),
@@ -24,7 +23,8 @@ class AdminNodeController {
 					'required' => true,
 					'type' => 'textbox',
 					'value' => $node->title,
-					'group' => 'node_details'
+					'group' => 'node_details',
+					'weight' => -10
 				),
 				'description' => array(
 					'label' => __('Description'),
@@ -32,7 +32,8 @@ class AdminNodeController {
 					'required' => false,
 					'type' => 'textarea',
 					'value' => $node->description,
-					'group' => 'node_details'
+					'group' => 'node_details',
+					'weight' => -10
 				)
 			),
 			'groups' => array(
@@ -41,7 +42,27 @@ class AdminNodeController {
 					'expanded' => true
 				)
 			)
-		));
+		);
+		
+		$node_tdata = manager::run_hook_all('get_node_types');
+		$options = array();
+		
+		if (!empty($node_tdata[$node->type]['options'])) {
+			foreach ($node_tdata[$node->type]['options'] as $id => $option) {
+				$form_data['fields'][$id] = $option;
+				$form_data['fields'][$id]['group'] = 'node_options';
+				$form_data['fields'][$id]['value'] = $node->options[$id];
+				$form_data['fields'][$id]['weight'] = 0;
+			}
+			
+			$form_data['groups']['node_options'] = array(
+				'title' => __('Node options'),
+				'expanded' => false
+			);
+		}
+		
+		$form = new Form();
+		$form->handle_form('node_edit', $form_data);
 		exit;
 	}
 }
