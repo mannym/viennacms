@@ -1,12 +1,14 @@
 body {
 	font-family: Verdana, Arial, sans-serif;
 	font-size: 12px;
+	margin: 0px;
 }
 
 #main-menu {
 	position: absolute;
 	left: 0px;
 	right: 0px;
+	width: 100%;
 	top: 0px;
 	height: 50px;
 	background-color: #09f;
@@ -71,9 +73,24 @@ body {
 	/*overflow: auto;*/
 }
 
+.panes {
+	background-color: #fff;
+}
+
 .panes .pane {
 	width: 100%;
 	border-bottom: 1px solid #02a;
+}
+
+.panes .pane div.content {
+	overflow: auto;
+	width: 180px;
+}
+
+#panes-bottom .pane div.content {
+	overflow: auto;
+	width: auto;
+	height: 135px;
 }
 
 #panes-bottom .pane {
