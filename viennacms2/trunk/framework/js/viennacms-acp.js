@@ -126,7 +126,11 @@ function load_content(url){
 		cache: false,
 		type: "GET",
 		url: url,
-		success: function(output){
+		success: function(output) {
+		    if ($.wymeditors(wi) != undefined) {
+	            wi++;
+	        }
+	        
 			$('#main-content').html(output);
 			update_content();
 		}
