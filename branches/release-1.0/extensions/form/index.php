@@ -203,6 +203,8 @@ class extension_form {
 		));
 		// Submit
 		$this->submit = __('Send');	
+		// Add action, because of strange webkit...
+		$this->action = $_SERVER['REQUEST_URI'];		
 		return;		
 	}
 	
