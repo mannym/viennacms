@@ -78,8 +78,64 @@ class AdminNodeController {
 			);
 		}
 		
+		if ($do == 'edit') {
+			$form_data['fields']['node_id'] = array(
+				'type' => 'hidden',
+				'required' => true,
+				'value' => $node->node_id,
+				'group' => 'node_details',
+				'weight' => -10
+ 			);
+		}
+		
+		$form_data['fields']['do'] = array(
+			'type' => 'hidden',
+			'required' => true,
+			'value' => $do,
+			'group' => 'node_details',
+			'weight' => -10
+		);
+		
 		$form = new Form();
+		$form->callback_object = $this;
 		$form->handle_form('node_edit', $form_data);
 		exit;
+	}
+	
+	public function node_edit_submit($fields) {
+		switch ($fields['do']) {
+			case 'edit':
+				$node = new Node();
+				$node->node_id = $fields['node_id'];
+				$node->read(true);
+				
+				if (empty($node->title)) {
+					trigger_error(__('This node does not exist!'));
+				}
+				break;
+		}
+		
+		$node->title = $fields['title'];
+		$node->description = $fields['description'];
+		
+		// set options
+		if (!empty($node->typedata['options'])) {
+			foreach ($node->typedata['options'] as $id => $option) {
+				$aid = 'option_' . $id;
+				if (isset($fields[$aid])) {
+					$node->options[$id] = $fields[$aid];
+				}
+			}
+		}
+		
+		// revision?
+		if ($node->typedata['type'] == 'static') {
+			$node->revision->content = $fields['revision_content'];
+		}
+		
+		// write it!
+		$node->write();
+		
+		echo __('Node successfully saved');
 	}
 }

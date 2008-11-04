@@ -73,7 +73,7 @@ class View implements ArrayAccess {
 		$view_path = $this->scan_themes($this->path);
 
 		if (!file_exists($view_path)) {
-			trigger_error('View path does not exist!', E_USER_ERROR);
+			trigger_error('View path ' . $this->path . ' does not exist!', E_USER_ERROR);
 		}
 		
 		include($view_path);

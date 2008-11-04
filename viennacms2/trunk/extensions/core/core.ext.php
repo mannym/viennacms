@@ -51,10 +51,10 @@ class extension_core {
 	
 	function validate_url($url) {
 		if (!empty($url)) {
-			cms::$vars['404_debug'] = true;
-			cms::$manager->run($url, true);
-			if (isset(cms::$vars['404_yep'])) {
-				return __('The entered URL does not exist.');
+			$result = cms::$manager->run($url, true);
+
+			if ($result === CONTROLLER_ERROR) {
+				return __('The entered URL does not exist, or is not accessible.');
 			}
 			
 			return false;

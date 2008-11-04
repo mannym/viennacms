@@ -63,6 +63,11 @@ class Form {
 		return $errors;
 	}
 	
+	private function save_form($fields) {
+		$function = $this->form_id . '_submit';
+		$this->callback_object->$function($fields);
+	}
+	
 	private function render_form($errors = array(), $values = array()) {
 		// sort the fields on weight, this could be more efficient?
 		$fields = array();
@@ -90,7 +95,8 @@ class Form {
 		// render the form...
 		$final_fields = '';
 		foreach ($fields as $group_id => $rfields) {
-			$rendered_fields = '';		
+			$rendered_fields = '';
+			$error = false;
 			foreach ($rfields as $key => $value) {
 				$value['name'] = $this->form_id . '_' . $key;
 				
@@ -107,20 +113,25 @@ class Form {
 				
 				$content = $view->display();
 				
-				$wrapper = new View();
-				$wrapper->path = 'form/field_wrapper.php';
-				
-				foreach ($value as $id => $setting) {
-					$wrapper[$id] = $setting;
+				if ($value['type'] != 'hidden') {				
+					$wrapper = new View();
+					$wrapper->path = 'form/field_wrapper.php';
+					
+					foreach ($value as $id => $setting) {
+						$wrapper[$id] = $setting;
+					}
+					
+					if (isset($errors[$key])) {
+						$wrapper['error'] = $errors[$key];
+						$error = true;
+					}
+					
+					$wrapper['rendered_field'] = $content;
+					
+					$rendered_fields .= $wrapper->display();
+				} else {
+					$rendered_fields .= $content;
 				}
-				
-				if (isset($errors[$key])) {
-					$wrapper['error'] = $errors[$key];	
-				}
-				
-				$wrapper['rendered_field'] = $content;
-				
-				$rendered_fields .= $wrapper->display();
 			}
 			
 			$view = new View();
@@ -129,6 +140,15 @@ class Form {
 				$view[$id] = $setting;
 			}
 			$view['content'] = $rendered_fields;
+			
+			if (!empty($errors)) {
+				if ($error) {
+					$view['expanded'] = true;	
+				} else {
+					$view['expanded'] = false;
+				}
+			}
+			
 			$final_fields .= $view->display();
 		}
 		

@@ -27,10 +27,12 @@ class AdminController extends Controller {
 		
 		$this->view['icons'] = $icons;
 		
-		return true;
+		return CONTROLLER_NO_LAYOUT;
 	}
 	
 	public function controller() {
+		$this->check_auth();
+		
 		$controllern = array_shift($this->arguments);
 		$method = array_shift($this->arguments);
 		

@@ -9,6 +9,10 @@
  */
 
 
+define('CONTROLLER_OK', 0);
+define('CONTROLLER_NO_LAYOUT', 1);
+define('CONTROLLER_ERROR', -1);
+
 /**
  * Manager
  * The start of... everything.
@@ -19,6 +23,7 @@
 class Manager {
 	private $global;
 	public static $extpaths = array();
+	public $check = 0;
 	
 	/**
 	 * Constructor of Manager
@@ -36,7 +41,11 @@ class Manager {
 	 *
 	 * @param string $query URL to parse and run, if empty, the current URL is used.
 	 */
-	public function run($query = '', $test = false) {
+	public function run($query = '', $check = false) {
+		if ($check) {
+			$this->check++;
+		}
+		
 		cms::register('router', new Router());
 		
 		if (empty($query)) {
@@ -71,21 +80,35 @@ class Manager {
 		cms::register('layout', $layout);
 		
 		$controller = $this->get_controller($parts['controller']);
+		if (!$controller) {
+			return $this->page_not_found();
+		}
+		
 		$controller->arguments = explode('/', $parts['params']);
 		$controller->view = new View();
-		$no_show_layout = $controller->$action();
-		if ($no_show_layout === -1 || $test) {
-			return false;
+		
+		if (!method_exists($controller, $action)) {
+			return $this->page_not_found();
 		}
+		
+		$result = $controller->$action();
+		
+		if ($check || $result === CONTROLLER_ERROR) {
+			$this->check--;
+			return $result;
+		}
+		
 		$content = $controller->view->display();
 		
 		// create layout
-		if (!$no_show_layout) {
+		if ($result == CONTROLLER_OK) {
 			$layout->page($content);
 			echo $layout->view->display();
-		} else {
+		} else if ($result === CONTROLLER_NO_LAYOUT) {
 			echo $content;
 		}
+	
+		return CONTROLLER_OK;
 	}
 	
 	/**
@@ -129,7 +152,13 @@ class Manager {
 			$files[] = dirname($path) . '/controllers/' . $name . '.php';
 		}
 		
-		include_once(self::scan_files($files));
+		$filename = self::scan_files($files);
+		
+		if ($filename == false) {
+			return false;
+		}
+		
+		include_once($filename);
 		$class_name = ucfirst(strtolower(str_replace('/', '', $name))) . 'Controller';
 		if(!class_exists($class_name))
 		{
@@ -143,11 +172,10 @@ class Manager {
 	 *
 	 */
 	public function page_not_found() {
-		if (isset(cms::$vars['404_debug'])) {
-			cms::$vars['404_yep'] = true;
-			return false;	
+		if ($this->check) {
+			return CONTROLLER_ERROR;	
 		}
-		
+
 		if (!isset(cms::$vars['404_done']) && isset(cms::$vars['sitenode']->options['404_url'])) {
 			cms::$vars['404_done'] = true;
 			$this->run(cms::$vars['sitenode']->options['404_url']);
@@ -364,7 +392,7 @@ HTML;
 			}
 		}
 		
-		throw new Exception('Could not find files.');
+		return false;
 	}
 }
 
