@@ -44,20 +44,37 @@ class AdminNodeController {
 			)
 		);
 		
-		$node_tdata = manager::run_hook_all('get_node_types');
 		$options = array();
 		
-		if (!empty($node_tdata[$node->type]['options'])) {
-			foreach ($node_tdata[$node->type]['options'] as $id => $option) {
-				$form_data['fields'][$id] = $option;
-				$form_data['fields'][$id]['group'] = 'node_options';
-				$form_data['fields'][$id]['value'] = $node->options[$id];
-				$form_data['fields'][$id]['weight'] = 0;
+		if (!empty($node->typedata['options'])) {
+			foreach ($node->typedata['options'] as $id => $option) {
+				$aid = 'option_' . $id;
+				$form_data['fields'][$aid] = $option;
+				$form_data['fields'][$aid]['group'] = 'node_options';
+				$form_data['fields'][$aid]['value'] = $node->options[$id];
+				$form_data['fields'][$aid]['weight'] = 0;
 			}
 			
 			$form_data['groups']['node_options'] = array(
 				'title' => __('Node options'),
 				'expanded' => false
+			);
+		}
+		
+		if ($node->typedata['type'] == 'static') {
+			$form_data['fields']['revision_content'] = array(
+				'label' => __('Content'),
+				'description' => __(''),
+				'required' => true,
+				'type' => 'wysiwyg',
+				'value' => $node->revision->content,
+				'group' => 'node_revision',
+				'weight' => 5
+			);
+			
+			$form_data['groups']['node_revision'] = array(
+				'title' => __('Content'),
+				'expanded' => true
 			);
 		}
 		

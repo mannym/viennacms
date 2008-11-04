@@ -30,6 +30,7 @@ class Node extends Model {
 			'object' => array('class' => 'Node_Option', 'property' => '_options')
 		)
 	);
+	public $typedata = array();
 	
 	protected function hook_read() {
 		$this->revision->node_obj = $this;
@@ -38,12 +39,22 @@ class Node extends Model {
 		foreach ($this->_options as $value) {
 			$this->options[$value->option_name] = $value;
 		}
+		
+		$this->set_type_vars();
 	}
 	
 	protected function hook_new() {
 		$this->options = new Node_Options();
 		$this->options->node = $this;
 		$this->_options = array();
+	}
+	
+	public function set_type_vars() {
+		$typedata = manager::run_hook_all('get_node_types');
+		
+		if (isset($typedata[$this->type])) {
+			$this->typedata = $typedata[$this->type];
+		}
 	}
 
 	protected function hook_presave() {
