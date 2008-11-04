@@ -3,11 +3,12 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generatie Tijd: 10 Sept 2008 om 14:54
+-- Generatie Tijd: 04 Nov 2008 om 18:56
 -- Server versie: 5.0.51
 -- PHP Versie: 5.2.6
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
 
 --
 -- Database: `viennacms2_dev`
@@ -28,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `nodes` (
   `revision_num` int(11) NOT NULL,
   `created` int(11) NOT NULL,
   PRIMARY KEY  (`node_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 --
 -- Gegevens worden uitgevoerd voor tabel `nodes`
@@ -36,9 +37,10 @@ CREATE TABLE IF NOT EXISTS `nodes` (
 
 INSERT INTO `nodes` (`node_id`, `title`, `description`, `type`, `parent`, `revision_num`, `created`) VALUES
 (1, 'The root node', 'The root of all nodes', 'site', 0, 0, 0),
-(2, 'First child node', 'The child of the root node.', 'page', 1, 1, 0),
-(3, 'Second child node', 'The child of the root node.', 'page', 1, 2, 0),
-(7, 'Woef!', 'De blafnode :D', 'page', 2, 2, 1219519471);
+(2, 'First really childish node', 'The child of the root node.', 'page', 1, 8, 0),
+(3, 'Le blaf', 'The child of the root node.', 'page', 1, 8, 0),
+(7, 'Woef!', 'De blafnode :D', 'page', 2, 2, 1219519471),
+(8, 'Barks', 'Woof', 'page', 1, 1, 1221129770);
 
 -- --------------------------------------------------------
 
@@ -52,14 +54,15 @@ CREATE TABLE IF NOT EXISTS `node_options` (
   `option_name` varchar(255) NOT NULL,
   `option_value` longtext NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Gegevens worden uitgevoerd voor tabel `node_options`
 --
 
 INSERT INTO `node_options` (`id`, `node_id`, `option_name`, `option_value`) VALUES
-(4, 1, 'homepage', '2');
+(4, 1, 'homepage', '2'),
+(5, 2, 'wof', 'waf');
 
 -- --------------------------------------------------------
 
@@ -74,7 +77,7 @@ CREATE TABLE IF NOT EXISTS `node_revisions` (
   `content` longtext NOT NULL,
   `time` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=19 ;
 
 --
 -- Gegevens worden uitgevoerd voor tabel `node_revisions`
@@ -83,7 +86,49 @@ CREATE TABLE IF NOT EXISTS `node_revisions` (
 INSERT INTO `node_revisions` (`id`, `node`, `number`, `content`, `time`) VALUES
 (2, 2, 1, 'Woef :D', 1219519471),
 (3, 3, 1, 'Woef x2', 1219520373),
-(4, 3, 2, 'Woef x23', 1219520373);
+(4, 3, 2, 'Woef x23', 1219520373),
+(5, 2, 2, 'Woefjes zijn blehker :)', 1221128648),
+(6, 8, 1, '', 1221129770),
+(7, 2, 3, 'Woefjes zijn blehker :)', 1221129849),
+(8, 2, 4, 'Woefjes zijn blehker :)', 1221129920),
+(9, 2, 5, '<p>Woefjes zijn best lekker.</p><p>Daisy is <strong>lief</strong>!</p>', 1225807341),
+(10, 3, 3, '<p>viennaCMS2 heeft veel nieuwe features, waaronder een vernieuwde form API, waarmee deze pagina dus geschreven is.</p><p>Daarom geven we een groot <strong>feest</strong><sup>2</sup>!</p>', 1225807407),
+(11, 2, 6, '<p>Woefjes zijn best lekker.</p><p>Daisy is <strong>lief</strong>! Daarom geef ik haar een lekker zacht <em>aaitje</em>. Eventjes testen:</p><ul><li>bulleted lists</li><li>werken?</li></ul><ol><li>eet een broodje</li><li>gooi het bord weg</li><li>eet de koelkast leeg</li></ol><h2>tabelletje</h2><table><tbody><tr><td>tables?</td></tr><tr><td>hmm</td></tr><tr><td>lol</td></tr></tbody></table>', 1225807743),
+(12, 2, 7, '<p>Woefjes zijn best lekker.</p><p>Daisy is <strong>lief</strong>! Daarom geef ik haar een lekker zacht <em>aaitje</em>. Eventjes testen:</p><ul><li>bulleted lists</li><li>werken?</li></ul><ol><li>eet een broodje</li><li>gooi het bord weg</li><li>eet de koelkast leeg</li></ol><h2>tabelletje</h2><table><tbody><tr><td>tables?</td></tr><tr><td>hmm</td></tr><tr><td>lol</td></tr></tbody></table>', 1225807791),
+(13, 3, 4, '<p>viennaCMS2 heeft veel nieuwe features, waaronder een vernieuwde form API, waarmee deze pagina dus geschreven is.</p><p>Daarom geven we een groot <strong>feest</strong><sup>2</sup>!</p><p>testing line</p>', 1225807811),
+(14, 2, 8, '<p>Woefjes zijn best lekker.</p><p>Daisy is <strong>lief</strong>! Daarom geef ik haar een lekker zacht <em>aaitje</em>. Eventjes testen:</p><ul><li>bulleted lists</li><li>werken?</li><li>toch?</li></ul><ol><li>eet een broodje</li><li>gooi het bord weg</li><li>eet de koelkast leeg</li></ol><h2>tabelletje</h2><table><tbody><tr><td>tables?</td></tr><tr><td>hmm</td></tr><tr><td>lol</td></tr></tbody></table>', 1225807818),
+(15, 3, 5, '<p>viennaCMS2 heeft veel nieuwe features, waaronder een vernieuwde form API, waarmee deze pagina dus geschreven is.</p><p>Daarom geven we een groot <strong>feest</strong><sup>2</sup>!</p><p>testing line</p><p>line 2</p>', 1225807824),
+(16, 3, 6, '<p>viennaCMS2 heeft veel nieuwe features, waaronder een vernieuwde form API, waarmee deze pagina dus geschreven is.</p><p>Daarom geven we een groot <strong>feest</strong><sup>2</sup>!</p><p>testing line</p><p>line 2</p>', 1225807830),
+(17, 3, 7, '<p>viennaCMS2 heeft veel nieuwe features, waaronder een vernieuwde form API, waarmee deze pagina dus geschreven is.</p><p>Daarom geven we een groot <strong>feest</strong><sup>2</sup>!</p><p>testing line</p><p>line 2</p><p>line 3?</p>', 1225807912),
+(18, 3, 8, '<p>viennaCMS2 heeft veel nieuwe features, waaronder een vernieuwde form API, waarmee deze pagina dus geschreven is.</p><p>Daarom geven we een groot <strong>feest</strong><sup>2</sup>! Kom jij ook?</p><p>testing line</p><p>line 2</p><p>line 3?</p>', 1225810714);
+
+-- --------------------------------------------------------
+
+--
+-- Tabel structuur voor tabel `permission_objects`
+--
+
+CREATE TABLE IF NOT EXISTS `permission_objects` (
+  `id` int(11) NOT NULL auto_increment,
+  `resource` varchar(40) NOT NULL,
+  `owner_id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  `permission_mask` varchar(60) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Gegevens worden uitgevoerd voor tabel `permission_objects`
+--
+
+INSERT INTO `permission_objects` (`id`, `resource`, `owner_id`, `group_id`, `permission_mask`) VALUES
+(1, 'admin:see_acp', 1, 0, 'y--');
+
+-- --------------------------------------------------------
+
+--
+-- Tabel structuur voor tabel `sessions`
+--
 
 CREATE TABLE IF NOT EXISTS `sessions` (
   `session_id` varchar(40) NOT NULL,
@@ -92,6 +137,11 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   `session_time` int(11) NOT NULL,
   PRIMARY KEY  (`session_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Gegevens worden uitgevoerd voor tabel `sessions`
+--
+
 
 -- --------------------------------------------------------
 
@@ -114,20 +164,3 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT INTO `users` (`user_id`, `username`, `user_password`, `user_email`, `user_active`) VALUES
 (1, 'admin', '200ceb26807d6bf99fd6f4f0d1ca54d4', 'foo@bar.com', 1);
-
-
-CREATE TABLE IF NOT EXISTS `permission_objects` (
-  `id` int(11) NOT NULL auto_increment,
-  `resource` varchar(40) NOT NULL,
-  `owner_id` int(11) NOT NULL,
-  `group_id` int(11) NOT NULL,
-  `permission_mask` varchar(60) NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
-
---
--- Gegevens worden uitgevoerd voor tabel `permission_objects`
---
-
-INSERT INTO `permission_objects` (`id`, `resource`, `owner_id`, `group_id`, `permission_mask`) VALUES
-(1, 'node:3', 1, 0, 'rwdv----r--v');
