@@ -2,6 +2,7 @@
 	<head>
 		<base href="<?php echo manager::base() ?>" />
 		<link rel="stylesheet" href="views/admin/style.css" />
+		<link rel="stylesheet" href="views/system/form.css" />
 		<script type="text/javascript" src="framework/js/jquery.js"></script>
 		<script type="text/javascript" src="framework/js/jquery.ui.js"></script>
 		<script type="text/javascript" src="framework/js/jquery.treeview.js"></script>

@@ -1,0 +1,47 @@
+/* form markup, needs to be moved out too */
+label.form-title {
+	font-weight: bold;
+	display: block;
+}
+
+.form-required {
+	color: red;
+}
+
+.form-error {
+	color: red;
+	font-size: 90%;
+	display: block;
+}
+
+.form-description {
+	font-size: 90%;
+	display: block;
+	margin-bottom: 12px;
+}
+
+fieldset {
+	border-bottom: none;
+	border-left: none;
+	border-right: none;
+}
+
+fieldset legend {
+	margin-left: -10px;
+}
+
+fieldset legend a {
+	padding-left: 19px;
+	height: 19px;
+	background-repeat: no-repeat;
+}
+
+/* todo: move these images */
+
+fieldset.contracted legend a {
+	background-image: url(../admin/images/contracted.png);
+}
+
+fieldset.expanded legend a {
+	background-image: url(../admin/images/expanded.png);
+}
