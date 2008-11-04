@@ -10,8 +10,8 @@
 	<body>
 	<div id="wrap">
 	<div id="header">
-		<a href="<?php echo $this['siteurl'] ?>" class="logo"></a>
-		<span><a href="<?php echo $this['login_logout_url'] ?>"><?php echo $this['login_logout'] ?></a></span>
+		<a href="<?php echo $this['siteurl'] ?>" class="logo"></a><span><a href="<?php echo $this['login_logout_url'] ?>"><?php echo $this['login_logout'] ?></a><?php
+		if($this['acp_auth']) { ?> &bull; <a href="<?php echo $this['acp_url']; ?>"><?php echo __('ACP'); ?></a><?php } ?></span>
 	</div>
 	<div id="menucontainer">
 	<div>

@@ -29,7 +29,17 @@ class LayoutController extends Controller {
 		$this->view['login_logout'] = $l_lilo;
 		$this->view['siteurl'] = manager::base();
 		$this->view['sitename'] = cms::$vars['sitenode']->title;
-		$this->view['sitedescription'] = cms::$vars['sitenode']->description;		
+		$this->view['sitedescription'] = cms::$vars['sitenode']->description;
+		$this->view['acp_url'] = $this->view->url('admin');
+		
+		// Has user ACP auth?
+		$this->view['acp_auth'] = false;
+		$auth = new Auth();
+		$rights = $auth->get_rights('admin:see_acp', cms::$user->user);
+		
+		if (in_array('y', $rights)) {
+			$this->view['acp_auth'] = true;
+		}				
 	}
 	
 	private function get_styles() {
