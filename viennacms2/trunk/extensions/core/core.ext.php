@@ -35,7 +35,8 @@ class extension_core {
 						'label' => __('"Page not found" URL'),
 						'description' => __('The URL on the site, which will be redirected to when a page can not be found.'),
 						'type' => 'textbox',
-						'required' => false
+						'required' => false,
+						'validate_function' => array($this, 'validate_url')
 					),
 					'homepage' => array(
 						'label' => __('Home page'),
@@ -46,5 +47,17 @@ class extension_core {
 				)
 			)
 		);
+	}
+	
+	function validate_url($url) {
+		if (!empty($url)) {
+			cms::$vars['404_debug'] = true;
+			cms::$manager->run($url, true);
+			if (isset(cms::$vars['404_yep'])) {
+				return __('The entered URL does not exist.');
+			}
+			
+			return false;
+		}
 	}
 }

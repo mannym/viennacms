@@ -83,7 +83,7 @@ body {
 }
 
 .panes .pane div.content {
-	overflow: auto;
+	overflow: hidden;
 	width: 180px;
 }
 
@@ -213,6 +213,11 @@ label.form-title {
 
 .form-required {
 	color: red;
+}
+
+.form-error {
+	color: red;
+	font-size: 90%;
 }
 
 .form-description {

@@ -36,7 +36,7 @@ class Manager {
 	 *
 	 * @param string $query URL to parse and run, if empty, the current URL is used.
 	 */
-	public function run($query = '') {
+	public function run($query = '', $test = false) {
 		cms::register('router', new Router());
 		
 		if (empty($query)) {
@@ -74,6 +74,9 @@ class Manager {
 		$controller->arguments = explode('/', $parts['params']);
 		$controller->view = new View();
 		$no_show_layout = $controller->$action();
+		if ($no_show_layout === -1 || $test) {
+			return false;
+		}
 		$content = $controller->view->display();
 		
 		// create layout
@@ -140,6 +143,11 @@ class Manager {
 	 *
 	 */
 	public function page_not_found() {
+		if (isset(cms::$vars['404_debug'])) {
+			cms::$vars['404_yep'] = true;
+			return false;	
+		}
+		
 		if (!isset(cms::$vars['404_done']) && isset(cms::$vars['sitenode']->options['404_url'])) {
 			cms::$vars['404_done'] = true;
 			$this->run(cms::$vars['sitenode']->options['404_url']);

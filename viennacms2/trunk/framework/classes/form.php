@@ -1,21 +1,69 @@
 <?php
 class Form {
 	public $callback_object;
+	public $action;
 	private $form;
-	private $form_id;
+	public $form_id;
 	
 	public function handle_form($form_id, $data) {
 		$this->form_id = $form_id;
 		$this->form = $data;
+		if (empty($this->action)) {
+			$this->action = cms::$router->query;
+		}
 		
 		if (isset($_POST[$form_id . '_submit'])) {
+			$fields = array();
+			foreach ($_POST as $key => $value) {
+				if (strpos($key, $form_id) === 0) {
+					$fields[str_replace($form_id . '_', '', $key)] = $value;
+				}
+			}
 			
+			if (($errors = $this->validate_form($fields)) === false) {
+				$this->save_form($fields);	
+			} else {
+				$this->render_form($errors, $fields);
+			}
 		} else {
 			$this->render_form();
 		}
 	}
 	
-	private function render_form($errors = array()) {
+	private function validate_form($fields) {
+		$errors = array();
+		foreach ($fields as $key => $value) {
+			$data = $this->form['fields'][$key];
+
+			if (empty($value) && $data['required']) {
+				$errors[$key] = sprintf(__('The field %s is required.'), $data['label']);	
+			}
+			
+			$val_func = $this->form_id . '_validate';
+			
+			if (method_exists($this->callback_object, $val_func)) {
+				$result = $this->callback_object->$val_func($key, $value);
+				if ($result) {
+					$errors[$key] = $result;	
+				}
+			}
+			
+			if (isset($data['validate_function'])) {
+				$result = call_user_func($data['validate_function'], $value);
+				if ($result) {
+					$errors[$key] = $result;	
+				}
+			}
+		}
+		
+		if (empty($errors)) {
+			return false;	
+		}
+		
+		return $errors;
+	}
+	
+	private function render_form($errors = array(), $values = array()) {
 		// sort the fields on weight, this could be more efficient?
 		$fields = array();
 		
@@ -53,6 +101,10 @@ class Form {
 					$view[$id] = $setting;
 				}
 				
+				if (isset($values[$key])) {
+					$view['value'] = $values[$key];
+				}
+				
 				$content = $view->display();
 				
 				$wrapper = new View();
@@ -60,6 +112,10 @@ class Form {
 				
 				foreach ($value as $id => $setting) {
 					$wrapper[$id] = $setting;
+				}
+				
+				if (isset($errors[$key])) {
+					$wrapper['error'] = $errors[$key];	
 				}
 				
 				$wrapper['rendered_field'] = $content;
@@ -76,6 +132,11 @@ class Form {
 			$final_fields .= $view->display();
 		}
 		
-		echo $final_fields;
+		$view = new View();
+		$view->path = 'form/form_wrapper.php';
+		$view['form'] = $this;
+		$view['action'] = $view->url($this->action);
+		$view['fields'] = $final_fields;
+		echo $view->display();
 	}
 }

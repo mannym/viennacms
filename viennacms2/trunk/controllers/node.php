@@ -12,8 +12,9 @@ class NodeController extends Controller {
 		
 		$node->read(true);
 		
-		if (!$node->node_id && !$id) {
+		if (!$node->title && !$id) {
 			cms::$manager->page_not_found();
+			return -1;
 		}
 		
 		$types = manager::run_hook_all('get_node_types');

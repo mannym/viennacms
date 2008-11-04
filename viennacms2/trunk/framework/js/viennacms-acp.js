@@ -128,25 +128,42 @@ function load_content(url){
 		url: url,
 		success: function(output){
 			$('#main-content').html(output);
-			
-			$('fieldset legend').each(function() {
-				$(this).html('<a class="toggle-me" href="#">' + $(this).html() + '</a>');
-			});
-			$('fieldset legend a.toggle-me').click(function() {
-				$(this).parents('fieldset').find('div').toggle("fast", function() {
-					$('fieldset div:hidden').parents('fieldset').addClass('contracted').removeClass('expanded');
-					$('fieldset div:visible').parents('fieldset').addClass('expanded').removeClass('contracted');
-					if($.browser.msie)
-						$(this).parents('fieldset').find('div').get(0).style.removeAttribute('filter');
-				});
-				return false;
-			});
-
-			$('fieldset.contracted > div').toggle();
-			
-			$('.wysiwyg').wymeditor();
+			update_content();
 		}
 	});
+}
+
+var wi = 0;
+
+function update_content() {
+	$('fieldset legend').each(function() {
+		$(this).html('<a class="toggle-me" href="#">' + $(this).html() + '</a>');
+	});
+	$('fieldset legend a.toggle-me').click(function() {
+		$(this).parents('fieldset').children('div').toggle("fast", function() {
+			$('fieldset > div:hidden').parents('fieldset').addClass('contracted').removeClass('expanded');
+			$('fieldset > div:visible').parents('fieldset').addClass('expanded').removeClass('contracted');
+			if($.browser.msie)
+				$(this).parents('fieldset').find('div').get(0).style.removeAttribute('filter');
+		});
+		return false;
+	});
+
+	$('fieldset.contracted > div').toggle();
+	
+	$('.wysiwyg').wymeditor();
+	
+	$('#main-content form').ajaxForm({
+	    success: function(output) {
+	        $('#main-content').html(output);
+	        update_content();
+	    }
+	}).bind('form-pre-serialize', function(event, $form, formOptions, veto) {
+        if ($.wymeditors(wi) != undefined) {
+	        $.wymeditors(wi).update();
+	        wi++;
+	    }
+    });
 }
 
 var waitForHide = 0;
