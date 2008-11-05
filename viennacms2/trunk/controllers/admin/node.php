@@ -4,6 +4,9 @@ class AdminNodeController {
 		$parent = new Node();
 		$parent->node_id = $this->arguments[0];
 		$parent->read(true);
+		if (empty($parent->title)) {
+			exit;
+		}
 		?>
 		<ul class="types submenu">
 		<?php
