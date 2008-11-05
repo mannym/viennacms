@@ -236,8 +236,6 @@ class acm_xcache
 	*/
 	public function sql_save($query, &$query_result, $ttl)
 	{
-		global $db;
-		
 		// Remove extra spaces and tabs
 		$query = preg_replace('/[\n\r\s\t]+/', ' ', $query);
 		
@@ -276,11 +274,11 @@ class acm_xcache
 		$query_id = sizeof($this->sql_rowset);
 		$this->sql_rowset[$query_id] = array();
 		
-		while ($row = $db->sql_fetchrow($query_result))
+		while ($row = cms::$db->sql_fetchrow($query_result))
 		{
 			$this->sql_rowset[$query_id][] = $row;
 		}
-		$db->sql_freeresult($query_result);
+		cms::$db->sql_freeresult($query_result);
 		
 		xcache_set('sql_' . $query_hash, $this->sql_rowset[$query_id], $ttl);
 		
