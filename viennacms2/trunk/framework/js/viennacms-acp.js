@@ -131,7 +131,11 @@ function load_pane(url, object) {
 			
 			object.parents('.pane').find('.toolbar li a').click(function() {
 			    url = $(this).attr('href');
-			    url = url.replace('%selected_id', $(this).parents('.pane').find('a.selected').parents('li').attr('id').replace('node-', ''));
+			    if ($(this).parents('.pane').find('a.selected').parents('li').length > 0) { 
+			        url = url.replace('%selected_id', $(this).parents('.pane').find('a.selected').parents('li').attr('id').replace('node-', ''));
+			    } else {
+			        url = url.replace('%selected_id', 0);
+			    }
 
 			    if ($(this).hasClass('submenu')) {
 			        var old = this;

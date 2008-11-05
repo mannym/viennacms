@@ -5,6 +5,7 @@ class AdminNodeController {
 		$parent->node_id = $this->arguments[0];
 		$parent->read(true);
 		if (empty($parent->title)) {
+			echo '<ul class="submenu">' . __('Please select a node before adding a sub node.') . '</ul>';
 			exit;
 		}
 		?>
