@@ -96,9 +96,12 @@ abstract class Model {
 					$return[$i]->$property = new $name();
 					$return[$i]->$property->set_row($row);
 				}
-				
-				$return[$i]->handle_otm();
-				$return[$i]->hook_read();
+			}
+			
+			$this->handle_otm($return);
+			
+			foreach ($return as $object) {
+				$object->hook_read();	
 			}
 			
 			return $return;
@@ -214,14 +217,26 @@ abstract class Model {
 		$this->written = true;
 	}
 	
-	public function handle_otm() {
+	public function handle_otm($multi = false) {
 		foreach ($this->relations as $key => $parameters) {
 			switch ($parameters['type']) {
 				case 'one_to_many':
 					$mywheres = array();
-					foreach ($parameters['my_fields'] as $i => $field) {
-						$value = $this->sql_value($field);
-						$mywheres[] = $parameters['their_fields'][$i] . ' = ' . $value;
+					if (!$multi) {
+						foreach ($parameters['my_fields'] as $i => $field) {
+							$value = $this->sql_value($field);
+							$mywheres[] = $parameters['their_fields'][$i] . ' = ' . $value;
+						}
+					} else {
+						foreach ($parameters['my_fields'] as $i => $field) {
+							$values = array();
+							foreach ($multi as $object) {
+								$values[] = $object->$field;
+							}
+							$values = implode(', ', $values);
+							$this->sql_value($field);
+							$mywheres[] = $parameters['their_fields'][$i] . ' IN (' . $values . ')';
+						}
 					}
 					$where .= implode(' AND ', $mywheres);
 					
@@ -230,11 +245,34 @@ abstract class Model {
 					$rowset = cms::$db->sql_fetchrowset($result);
 					$name = $parameters['object']['class'];
 					$property = $parameters['object']['property'];
-					$this->$property = array();
-					//$rowset = cms::$db->sql_fetchrowset($result);
-					foreach ($rowset as $i => $row) {
-						$this->{$property}[$i] = new $name();
-						$this->{$property}[$i]->set_row($row);
+					if (!$multi) {
+						$this->$property = array();
+						//$rowset = cms::$db->sql_fetchrowset($result);
+						foreach ($rowset as $i => $row) {
+							$this->{$property}[$i] = new $name();
+							$this->{$property}[$i]->set_row($row);
+						}
+					} else {
+						foreach ($multi as $object) {						
+							$object->$property = array();
+						
+							foreach ($rowset as $i => $row) {
+								$mine = true;
+								foreach ($parameters['my_fields'] as $f => $field) {
+									if ($object->$field != $row[$parameters['their_fields'][$f]]) {
+										$mine = false;
+										break;
+									}
+								}
+							
+								if (!$mine) {
+									continue;
+								}
+								
+								$object->{$property}[$i] = new $name();
+								$object->{$property}[$i]->set_row($row);
+							}
+						}
 					}
 				break;
 			}
