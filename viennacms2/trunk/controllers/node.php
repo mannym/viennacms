@@ -54,7 +54,8 @@ class NodeController extends Controller {
 	
 	public function get_modules($location) {
 		$content = '';
-	
+		if(empty($this->modules[$location]))
+			return __('This node doesn\'t have any modules.');
 		foreach ($this->modules[$location] as $module) {
 			$box = new View();
 			$box->path = 'style/box.php';
