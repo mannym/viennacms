@@ -667,7 +667,7 @@ class dblayer_base
 					{
 						$this->sql_report .= 'Affected rows: <b>' . $this->sql_affectedrows($this->query_result) . '</b> | ';
 					}
-					$this->sql_report .= 'Before: ' . sprintf('%.5f', $this->curtime - $starttime) . 's | After: ' . sprintf('%.5f', $endtime - $starttime) . 's | Elapsed: <b>' . sprintf('%.5f', $endtime - $this->curtime) . 's</b>';
+					$this->sql_report .= 'Before: ' . sprintf('%.5f', $this->curtime - cms::$vars['starttime']) . 's | After: ' . sprintf('%.5f', $endtime - cms::$vars['starttime']) . 's | Elapsed: <b>' . sprintf('%.5f', $endtime - $this->curtime) . 's</b>';
 				}
 				else
 				{
@@ -739,7 +739,7 @@ class dblayer_base
 				$this->sql_report .= '<table cellspacing="1"><thead><tr><th>Query results obtained from the cache</th></tr></thead><tbody><tr>';
 				$this->sql_report .= '<td class="row3"><textarea style="font-family:\'Courier New\',monospace;width:99%" rows="5" cols="10">' . preg_replace('/\t(AND|OR)(\W)/', "\$1\$2", htmlspecialchars(preg_replace('/[\s]*[\n\r\t]+[\n\r\s\t]*/', "\n", $query))) . '</textarea></td></tr></tbody></table>';
 				$this->sql_report .= '<p style="text-align: center;">';
-				$this->sql_report .= 'Before: ' . sprintf('%.5f', $this->curtime - $starttime) . 's | After: ' . sprintf('%.5f', $endtime - $starttime) . 's | Elapsed [cache]: <b style="color: ' . $color . '">' . sprintf('%.5f', ($time_cache)) . 's</b> | Elapsed [db]: <b>' . sprintf('%.5f', $time_db) . 's</b></p><br /><br />';
+				$this->sql_report .= 'Before: ' . sprintf('%.5f', $this->curtime - cms::$vars['starttime']) . 's | After: ' . sprintf('%.5f', $endtime - cms::$vars['starttime']) . 's | Elapsed [cache]: <b style="color: ' . $color . '">' . sprintf('%.5f', ($time_cache)) . 's</b> | Elapsed [db]: <b>' . sprintf('%.5f', $time_db) . 's</b></p><br /><br />';
 
 				// Pad the start time to not interfere with page timing
 				$starttime += $time_db;

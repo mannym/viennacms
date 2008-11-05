@@ -117,9 +117,13 @@ if (empty($dbms)) {
 	die('You should install viennaCMS2 first.');
 }
 
+if (empty($acm_type)) {
+	$acm_type = 'acm_file';
+}
+
 cms::register('db', new database());
 cms::$db->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname);
-cms::register('cache', new cache());
+cms::register('cache', new $acm_type());
 
 //try {
 //	$global['db'] = newADOConnection($dbms);
