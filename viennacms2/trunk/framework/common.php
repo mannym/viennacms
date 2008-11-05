@@ -7,8 +7,6 @@
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 */
 
-$starttime = microtime(true); // The true is the get_as_float parameter, which was added in PHP5. 
-
 define('ROOT_PATH', dirname(dirname(__FILE__)) . '/');
 
 function __autoload($class_name) {

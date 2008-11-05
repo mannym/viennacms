@@ -43,7 +43,7 @@ class LayoutController extends Controller {
 		}
 		
 		// Do this at the very latest moment.
-		$this->view['starttime'] = $starttime;
+		$this->view['starttime'] = cms::$vars['starttime'];
 				
 		header('Content-type: text/html; charset=utf-8');		
 	}
