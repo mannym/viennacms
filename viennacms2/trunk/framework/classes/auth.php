@@ -38,6 +38,18 @@ class Auth {
 		return $return;
 	}
 	
+	function make_permission_string($array) {
+		$return = '';
+		
+		foreach ($array as $parts) {
+			foreach ($parts as $part) {
+				$return .= $part;
+			}
+		}
+		
+		return $return;
+	}
+	
 	function get_rights($resource, $object) {
 		// is the object an user, or a group?
 		switch (get_class($object)) {

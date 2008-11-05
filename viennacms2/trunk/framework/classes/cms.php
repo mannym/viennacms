@@ -11,6 +11,18 @@ class cms {
 		self::$$name = $object;
 	}
 	
+	public static function display_allowed($type, $node, $other) {
+		$results = manager::run_hook_all('display_allowed', $type, $node, $other);
+		
+		foreach ($results as $result) {
+			if ($result == false) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
 	public static function get_admin_tree($node_link_template) {
 		$node = new Node();
 		$node->node_id = 0;

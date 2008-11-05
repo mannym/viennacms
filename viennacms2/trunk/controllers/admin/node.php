@@ -1,9 +1,39 @@
 <?php
 class AdminNodeController {
-	public function edit() {
-		if (!empty($this->arguments[0])) {
-			$do = 'edit';
+	public function add() {
+		$parent = new Node();
+		$parent->node_id = $this->arguments[0];
+		$parent->read(true);
+		?>
+		<ul class="types submenu">
+		<?php
+		$types = manager::run_hook_all('get_node_types');
+		foreach ($types as $key => $type) {
+			$node = new Node();
+			$node->type = $key;
 			
+			if (!cms::display_allowed('this_under_other', $node, $parent)) {
+				continue;
+			}
+			
+			?>
+			<li>
+			<a class="<?php echo $key ?>" href="<?php echo $this->view->url('admin/controller/node/add_do/' . $key . '/' . $parent->node_id); ?>"><?php echo $type['title'] ?></a><span><?php echo $type['description'] ?></span>
+			</li>
+			<?php
+		}
+		?>
+		</ul>
+		<?php
+		exit;
+	}
+	
+	public function add_do() {
+		$this->edit('add');
+	}
+	
+	public function edit($do = 'edit') {
+		if ($do == 'edit') {
 			$node = new Node();
 			$node->node_id = $this->arguments[0];
 			$node->read(true);
@@ -13,6 +43,35 @@ class AdminNodeController {
 			}
 		} else {
 			$node = Node::create('Node');
+			$node->type = $this->arguments[0];
+			$node->parent = $this->arguments[1];
+			$node->set_type_vars();
+			
+			$ux_html = '<li class="oncontentremove"><a class="' . $node->type . ' mynewnode" href="#">' . __('New node') . '</a></li>';
+			?>
+			<script type="text/javascript">
+				hasChildren = $('.treeview a.selected').parents('li').eq(0).find('ul').length;
+				if (hasChildren > 0) {
+					var add = $('.treeview a.selected').parents('li').eq(0).find('ul').eq(0).append('<?php echo $ux_html ?>');
+					$('.treeview').treeview({ add: add });
+				} else {
+					var add = $('.treeview a.selected').parents('li').eq(0).append('<ul class="oncontentremove open"><?php echo $ux_html?></ul>')
+					$('.treeview').treeview({ add: add });
+				}
+				
+				$('.treeview a.selected').removeClass('selected');
+				$('.mynewnode').addClass('selected');
+				
+				$('#node_edit_title').keyup(function() {
+					value = $(this).val();
+					if (value == "") {
+						$('.mynewnode').html('<?php echo __('New node') ?>');
+					} else {
+						$('.mynewnode').html(value);
+					}
+				});
+			</script>
+			<?php
 		}
 		
 		$form_data = array(
@@ -86,6 +145,22 @@ class AdminNodeController {
 				'group' => 'node_details',
 				'weight' => -10
  			);
+		} else {
+			$form_data['fields']['type'] = array(
+				'type' => 'hidden',
+				'required' => true,
+				'value' => $node->type,
+				'group' => 'node_details',
+				'weight' => -10
+			);
+			
+			$form_data['fields']['parent'] = array(
+				'type' => 'hidden',
+				'required' => true,
+				'value' => $node->parent,
+				'group' => 'node_details',
+				'weight' => -10
+			);
 		}
 		
 		$form_data['fields']['do'] = array(
@@ -113,6 +188,12 @@ class AdminNodeController {
 					trigger_error(__('This node does not exist!'));
 				}
 				break;
+			case 'add':
+				$node = Node::create('Node');
+				$node->type = $fields['type'];
+				$node->parent = $fields['parent'];
+				$node->set_type_vars();
+				break;
 		}
 		
 		$node->title = $fields['title'];
@@ -136,6 +217,11 @@ class AdminNodeController {
 		// write it!
 		$node->write();
 		
-		echo __('Node successfully saved');
+		echo __('The node has been successfully saved.');
+		?>
+		<script type="text/javascript">
+			load_active_panes();
+		</script>
+		<?php
 	}
 }

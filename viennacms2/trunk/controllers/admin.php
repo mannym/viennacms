@@ -15,6 +15,20 @@ class AdminController extends Controller {
 		}		
 	}
 	
+	public static function add_toolbar($data, $caller) {
+		?>
+		<ul class="toolbar">
+			<?php
+			foreach ($data as $id => $item) {
+				?>
+				<li><a style="background-image: url(<?php echo $item['icon'] ?>);" class="<?php echo $item['type'] ?>" href="<?php echo $caller->view->url($item['callback']) ?>"><span><?php echo $id ?></span></a></li>
+				<?php
+			}
+			?>
+		</ul>
+		<?php
+	}
+	
 	public function main() {
 		$this->check_auth();
 		$this->view['pane_url'] = $this->view->url('admin/panes');
@@ -59,6 +73,7 @@ class AdminController extends Controller {
 		$controller->view = new View();
 		$controller->view->path = 'admin/panes/' . $pane . '.php';
 		$controller->arguments = $this->arguments;
+		$controller->base = 'admin/panec/nodes/';
 		$controller->main();
 		echo $controller->view->display();
 		exit;

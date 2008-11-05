@@ -17,6 +17,7 @@ class extension_core {
 				'description' => __('A page is a simple way of posting content that almost never changes.'),
 				'type' => 'static',
 				'icon' => '~/views/admin/images/icons/page.png',
+				'big_icon' => '~/views/admin/images/icons/page_big.png',
 				'options' => array()
 			),
 			'dynamicpage' => array(
@@ -25,6 +26,7 @@ class extension_core {
 				'description' => __('A dynamic page is used for placing modules on a site. These modules can be used for all kinds of dynamic content.'),
 				'type' => 'dynamic',
 				'icon' => '~/views/admin/images/icons/dynamicpage.png',
+				'big_icon' => '~/views/admin/images/icons/dynamicpage_big.png',
 				'options' => array()
 			),
 			'site' => array(
@@ -47,6 +49,16 @@ class extension_core {
 				)
 			)
 		);
+	}
+	
+	function display_allowed($type, $node, $other) {
+		switch ($type) {
+			case 'this_under_other':
+				if ($node->type == 'site') {
+					return false;
+				}
+			break;
+		}
 	}
 	
 	function validate_url($url) {

@@ -72,10 +72,11 @@
 			}
 		},
 		prepareBranches: function(settings) {
+		    this.filter("li.last").removeClass(CLASSES.last);
 			// mark last tree items
-			this.filter(":last-child").addClass(CLASSES.last);
+			this.filter("li:last-child").addClass(CLASSES.last);
 			// collapse whole tree, or only those marked as closed, anyway except those marked as open
-			this.filter((settings.collapsed ? "" : "." + CLASSES.closed) + ":not(." + CLASSES.open + ")").find(">ul").hide();
+			this.find((settings.collapsed ? "ul" : "ul." + CLASSES.closed) + ":not(." + CLASSES.open + ")").hide();
 			// return all items with sublists
 			return this.filter(":has(>ul)");
 		},

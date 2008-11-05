@@ -139,16 +139,53 @@ ul.toolbar {
 	height: 25px;
 }
 
-ul.toolbar li {
+ul.toolbar li a {
 	float: left;
 	margin: 2px;
+	margin-bottom: 1px;
 	width: 22px;
 	height: 22px;
 	cursor: pointer;
+	display: block;
+}
+
+ul.submenu 
+{
+	clear: both;
+	background-color: #e4e0d8;
+	border: 1px solid #d4d0c8;
+	border-top: none;
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+	display: none;
+}
+
+ul.submenu li 
+{
+	display: block;
+	width: 178px;
+	height: auto;
+}
+
+ul.submenu li a 
+{
+	display: block;
+	float: none;
+	margin: 0px;
+	padding: 0px;
+	width: auto;
+	height: auto;
 }
 
 ul.toolbar li span {
 	display: none;
+}
+
+ul.submenu li span 
+{
+	display: block;
+	font-size: 90%;
 }
 
 /* leave this here for now */
@@ -180,7 +217,7 @@ ul.toolbar li span {
 }
 
 .treeview a.selected {
-	background-color: #eee;
+	background-color: #ddd;
 }
 
 #treecontrol { margin: 1em 0; }
@@ -199,7 +236,7 @@ ul.toolbar li span {
 	margin-left: 10px;
 }
 	
-.treeview a { padding-left: 19px; display: inline-block; height: 16px; text-decoration: none; color: #0066ff; }
+.treeview a, .types a { padding-left: 19px !important; display: inline-block !important; height: 20px; text-decoration: none; color: #0066ff; }
 .treeview a:visited { color: #0066ff; }
 .treeview .selected > a {
 	text-decoration: underline;

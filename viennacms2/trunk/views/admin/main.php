@@ -17,7 +17,7 @@
 			<?php
 			foreach ($this['icons'] as $key => $icon) {
 				?>
-				.treeview a.<?php echo $key ?> { background: url(<?php echo $icon ?>) 0 0 no-repeat; }
+				.treeview a.<?php echo $key ?>, .types a.<?php echo $key ?> { background-image: url(<?php echo $icon ?>); background-repeat: no-repeat; }
 				<?php
 			}
 			?>
