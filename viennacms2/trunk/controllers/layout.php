@@ -1,6 +1,7 @@
 <?php
 class LayoutController extends Controller {
 	public function page($content) {
+		global $starttime;
 		// assign navigation
 		if (isset(cms::$vars['node'])) {
 			$this->parents = $this->get_parents(cms::$vars['node']);
@@ -41,6 +42,9 @@ class LayoutController extends Controller {
 			$this->view['acp_auth'] = true;
 		}
 		
+		// Do this at the very latest moment.
+		$this->view['starttime'] = $starttime;
+				
 		header('Content-type: text/html; charset=utf-8');		
 	}
 	
