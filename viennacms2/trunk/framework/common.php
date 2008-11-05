@@ -101,7 +101,10 @@ if (STRIP) {
 	}
 }
 
+$mtime = explode(' ', microtime());
+
 cms::$vars = new GlobalStore();
+cms::$vars['starttime'] = $mtime[0] + $mtime[1];
 //$global = cms::$vars;
 
 //include(ROOT_PATH . 'framework/db/adodb-exceptions.inc.php');

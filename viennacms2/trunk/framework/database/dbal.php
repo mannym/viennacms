@@ -583,8 +583,6 @@ class dblayer_base
 	*/
 	function sql_report($mode, $query = '')
 	{
-		global $starttime, $user;
-
 		if (empty($_REQUEST['explain']))
 		{
 			return false;
@@ -599,7 +597,7 @@ class dblayer_base
 		{
 			case 'display':
 				$mtime = explode(' ', microtime());
-				$totaltime = $mtime[0] + $mtime[1] - $starttime;
+				$totaltime = $mtime[0] + $mtime[1] - cms::$vars['starttime'];
 
 				echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 					<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
