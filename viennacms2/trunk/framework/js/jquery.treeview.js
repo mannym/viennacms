@@ -77,6 +77,12 @@
 			this.filter("li:last-child").addClass(CLASSES.last);
 			// collapse whole tree, or only those marked as closed, anyway except those marked as open
 			this.find((settings.collapsed ? "ul" : "ul." + CLASSES.closed) + ":not(." + CLASSES.open + ")").hide();
+			
+			this.filter(":not(:has(>ul))").each(function() {
+		        $(this).click(function() {});
+		        $(this).removeClass(CLASSES.expandable).removeClass(CLASSES.collapsable).replaceClass(CLASSES.lastExpandable, CLASSES.last)
+		               .replaceClass(CLASSES.lastCollapsable, CLASSES.last).find('.hitarea').remove();
+		    }); 
 			// return all items with sublists
 			return this.filter(":has(>ul)");
 		},

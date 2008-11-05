@@ -180,7 +180,18 @@ function load_content(url){
 	            wi++;
 	        }
 	        
-			$('.oncontentremove').remove();
+	        var saveMe;	        
+		    $('.oncontentremove').each(function() {
+		        if ($(this).parents('li:not(.oncontentremove)').length > 0) {
+		            saveMe = $(this).parents('li:not(.oncontentremove)').eq(0);
+		        }
+		    });
+		    $('.oncontentremove').remove();
+		    
+		    if (saveMe) {
+		        $('.treeview').treeview({ add: saveMe });
+		    }
+		    
 			$('#main-content').html(output);
 			$('ul.submenu').slideUp('normal', function() {
                 $(this).remove();
