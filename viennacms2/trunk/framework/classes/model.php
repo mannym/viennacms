@@ -77,18 +77,8 @@ abstract class Model {
 		$sql .= ' WHERE ' . implode(' AND ', $wheres);
 		$sql .= ($single) ? ' LIMIT 1' : '';
 		
-		if ($this->cache == false) {
-			$result = cms::$db->sql_query($sql);
-			$rowset = cms::$db->sql_fetchrowset($result);
-		} else {
-			$result = cms::$cache->sql_load($sql);
-			if (!$result) {
-				$result = cms::$db->sql_query($sql);
-				cms::$cache->sql_save($sql, $result, $this->cache);
-			}
-			
-			$rowset = cms::$cache->sql_fetchrowset($result);
-		}
+		$result = cms::$db->sql_query($sql, $this->cache);
+		$rowset = cms::$db->sql_fetchrowset($result);
 		
 		if (!$single) {
 			$class = get_class($this);
@@ -97,6 +87,7 @@ abstract class Model {
 			foreach ($rowset as $i => $row) {
 				$return[$i] = new $class();
 				$return[$i]->set_row($row);
+				$return[$i]->cache = $this->cache;
 				
 				foreach ($objects as $parameters) {
 					$name = $parameters['class'];
@@ -235,18 +226,8 @@ abstract class Model {
 					$where .= implode(' AND ', $mywheres);
 					
 					$sql = 'SELECT * FROM ' . $parameters['table'] . ' WHERE ' . $where;
-					if ($this->cache == false) {
-						$result = cms::$db->sql_query($sql);
-						$rowset = cms::$db->sql_fetchrowset($result);
-					} else {
-						$result = cms::$cache->sql_load($sql);
-						if (!$result) {
-							$result = cms::$db->sql_query($sql);
-							cms::$cache->sql_save($sql, $result, $this->cache);
-						}
-						
-						$rowset = cms::$cache->sql_fetchrowset($result);
-					}
+					$result = cms::$db->sql_query($sql, $this->cache);
+					$rowset = cms::$db->sql_fetchrowset($result);
 					$name = $parameters['object']['class'];
 					$property = $parameters['object']['property'];
 					$this->$property = array();

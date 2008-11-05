@@ -361,8 +361,6 @@ class cache
 	*/
 	public function sql_save($query, &$query_result, $ttl)
 	{
-		global $db;
-		
 		// Remove extra spaces and tabs
 		$query = preg_replace('/[\n\r\s\t]+/', ' ', $query);
 		$filename = $this->cache_dir . 'sql_' . md5($query) . '.php';

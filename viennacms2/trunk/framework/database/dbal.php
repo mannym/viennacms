@@ -202,8 +202,6 @@ class dblayer_base
 	*/
 	function sql_fetchfield($field, $query_id = false)
 	{
-		global $cache;
-
 		if ($query_id === false)
 		{
 			$query_id = $this->query_result;
@@ -211,9 +209,9 @@ class dblayer_base
 
 		if ($query_id !== false)
 		{
-			if (!is_object($query_id) && isset($cache->sql_rowset[$query_id]))
+			if (!is_object($query_id) && isset(cms::$cache->sql_rowset[$query_id]))
 			{
-				return $cache->sql_fetchfield($query_id, $field);
+				return cms::$cache->sql_fetchfield($query_id, $field);
 			}
 
 			$row = $this->sql_fetchrow($query_id);
@@ -585,7 +583,7 @@ class dblayer_base
 	*/
 	function sql_report($mode, $query = '')
 	{
-		global $cache, $starttime, $user;
+		global $starttime, $user;
 
 		if (empty($_REQUEST['explain']))
 		{
@@ -600,12 +598,6 @@ class dblayer_base
 		switch ($mode)
 		{
 			case 'display':
-				if (!empty($cache))
-				{
-					$cache->unload();
-				}
-				$this->sql_close();
-
 				$mtime = explode(' ', microtime());
 				$totaltime = $mtime[0] + $mtime[1] - $starttime;
 
@@ -643,7 +635,7 @@ class dblayer_base
 					</body>
 					</html>';
 
-				exit_handler();
+				exit;
 
 			break;
 

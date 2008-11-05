@@ -101,12 +101,20 @@ class Manager {
 		$content = $controller->view->display();
 		
 		// create layout
+		$output = '';
 		if ($result == CONTROLLER_OK) {
 			$layout->page($content);
-			echo $layout->view->display();
+			$output = $layout->view->display();
 		} else if ($result === CONTROLLER_NO_LAYOUT) {
-			echo $content;
+			$output = $content;
 		}
+		
+		if (defined('DEBUG_EXTRA') && isset($_REQUEST['explain'])) {
+			cms::$db->sql_report('display');
+			exit;
+		}
+		
+		echo $output;
 	
 		return CONTROLLER_OK;
 	}

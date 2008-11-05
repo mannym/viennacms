@@ -28,7 +28,7 @@
 	<div id="footer">
 		Powered by <a href="http://www.viennacms.nl/">viennaCMS</a> &copy; 2008 viennaCMS Group | 
 		<?php
-		echo cms::$db->num_queries['total'] . ' queries';
+		echo cms::$db->num_queries['normal'] . ' queries, and ' . cms::$db->num_queries['cached'] . ' cached';
 		?>
 	</div>
 	</div>

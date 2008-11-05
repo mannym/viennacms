@@ -85,9 +85,7 @@ class database extends dblayer_base
 	*/
 	function sql_server_info($raw = false)
 	{
-		global $cache;
-
-		if (empty($cache) || ($this->sql_server_version = $cache->get('mysqli_version')) === false)
+		if (empty(cms::$cache) || ($this->sql_server_version = cms::$cache->get('mysqli_version')) === false)
 		{
 			$result = @mysqli_query($this->db_connect_id, 'SELECT VERSION() AS version');
 			$row = @mysqli_fetch_assoc($result);
@@ -95,9 +93,9 @@ class database extends dblayer_base
 
 			$this->sql_server_version = $row['version'];
 
-			if (!empty($cache))
+			if (!empty(cms::$cache))
 			{
-				$cache->put('mysqli_version', $this->sql_server_version);
+				cms::$cache->put('mysqli_version', $this->sql_server_version);
 			}
 		}
 
@@ -145,15 +143,13 @@ class database extends dblayer_base
 	{
 		if ($query != '')
 		{
-			global $cache;
-
 			// EXPLAIN only in extra debug mode
 			if (defined('DEBUG_EXTRA'))
 			{
 				$this->sql_report('start', $query);
 			}
 
-			$this->query_result = ($cache_ttl && method_exists($cache, 'sql_load')) ? $cache->sql_load($query) : false;
+			$this->query_result = ($cache_ttl && method_exists(cms::$cache, 'sql_load')) ? cms::$cache->sql_load($query) : false;
 			$this->sql_add_num_queries($this->query_result);
 
 			if ($this->query_result === false)
@@ -168,9 +164,9 @@ class database extends dblayer_base
 					$this->sql_report('stop', $query);
 				}
 
-				if ($cache_ttl && method_exists($cache, 'sql_save'))
+				if ($cache_ttl && method_exists(cms::$cache, 'sql_save'))
 				{
-					$cache->sql_save($query, $this->query_result, $cache_ttl);
+					cms::$cache->sql_save($query, $this->query_result, $cache_ttl);
 				}
 			}
 			else if (defined('DEBUG_EXTRA'))
@@ -218,16 +214,14 @@ class database extends dblayer_base
 	*/
 	function sql_fetchrow($query_id = false)
 	{
-		global $cache;
-
 		if ($query_id === false)
 		{
 			$query_id = $this->query_result;
 		}
 
-		if (!is_object($query_id) && isset($cache->sql_rowset[$query_id]))
+		if (!is_object($query_id) && isset(cms::$cache->sql_rowset[$query_id]))
 		{
-			return $cache->sql_fetchrow($query_id);
+			return cms::$cache->sql_fetchrow($query_id);
 		}
 
 		return ($query_id !== false) ? @mysqli_fetch_assoc($query_id) : false;
@@ -246,16 +240,14 @@ class database extends dblayer_base
 	*/
 	function sql_freeresult($query_id = false)
 	{
-		global $cache;
-
 		if ($query_id === false)
 		{
 			$query_id = $this->query_result;
 		}
 
-		if (!is_object($query_id) && isset($cache->sql_rowset[$query_id]))
+		if (!is_object($query_id) && isset(cms::$cache->sql_rowset[$query_id]))
 		{
-			return $cache->sql_freeresult($query_id);
+			return cms::$cache->sql_freeresult($query_id);
 		}
 
 		return @mysqli_free_result($query_id);
