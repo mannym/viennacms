@@ -1,6 +1,7 @@
 <?php
 abstract class Model {
 	public $written = false;
+	public $cache = false;
 	
 	public static function create($name) {
 		$model = new $name();
@@ -76,8 +77,18 @@ abstract class Model {
 		$sql .= ' WHERE ' . implode(' AND ', $wheres);
 		$sql .= ($single) ? ' LIMIT 1' : '';
 		
-		$result = cms::$db->sql_query($sql);
-		$rowset = cms::$db->sql_fetchrowset($result);
+		if ($this->cache == false) {
+			$result = cms::$db->sql_query($sql);
+			$rowset = cms::$db->sql_fetchrowset($result);
+		} else {
+			$result = cms::$cache->sql_load($sql);
+			if (!$result) {
+				$result = cms::$db->sql_query($sql);
+				cms::$cache->sql_save($sql, $result, $this->cache);
+			}
+			
+			$rowset = cms::$cache->sql_fetchrowset($result);
+		}
 		
 		if (!$single) {
 			$class = get_class($this);
@@ -178,6 +189,7 @@ abstract class Model {
 			}
 		}
 		
+		$this->clear_cache(false);
 		$this->written = true;
 	}
 
@@ -223,16 +235,36 @@ abstract class Model {
 					$where .= implode(' AND ', $mywheres);
 					
 					$sql = 'SELECT * FROM ' . $parameters['table'] . ' WHERE ' . $where;
-					$result = cms::$db->sql_query($sql);
+					if ($this->cache == false) {
+						$result = cms::$db->sql_query($sql);
+						$rowset = cms::$db->sql_fetchrowset($result);
+					} else {
+						$result = cms::$cache->sql_load($sql);
+						if (!$result) {
+							$result = cms::$db->sql_query($sql);
+							cms::$cache->sql_save($sql, $result, $this->cache);
+						}
+						
+						$rowset = cms::$cache->sql_fetchrowset($result);
+					}
 					$name = $parameters['object']['class'];
 					$property = $parameters['object']['property'];
 					$this->$property = array();
-					$rowset = cms::$db->sql_fetchrowset($result);
+					//$rowset = cms::$db->sql_fetchrowset($result);
 					foreach ($rowset as $i => $row) {
 						$this->{$property}[$i] = new $name();
 						$this->{$property}[$i]->set_row($row);
 					}
 				break;
+			}
+		}
+	}
+	
+	public function clear_cache($all = true) {
+		cms::$cache->destroy('sql', $this->table);
+		if ($all) {
+			foreach ($this->relations as $data) {
+				cms::$cache->destroy('sql', $data['table']);
 			}
 		}
 	}

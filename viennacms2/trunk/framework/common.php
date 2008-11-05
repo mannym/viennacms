@@ -25,7 +25,13 @@ function __autoload($class_name) {
 	}
 }
 
+function cleanup() {
+	cms::$cache->unload();
+	cms::$db->sql_close();
+}
+
 set_error_handler(array('Manager', 'handle_error'));
+register_shutdown_function('cleanup');
 
 if (version_compare(phpversion(), '6.0.0-dev', '<') && get_magic_quotes_gpc()) {
 	define('STRIP', true);
@@ -110,6 +116,7 @@ if (empty($dbms)) {
 
 cms::register('db', new database());
 cms::$db->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname);
+cms::register('cache', new cache());
 
 //try {
 //	$global['db'] = newADOConnection($dbms);

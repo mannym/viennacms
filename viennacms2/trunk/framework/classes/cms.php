@@ -6,6 +6,7 @@ class cms {
 	static $manager;
 	static $router;
 	static $layout;
+	static $cache;
 	
 	public static function register($name, $object) {
 		self::$$name = $object;

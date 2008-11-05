@@ -8,6 +8,7 @@ class User extends Model {
 		'user_password' => array('type' => 'string'),
 		'user_email' => array('type' => 'string'),
 		'user_active' => array('type' => 'int'),
+		'user_permissions' => array('type' => 'string')
 	);
 	protected $relations = array();
 }

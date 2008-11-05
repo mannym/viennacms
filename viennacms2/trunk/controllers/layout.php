@@ -80,7 +80,7 @@ class LayoutController extends Controller {
 	 */
 	
 	private function _get_parents($node) {
-		$nodes = array($node->get_parent());
+		$nodes = array($node->get_parent(7200));
 
 		if ($nodes[0]->node_id) {
 			$newnode = $nodes[0];
@@ -95,12 +95,12 @@ class LayoutController extends Controller {
 		
 		if ($level == 1) {
 			$node = cms::$vars['sitenode'];
-			$nodes = $node->get_children();
+			$nodes = $node->get_children(7200);
 		} else if ($level > 1) {
 			if (isset($this->parents[$level])) {
-				$nodes = $this->parents[$level]->get_siblings_all();
+				$nodes = $this->parents[$level]->get_siblings_all(7200);
 			} else if (isset($this->parents[$level - 1])) {
-				$nodes = $this->parents[$level - 1]->get_children();
+				$nodes = $this->parents[$level - 1]->get_children(7200);
 			}
 		}
 		foreach ($this->parents as $parent) {

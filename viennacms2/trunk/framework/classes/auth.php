@@ -64,6 +64,13 @@ class Auth {
 			break;
 		}
 		
+		if (($check & AUTH_USER) && $object->user_id == cms::$user->user->user_id) {
+			$usercache = unserialize(cms::$user->user->user_permissions);
+			if ($usercache !== false && isset($usercache[$resource])) {
+				return $usercache[$resource];
+			}
+		}
+		
 		// read the database
 		$data = new Permission_Object();
 		$data->resource = $resource;
@@ -91,6 +98,12 @@ class Auth {
 					$results[] = $right; // add it!
 				}
 			}
+		}
+		
+		if (($check & AUTH_USER) && $object->user_id == cms::$user->user->user_id) {
+			$usercache = unserialize(cms::$user->user->user_permissions);
+			$usercache[$resource] = $results;
+			cms::$user->user->user_permissions = serialize($usercache);
 		}
 		
 		return $results;

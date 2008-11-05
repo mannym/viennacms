@@ -76,22 +76,25 @@ class Node extends Model {
 		$this->revision->time = time();
 	}
 	
-	public function get_children() {
+	public function get_children($cache = false) {
 		$node = new Node();
 		$node->parent = $this->node_id;
+		$node->cache = $cache;
 		return $node->read();
 	}
 	
-	public function get_parent() {
+	public function get_parent($cache = false) {
 		$node = new Node();
 		$node->node_id = $this->parent;
+		$node->cache = $cache;
 		$node->read(true);
 		return $node;
 	}
 	
-	public function get_siblings_all() {
+	public function get_siblings_all($cache = false) {
 		$node = new Node();
 		$node->parent = $this->parent;
+		$node->cache = $cache;
 		return $node->read();
 	}
 }

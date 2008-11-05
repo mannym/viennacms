@@ -11,6 +11,10 @@ class Users {
 		@define('USER_WRONG_PASSWORD', 2);
 	}
 	
+	public function __destruct() {
+		$this->user->write();
+	}
+	
 	public function initialize() {
 		if (isset($_COOKIE['viennacms2_id'])) {
 			$this->cookie = unserialize(stripslashes($_COOKIE['viennacms2_id']));
