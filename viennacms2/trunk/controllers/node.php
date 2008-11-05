@@ -54,9 +54,19 @@ class NodeController extends Controller {
 	
 	public function get_modules($location) {
 		$content = '';
-		if(empty($this->modules[$location]))
+
+		$modules = array();
+		if (empty($this->modules[$location])) {
 			return __('This node doesn\'t have any modules.');
-		foreach ($this->modules[$location] as $module) {
+		}
+		
+		foreach ($this->modules[$location] as $id => $module) {
+			$modules[$module['order']] = $module;
+		}
+		
+		ksort($modules);
+		
+		foreach ($modules as $module) {
 			$box = new View();
 			$box->path = 'style/box.php';
 			$controller = cms::$manager->get_controller($module['controller']);

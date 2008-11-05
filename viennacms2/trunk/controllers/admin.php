@@ -67,6 +67,7 @@ class AdminController extends Controller {
 	}
 	
 	public function pane() {
+		$this->check_auth();
 		$pane = array_shift($this->arguments);
 		
 		$controller = cms::$manager->get_controller('admin/' . $pane . 'pane'); // array_shift to remove the original argument.
@@ -86,11 +87,13 @@ class AdminController extends Controller {
 			'left' => array(
 				array(
 					'title' => __('Nodes'),
-					'href' => $this->view->url('admin/pane/nodes')
+					'href' => $this->view->url('admin/pane/nodes'),
+					'aclass' => 'active'
 				),
 				array(
 					'title' => __('Revisions'),
-					'href' => $this->view->url('admin/pane/revisions')
+					'href' => $this->view->url('admin/pane/revisions'),
+					'aclass' => ''
 				),
 				
 			),

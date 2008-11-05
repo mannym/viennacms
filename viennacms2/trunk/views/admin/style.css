@@ -164,7 +164,7 @@ ul.submenu
 ul.submenu li 
 {
 	display: block;
-	width: 178px;
+	width: auto;
 	height: auto;
 }
 
@@ -186,6 +186,36 @@ ul.submenu li span
 {
 	display: block;
 	font-size: 90%;
+}
+
+.modules 
+{
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+	width: 400px;
+}
+
+.modules li 
+{
+	border: 1px solid #ccc;
+	background-color: #eee;
+	margin-bottom: 5px;
+}
+
+.modules li a 
+{
+	color: #000;
+	font-size: 120%;
+	text-decoration: none;
+}
+
+.modules li div.modform 
+{
+	position: relative;
+	top: 0px;
+	background-color: #fff;
+	border-top: 1px solid #06f;
 }
 
 /* leave this here for now */

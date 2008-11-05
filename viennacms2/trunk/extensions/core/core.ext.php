@@ -51,6 +51,17 @@ class extension_core {
 		);
 	}
 	
+	
+	public function module_manifest() {
+		return array(
+				'htmlcontent' => array(
+					'icon' => '~/views/admin/images/icons/page.png',
+					'title' => __('HTML content'),
+					'description' => __('A module which provides a content box which renders HTML.')
+					)	
+				);
+	}
+	
 	function display_allowed($type, $node, $other) {
 		switch ($type) {
 			case 'this_under_other':

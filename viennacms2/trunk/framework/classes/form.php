@@ -4,6 +4,7 @@ class Form {
 	public $action;
 	private $form;
 	public $form_id;
+	public $return = false;
 	
 	public function handle_form($form_id, $data) {
 		$this->form_id = $form_id;
@@ -26,14 +27,14 @@ class Form {
 				$this->render_form($errors, $fields);
 			}
 		} else {
-			$this->render_form();
+			return $this->render_form();
 		}
 	}
 	
-	private function validate_form($fields) {
+	public function validate_form($fields) {
 		$errors = array();
-		foreach ($fields as $key => $value) {
-			$data = $this->form['fields'][$key];
+		foreach ($this->form['fields'] as $key => $data) {
+			$value = $fields[$key];
 
 			if (empty($value) && $data['required']) {
 				$errors[$key] = sprintf(__('The field %s is required.'), $data['label']);	
@@ -150,6 +151,10 @@ class Form {
 			}
 			
 			$final_fields .= $view->display();
+		}
+		
+		if ($this->return) {
+			return $final_fields;
 		}
 		
 		$view = new View();

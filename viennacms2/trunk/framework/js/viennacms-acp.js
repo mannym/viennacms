@@ -2,10 +2,10 @@ var dragging = false;
 
 function create_init_panes(loc, data) {
 	for (i = 0; i < data.length; i++) {
-		loc.append('<li><a href="' + data[i].href + '">' + data[i].title + '</a></li>');
+		loc.append('<li class="' + data[i].aclass + '"><a href="' + data[i].href + '">' + data[i].title + '</a></li>');
 	}
 	
-	loc.find('li:last').addClass('active');
+	//loc.addClass('active');
 }
 
 $(function() {
@@ -56,7 +56,7 @@ function init_rest() {
 	reload_pane_containers(false);
 
     $('#main-content').click(function() {
-        $('ul.submenu').slideUp('normal', function() {
+        $('.panes ul.submenu').slideUp('normal', function() {
             $(this).remove();
         });
     });
@@ -238,6 +238,94 @@ function update_content() {
 	        $.wymeditors(wi).update();
 	        wi++;
 	    }
+	    
+	    if ($('div.modform').length > 0) {
+	        update_modform($('div.modform').parents('li').eq(0).find('a').get(0));
+	    }
+    });
+    
+    //$('.modules').sortable();
+    build_modules();
+}
+
+function build_modules() {
+    $('.modules li').each(function() {
+        $(this).find('a').click(function() {
+            if (!dragging) {
+                var old = this;
+                
+                $.ajax({
+	                cache: false,
+	                type: "POST",
+	                data: 'node_edit_revision_content=' + $('#nerc').attr('value'),
+	                url: $(this).attr('href'),
+	                success: function(output) {
+	                    var callback = function() {
+	                        $('div.modform').remove();
+                            $(old).parents('li').append(output);
+		                    $('.modform .wysiwyg').wymeditor();
+		                    $('.modform input, .modform textarea').blur(function() {
+		                        update_modform(old);
+		                    });
+		                    $('.modform').click(function() {
+		                        if ($.wymeditors(wi) != undefined) {
+		                            $.wymeditors(wi).update();
+		                        }
+		                    });
+		                    
+		                    $('.modform a').click(function() {
+		                        $.ajax(
+		                        {
+	                                cache: false,
+	                                type: "POST",
+	                                data: 'nerc=' + $('#nerc').attr('value'),
+	                                url: $(this).attr('href'),
+	                                success: function(output) {
+	                                    if ($.wymeditors(wi) != undefined) {
+		                                    wi++;
+		                                }
+	                                    $(old).parents('li').eq(0).before(output);
+	                                    $(old).parents('li').eq(0).remove();
+	                                    build_modules();
+	                                }
+	                            });
+		                    
+		                        return false;
+		                    });
+		                    
+	                        $('div.modform').slideDown('normal');
+	                    };
+	                    
+	                    if ($('div.modform').length > 0) {
+	                    	update_modform($('div.modform').parents('li').eq(0).find('a').get(0), function() {
+	                    	    $('div.modform').slideUp('normal', callback);
+		                        if ($.wymeditors(wi) != undefined) {
+		                            wi++;
+		                        }
+                            });
+	                    } else {
+	                        callback();
+	                    }
+	                }
+	            });
+            }
+            
+            return false;
+        });
+    });
+}
+
+function update_modform(base, callback) {
+    var fields = $('.modform input, .modform textarea, #nerc').fieldSerialize();
+    $.ajax({
+        cache: false,
+        type: "POST",
+        url: $(base).attr('href'),
+        data: fields,
+        success: function(output) {
+            $('#nerc').attr('value', output);
+            callback();
+        }
     });
 }
 
