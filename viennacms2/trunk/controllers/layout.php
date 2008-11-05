@@ -39,7 +39,9 @@ class LayoutController extends Controller {
 		
 		if (in_array('y', $rights)) {
 			$this->view['acp_auth'] = true;
-		}				
+		}
+		
+		header('Content-type: text/html; charset=utf-8');		
 	}
 	
 	private function get_styles() {

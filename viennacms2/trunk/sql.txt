@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `nodes` (
   `revision_num` int(11) NOT NULL,
   `created` int(11) NOT NULL,
   PRIMARY KEY  (`node_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 --
 -- Gegevens worden uitgevoerd voor tabel `nodes`
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `node_options` (
   `option_name` varchar(255) NOT NULL,
   `option_value` longtext NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Gegevens worden uitgevoerd voor tabel `node_options`
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS `node_revisions` (
   `content` longtext NOT NULL,
   `time` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=19 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=19 ;
 
 --
 -- Gegevens worden uitgevoerd voor tabel `node_revisions`
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `permission_objects` (
   `group_id` int(11) NOT NULL,
   `permission_mask` varchar(60) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
 -- Gegevens worden uitgevoerd voor tabel `permission_objects`
@@ -136,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   `session_ip` varchar(60) NOT NULL,
   `session_time` int(11) NOT NULL,
   PRIMARY KEY  (`session_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Gegevens worden uitgevoerd voor tabel `sessions`
@@ -156,7 +156,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `user_email` varchar(150) NOT NULL,
   `user_active` tinyint(1) NOT NULL,
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
 -- Gegevens worden uitgevoerd voor tabel `users`
