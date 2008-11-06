@@ -124,7 +124,7 @@ function load_pane(url, object) {
 			    $(this).addClass('selected');
 			});
 			
-			object.parents('.pane').find('.content a').click(function() {
+			object.parents('.pane').find('.content div a').click(function() {
 				load_content($(this).attr('href'));
 				return false;
 			});
@@ -303,7 +303,11 @@ function build_modules() {
 		                        return false;
 		                    });
 		                    
-	                        $('div.modform').slideDown('normal');
+		                    if ($.browser.msie) {
+		                        $('div.modform').show(); // IE seems to hide form elements otherwise
+		                    } else {
+	                            $('div.modform').slideDown('normal');
+	                        }
 	                    };
 	                    
 	                    if ($('div.modform').length > 0) {
@@ -334,7 +338,13 @@ function update_modform(base, callback, params) {
         data: fields,
         success: function(output) {
             $('#nerc').attr('value', output);
-            callback(params);
+            if (callback) {
+                if (params) {
+                    callback(params);
+                } else {
+                    callback();
+                }
+            }
         }
     });
 }

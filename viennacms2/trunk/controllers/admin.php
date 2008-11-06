@@ -76,7 +76,9 @@ class AdminController extends Controller {
 		$controller->arguments = $this->arguments;
 		$controller->base = 'admin/panec/nodes/';
 		$controller->main();
+		echo '<div>';
 		echo $controller->view->display();
+		echo '</div>';
 		exit;
 	}
 	
