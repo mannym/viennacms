@@ -7,6 +7,8 @@
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 */
 
+$base_memory_usage = memory_get_usage();
+
 define('ROOT_PATH', dirname(dirname(__FILE__)) . '/');
 
 function __autoload($class_name) {
@@ -105,6 +107,8 @@ $mtime = explode(' ', microtime());
 
 cms::$vars = new GlobalStore();
 cms::$vars['starttime'] = $mtime[0] + $mtime[1];
+cms::$vars['base_memory_usage'] = $base_memory_usage;
+unset($base_memory_usage);
 //$global = cms::$vars;
 
 //include(ROOT_PATH . 'framework/db/adodb-exceptions.inc.php');

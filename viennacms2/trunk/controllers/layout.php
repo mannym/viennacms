@@ -45,7 +45,8 @@ class LayoutController extends Controller {
 		if (defined('DEBUG') || defined('DEBUG_EXTRA')) {
 			$debug_output = cms::$db->num_queries['normal'] . ' queries, and ' . cms::$db->num_queries['cached'] . ' cached | ';
 			$debug_output .= 'Time: ' . round(microtime(true) - cms::$vars['starttime'], 3) . ' seconds | ';
-			$debug_output .= 'Memory usage: ' . round(memory_get_usage() / 1024, 2) . ' kB';
+			$memory_usage = memory_get_usage() - cms::$vars['base_memory_usage'];
+			$debug_output .= 'Memory usage: ' . round($memory_usage / 1024, 2) . ' kB';
 			if (defined('DEBUG_EXTRA')) {			
 				$debug_output .= ' | <a href="' . $_SERVER['REQUEST_URI'] . '?explain=1">Explain</a>';
 			}
