@@ -46,30 +46,32 @@
  * an HTML form using AJAX.
  */
 $.fn.ajaxSubmit = function(options) {
+    var obj = options.object;
+
     // fast fail if nothing selected (http://dev.jquery.com/ticket/2752)
-    if (!this.length) {
+    if (!obj.length) {
         log('ajaxSubmit: skipping submit process - no element selected');
-        return this;
+        return obj;
     }
 
     if (typeof options == 'function')
         options = { success: options };
 
     options = $.extend({
-        url:  this.attr('action') || window.location.toString(),
-        type: this.attr('method') || 'GET'
+        url:  obj.attr('action') || window.location.toString(),
+        type: obj.attr('method') || 'GET'
     }, options || {});
 
     // hook for manipulating the form data before it is extracted;
     // convenient for use with rich editors like tinyMCE or FCKEditor
     var veto = {};
-    this.trigger('form-pre-serialize', [this, options, veto]);
+    obj.trigger('form-pre-serialize', [obj, options, veto]);
     if (veto.veto) {
         log('ajaxSubmit: submit vetoed via form-pre-serialize trigger');
-        return this;
-   }
+        return obj;
+    }
 
-    var a = this.formToArray(options.semantic);
+    var a = obj.formToArray(options.semantic);
     if (options.data) {
         options.extraData = options.data;
         for (var n in options.data) {
@@ -83,16 +85,16 @@ $.fn.ajaxSubmit = function(options) {
     }
 
     // give pre-submit callback an opportunity to abort the submit
-    if (options.beforeSubmit && options.beforeSubmit(a, this, options) === false) {
+    if (options.beforeSubmit && options.beforeSubmit(a, obj, options) === false) {
         log('ajaxSubmit: submit aborted via beforeSubmit callback');
-        return this;
+        return obj;
     }    
 
     // fire vetoable 'validate' event
-    this.trigger('form-submit-validate', [a, this, options, veto]);
+    obj.trigger('form-submit-validate', [a, obj, options, veto]);
     if (veto.veto) {
         log('ajaxSubmit: submit vetoed via form-submit-validate trigger');
-        return this;
+        return obj;
     }    
 
     var q = $.param(a);
@@ -104,7 +106,7 @@ $.fn.ajaxSubmit = function(options) {
     else
         options.data = q; // data is the query string for 'post'
 
-    var $form = this, callbacks = [];
+    var $form = obj, callbacks = [];
     if (options.resetForm) callbacks.push(function() { $form.resetForm(); });
     if (options.clearForm) callbacks.push(function() { $form.clearForm(); });
 
@@ -124,7 +126,7 @@ $.fn.ajaxSubmit = function(options) {
     };
 
     // are there files to upload?
-    var files = $('input:file', this).fieldValue();
+    var files = $('input:file', obj).fieldValue();
     var found = false;
     for (var j=0; j < files.length; j++)
         if (files[j])
@@ -143,8 +145,8 @@ $.fn.ajaxSubmit = function(options) {
        $.ajax(options);
 
     // fire 'notify' event
-    this.trigger('form-submit-notify', [this, options]);
-    return this;
+    obj.trigger('form-submit-notify', [obj, options]);
+    return obj;
 
 
     // private function for handling file uploads (hat tip to YAHOO!)
@@ -344,10 +346,7 @@ $.fn.ajaxSubmit = function(options) {
  * the form itself.
  */ 
 $.fn.ajaxForm = function(options) {
-    return this.ajaxFormUnbind().bind('submit.form-plugin',function() {
-        $(this).ajaxSubmit(options);
-        return false;
-    }).each(function() {
+    return this.ajaxFormUnbind().each(function() {
         // store options in hash
         $(":submit,input:image", this).bind('click.form-plugin',function(e) {
             var form = this.form;
@@ -409,8 +408,9 @@ $.fn.formToArray = function(semantic) {
                 a.push({name: n+'.x', value: form.clk_x}, {name: n+'.y', value: form.clk_y});
             continue;
         }
-
+        
         var v = $.fieldValue(el, true);
+//        alert(v);
         if (v && v.constructor == Array) {
             for(var j=0, jmax=v.length; j < jmax; j++)
                 a.push({name: n, value: v[j]});
@@ -520,7 +520,7 @@ $.fieldValue = function(el, successful) {
 
     if (successful && (!n || el.disabled || t == 'reset' || t == 'button' ||
         (t == 'checkbox' || t == 'radio') && !el.checked ||
-        (t == 'submit' || t == 'image') && el.form && el.form.clk != el ||
+        (t == 'image') && el.form && el.form.clk != el ||
         tag == 'select' && el.selectedIndex == -1))
             return null;
 
@@ -616,11 +616,13 @@ $.fn.selected = function(select) {
     });
 };
 
+//$.fn.ajaxSubmit.debug = true;
+
 // helper fn for console logging
 // set $.fn.ajaxSubmit.debug to true to enable debug logging
 function log() {
-    if ($.fn.ajaxSubmit.debug && window.console && window.console.log)
-        window.console.log('[jquery.form] ' + Array.prototype.join.call(arguments,''));
+    if ($.fn.ajaxSubmit.debug)
+        alert('[jquery.form] ' + Array.prototype.join.call(arguments,''));
 };
 
 })(jQuery);

@@ -225,23 +225,33 @@ function update_content() {
 	
 	$('.wysiwyg').wymeditor();
 	
-	$('#main-content form').ajaxForm({
-	    success: function(output) {
-	        $('#main-content').html(output);
-	        $('ul.submenu').slideUp('normal', function() {
-                $(this).remove();
-		    });
-	        update_content();
-	    }
-	}).bind('form-pre-serialize', function(event, $form, formOptions, veto) {
+	$('#main-content form').ajaxForm()
+	  .bind('form-pre-serialize', function(event, $form, formOptions, veto) {
         if ($.wymeditors(wi) != undefined) {
 	        $.wymeditors(wi).update();
 	        wi++;
 	    }
-	    
-	    if ($('div.modform').length > 0) {
-	        update_modform($('div.modform').parents('li').eq(0).find('a').get(0));
+    }).submit(function() {
+        options = {
+	            success: function(output) {
+	                $('#main-content').html(output);
+	                $('ul.submenu').slideUp('normal', function() {
+                        $(this).remove();
+		            });
+	                update_content();
+	            },
+	            object: $(this)
+	        };
+
+	    callback = $(this).ajaxSubmit;
+
+        if ($('div.modform').length > 0) {
+	        update_modform($('div.modform').parents('li').eq(0).find('a').get(0), callback, options);
+	    } else {
+	        callback(options);
 	    }
+	    
+        return false;
     });
     
     //$('.modules').sortable();
@@ -315,7 +325,7 @@ function build_modules() {
     });
 }
 
-function update_modform(base, callback) {
+function update_modform(base, callback, params) {
     var fields = $('.modform input, .modform textarea, #nerc').fieldSerialize();
     $.ajax({
         cache: false,
@@ -324,7 +334,7 @@ function update_modform(base, callback) {
         data: fields,
         success: function(output) {
             $('#nerc').attr('value', output);
-            callback();
+            callback(params);
         }
     });
 }
