@@ -26,9 +26,9 @@
 		<?php echo $this['content'] ?>
 	</div>
 	<div id="footer">
-		Powered by <a href="http://www.viennacms.nl/">viennaCMS</a> &copy; 2008 viennaCMS Group | 
+		Powered by <a href="http://www.viennacms.nl/">viennaCMS</a> &copy; 2008 viennaCMS Group<br />
 		<?php
-		echo cms::$db->num_queries['normal'] . ' queries, and ' . cms::$db->num_queries['cached'] . ' cached | Time: ' . round(microtime(true) - $this['starttime'], 5);
+		echo $this['debug_output'];
 		?>
 	</div>
 	</div>

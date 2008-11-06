@@ -42,8 +42,16 @@ class LayoutController extends Controller {
 			$this->view['acp_auth'] = true;
 		}
 		
-		// Do this at the very latest moment.
-		$this->view['starttime'] = cms::$vars['starttime'];
+		if (defined('DEBUG') || defined('DEBUG_EXTRA')) {
+			$debug_output = cms::$db->num_queries['normal'] . ' queries, and ' . cms::$db->num_queries['cached'] . ' cached | ';
+			$debug_output .= 'Time: ' . round(microtime(true) - cms::$vars['starttime'], 3) . ' seconds | ';
+			$debug_output .= 'Memory usage: ' . round(memory_get_usage() / 1024, 2) . ' kB';
+			if (defined('DEBUG_EXTRA')) {			
+				$debug_output .= ' | <a href="' . $_SERVER['REQUEST_URI'] . '?explain=1">Explain</a>';
+			}
+			
+			$this->view['debug_output'] = $debug_output;
+		}
 				
 		header('Content-type: text/html; charset=utf-8');		
 	}
