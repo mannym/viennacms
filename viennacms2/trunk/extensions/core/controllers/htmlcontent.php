@@ -27,7 +27,7 @@ class HTMLContentController extends Controller {
 					'label' => __('Content'),
 					'description' => __(''),
 					'required' => true,
-					'type' => 'textarea',
+					'type' => 'wysiwyg',
 					'value' => $module['arguments']['content'],
 					'group' => 'all',
 					'weight' => -10

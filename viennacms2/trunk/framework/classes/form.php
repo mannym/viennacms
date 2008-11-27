@@ -4,6 +4,10 @@ class Form {
 	public $action;
 	private $form;
 	public $form_id;
+	/**
+	 * Only return fields, not the form tag.
+	 * @todo change the name of this property
+	 */
 	public $return = false;
 	
 	public function handle_form($form_id, $data) {
@@ -24,7 +28,7 @@ class Form {
 			if (($errors = $this->validate_form($fields)) === false) {
 				$this->save_form($fields);	
 			} else {
-				$this->render_form($errors, $fields);
+				return $this->render_form($errors, $fields);
 			}
 		} else {
 			return $this->render_form();
@@ -40,21 +44,18 @@ class Form {
 				$errors[$key] = sprintf(__('The field %s is required.'), $data['label']);	
 			}
 			
-			$val_func = $this->form_id . '_validate';
-			
-			if (method_exists($this->callback_object, $val_func)) {
-				$result = $this->callback_object->$val_func($key, $value);
-				if ($result) {
-					$errors[$key] = $result;	
-				}
-			}
-			
 			if (isset($data['validate_function'])) {
 				$result = call_user_func($data['validate_function'], $value);
 				if ($result) {
 					$errors[$key] = $result;	
 				}
 			}
+		}
+		
+		$val_func = $this->form_id . '_validate';
+			
+		if (method_exists($this->callback_object, $val_func)) {
+			$this->callback_object->$val_func($fields, $errors);
 		}
 		
 		if (empty($errors)) {
@@ -162,6 +163,6 @@ class Form {
 		$view['form'] = $this;
 		$view['action'] = $view->url($this->action);
 		$view['fields'] = $final_fields;
-		echo $view->display();
+		return $view->display();
 	}
 }

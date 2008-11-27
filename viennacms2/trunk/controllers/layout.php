@@ -59,6 +59,7 @@ class LayoutController extends Controller {
 	
 	private function get_styles() {
 		$styles = array(
+			'views/system/form.css',
 			'layouts/' . cms::$vars['style'] . '/stylesheet.css'
 		);
 		$return = '';

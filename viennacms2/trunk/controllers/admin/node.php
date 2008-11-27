@@ -194,7 +194,7 @@ class AdminNodeController {
 		
 		$form = new Form();
 		$form->callback_object = $this;
-		$form->handle_form('node_edit', $form_data);
+		echo $form->handle_form('node_edit', $form_data);
 		exit;
 	}
 	
