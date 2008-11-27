@@ -207,6 +207,7 @@ class AdminNodeController {
 		} else {
 			$rmodules = unserialize(base64_decode($_POST['node_edit_revision_content']));
 		}
+		
 		foreach ($rmodules[$this->arguments[1]] as &$tmodule) {
 			if ($tmodule['id'] == $this->arguments[2]) {
 				$mm = &$tmodule;

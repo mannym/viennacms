@@ -263,11 +263,11 @@ function build_modules() {
         $(this).find('a').click(function() {
             if (!dragging) {
                 var old = this;
-                
+                // .replace('+', '%2B').replace('=', '%3D').replace('/', '%2F')
                 $.ajax({
 	                cache: false,
 	                type: "POST",
-	                data: 'node_edit_revision_content=' + $('#nerc').attr('value'),
+	                data: 'node_edit_revision_content=' + escape($('#nerc').attr('value'), true),
 	                url: $(this).attr('href'),
 	                success: function(output) {
 	                    var callback = function() {
@@ -288,7 +288,7 @@ function build_modules() {
 		                        {
 	                                cache: false,
 	                                type: "POST",
-	                                data: 'nerc=' + $('#nerc').attr('value'),
+	                                data: 'nerc=' + escape($('#nerc').attr('value'), true),
 	                                url: $(this).attr('href'),
 	                                success: function(output) {
 	                                    if ($.wymeditors(wi) != undefined) {
@@ -330,6 +330,10 @@ function build_modules() {
 }
 
 function update_modform(base, callback, params) {
+    if ($.wymeditors(wi) != undefined) {
+	    $.wymeditors(wi).update();
+	}
+
     var fields = $('.modform input, .modform textarea, #nerc').fieldSerialize();
     $.ajax({
         cache: false,
