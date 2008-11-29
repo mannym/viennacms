@@ -1,5 +1,20 @@
 <?php
+/**
+* LayoutController
+* Creates the page layout variables, and starts the view.
+* 
+* @package viennaCMS2
+* @version $Id$
+* @access public
+*/
 class LayoutController extends Controller {
+	/**
+	* LayoutController::page()
+	* Assigns variables to the page.php view, including the page content.
+	* 
+	* @param string $content Content of the page
+	* @return void
+	*/
 	public function page($content) {
 		global $starttime;
 		// assign navigation
@@ -57,6 +72,28 @@ class LayoutController extends Controller {
 		header('Content-type: text/html; charset=utf-8');		
 	}
 	
+	/**
+	* LayoutController::set_title()
+	* Set the page title. Should be called before page().
+	* 
+	* @param string $title Page title
+	* @return bool success
+	*/
+	public function set_title($title) {
+		if (empty($title)) {
+			return false;
+		}
+		
+		$this->view['title'] = $title;
+		return true;
+	}
+	
+	/**
+	* LayoutController::get_styles()
+	* Returns the style sheet tags to be used on the page.
+	* 
+	* @return string style tags
+	*/
 	private function get_styles() {
 		$styles = array(
 			'views/system/form.css',
@@ -78,7 +115,6 @@ class LayoutController extends Controller {
 	* @param Node $node
 	* @return array $parents
 	*/
-
 	public function get_parents($node) {
 		$array = array($node);
 		$array = array_merge($array, $this->_get_parents($node));
@@ -88,11 +124,11 @@ class LayoutController extends Controller {
 	}
 	
 	/**
-	 * Internal get_parents
-	 * 
-	 * @param Node $node
-	 */
-	
+	* Internal get_parents
+	* 
+	* @param Node $node
+	*/
+
 	private function _get_parents($node) {
 		$nodes = array($node->get_parent(7200));
 
@@ -104,6 +140,13 @@ class LayoutController extends Controller {
 		return $nodes;
 	}
 	
+	/**
+	* LayoutController::get_nav()
+	* Creates navigational links for a specified level.
+	* 
+	* @param integer $level Level of depth.
+	* @return string navigation list
+	*/
 	private function get_nav($level = 1) {
 		$active = array();
 		

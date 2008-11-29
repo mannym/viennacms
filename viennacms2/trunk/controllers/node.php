@@ -30,7 +30,7 @@ class NodeController extends Controller {
 
 		if (!$id) {
 			cms::$vars['node'] = $node;
-			cms::$layout->view['title'] = $node->title;
+			cms::$layout->set_title($node->title);
 		}
 	}
 	
@@ -38,7 +38,6 @@ class NodeController extends Controller {
 	 * Display an embedded node.
 	 *
 	 * @param int $id Node ID
-	 * @param GlobalStore $global the global storage
 	 * @return string node output
 	 * @example
 	 * <code>

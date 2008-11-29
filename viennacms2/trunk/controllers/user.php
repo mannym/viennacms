@@ -31,6 +31,8 @@ class UserController extends Controller {
 		$form = new Form();
 		$form->callback_object = $this;
 		$this->view['form_output'] = $form->handle_form('user_login', $form_data);
+		
+		cms::$layout->set_title(__('User login'));
 	}
 	
 	public function user_login_validate($fields, &$errors) {

@@ -1,4 +1,12 @@
 <?php
+/**
+* cms
+* The main management/storage class, which keeps variables, and has utility functions.
+* 
+* @package viennaCMS2
+* @version $Id$
+* @access public
+*/
 class cms {
 	static $db;
 	static $vars;
@@ -8,11 +16,28 @@ class cms {
 	static $layout;
 	static $cache;
 	
+	/**
+	* cms::register()
+	* Registers one of the required objects. Your own objects should be placed in the $vars array.
+	* 
+	* @param string $name Object name, should be a property in this file
+	* @param mixed $object Object to store.
+	* @return void
+	*/
 	public static function register($name, $object) {
 		self::$$name = $object;
 	}
 	
-	public static function display_allowed($type, $node, $other) {
+	/**
+	* cms::display_allowed()
+	* Utility function, asks all node hooks if a specific node may be located under another node.
+	* 
+	* @param string $type The type of check that needs to be done. Seemingly, only 'this_under_other' is implemented now.
+	* @param Node $node The 'this' node to be checked.
+	* @param mixed $other The 'other' node, may be false.
+	* @return bool success value
+	*/
+	public static function display_allowed($type, $node, $other = false) {
 		$results = manager::run_hook_all('display_allowed', $type, $node, $other);
 		
 		foreach ($results as $result) {
@@ -24,12 +49,24 @@ class cms {
 		return true;
 	}
 	
+	/**
+	* cms::get_admin_tree()
+	* Gets a tree structure for all nodes - for use in the ACP.
+	* 
+	* @todo make this a more generic function, which can also be used outside of the ACP.
+	* @param string $node_link_template Template for the link target. May contain the following replacement tags: %node_id, %node_type
+	* @return string tree HTML
+	*/
 	public static function get_admin_tree($node_link_template) {
 		$node = new Node();
 		$node->node_id = 0;
 		return self::_get_admin_tree($node, '', $node_link_template);
 	}
 	
+	/**
+	* cms::_get_admin_tree()
+	* internal function for get_admin_tree()
+	*/
 	private static function _get_admin_tree($node, $list = '', $nlt = '') {
 		if ($node->node_id != 0) {
 			$pnlt = str_replace(

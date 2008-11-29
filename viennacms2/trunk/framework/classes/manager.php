@@ -26,10 +26,8 @@ class Manager {
 	public $check = 0;
 	
 	/**
-	 * Constructor of Manager
-	 *
-	 * @param GlobalStore $global
-	 */
+	* Constructor of Manager
+	*/
 	public function __construct() {
 		cms::register('manager', $this);
 		// TODO: dynamically load this
@@ -37,10 +35,10 @@ class Manager {
 	}
 	
 	/**
-	 * Runs the page.
-	 *
-	 * @param string $query URL to parse and run, if empty, the current URL is used.
-	 */
+	* Runs the page.
+	*
+	* @param string $query URL to parse and run, if empty, the current URL is used.
+	*/
 	public function run($query = '', $check = false) {
 		if ($check) {
 			$this->check++;
@@ -120,10 +118,10 @@ class Manager {
 	}
 	
 	/**
-	 * Retrieves the site node of this web site.
-	 *
-	 * @return Node site node
-	 */
+	* Retrieves the site node of this web site.
+	*
+	* @return Node site node
+	*/
 	public function get_sitenode() {
 		// create a temporary node to serve as the main root
 		$node = new Node();
@@ -144,11 +142,11 @@ class Manager {
 	}
 	
 	/**
-	 * Loads the controller with name $name.
-	 *
-	 * @param string $name
-	 * @return Controller the controller
-	 */
+	* Loads the controller with name $name.
+	*
+	* @param string $name
+	* @return Controller the controller
+	*/
 	public function get_controller($name) {
 		$name = strtolower($name);
 
@@ -176,9 +174,8 @@ class Manager {
 	}
 
 	/**
-	 * Show a 404 page.
-	 *
-	 */
+	* Show a 404 page.
+	*/
 	public function page_not_found() {
 		if ($this->check) {
 			return CONTROLLER_ERROR;	
@@ -202,6 +199,11 @@ class Manager {
 		trigger_error(__('The requested page could not be found.'));
 	}
 	
+	/**
+	* Manager::array_merge_keys()
+	* 
+	* @todo move to cms::
+	*/
 	static function array_merge_keys($arr1, $arr2) {
 	    foreach ($arr2 as $k=>$v) {
 	        if (!array_key_exists($k, $arr1)) {
@@ -217,14 +219,15 @@ class Manager {
 	}
 	
 	/**
-	 * Runs a hook on all extensions.
-	 *
-	 * @example
-	 * <code>
-	 * manager::run_hook_all('hook', 'parameter', true);
-	 * </code>
-	 * @return mixed hook results
-	 */
+	* Runs a hook on all extensions.
+	*
+	* @todo move to cms::
+	* @example
+	* <code>
+	* manager::run_hook_all('hook', 'parameter', true);
+	* </code>
+	* @return mixed hook results
+	*/
 	static function run_hook_all() {
 		$args = func_get_args();
 		$hook_name = array_shift($args);
@@ -248,6 +251,7 @@ class Manager {
 	/**
 	 * Loads all extensions.
 	 *
+	 * @todo move to cms::
 	 * @return array with extension objects
 	 */
 	static function load_all_extensions() {
@@ -260,6 +264,12 @@ class Manager {
 		return $return;
 	}
 	
+	/**
+	* Manager::basepath()
+	* Returns the base path of the viennaCMS installation, relative to the site's document root.
+	* 
+	* @return string path
+	*/
 	static function basepath() {
 		$url = dirname($_SERVER['SCRIPT_NAME']);
 		if (dirname($_SERVER['SCRIPT_NAME']) != '/') {
@@ -268,6 +278,12 @@ class Manager {
 		return $url;		
 	}
 	
+	/**
+	* Manager::base()
+	* Returns the base URL of the viennaCMS installation.
+	* 
+	* @return string absolute base URL
+	*/ 	
 	static function base() {
 		$url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';
 		$url .= '://' . $_SERVER['HTTP_HOST'];
@@ -279,11 +295,11 @@ class Manager {
 	}
 	
 	/**
-	 * Loads a specific extension
-	 *
-	 * @param string $name
-	 * @return extension object
-	 */
+	* Loads a specific extension
+	*
+	* @param string $name
+	* @return extension object
+	*/
 	static function load_extension($name) {
 		include_once(self::$extpaths[$name]);
 		$classname = 'extension_' . $name;
@@ -295,6 +311,9 @@ class Manager {
 		return new $classname($this->global);
 	}
 
+	/**
+	* @todo move to cms::
+	*/ 
 	static function handle_error($errno, $msg_text, $errfile, $errline)
 	{
 		global $msg_title, $msg_long_text;
@@ -387,11 +406,12 @@ HTML;
 	}
 	
 	/**
-	 * Searches for a specific file in an array.
-	 *
-	 * @param array $array
-	 * @return string fiilename
-	 */
+	* Searches for a specific file in an array, by checking all files for existence.
+	*
+	* @todo move to cms::
+	* @param array $array
+	* @return string First found filename to exist.
+	*/
 	static public function scan_files($array) {
 		foreach ($array as $file) {
 			if (file_exists(ROOT_PATH . $file)) {
