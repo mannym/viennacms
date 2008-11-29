@@ -92,4 +92,25 @@ class cms {
 		$list .= '</li>';
 		return $list;
 	}
+	
+	/**
+	* @todo pretty up the error page
+	*/
+	public static function handle_exception($exception) {
+		$error_data = array(
+			'code' => $exception->getCode(),
+			'file' => $exception->getFile(),
+			'line' => $exception->getLine()
+		);
+		
+		$string = base64_encode(str_rot13(serialize($error_data)));
+		$lines = implode("\n", str_split($string, 60));
+		
+		echo '<html><body>';
+		echo '<h1>viennaCMS: critical error</h1>';
+		echo $exception->getMessage();
+		echo '<h2>Debug information (for developers)</h2><pre>';
+		echo $lines;
+		echo '</pre></body></html>';
+	}
 }

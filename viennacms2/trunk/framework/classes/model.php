@@ -50,7 +50,7 @@ abstract class Model {
 		foreach ($this->relations as $key => $parameters) {
 			switch ($parameters['type']) {
 				case 'one_to_one':
-					$after_table = ' LEFT JOIN ' . $parameters['table'] . ' ' . $this->get_table_name($parameters['table']) . ' ON ';
+					$after_table = ' LEFT JOIN ' . $this->prefix_table_name($parameters['table']) . ' ' . $this->get_table_name($parameters['table']) . ' ON ';
 					$mywheres = array();
 					foreach ($parameters['my_fields'] as $i => $field) {
 						if (isset($parameters['checks']['other.' . $parameters['their_fields'][$i]]) &&
@@ -70,11 +70,13 @@ abstract class Model {
 		$fields = $qtables = array();
 				
 		foreach ($this->tables as $identifier => $table) {
-			$qtables[] = $table . ' ' . $identifier;
+			$qtables[] = $this->prefix_table_name($table) . ' ' . $identifier;
 		}
 		
 		$sql  = 'SELECT * FROM ' . implode(', ', $qtables) . $after_table;
-		$sql .= ' WHERE ' . implode(' AND ', $wheres);
+		if (!empty($wheres)) {
+			$sql .= ' WHERE ' . implode(' AND ', $wheres);
+		}
 		$sql .= ($single) ? ' LIMIT 1' : '';
 		
 		$result = cms::$db->sql_query($sql, $this->cache);
@@ -152,7 +154,7 @@ abstract class Model {
 		}
 
 		$sql_data = cms::$db->sql_build_array($type, $data);
-		$sql .= $this->table . (($type == 'UPDATE') ? ' SET ' : ' ');
+		$sql .= $this->prefix_table_name($this->table) . (($type == 'UPDATE') ? ' SET ' : ' ');
 		$sql .= $sql_data . $end;
 	
 		cms::$db->sql_query($sql);
@@ -240,7 +242,7 @@ abstract class Model {
 					}
 					$where .= implode(' AND ', $mywheres);
 					
-					$sql = 'SELECT * FROM ' . $parameters['table'] . ' WHERE ' . $where;
+					$sql = 'SELECT * FROM ' . $this->prefix_table_name($parameters['table']) . ' WHERE ' . $where;
 					$result = cms::$db->sql_query($sql, $this->cache);
 					$rowset = cms::$db->sql_fetchrowset($result);
 					$name = $parameters['object']['class'];
@@ -280,10 +282,10 @@ abstract class Model {
 	}
 	
 	public function clear_cache($all = true) {
-		cms::$cache->destroy('sql', $this->table);
+		cms::$cache->destroy('sql', $this->prefix_table_name($this->table));
 		if ($all) {
 			foreach ($this->relations as $data) {
-				cms::$cache->destroy('sql', $data['table']);
+				cms::$cache->destroy('sql', $this->prefix_table_name($data['table']));
 			}
 		}
 	}
@@ -297,5 +299,9 @@ abstract class Model {
 		}
 		
 		return $output;
+	}
+	
+	public function prefix_table_name($table) {
+		return cms::$vars['table_prefix'] . $table;
 	}
 }

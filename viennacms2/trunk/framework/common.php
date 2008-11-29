@@ -33,6 +33,7 @@ function cleanup() {
 }
 
 set_error_handler(array('Manager', 'handle_error'));
+set_exception_handler(array('cms', 'handle_exception'));
 register_shutdown_function('cleanup');
 
 if (version_compare(phpversion(), '6.0.0-dev', '<') && get_magic_quotes_gpc()) {
@@ -125,6 +126,7 @@ if (empty($acm_type)) {
 	$acm_type = 'acm_file';
 }
 
+cms::$vars['table_prefix'] = $table_prefix;
 cms::register('db', new database());
 cms::$db->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname);
 cms::register('cache', new $acm_type());

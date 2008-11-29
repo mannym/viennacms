@@ -21,7 +21,6 @@ define('CONTROLLER_ERROR', -1);
  * @access public
  */
 class Manager {
-	private $global;
 	public static $extpaths = array();
 	public $check = 0;
 	
