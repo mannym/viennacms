@@ -43,6 +43,16 @@ class Node extends Model {
 		$this->set_type_vars();
 	}
 	
+	protected function hook_remove() {
+		$revision = new Node_Revision();
+		$revision->node = $this->node_id;
+		$revisions = $revision->read();
+		
+		foreach ($revisions as $revision) {
+			$revision->delete();
+		}
+	}
+	
 	protected function hook_new() {
 		$this->options = new Node_Options();
 		$this->options->node = $this;

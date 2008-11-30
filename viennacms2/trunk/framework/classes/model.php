@@ -160,7 +160,7 @@ abstract class Model {
 		cms::$db->sql_query($sql);
 		
 		$key = $this->keys[0];
-		if ($this->fields[$key]['type'] == 'int') {
+		if (!$this->written && $this->fields[$key]['type'] == 'int') {
 			$this->$key = cms::$db->sql_nextid();
 		}
 
@@ -188,9 +188,65 @@ abstract class Model {
 		$this->clear_cache(false);
 		$this->written = true;
 	}
+	
+	public function delete($relations = true) {
+		$this->hook_preremove();
+		
+		$where = $end = '';		
+		
+		if (!$this->written) {
+			return false;
+		}
+		
+		$sql = 'DELETE FROM ';
+		$wheres = array();
+		
+		foreach ($this->keys as $key) {
+			$wheres[] = $key . ' = ' . $this->sql_value($key);
+		}
+		
+		$where = implode(' AND ', $wheres);
+		$end = ' WHERE ' . $where;
+
+		$sql .= $this->prefix_table_name($this->table) . ' ';
+		$sql .= $sql_data . $end;
+	
+		cms::$db->sql_query($sql);
+		
+		$this->hook_remove();
+		
+		if ($relations) {
+			foreach ($this->relations as $parameters) {
+				$property = $parameters['object']['property'];
+				
+				if (!empty($this->$property)) {
+					switch ($parameters['type']) {
+						case 'one_to_one':
+							echo '1t1';
+							$this->$property->delete();
+						break;
+						case 'one_to_many':
+							foreach ($this->$property as $thing) {
+								$thing->delete();
+							}
+						break;
+					}
+				}
+			}
+		}
+		
+		$key = $this->keys[0];
+		if ($this->fields[$key]['type'] == 'int') {
+			$this->$key = 0;
+		}
+		
+		$this->clear_cache(false);
+	}
 
 	protected function hook_read() { }
 	protected function hook_presave() { }
+	protected function hook_preremove() { }
+	protected function hook_remove() { }
 	protected function hook_save() { }
 	protected function hook_new() { }
 	

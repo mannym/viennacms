@@ -64,6 +64,8 @@ class Manager {
 			$query = 'node';
 		}
 		
+		$query = (string) $query;
+		
 		cms::$router->route($query);
 		// TODO: create selection
 		cms::$vars['style'] = 'default';

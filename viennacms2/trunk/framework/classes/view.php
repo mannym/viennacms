@@ -45,12 +45,12 @@ class View implements ArrayAccess {
 		
 		if (!is_array($data)) {
 			if (strpos($data, '://') === false) {
-				return manager::base() . $prefix . $data;
+				return manager::base() . $prefix . cms::$router->alias_url_link($data);
 			} else {
 				return $data;
 			}
 		} else {
-			$url = $prefix;
+			$url = '';
 			
 			if (!empty($data['controller'])) {
 				$url .= $data['controller'];
@@ -64,7 +64,7 @@ class View implements ArrayAccess {
 				$url .= '/' . implode('/', $data['parameters']);
 			}
 			
-			return manager::base() . $url;
+			return manager::base() . $prefix . cms::$router->alias_url_link($url);
 		}
 	}
 	

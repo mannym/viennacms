@@ -413,6 +413,21 @@ class AdminNodeController {
 		
 		// write it!
 		$node->write();
+
+		$path = '';
+		
+		if ($node->parent) {
+			$parents = cms::$layout->get_parents($node->get_parent());
+			array_shift($parents);
+			foreach ($parents as $parent) {
+				$path .= cms::$router->clean_title($parent->title) . '/';
+			}
+		}
+
+		$path .= cms::$router->clean_title($node->title);
+		$path .= '.html';
+		
+		cms::$router->add_url_alias($path, 'node/show/' . $node->node_id);
 		
 		echo __('The node has been successfully saved.');
 		?>

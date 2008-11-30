@@ -112,6 +112,7 @@ class LayoutController extends Controller {
 	/**
 	* Get all parents of a node. 
 	* 
+	* @todo back to another namespace with you ;)
 	* @param Node $node
 	* @return array $parents
 	*/

@@ -74,9 +74,9 @@ class extension_core {
 	
 	function validate_url($url) {
 		if (!empty($url)) {
-			$result = cms::$manager->run($url, true);
+			$result = cms::$router->check_url_existence($url);
 
-			if ($result === CONTROLLER_ERROR) {
+			if (!$result) {
 				return __('The entered URL does not exist, or is not accessible.');
 			}
 			

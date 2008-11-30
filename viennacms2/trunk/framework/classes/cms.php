@@ -25,7 +25,9 @@ class cms {
 	* @return void
 	*/
 	public static function register($name, $object) {
-		self::$$name = $object;
+		if (empty(self::$$name)) {
+			self::$$name = $object;
+		}
 	}
 	
 	/**
