@@ -300,7 +300,7 @@ class AdminNodeController {
 			foreach ($modules as $module) {
 				$controller = cms::$manager->get_controller($module['controller']);
 				$name = $controller->friendlyname();
-				echo '<li class="module-' . $module['controller'] . '" id="module-' . $module['id'] . '"><a href="' . $this->view->url('admin/controller/node/edit_module/' . $node->node_id . '/content/' . $module['id']) . '">';
+				echo '<li class="module-' . $module['controller'] . '" id="module-' . $module['id'] . '"><a href="' . $this->view->url('admin/controller/node/edit_module/' . intval($node->node_id) . '/content/' . $module['id']) . '">';
 				echo $name;
 				echo '</a></li>'; 
 			}

@@ -25,6 +25,20 @@
 		<br style="clear: both;" />
 		<?php echo $this['content'] ?>
 	</div>
+	<div id="sidebar">
+		<?php
+		/**
+		* @todo modify the navigation stuff to be block-based, oh, and could we then PLEASE add the real parent page title, instead of this string?
+		*/
+		if (!empty($this['nav'][2])) {
+			echo '<h1>' . __('Sub-navigation') . '</h1>';
+			echo '<ul>';
+			echo $this['nav'][2];
+			echo '</ul>';
+		}
+		?>
+		<?php echo $this['main_sidebar'] ?>
+	</div>
 	<div id="footer">
 		Powered by <a href="http://www.viennacms.nl/">viennaCMS</a> &copy; 2008 viennaCMS Group<br />
 		<?php

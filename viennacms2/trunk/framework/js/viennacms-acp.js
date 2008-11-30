@@ -20,6 +20,7 @@ $(function() {
 
 function init_rest() {
 		
+/* this stuff is disabled... for now ;)
 	$('.panes .pane .tabs').sortable({
 		'revert': true,
 		'connectWith': ['.panes .pane .tabs'],
@@ -50,6 +51,7 @@ function init_rest() {
 			dragging = false;
 		}
 	});
+*/
 	
 	activate_click_panes();
 	load_active_panes();
