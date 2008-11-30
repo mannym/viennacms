@@ -2,6 +2,7 @@
 abstract class Model {
 	public $written = false;
 	public $cache = false;
+	public $order = array();
 	
 	public static function create($name) {
 		$model = new $name();
@@ -44,6 +45,16 @@ abstract class Model {
 			$wheres[] = $my_id . '.' . $field . ' = ' . $value;
 		}
 		
+		$orders = array();
+		
+		foreach ($this->order as $field => $how) {
+			if (!in_array(strtoupper($how), array('ASC', 'DESC'))) {
+				$how = 'ASC';
+			}
+			
+			$orders[] = $my_id . '.' . $field . ' ' . $how;
+		}
+		
 		$after_table = '';
 		$objects = array();
 		
@@ -76,6 +87,9 @@ abstract class Model {
 		$sql  = 'SELECT * FROM ' . implode(', ', $qtables) . $after_table;
 		if (!empty($wheres)) {
 			$sql .= ' WHERE ' . implode(' AND ', $wheres);
+		}
+		if (!empty($orders)) {
+			$sql .= ' ORDER BY ' . implode(', ', $orders);
 		}
 		$sql .= ($single) ? ' LIMIT 1' : '';
 		

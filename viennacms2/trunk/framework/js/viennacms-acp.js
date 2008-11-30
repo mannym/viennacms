@@ -95,10 +95,12 @@ function ie_position_fix() {
 	}
 }
 
+var global_pane_param;
+
 function load_active_panes() {
 	$('.panes').each(function() {
 		$(this).find('li.active a').each(function() {
-			load_pane($(this).attr('href'), $(this));
+			load_pane($(this).attr('href').replace('%parameter', global_pane_param), $(this));
 		});
 		
 		if ($(this).find('li.active a').length == 0) {
@@ -128,6 +130,12 @@ function load_pane(url, object) {
 			
 			object.parents('.pane').find('.content div a').click(function() {
 				load_content($(this).attr('href'));
+				if ($(this).parents('.pane').find('a.selected').parents('li').length > 0) { 
+			        global_pane_param = $(this).parents('.pane').find('a.selected').parents('li').attr('id').replace('node-', '');
+			    } else {
+			        global_pane_param = 0;
+			    }
+
 				return false;
 			});
 			
