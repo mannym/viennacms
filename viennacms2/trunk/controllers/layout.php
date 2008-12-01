@@ -175,7 +175,11 @@ class LayoutController extends Controller {
 		
 		foreach ($nodes as $node) {
 			$text = $node->title;
-			$link = $this->view->url('node/show/' . $node->node_id);
+			if ($node->node_id == (string) cms::$vars['sitenode']->options['homepage']) {
+				$link = manager::base();
+			} else {
+				$link = $this->view->url('node/show/' . $node->node_id);
+			}
 		
 			$class = '';
 				
