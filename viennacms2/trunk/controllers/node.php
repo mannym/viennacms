@@ -2,7 +2,7 @@
 class NodeController extends Controller {
 	public $modules;
 
-	public function show($id = false) {
+	public function show($id = false, $revision = false) {
 		$node = new Node();
 		if (!$id) {
 			$node->node_id = $this->arguments[0];
@@ -11,6 +11,13 @@ class NodeController extends Controller {
 		}
 		
 		$node->read(true);
+		
+		if ($revision !== false) {
+			$node->revision = new Node_Revision();
+			$node->revision->node = $node->node_id;
+			$node->revision->number = $revision;
+			$node->revision->read(true);
+		}
 		
 		if (!$node->title && !$id) {
 			return cms::$manager->page_not_found();
@@ -25,7 +32,7 @@ class NodeController extends Controller {
 			$this->view['content'] = $this->get_modules('content');
 			// TODO: make left and such
 		}
-
+		
 		$this->view['node'] = $node;	
 
 		if (!$id) {
@@ -38,16 +45,18 @@ class NodeController extends Controller {
 	 * Display an embedded node.
 	 *
 	 * @param int $id Node ID
+	 * @param mixed $revision Revision number to retrieve
 	 * @return string node output
 	 * @example
 	 * <code>
 	 * NodeController::node(7);
 	 * </code>
 	 */
-	static function node($id) {
+	static function node($id, $revision = false) {
 		$controller = new NodeController();
 		$controller->view = new View();
-		$controller->show($id);
+		$controller->view->path = 'node/show.php';
+		$controller->show($id, $revision);
 		return $controller->view->display();
 	}
 	

@@ -40,6 +40,7 @@ body {
 	top: 52px;
 	padding-left: 5px;
 	padding-right: 5px;
+	overflow: auto;
 }
 
 #panes-left {
@@ -70,7 +71,6 @@ body {
 
 #panes-left, #panes-right {
 	bottom: 135px;
-	/*overflow: auto;*/
 }
 
 .panes {
@@ -129,6 +129,12 @@ body {
 
 .panes .pane ul.tabs li.active {
 	background-color: #e4e0d8;
+}
+
+div.preview {
+	margin: 5px;
+	padding: 5px;
+	border: 1px dashed #09f;
 }
 
 ul.toolbar {
