@@ -8,6 +8,10 @@
 * @access public
 */
 class LayoutController extends Controller {
+	public function __construct() {
+		View::$searchpaths['layouts/' . cms::$vars['style'] . '/'] = VIEW_PRIORITY_USER;
+	}
+	
 	/**
 	* LayoutController::page()
 	* Assigns variables to the page.php view, including the page content.
@@ -96,7 +100,7 @@ class LayoutController extends Controller {
 	*/
 	private function get_styles() {
 		$styles = array(
-			'views/system/form.css',
+			'framework/views/system/form.css',
 			'layouts/' . cms::$vars['style'] . '/stylesheet.css'
 		);
 		$return = '';

@@ -39,9 +39,9 @@ fieldset legend a {
 /* todo: move these images */
 
 fieldset.contracted legend a {
-	background-image: url(../admin/images/contracted.png);
+	background-image: url(../../../blueprint/views/admin/images/contracted.png);
 }
 
 fieldset.expanded legend a {
-	background-image: url(../admin/images/expanded.png);
+	background-image: url(../../../blueprint/views/admin/images/expanded.png);
 }

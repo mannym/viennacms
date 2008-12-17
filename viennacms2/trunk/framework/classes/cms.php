@@ -115,4 +115,39 @@ class cms {
 		echo $lines;
 		echo '</pre></body></html>';
 	}
+	
+	public static function autoload($class_name) {
+		// enable the blueprint
+		$filename = ROOT_PATH . 'blueprint/classes/' . strtolower($class_name) . '.php';
+	
+		if (file_exists($filename)) {
+			include_once($filename);
+			return true;
+		}
+		
+		$filename = ROOT_PATH . 'blueprint/models/' . strtolower($class_name) . '.php';
+		
+		if (file_exists($filename)) {
+			include_once($filename);
+			return true;
+		}
+	}
+	
+	/**
+	* Searches for a specific file in an array, by checking all files for existence.
+	*
+	* @todo move to cms::
+	* @param array $array
+	* @return string First found filename to exist.
+	*/
+	static public function scan_files($array) {
+		foreach ($array as $file) {
+			if (file_exists(ROOT_PATH . $file)) {
+				// TODO: cache the result
+				return ROOT_PATH . $file;
+			}
+		}
+		
+		return false;
+	}
 }

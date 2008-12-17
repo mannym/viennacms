@@ -5,9 +5,16 @@
 * @copyright (c) 2008 viennaCMS group
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 */
+
+define('VIEW_PRIORITY_USER', 0);
+define('VIEW_PRIORITY_STOCK', 1);
+define('VIEW_PRIORITY_LOW', 2);
 class View implements ArrayAccess {
 	private $vars;
 	public $path;
+	public static $searchpaths = array(
+		'framework/views/' => VIEW_PRIORITY_STOCK
+	);
 	
 	public function __construct() {
 		$this->reset_path();
@@ -84,16 +91,19 @@ class View implements ArrayAccess {
 	}
 	
 	public function scan_themes($path) {
-		$files = array(
-			'layouts/' . cms::$vars['style'] . '/' . $path,
-			'views/' . $path
-		);
+		$files = array();
+		$files_0 = array();
+		$files_1 = array();
+		$files_2 = array();
 		
-		foreach (manager::$extpaths as $extension => $extpath) {
-			$files[] = dirname($extpath) . '/views/' . $path;
+		foreach (self::$searchpaths as $fpath => $priority) {
+			$var = 'files_' . $priority;
+			$$var = array_merge($$var, array($fpath . $path)); // PHP won't allow $$var[] :(
 		}
 		
-		return Manager::scan_files($files);
+		$files = array_merge($files_0, $files_1, $files_2);
+		
+		return cms::scan_files($files);
 	}
 	
 	public function offsetExists($key) {

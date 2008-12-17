@@ -12,6 +12,8 @@ $base_memory_usage = memory_get_usage();
 define('ROOT_PATH', dirname(dirname(__FILE__)) . '/');
 
 function __autoload($class_name) {
+	// initial autoload function for initialisation
+	
 	$filename = ROOT_PATH . 'framework/classes/' . strtolower($class_name) . '.php';
 	
 	if (file_exists($filename)) {
@@ -19,7 +21,7 @@ function __autoload($class_name) {
 		return true;
 	}
 	
-	$filename = ROOT_PATH . 'models/' . strtolower($class_name) . '.php';
+	$filename = ROOT_PATH . 'framework/models/' . strtolower($class_name) . '.php';
 	
 	if (file_exists($filename)) {
 		include_once($filename);
@@ -32,6 +34,7 @@ function cleanup() {
 	cms::$db->sql_close();
 }
 
+spl_autoload_register('__autoload');
 set_error_handler(array('Manager', 'handle_error'));
 set_exception_handler(array('cms', 'handle_exception'));
 register_shutdown_function('cleanup');
@@ -167,3 +170,9 @@ var_dump($global['db']->num_queries);
 
 cms::register('user', new Users());
 cms::$user->initialize();
+
+// add other auto-loading classes
+spl_autoload_register(array('cms', 'autoload'));
+spl_autoload_register(array('controller', 'autoload'));
+Controller::$searchpaths[] = 'blueprint/controllers/';
+View::$searchpaths['blueprint/views/'] = VIEW_PRIORITY_STOCK;

@@ -149,28 +149,12 @@ class Manager {
 	* @return Controller the controller
 	*/
 	public function get_controller($name) {
-		$name = strtolower($name);
-
-		$files = array(
-			'controllers/' . $name . '.php',
-		);
-		
-		foreach (self::$extpaths as $extension => $path) {
-			$files[] = dirname($path) . '/controllers/' . $name . '.php';
+		if (strpos($name, '/') !== false) {
+			Controller::load($name);
+			$name = str_replace('/', '', $name);
 		}
 		
-		$filename = self::scan_files($files);
-		
-		if ($filename == false) {
-			return false;
-		}
-		
-		include_once($filename);
-		$class_name = ucfirst(strtolower(str_replace('/', '', $name))) . 'Controller';
-		if(!class_exists($class_name))
-		{
-			throw new ViennaCMSException('Unknown controller');
-		}
+		$class_name = ucfirst(strtolower($name)) . 'Controller';
 		return new $class_name();
 	}
 
@@ -309,6 +293,9 @@ class Manager {
 			throw new Exception('This extension does not exist!');
 		}
 		
+		Controller::$searchpaths[] = dirname(self::$extpaths[$name]) . '/controllers/';
+		View::$searchpaths[dirname(self::$extpaths[$name]) . '/views/'] = VIEW_PRIORITY_STOCK;
+		
 		return new $classname($this->global);
 	}
 
@@ -403,24 +390,6 @@ HTML;
 	
 		// If we notice an error not handled here we pass this back to PHP by returning false
 		// This may not work for all php versions
-		return false;
-	}
-	
-	/**
-	* Searches for a specific file in an array, by checking all files for existence.
-	*
-	* @todo move to cms::
-	* @param array $array
-	* @return string First found filename to exist.
-	*/
-	static public function scan_files($array) {
-		foreach ($array as $file) {
-			if (file_exists(ROOT_PATH . $file)) {
-				// TODO: cache the result
-				return ROOT_PATH . $file;
-			}
-		}
-		
 		return false;
 	}
 }

@@ -1,5 +1,9 @@
 <?php
 class AdminController extends Controller {
+	public function __construct() {
+		Controller::$searchpaths[] = 'blueprint/controllers/admin/';
+	}
+	
 	private function check_auth() {
 		if (!cms::$user->logged_in) {
 			cms::$vars['error_title'] = __('Authentication required');

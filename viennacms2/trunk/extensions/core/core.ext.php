@@ -16,8 +16,8 @@ class extension_core {
 				'title' => __('Page'),
 				'description' => __('A page is a simple way of posting content that almost never changes.'),
 				'type' => 'static',
-				'icon' => '~/views/admin/images/icons/page.png',
-				'big_icon' => '~/views/admin/images/icons/page_big.png',
+				'icon' => '~/blueprint/views/admin/images/icons/page.png',
+				'big_icon' => '~/blueprint/views/admin/images/icons/page_big.png',
 				'options' => array()
 			),
 			'dynamicpage' => array(
@@ -25,13 +25,13 @@ class extension_core {
 				'title' => __('Dynamic page'),
 				'description' => __('A dynamic page is used for placing modules on a site. These modules can be used for all kinds of dynamic content.'),
 				'type' => 'dynamic',
-				'icon' => '~/views/admin/images/icons/dynamicpage.png',
-				'big_icon' => '~/views/admin/images/icons/dynamicpage_big.png',
+				'icon' => '~/blueprint/views/admin/images/icons/dynamicpage.png',
+				'big_icon' => '~/blueprint/views/admin/images/icons/dynamicpage_big.png',
 				'options' => array()
 			),
 			'site' => array(
 				// let's not go there... for now :)
-				'icon' => '~/views/admin/images/icons/site.png',
+				'icon' => '~/blueprint/views/admin/images/icons/site.png',
 				'options' => array(
 					'404_url' => array(
 						'label' => __('"Page not found" URL'),
@@ -55,7 +55,7 @@ class extension_core {
 	public function module_manifest() {
 		return array(
 				'htmlcontent' => array(
-					'icon' => '~/views/admin/images/icons/page.png',
+					'icon' => '~/blueprint/views/admin/images/icons/page.png',
 					'title' => __('HTML content'),
 					'description' => __('A module which provides a content box which renders HTML.')
 					)	
