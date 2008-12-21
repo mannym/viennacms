@@ -67,6 +67,7 @@ class Manager {
 		$query = (string) $query;
 		
 		cms::$router->route($query);
+
 		// TODO: create selection
 		cms::$vars['style'] = 'default';
 		$parts = cms::$router->parts;
@@ -149,8 +150,11 @@ class Manager {
 	* @return Controller the controller
 	*/
 	public function get_controller($name) {
+		if (!Controller::load($name)) {
+			return false;
+		}
+		
 		if (strpos($name, '/') !== false) {
-			Controller::load($name);
 			$name = str_replace('/', '', $name);
 		}
 		
