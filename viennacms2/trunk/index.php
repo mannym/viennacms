@@ -10,5 +10,5 @@
 
 require('framework/common.php');
 
-$manager = new Manager($global);
+$manager = new Manager();
 $manager->run();

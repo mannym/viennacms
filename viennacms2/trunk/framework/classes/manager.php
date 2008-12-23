@@ -57,7 +57,9 @@ class Manager {
 			}
 		}
 		// some init-ing
-		cms::$vars['sitenode'] = $this->get_sitenode();
+		if (!defined('MINIMAL')) {
+			cms::$vars['sitenode'] = $this->get_sitenode();
+		}
 				
 		// TODO: change this to configable in acp
 		if (empty($query)) {
@@ -74,9 +76,16 @@ class Manager {
 		$action = (!empty($parts['action'])) ? $parts['action'] : 'main';
 
 		// get the layout
-		$layout = $this->get_controller('layout');
-		$layout->view = new View();
-		$layout->view->path = 'style/page.php';
+		if (!defined('MINIMAL')) {
+			$layout = $this->get_controller('layout');
+			$layout->view = new View();
+			$layout->view->path = 'style/page.php';
+		} else {
+			$layout = $this->get_controller('installstyle');
+			$layout->view = new View();
+			$layout->view->path = 'page.php';
+		}
+		
 		cms::register('layout', $layout);
 		
 		$controller = $this->get_controller($parts['controller']);

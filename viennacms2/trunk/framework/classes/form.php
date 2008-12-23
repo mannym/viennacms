@@ -4,6 +4,7 @@ class Form {
 	public $action;
 	private $form;
 	public $form_id;
+	public $errors = false;
 	/**
 	 * Only return fields, not the form tag.
 	 * @todo change the name of this property
@@ -26,8 +27,9 @@ class Form {
 			}
 			
 			if (($errors = $this->validate_form($fields)) === false) {
-				$this->save_form($fields);	
+				$this->save_form($fields);
 			} else {
+				$this->errors = true;
 				return $this->render_form($errors, $fields);
 			}
 		} else {

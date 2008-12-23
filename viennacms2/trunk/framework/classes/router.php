@@ -13,14 +13,16 @@ class Router {
 		include(ROOT_PATH . 'framework/config/router.php');
 		$this->routes = $routes;
 		
-		$alias = new URL_Alias();
-		$aliases = $alias->read();
-		
-		foreach ($aliases as $alias) {
-			$this->aliases[$alias->alias_url] = $alias->alias_target;
+		if (!defined('MINIMAL')) {
+			$alias = new URL_Alias();
+			$aliases = $alias->read();
 			
-			if ($alias->alias_flags & ALIAS_URL_DEFAULT) {
-				$this->paths[$alias->alias_target] = $alias->alias_url;
+			foreach ($aliases as $alias) {
+				$this->aliases[$alias->alias_url] = $alias->alias_target;
+				
+				if ($alias->alias_flags & ALIAS_URL_DEFAULT) {
+					$this->paths[$alias->alias_target] = $alias->alias_url;
+				}
 			}
 		}
 	}

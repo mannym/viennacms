@@ -30,8 +30,13 @@ function __autoload($class_name) {
 }
 
 function cleanup() {
-	cms::$cache->unload();
-	cms::$db->sql_close();
+	if (!empty(cms::$cache)) {
+		cms::$cache->unload();
+	}
+	
+	if (!empty(cms::$db)) {
+		cms::$db->sql_close();
+	}
 }
 
 spl_autoload_register('__autoload');
@@ -119,11 +124,16 @@ unset($base_memory_usage);
 //include(ROOT_PATH . 'framework/db/adodb.inc.php');
 //include(ROOT_PATH . 'framework/db/adodb-active-record.inc.php');
 @include(ROOT_PATH . 'framework/config/basic.php');
-include(ROOT_PATH . 'framework/database/' . $dbms . '.php');
 
 if (empty($dbms)) {
-	die('You should install viennaCMS2 first.');
+	define('MINIMAL', true);
+	
+	$manager = new Manager();
+	$manager->run('install/fresh');
+	exit;
 }
+
+include(ROOT_PATH . 'framework/database/' . $dbms . '.php');
 
 if (empty($acm_type)) {
 	$acm_type = 'acm_file';
