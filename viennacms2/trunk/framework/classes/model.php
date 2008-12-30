@@ -352,10 +352,12 @@ abstract class Model {
 	}
 	
 	public function clear_cache($all = true) {
-		cms::$cache->destroy('sql', $this->prefix_table_name($this->table));
-		if ($all) {
-			foreach ($this->relations as $data) {
-				cms::$cache->destroy('sql', $this->prefix_table_name($data['table']));
+		if (!empty(cms::$cache)) {
+			cms::$cache->destroy('sql', $this->prefix_table_name($this->table));
+			if ($all) {
+				foreach ($this->relations as $data) {
+					cms::$cache->destroy('sql', $this->prefix_table_name($data['table']));
+				}
 			}
 		}
 	}
