@@ -9,13 +9,52 @@ function create_init_panes(loc, data) {
 }
 
 $(function() {
-	$.getJSON(
+/*	$.getJSON(
 		pane_url,
 		function(data) {
 			create_init_panes($('#panes-left ul.tabs'), data.left);
 			init_rest();
 		}
-	);
+	);*/
+	
+	reload_pane_containers(false);
+	update_content();
+
+	$(".treeview").treeview({
+		collapsed: true,
+		unique: true,
+		persist: 'cookie'
+	});
+
+	$('.pane').find('.toolbar li a').click(function() {
+	    url = $(this).attr('href');
+
+	    if ($(this).hasClass('submenu')) {
+	        var old = this;
+	    
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: url,
+                success: function(output) {
+                    var callback = function() {
+                        $('ul.submenu').remove();
+                        $(old).parents('ul.toolbar').after(output);
+	                    
+                        $('ul.submenu').slideDown('normal');
+                    };
+                    
+                    if ($('ul.submenu').length > 0) {
+	                    $('ul.submenu').slideUp('normal', callback);
+                    } else {
+                        callback();
+                    }
+                }
+            });
+	    }
+	    
+	    return false;
+	});
 });
 
 function init_rest() {
@@ -235,7 +274,7 @@ function update_content() {
 	
 	$('.wysiwyg').wymeditor();
 	
-	$('#main-content form').ajaxForm()
+/*	$('#main-content form').ajaxForm()
 	  .bind('form-pre-serialize', function(event, $form, formOptions, veto) {
         if ($.wymeditors(wi) != undefined) {
 	        $.wymeditors(wi).update();
@@ -262,11 +301,29 @@ function update_content() {
 	    }
 	    
         return false;
-    });
+    });*/
+	$('#main-content form').submit(function() {
+		if ($.wymeditors(wi) != undefined) {
+	        $.wymeditors(wi).update();
+	        wi++;
+	    }
+		
+		if ($('div.modform').length > 0 && mf == false) {
+			mycallback = $(this);
+			
+	        update_modform($('div.modform').parents('li').eq(0).find('a').get(0), function() {
+				mf = true;
+				mycallback.find('input[@type=submit]').click(); // simply calling submit() won't work, FORM_ID_submit won't be added
+			});
+			return false;
+	    }
+	});
     
     //$('.modules').sortable();
     build_modules();
 }
+
+var mf = false;
 
 function build_modules() {
     $('.modules li').each(function() {
@@ -352,6 +409,7 @@ function update_modform(base, callback, params) {
         data: fields,
         success: function(output) {
             $('#nerc').attr('value', output);
+
             if (callback) {
                 if (params) {
                     callback(params);
@@ -367,7 +425,7 @@ var waitForHide = 0;
 
 function reload_pane_containers(nicely) {
 	$('.panes').each(function() {
-		if ($(this).find('.pane ul.tabs li').length == 0) {
+		if ($(this).find('.pane').length == 0) {
 			if (nicely) {
 				waitForHide++;
 				$(this).hide('fast', function() {
@@ -385,7 +443,7 @@ function reload_pane_containers(nicely) {
 		
 		percentage = 100 / $(this).find('.pane').length;
 		$(this).find('.pane').height(percentage + '%');
-		$(this).find('.pane .content').height(percentage - 2 + '%');
+		$(this).find('.pane .content').height('96%');
 	});
 	
 	if (waitForHide == 0) {

@@ -27,7 +27,7 @@ class Form {
 			}
 			
 			if (($errors = $this->validate_form($fields)) === false) {
-				$this->save_form($fields);
+				return $this->save_form($fields);
 			} else {
 				$this->errors = true;
 				return $this->render_form($errors, $fields);
@@ -69,7 +69,7 @@ class Form {
 	
 	private function save_form($fields) {
 		$function = $this->form_id . '_submit';
-		$this->callback_object->$function($fields);
+		return $this->callback_object->$function($fields);
 	}
 	
 	private function render_form($errors = array(), $values = array()) {

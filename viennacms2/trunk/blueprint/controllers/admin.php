@@ -1,7 +1,18 @@
 <?php
 class AdminController extends Controller {
+	public static $panes = array();
+	
+	public static function add_pane($location, $pane, $arguments = array()) {
+		self::$panes[$location][] = array(
+			'title' => __('todo'),
+			'href' => $pane,
+			'arguments' => $arguments
+		);
+	}
+	
 	public function __construct() {
 		Controller::$searchpaths[] = 'blueprint/controllers/admin/';
+		View::$searchpaths['blueprint/views/admin/'] = VIEW_PRIORITY_HIGH;
 	}
 	
 	private function check_auth() {
@@ -20,6 +31,7 @@ class AdminController extends Controller {
 	}
 	
 	public static function add_toolbar($data, $caller) {
+		ob_start();
 		?>
 		<ul class="toolbar">
 			<?php
@@ -31,11 +43,19 @@ class AdminController extends Controller {
 			?>
 		</ul>
 		<?php
+		$c = ob_get_contents();
+		ob_end_clean();
+		
+		return $c;
 	}
 	
 	public function main() {
 		$this->check_auth();
-		$this->view['pane_url'] = $this->view->url('admin/panes');
+		$this->init();
+	}
+	
+	public function init() {
+		cms::$layout->view['pane_url'] = $this->view->url('admin/panes');
 		
 		$node_types = manager::run_hook_all('get_node_types');
 		$icons = array();
@@ -43,13 +63,30 @@ class AdminController extends Controller {
 			$icons[$id] = str_replace('~/', manager::base(), $data['icon']);
 		}
 		
-		$this->view['icons'] = $icons;
+		cms::$layout->view['icons'] = $icons;
 		
-		return CONTROLLER_NO_LAYOUT;
+		$panes = $this->get_panes();
+		$panes = array_merge_recursive($panes, AdminController::$panes);
+		$panes_output = array(
+			'left' => array()
+		);
+		
+		foreach ($panes as $location => $lpanes) {
+			foreach ($lpanes as $pane) {
+				$panes_output[$location][] = array(
+					'title' => $pane['title'],
+					'content' => $this->pane($pane['href'], $pane['arguments'])
+				);
+			}
+		}
+		
+		cms::$layout->view['panes'] = $panes_output;
 	}
 	
 	public function controller() {
 		$this->check_auth();
+		
+		$this->view->path = 'admin/simple.php';
 		
 		$controllern = array_shift($this->arguments);
 		$method = array_shift($this->arguments);
@@ -58,10 +95,15 @@ class AdminController extends Controller {
 		$controller->view = new View();
 		$controller->view->path = 'admin/' . $controllern . '/' . $method . '.php';
 		$controller->arguments = $this->arguments;
-		$controller->$method();
-		echo $controller->view->display();
+		$return = $controller->$method();
 		
-		exit;
+		if (is_string($return)) {
+			$this->view['data'] = $return;
+		} else {
+			$this->view['data'] = $controller->view->display();
+		}
+		
+		$this->init();
 	}
 	
 	public function panes() {
@@ -70,19 +112,14 @@ class AdminController extends Controller {
 		exit;
 	}
 	
-	public function pane() {
-		$this->check_auth();
-		$pane = array_shift($this->arguments);
+	public function pane($pane, $arguments = array()) {
 		$controller = cms::$manager->get_controller('admin/' . $pane . 'pane'); // array_shift to remove the original argument.
 		$controller->view = new View();
 		$controller->view->path = 'admin/panes/' . $pane . '.php';
-		$controller->arguments = $this->arguments;
+		$controller->arguments = $arguments;
 		$controller->base = 'admin/panec/nodes/';
 		$controller->main();
-		echo '<div>';
-		echo $controller->view->display();
-		echo '</div>';
-		exit;
+		return $controller->view->display();
 	}
 	
 	private function get_panes() {
@@ -92,14 +129,13 @@ class AdminController extends Controller {
 			'left' => array(
 				array(
 					'title' => __('Nodes'),
-					'href' => $this->view->url('admin/pane/nodes'),
-					'aclass' => 'active'
+					'href' => 'nodes'
 				),
-				array(
+				/*array(
 					'title' => __('Revisions'),
 					'href' => $this->view->url('admin/pane/revisions/%parameter'),
 					'aclass' => ''
-				),
+				),*/
 				
 			),
 		);

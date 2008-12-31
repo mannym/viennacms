@@ -45,6 +45,8 @@ class AdminNodeController {
 			if (empty($node->title)) {
 				trigger_error(__('This node does not exist!'));
 			}
+			
+			AdminController::add_pane('left', 'meta', array($node->node_id));
 		} else {
 			$node = Node::create('Node');
 			$node->type = $this->arguments[0];
@@ -194,8 +196,8 @@ class AdminNodeController {
 		
 		$form = new Form();
 		$form->callback_object = $this;
-		echo $form->handle_form('node_edit', $form_data);
-		exit;
+		
+		return $form->handle_form('node_edit', $form_data);
 	}
 	
 	public function edit_module() {
@@ -429,11 +431,6 @@ class AdminNodeController {
 		
 		cms::$router->add_url_alias($path, 'node/show/' . $node->node_id);
 		
-		echo __('The node has been successfully saved.');
-		?>
-		<script type="text/javascript">
-			load_active_panes();
-		</script>
-		<?php
+		return __('The node has been successfully saved.');
 	}
 }

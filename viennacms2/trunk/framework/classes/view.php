@@ -6,9 +6,10 @@
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 */
 
-define('VIEW_PRIORITY_USER', 0);
-define('VIEW_PRIORITY_STOCK', 1);
-define('VIEW_PRIORITY_LOW', 2);
+define('VIEW_PRIORITY_HIGH', 0);
+define('VIEW_PRIORITY_USER', 1);
+define('VIEW_PRIORITY_STOCK', 2);
+define('VIEW_PRIORITY_LOW', 3);
 class View implements ArrayAccess {
 	private $vars;
 	public $path;
@@ -95,13 +96,14 @@ class View implements ArrayAccess {
 		$files_0 = array();
 		$files_1 = array();
 		$files_2 = array();
+		$files_3 = array();
 		
 		foreach (self::$searchpaths as $fpath => $priority) {
 			$var = 'files_' . $priority;
 			$$var = array_merge($$var, array($fpath . $path)); // PHP won't allow $$var[] :(
 		}
 		
-		$files = array_merge($files_0, $files_1, $files_2);
+		$files = array_merge($files_0, $files_1, $files_2, $files_3);
 		
 		return cms::scan_files($files);
 	}
