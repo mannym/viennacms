@@ -68,6 +68,8 @@ class Router {
 			throw new viennaCMSException('The parameters default and unique_target can not be both set to true.');
 		}
 		
+		$deleted = false;
+		
 		$alias = new URL_Alias();
 		$alias->alias_target = $to;
 		$alias->read(true);
@@ -75,6 +77,8 @@ class Router {
 		if ($unique_target && !empty($alias->alias_url)) {
 			if ($alias->alias_flags & ALIAS_AUTO_DELETABLE) {
 				$alias->delete();
+				$deleted = true;
+				$default = true; // umm, wait, now I don't get it anymore...
 			}
 		} else if (!$default) {
 			$default = true;
@@ -82,7 +86,7 @@ class Router {
 		
 		// check if the FROM url is free... TO url would cost too much processing power -- or at least be inefficient... though this function 
 		// should only be called by administrators :\
-		if ($this->check_url_existence($from)) {
+		if (!$deleted && $this->check_url_existence($from)) {
 			return false;
 		}
 		

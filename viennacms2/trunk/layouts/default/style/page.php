@@ -40,7 +40,7 @@
 		<?php echo $this['main_sidebar'] ?>
 	</div>
 	<div id="footer">
-		Powered by <a href="http://www.viennacms.nl/">viennaCMS</a> &copy; 2008 viennaCMS Group<br />
+		Powered by <a href="http://www.viennacms.nl/">viennaCMS</a> &copy; 2008, 2009 viennaCMS Group<br />
 		<?php
 		echo $this['debug_output'];
 		?>
