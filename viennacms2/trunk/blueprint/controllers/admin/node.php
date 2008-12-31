@@ -33,10 +33,12 @@ class AdminNodeController {
 	}
 	
 	public function add_do() {
-		$this->edit('add');
+		return $this->edit('add');
 	}
 	
 	public function edit($do = 'edit') {
+		$postfix = '';
+		
 		if ($do == 'edit') {
 			$node = new Node();
 			$node->node_id = $this->arguments[0];
@@ -54,8 +56,10 @@ class AdminNodeController {
 			$node->set_type_vars();
 			
 			$ux_html = '<li class="oncontentremove"><a class="' . $node->type . ' mynewnode" href="#">' . __('New node') . '</a></li>';
+			ob_start();
 			?>
 			<script type="text/javascript">
+				$(function() {
 				hasChildren = $('.treeview a.selected').parents('li').eq(0).find('ul').length;
 				if (hasChildren > 0) {
 					var add = $('.treeview a.selected').parents('li').eq(0).find('ul').eq(0).append('<?php echo $ux_html ?>');
@@ -76,8 +80,11 @@ class AdminNodeController {
 						$('.mynewnode').html(value);
 					}
 				});
+				});
 			</script>
 			<?php
+			$postfix = ob_get_contents();
+			ob_end_clean();
 		}
 		
 		$form_data = array(
@@ -197,7 +204,7 @@ class AdminNodeController {
 		$form = new Form();
 		$form->callback_object = $this;
 		
-		return $form->handle_form('node_edit', $form_data);
+		return $form->handle_form('node_edit', $form_data) . $postfix;
 	}
 	
 	public function edit_module() {

@@ -10,19 +10,11 @@ class AdminMetaPaneController extends Controller {
 			return;
 		}
 		
-		$meta = cms::run_hook_all('acp_metadata');
+		$meta = manager::run_hook_all('acp_metadata', $node, $this);
 		
-		foreach ($meta as $data) {
-			$revisions = new Node_Revision();
-			$revisions->node = $node->node_id;
-			$revisions->order = array('time' => 'desc');
-			$revisions = $revisions->read();
-			$output = '<li><a class="history" href="#">' . __('Revisions') . '</a><ul>';
-			
-			foreach ($revisions as $revision) {
-				$output .= '<li><a class="page" href="' . $this->view->url('admin/controller/revision/view/' . $node->node_id . '/' . $revision->number) . '">' . sprintf(__('Revision %d'), $revision->number) . '</a></li>';
-			}
-			
+		foreach ($meta as $key => $data) {
+			$output = '<li><a class="' . $key . '" href="#">' . $data['title'] . '</a><ul>';
+			$output .= $data['content'];			
 			$output .= '</ul></li>';
 		}
 		

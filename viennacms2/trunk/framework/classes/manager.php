@@ -28,7 +28,6 @@ class Manager {
 	* Constructor of Manager
 	*/
 	public function __construct() {
-		cms::register('manager', $this);
 		// TODO: dynamically load this
 		self::$extpaths['core'] = 'extensions/core/core.ext.php';
 	}
@@ -43,7 +42,7 @@ class Manager {
 			$this->check++;
 		}
 		
-		cms::register('router', new Router());
+		cms::register('router');
 		
 		if (empty($query)) {
 			$uri_no_qs = explode('?', $_SERVER['REQUEST_URI']);
@@ -86,7 +85,7 @@ class Manager {
 			$layout->view->path = 'page.php';
 		}
 		
-		cms::register('layout', $layout);
+		cms::assign('layout', $layout);
 		
 		$controller = $this->get_controller($parts['controller']);
 		if (!$controller) {

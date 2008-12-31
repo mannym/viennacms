@@ -10,5 +10,6 @@
 
 require('framework/common.php');
 
-$manager = new Manager();
-$manager->run();
+//$manager = new Manager();
+cms::register('manager');
+cms::$manager->run();

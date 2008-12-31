@@ -12,7 +12,7 @@ class Users {
 	}
 	
 	public function __destruct() {
-		$this->user->write();
+		$this->user->write(); // hey, who added this line of code?
 	}
 	
 	public function initialize() {

@@ -7,7 +7,7 @@
 * @version $Id$
 * @access public
 */
-class cms {
+abstract class cms {
 	static $db;
 	static $vars;
 	static $user;
@@ -15,19 +15,100 @@ class cms {
 	static $router;
 	static $layout;
 	static $cache;
+	static $plugins;
+	
+	public static $instances = null;
+	
+	private function __construct() { } // make derivative classes impossible to instantiate
+	
+	/**
+	* cms::get_instance()
+	* 
+	* Get a property instance.
+	* 
+	* @param string $name Name of the object to retrieve.
+	* 
+	* @return mixed property value
+	*/
+	
+	public static function get_instance($name) {
+		if (!self::registered($name)) {
+			return self::register($name);
+		}
+		
+		if (!property_exists('cms', $name)) {
+			return self::$instances[$name];
+		} else {
+			return self::$$name;
+		}
+	}
 	
 	/**
 	* cms::register()
-	* Registers one of the required objects. Your own objects should be placed in the $vars array.
+	* Registers one of the required objects.
 	* 
-	* @param string $name Object name, should be a property in this file
-	* @param mixed $object Object to store.
+	* @param string $name Object name.
+	* @param string $class The name of the class, if it can not be automatically determined.
 	* @return void
 	*/
-	public static function register($name, $object) {
-		if (empty(self::$$name)) {
+	public static function register($name, $class = false) {
+		if (self::registered($name)) {
+			return self::get_instance($name);
+		}
+		
+		if ($class === false) {
+			$class = $name;
+		}
+		
+		$reflection = new ReflectionClass($class);
+
+		if (!$reflection->isInstantiable()) {
+			throw new Exception('A class needs to be instantiable.');
+		}
+		
+		if (!property_exists('cms', $name)) {
+			self::$instances[$name] = $reflection->newInstance();
+		} else {
+			self::$$name = $reflection->newInstance();
+		}
+		
+		return self::get_instance($name);
+	}
+	
+	/**
+	* cms::assign()
+	* Assign an object to a variable. This one is more like the pre-M1 register().
+	* 
+	* @param string $name Object name.
+	* @param mixed $object The object to add.
+	* @return void
+	*/
+	public static function assign($name, $object) {
+		if (self::registered($name)) {
+			return self::get_instance($name);
+		}
+		
+		if (!property_exists('cms', $name)) {
+			self::$instances[$name] = $object;
+		} else {
 			self::$$name = $object;
 		}
+		
+		return self::get_instance($name);
+	}
+	
+	public static function registered($name) {
+		if (property_exists('cms', $name)) {
+			if (!empty(self::$$name)) {
+				return true;
+			}
+		} else {
+			if (!empty(self::$instances[$name])) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -59,24 +140,31 @@ class cms {
 	* @param string $node_link_template Template for the link target. May contain the following replacement tags: %node_id, %node_type
 	* @return string tree HTML
 	*/
-	public static function get_admin_tree($node_link_template) {
+	public static function get_admin_tree($node_link_template, $selected = false) {
 		$node = new Node();
 		$node->node_id = 0;
-		return self::_get_admin_tree($node, '', $node_link_template);
+		return self::_get_admin_tree($node, '', $node_link_template, $selected);
 	}
 	
 	/**
 	* cms::_get_admin_tree()
 	* internal function for get_admin_tree()
 	*/
-	private static function _get_admin_tree($node, $list = '', $nlt = '') {
+	private static function _get_admin_tree($node, $list = '', $nlt = '', $selected = false) {
 		if ($node->node_id != 0) {
 			$pnlt = str_replace(
 				array('%node_id', '%node_type'),
 				array($node->node_id, $node->type),
 				$nlt
 			);
-			$list .= '<li id="node-' . $node->node_id . '"><a href="' . $pnlt . '" class="' . $node->type . '">' . $node->title . '</a>' . "\r\n";			
+			
+			$class = '';
+			
+			if (is_numeric($selected) && $node->node_id == $selected) {
+				$class = ' selected';
+			}
+			
+			$list .= '<li id="node-' . $node->node_id . '"><a href="' . $pnlt . '" class="' . $node->type . $class . '">' . $node->title . '</a>' . "\r\n";			
 		}
 			
 		$nodes = $node->get_children();
@@ -86,7 +174,7 @@ class cms {
 		if ($nodes) {
 			$list .= '<ul>';
 			foreach ($nodes as $node) {
-				$list = self::_get_admin_tree($node, $list, $nlt);
+				$list = self::_get_admin_tree($node, $list, $nlt, $selected);
 			}
 			$list .= '</ul>';
 		}

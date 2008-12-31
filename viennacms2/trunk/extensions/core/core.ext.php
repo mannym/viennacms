@@ -83,4 +83,28 @@ class extension_core {
 			return false;
 		}
 	}
+	
+	function acp_metadata($node, $caller) {
+		return array(
+			'history' => array(
+				'title' => __('Revisions'),
+				'content' => $this->acp_node_revisions($node, $caller)
+			)
+		);
+	}
+	
+	function acp_node_revisions($node, $caller) {
+		$revisions = new Node_Revision();
+		$revisions->node = $node->node_id;
+		$revisions->order = array('time' => 'desc');
+		$revisions = $revisions->read();
+		
+		$output = '';
+		
+		foreach ($revisions as $revision) {
+			$output .= '<li><a class="page" href="' . $caller->view->url('admin/controller/revision/view/' . $node->node_id . '/' . $revision->number) . '">' . sprintf(__('Revision %d'), $revision->number) . '</a></li>';
+		}
+		
+		return $output;
+	}
 }

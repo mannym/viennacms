@@ -140,9 +140,9 @@ if (empty($acm_type)) {
 }
 
 cms::$vars['table_prefix'] = $table_prefix;
-cms::register('db', new database());
+cms::register('db', 'database');
 cms::$db->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname);
-cms::register('cache', new $acm_type());
+cms::register('cache', $acm_type);
 
 //try {
 //	$global['db'] = newADOConnection($dbms);
@@ -178,7 +178,8 @@ echo $node->node_id;
 var_dump($global['db']->num_queries);
 */
 
-cms::register('user', new Users());
+cms::register('user', 'Users');
+//cms::register('plugins');
 cms::$user->initialize();
 
 // add other auto-loading classes
@@ -186,3 +187,6 @@ spl_autoload_register(array('cms', 'autoload'));
 spl_autoload_register(array('controller', 'autoload'));
 Controller::$searchpaths[] = 'blueprint/controllers/';
 View::$searchpaths['blueprint/views/'] = VIEW_PRIORITY_STOCK;
+
+//cms::$plugins->init(ROOT_PATH . 'extensions/');
+//cms::$plugins->setup();
