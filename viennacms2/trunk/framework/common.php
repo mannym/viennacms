@@ -123,7 +123,7 @@ unset($base_memory_usage);
 //include(ROOT_PATH . 'framework/db/adodb-exceptions.inc.php');
 //include(ROOT_PATH . 'framework/db/adodb.inc.php');
 //include(ROOT_PATH . 'framework/db/adodb-active-record.inc.php');
-@include(ROOT_PATH . 'framework/config/basic.php');
+@include(ROOT_PATH . 'config.php');
 
 if (empty($dbms)) {
 	define('MINIMAL', true);

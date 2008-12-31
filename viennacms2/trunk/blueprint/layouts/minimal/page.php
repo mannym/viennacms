@@ -10,7 +10,7 @@
 	<body>
 	<div id="wrap">
 	<div id="header">
-		<a href="<?php echo $this['siteurl'] ?>" class="logo"></a>
+		<a href="#" class="logo"></a>
 	</div>
 	<div id="menucontainer">
 		<div>

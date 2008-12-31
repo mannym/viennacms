@@ -26,6 +26,21 @@ if ($this['error'] != '') {
 <span class="form-description"><?php echo __('The prefix of the viennaCMS tables. If you don\'t have other viennaCMS installations in the same database, you can keep this at the default setting.') ?></span>
 
 <?php	
+elseif ($this['step'] == 3):
+if ($this['error'] != '') {
+	echo '<span style="color: red;">' . $this['error'] . '</span>';
+}
+?>
+<label for="username" class="form-title"><?php echo __('User name') ?>:</label>
+<input type="text" name="username" id="username" value="<?php echo $this['username'] ?>" class="textbox" />
+<span class="form-description"><?php echo __('The user name you want to use to log in to the administration panel.') ?></span>
+<label for="password" class="form-title"><?php echo __('Password') ?>:</label>
+<input type="password" name="password" id="password" class="textbox" />
+<span class="form-description"><?php echo __('The password you want to use. Don\'t forget this.') ?></span>
+<label for="password2" class="form-title"><?php echo __('Password (confirm)') ?>:</label>
+<input type="password" name="password2" id="password2" class="textbox" />
+<span class="form-description"><?php echo __('Type the password again, so we can check for typing mistakes.') ?></span>
+<?php
 endif;
 ?>
 <input type="hidden" name="step" value="<?php echo $this['step'] + 1 ?>" />

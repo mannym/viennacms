@@ -10,12 +10,12 @@ class Permission_Object extends Model {
 		'permission_mask' => array('type' => 'string')
 	);
 	protected $relations = array(
-		'owner' => array(
+/*		'owner' => array(
 			'type' => 'one_to_one',
 			'my_fields' => array('owner_id'),
 			'table' => 'users',
 			'their_fields' => array('user_id'),
 			'object' => array('class' => 'User', 'property' => 'owner')
-		)
+		)*/
 	);
 }
