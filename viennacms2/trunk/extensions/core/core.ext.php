@@ -112,4 +112,26 @@ class extension_core {
 		
 		return $output;
 	}
+	
+	function acp_get_panes($view) { // jippeeee, more hooks
+		switch ($view) {
+			case 'nodes':
+				return array(
+					'left' => array(
+						array(
+							'title' => __('Nodes'),
+							'href' => 'nodes'
+						),
+					)
+				);
+			break;
+		}
+	}
+	
+	function acp_views() {
+		return array(
+			'nodes' => __('Nodes'),
+			'files' => __('Files')
+		);
+	}
 }

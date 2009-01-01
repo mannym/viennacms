@@ -54,7 +54,23 @@ class AdminController extends Controller {
 		$this->init();
 	}
 	
+	public function view() {
+		$this->check_auth();
+		
+		setcookie('viennacms_acp_view', $this->arguments[0], time() + (3600), '/', '');
+		$_COOKIE['viennacms_acp_view'] = $this->arguments[0];
+		$this->view->path = 'admin/simple.php';
+				
+		$this->init();
+	}
+	
 	public function init() {
+		if (isset($_COOKIE['viennacms_acp_view'])) {
+			$view = $_COOKIE['viennacms_acp_view'];
+		} else {
+			$view = 'nodes';
+		}
+		
 		cms::$layout->view['pane_url'] = $this->view->url('admin/panes');
 		
 		$node_types = manager::run_hook_all('get_node_types');
@@ -65,7 +81,7 @@ class AdminController extends Controller {
 		
 		cms::$layout->view['icons'] = $icons;
 		
-		$panes = $this->get_panes();
+		$panes = manager::run_hook_all('acp_get_panes', $view);
 		$panes = array_merge_recursive($panes, AdminController::$panes);
 		$panes_output = array(
 			'left' => array()
@@ -81,6 +97,7 @@ class AdminController extends Controller {
 		}
 		
 		cms::$layout->view['panes'] = $panes_output;
+		cms::$layout->view['views'] = manager::run_hook_all('acp_views');
 	}
 	
 	public function controller() {
