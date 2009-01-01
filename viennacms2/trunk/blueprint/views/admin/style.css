@@ -203,11 +203,13 @@ ul.submenu li span
 	width: 400px;
 }
 
-.modules li 
+.modules > li 
 {
 	border: 1px solid #ccc;
 	background-color: #eee;
 	margin-bottom: 5px;
+	clear: both;
+	min-height: 21px;
 }
 
 .modules li a 
@@ -215,6 +217,8 @@ ul.submenu li span
 	color: #000;
 	font-size: 120%;
 	text-decoration: none;
+	margin-top: 1px;
+	float: left;
 }
 
 .modules li div.modform 
@@ -223,6 +227,7 @@ ul.submenu li span
 	top: 0px;
 	background-color: #fff;
 	border-top: 1px solid #06f;
+	clear: both;
 }
 
 /* leave this here for now */
@@ -281,3 +286,16 @@ ul.submenu li span
 }
 
 .treeview a.history, .types a.history { background-image: url(images/history.png); background-repeat: no-repeat; }
+
+.modules li a.delete-module {
+	font-size: 100%;
+	float: right;
+	margin-right: 2px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	width: 22px;
+	height: 22px;
+	cursor: pointer;
+	display: inline;
+	background-image: url(images/icons/remove.png);
+}

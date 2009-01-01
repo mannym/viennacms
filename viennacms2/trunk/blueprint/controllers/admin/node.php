@@ -211,6 +211,7 @@ class AdminNodeController {
 		$node = new Node();
 		$node->node_id = $this->arguments[0];
 		$node->read(true);
+		
 		if (!isset($_POST['node_edit_revision_content'])) {
 			$rmodules = unserialize($node->revision->content);
 		} else {
@@ -279,6 +280,27 @@ class AdminNodeController {
 		exit;
 	}
 	
+	public function remove_module() {
+		$node = new Node();
+		$node->node_id = $this->arguments[0];
+		$node->read(true);
+		if (!isset($_POST['node_edit_revision_content'])) {
+			$rmodules = unserialize($node->revision->content);
+		} else {
+			$rmodules = unserialize(base64_decode($_POST['node_edit_revision_content']));
+		}
+		
+		foreach ($rmodules[$this->arguments[1]] as $key => &$tmodule) {
+			if ($tmodule['id'] == $this->arguments[2]) {
+				unset($rmodules[$this->arguments[1]][$key]);
+				break;
+			}
+		}
+		
+		echo base64_encode(serialize($rmodules));
+		exit;
+	}
+	
 	private function module_editor($node) {
 		ob_start();
 		?>
@@ -309,12 +331,12 @@ class AdminNodeController {
 			foreach ($modules as $module) {
 				$controller = cms::$manager->get_controller($module['controller']);
 				$name = $controller->friendlyname();
-				echo '<li class="module-' . $module['controller'] . '" id="module-' . $module['id'] . '"><a href="' . $this->view->url('admin/controller/node/edit_module/' . intval($node->node_id) . '/content/' . $module['id']) . '">';
+				echo '<li class="module-' . $module['controller'] . '" id="module-' . $module['id'] . '"><a class="module" href="' . $this->view->url('admin/controller/node/edit_module/' . intval($node->node_id) . '/content/' . $module['id']) . '">';
 				echo $name;
-				echo '</a></li>'; 
+				echo '</a><a class="delete-module" href="' . $this->view->url('admin/controller/node/remove_module/' . intval($node->node_id) . '/content/' . $module['id']) . '"></a></li>'; 
 			}
 			?>
-			<li class="module-add" id="module-XX"><a href="<?php echo $this->view->url('admin/controller/node/new_module/' . $node->node_id . '/content') ?>">
+			<li class="module-add" id="module-XX"><a class="module" href="<?php echo $this->view->url('admin/controller/node/new_module/' . $node->node_id . '/content') ?>">
 			<?php echo __('Add'); ?>
 			</a></li>
 		</ul>
@@ -369,9 +391,12 @@ class AdminNodeController {
 		$string = base64_encode(serialize($rmodules));
 		$controller = cms::$manager->get_controller($module['controller']);
 		$name = $controller->friendlyname();
-		echo '<li class="module-' . $module['controller'] . '" id="module-' . $module['id'] . '"><a href="' . $this->view->url('admin/controller/node/edit_module/' . $node->node_id . '/content/' . $module['id'] . '/' . $module['controller']) . '">';
+//		echo '<li class="module-' . $module['controller'] . '" id="module-' . $module['id'] . '"><a href="' . $this->view->url('admin/controller/node/edit_module/' . $node->node_id . '/content/' . $module['id'] . '/' . $module['controller']) . '">';
+//		echo $name;
+//		echo '</a></li>'; 
+		echo '<li class="module-' . $module['controller'] . '" id="module-' . $module['id'] . '"><a class="module" href="' . $this->view->url('admin/controller/node/edit_module/' . intval($node->node_id) . '/content/' . $module['id'] . '/' . $module['controller']) . '">';
 		echo $name;
-		echo '</a></li>'; 
+		echo '</a><a class="delete-module" href="' . $this->view->url('admin/controller/node/remove_module/' . intval($node->node_id) . '/content/' . $module['id']) . '"></a></li>'; 
 		?>
 		
 		<script type="text/javascript">

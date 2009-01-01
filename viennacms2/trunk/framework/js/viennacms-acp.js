@@ -328,7 +328,7 @@ var mf = false;
 
 function build_modules() {
     $('.modules li').each(function() {
-        $(this).find('a').click(function() {
+        $(this).find('a.module').click(function() {
             if (!dragging) {
                 var old = this;
                 // .replace('+', '%2B').replace('=', '%3D').replace('/', '%2F')
@@ -394,6 +394,27 @@ function build_modules() {
             
             return false;
         });
+		
+		$(this).find('a.delete-module').click(function() {
+			var old = this;
+			
+			if (!window.confirm("Do you really want to remove this module?")) {
+				return false;
+			}
+			
+			$.ajax({
+	                cache: false,
+	                type: "POST",
+	                data: 'node_edit_revision_content=' + escape($('#nerc').attr('value'), true),
+	                url: $(this).attr('href'),
+	                success: function(output) {
+						$('#nerc').attr('value', output);
+						$(old).parents('li').eq(0).remove();
+	                }
+			});
+			
+			return false;
+		});
     });
 }
 
