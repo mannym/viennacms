@@ -19,6 +19,10 @@ class NodeController extends Controller {
 			$node->revision->read(true);
 		}
 		
+		if (!$id) {
+			cms::$vars['node'] = $node;
+		}
+		
 		if (!$node->title && !$id) {
 			return cms::$manager->page_not_found();
 		}
@@ -36,7 +40,6 @@ class NodeController extends Controller {
 		$this->view['node'] = $node;	
 
 		if (!$id) {
-			cms::$vars['node'] = $node;
 			cms::$layout->set_title($node->title);
 		}
 	}

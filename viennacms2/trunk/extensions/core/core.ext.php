@@ -58,7 +58,12 @@ class extension_core {
 					'icon' => '~/blueprint/views/admin/images/icons/page.png',
 					'title' => __('HTML content'),
 					'description' => __('A module which provides a content box which renders HTML.')
-					)	
+					),
+				'nicenav' => array(
+					'icon' => '~/blueprint/views/admin/images/icons/nicenav.png',
+					'title' => __('Nice sub-navigation'),
+					'description' => __('Nice 2-column sub-navigation with descriptions.')
+				)	
 				);
 	}
 	
