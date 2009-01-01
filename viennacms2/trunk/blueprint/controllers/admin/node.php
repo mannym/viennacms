@@ -136,7 +136,7 @@ class AdminNodeController {
 		if ($node->typedata['type'] == 'static') {
 			$form_data['fields']['revision_content'] = array(
 				'label' => __('Content'),
-				'description' => __(''),
+				'description' => '',
 				'required' => true,
 				'type' => 'wysiwyg',
 				'value' => $node->revision->content,
@@ -153,7 +153,7 @@ class AdminNodeController {
 		if ($node->typedata['type'] == 'dynamic') {
 			$form_data['fields']['revision_content'] = array(
 				'label' => __('Content'),
-				'description' => __(''),
+				'description' => '',
 				'required' => true,
 				'type' => 'html',
 				'value' => $this->module_editor($node),

@@ -25,7 +25,7 @@ class HTMLContentController extends Controller {
 					),
 				'content' => array(
 					'label' => __('Content'),
-					'description' => __(''),
+					'description' => '',
 					'required' => true,
 					'type' => 'wysiwyg',
 					'value' => $module['arguments']['content'],

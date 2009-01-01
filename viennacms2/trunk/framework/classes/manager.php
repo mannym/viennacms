@@ -405,8 +405,3 @@ HTML;
 		return false;
 	}
 }
-
-// placeholder
-function __($msg) {
-	return $msg;
-}

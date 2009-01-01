@@ -124,6 +124,24 @@ unset($base_memory_usage);
 //include(ROOT_PATH . 'framework/db/adodb.inc.php');
 //include(ROOT_PATH . 'framework/db/adodb-active-record.inc.php');
 @include(ROOT_PATH . 'config.php');
+include(ROOT_PATH . 'framework/gettext.php');
+
+// initial language coding
+// won't do anything to developers debugging :)
+
+if (!defined('DEBUG')) {
+	$languages = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+	
+	foreach ($languages as $language) {
+		$lang = substr($language, 0, 2);
+		
+		if (file_exists(ROOT_PATH . 'locale/' . $lang) && is_dir(ROOT_PATH . 'locale/' . $lang)) {
+			_setlocale(LC_ALL, $lang);
+			_bindtextdomain('viennacms2', ROOT_PATH . 'locale/');
+			_textdomain('viennacms2');
+		}
+	}
+}
 
 if (empty($dbms)) {
 	define('MINIMAL', true);

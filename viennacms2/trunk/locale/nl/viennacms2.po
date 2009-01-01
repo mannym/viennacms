@@ -1,0 +1,388 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: viennaCMS2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-01-01 12:09+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Bas <bas@dotbas.net>\n"
+"Language-Team: viennaCMS developers\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Dutch\n"
+"X-Poedit-KeywordsList: __\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: C:\\xampplite\\htdocs\\viennacms2\n"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin.php:7
+msgid "todo"
+msgstr "te doen"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin.php:20
+msgid "Authentication required"
+msgstr "Authentificatie vereist"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin.php:21
+msgid "You need to log in to access the ACP."
+msgstr "Je moet inloggen om toegang te krijgen tot het beheerderspaneel."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin.php:28
+msgid "Information"
+msgstr "Informatie"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin.php:29
+msgid "You are not allowed to access the Administration Control Panel."
+msgstr "Je hebt geen toestemming om bij het beheerderspaneel te komen."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin.php:148
+msgid "Nodes"
+msgstr "Nodes"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/layout.php:42
+#, php-format
+msgid "Logout [ %s ]"
+msgstr "Uitloggen [ %s ]"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/layout.php:45
+msgid "Login"
+msgstr "Inloggen"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/node.php:71
+msgid "This node doesn't have any modules."
+msgstr "Deze node heeft geen modules."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/user.php:7
+msgid "Username"
+msgstr "Gebruikersnaam"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/user.php:8
+msgid "The username that belongs to your user account."
+msgstr "De gebruikersnaam die bij je account hoort."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/user.php:15
+msgid "Password"
+msgstr "Wachtwoord"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/user.php:16
+msgid "The (case sensitive) password for your user account."
+msgstr "Het (hoofdlettergevoelige) wachtwoord van je gebruikersaccount."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/user.php:25
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/user.php:35
+msgid "User login"
+msgstr "Inloggen"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/user.php:41
+msgid "This username does not exist."
+msgstr "Deze gebruikersnaam bestaat niet."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/user.php:43
+msgid "The entered password is incorrect."
+msgstr "Het ingevoerde wachtwoord is incorrect."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/metapane.php:9
+msgid "Please select a node before showing meta data."
+msgstr "Selecteer een node voordat je metadata bekijkt."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:8
+msgid "Please select a node before adding a sub node."
+msgstr "Selecteer een node voordat je een subnode wilt toevoegen."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:48
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:417
+msgid "This node does not exist!"
+msgstr "Deze node bestaat niet!"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:58
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:78
+msgid "New node"
+msgstr "Nieuwe node"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:93
+msgid "Title"
+msgstr "Titel"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:94
+msgid "The title of this node, which will be displayed for example in the menu."
+msgstr "De titel van deze node, die onder andere weergegeven wordt in het menu."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:102
+msgid "Description"
+msgstr "Beschrijving"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:103
+msgid "The description of this node, which you can see in themes and modules that support this feature."
+msgstr "De beschrijving van deze node, welke zichtbaar is in themas en modules die deze mogelijkheid ondersteunen."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:113
+msgid "Node details"
+msgstr "Node-details"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:131
+msgid "Node options"
+msgstr "Node-opties"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:138
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:148
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:155
+msgid "Content"
+msgstr "Inhoud"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:165
+msgid "Modules"
+msgstr "Modules"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:316
+msgid "No content"
+msgstr "Geen inhoud"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:317
+msgid "This module does not have any content."
+msgstr "Deze module heeft geen inhoud."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:340
+msgid "Add"
+msgstr "Toevoegen"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:466
+msgid "The node has been successfully saved."
+msgstr "De node is succesvol opgeslagen."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/layouts/minimal/page.php:5
+msgid "viennaCMS installation"
+msgstr "viennaCMS-installatie"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/revision/view.php:2
+#, php-format
+msgid "%s, revision %d"
+msgstr "%s, revisie %d"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/revision/view.php:3
+#, php-format
+msgid "Created on %s"
+msgstr "Gemaakt op %s"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:16
+msgid "Page"
+msgstr "Pagina"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:17
+msgid "A page is a simple way of posting content that almost never changes."
+msgstr "Een pagina is een simpele manier van inhoud plaatsen die bijna nooit wijzigt."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:25
+msgid "Dynamic page"
+msgstr "Dynamische pagina"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:26
+msgid "A dynamic page is used for placing modules on a site. These modules can be used for all kinds of dynamic content."
+msgstr "Een dynamische pagina wordt gebruikt om modules op een site te plaatsen. Deze modules worden gebruikt voor verschillende soorten dynamische inhoud."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:37
+msgid "\"Page not found\" URL"
+msgstr "\"Pagina-niet-gevonden\" URL"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:38
+msgid "The URL on the site, which will be redirected to when a page can not be found."
+msgstr "De URL op de website die gebruikt wordt als een pagina niet gevonden kan worden."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:44
+msgid "Home page"
+msgstr "Homepagina"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:45
+msgid "The ID of the node, which will be set as the home page for this site."
+msgstr "Het ID van de node welke gebruikt wordt als homepagina voor deze site."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:59
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/htmlcontent.php:11
+msgid "HTML content"
+msgstr "HTML-inhoud"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:60
+msgid "A module which provides a content box which renders HTML."
+msgstr "Een module die inhoud weergeeft met HTML."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:64
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/nicenav.php:32
+msgid "Nice sub-navigation"
+msgstr "Mooie sub-navigatie"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:65
+msgid "Nice 2-column sub-navigation with descriptions."
+msgstr "Een mooie 2-koloms sub-navigatie met beschrijvingen."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:85
+msgid "The entered URL does not exist, or is not accessible."
+msgstr "De ingevoerde URL bestaat niet, of is niet toegankelijk."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:95
+msgid "Revisions"
+msgstr "Revisies"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:110
+#, php-format
+msgid "Revision %d"
+msgstr "Revisie %d"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:134
+msgid "Files"
+msgstr "Bestanden"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/htmlcontent.php:19
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/nicenav.php:40
+msgid "The title of this module."
+msgstr "De titel van deze module."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/htmlcontent.php:38
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/nicenav.php:50
+msgid "Module"
+msgstr "Module"
+
+#: C:\xampplite\htdocs\viennacms2/framework/classes/form.php:46
+#, php-format
+msgid "The field %s is required."
+msgstr "Het veld %s is verplicht."
+
+#: C:\xampplite\htdocs\viennacms2/framework/classes/manager.php:195
+msgid "Page not found"
+msgstr "Pagina niet gevonden"
+
+#: C:\xampplite\htdocs\viennacms2/framework/classes/manager.php:196
+msgid "The requested page could not be found."
+msgstr "De opgevraagde pagina kon niet gevonden worden."
+
+#: C:\xampplite\htdocs\viennacms2/framework/classes/manager.php:359
+msgid "General Error"
+msgstr "Algemene fout"
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:5
+msgid "viennaCMS is already installed!"
+msgstr "viennaCMS is al geinstalleerd!"
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:19
+msgid "Welcome"
+msgstr "Welkom"
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:25
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:156
+msgid "Database information"
+msgstr "Databaseinformatie"
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:81
+msgid "A default viennaCMS web site"
+msgstr "Een nieuwe viennaCMS-website"
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:98
+msgid "The default home page"
+msgstr "De standaard homepagina"
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:101
+msgid "viennaCMS2 has been successfully installed. Go to your ACP, and add some pages! :-D"
+msgstr "viennaCMS2 is succesvol geinstalleerd. Ga naar je beheerderspaneel, en voeg pagina's toe! :-D"
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:119
+msgid "Node system self-test failed. Now stop squirming and error out!"
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:150
+msgid "Could not write the configuration file."
+msgstr "Kon het configuratiebestand niet schrijven."
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:171
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:196
+msgid "User information"
+msgstr "Gebruikersinformatie"
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:184
+msgid "You need to enter a user name."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:188
+msgid "You need to enter a password."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:192
+msgid "The passwords do not match."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/form/form_wrapper.php:4
+msgid "Submit"
+msgstr "Bevestig"
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:5
+msgid "Welcome to the viennaCMS2 installation wizard! viennaCMS2 is a rewritten version of the original viennaCMS, and includes a lot of new features.<br />Please note this is a development version, which will mean that critical bugs will occur. For your own safety, and the safety of others, please refrain from using viennaCMS2 on a live site."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:12
+msgid "Database host"
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:14
+msgid "The database host, usually localhost. If you don't know this, contact your hosting provider."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:15
+msgid "Database user name"
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:17
+msgid "The database user name to access your database. You can usually find this in your host's control panel."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:18
+msgid "Database password"
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:20
+msgid "The password which belongs to the database user name."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:21
+msgid "Database name"
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:23
+msgid "The name of the database to install viennaCMS in."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:24
+msgid "Table prefix"
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:26
+msgid "The prefix of the viennaCMS tables. If you don't have other viennaCMS installations in the same database, you can keep this at the default setting."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:34
+msgid "User name"
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:36
+msgid "The user name you want to use to log in to the administration panel."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:39
+msgid "The password you want to use. Don't forget this."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:40
+msgid "Password (confirm)"
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:42
+msgid "Type the password again, so we can check for typing mistakes."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:48
+msgid "Next &raquo;"
+msgstr "Volgende &raquo;"
+
+#: C:\xampplite\htdocs\viennacms2/layouts/default/style/page.php:14
+msgid "ACP"
+msgstr "Beheerderspaneel"
+
+#: C:\xampplite\htdocs\viennacms2/layouts/default/style/page.php:34
+msgid "Sub-navigation"
+msgstr "Subnavigatie"
+
