@@ -208,3 +208,7 @@ View::$searchpaths['blueprint/views/'] = VIEW_PRIORITY_STOCK;
 
 //cms::$plugins->init(ROOT_PATH . 'extensions/');
 //cms::$plugins->setup();
+
+cms::register('files');
+cms::$files->init();
+cms::register('helpers');

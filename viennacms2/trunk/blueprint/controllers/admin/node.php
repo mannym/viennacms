@@ -1,5 +1,5 @@
 <?php
-class AdminNodeController {
+class AdminNodeController extends Controller {
 	public function add() {
 		$parent = new Node();
 		$parent->node_id = $this->arguments[0];
@@ -86,6 +86,8 @@ class AdminNodeController {
 			$postfix = ob_get_contents();
 			ob_end_clean();
 		}
+		
+		//if ($this->method_override(__FUNCTION__)) return $this->call_override(__FUNCTION__, $node);
 		
 		$form_data = array(
 			'fields' => array(

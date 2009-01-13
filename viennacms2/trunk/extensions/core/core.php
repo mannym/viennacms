@@ -5,6 +5,8 @@
 * not used currently, waiting for better implementation of phpBB's plugin system
 */
 
+return;
+
 class cms_plugin_core_info {
 	public $name = 'Base plugin';
 	public $description = 'Implements core features';

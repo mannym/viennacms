@@ -334,12 +334,12 @@ abstract class cms_plugin_support
 	/**
 	* @var array Methods injected
 	*/
-	private $plugin_methods;
+	private static $plugin_methods;
 
 	/**
 	* @var array Attributes injected
 	*/
-	private $plugin_attributes;
+	private static $plugin_attributes;
 
 	/**
 	* Register a new method, overrides one or inject into one.
@@ -358,7 +358,7 @@ abstract class cms_plugin_support
 	*
 	* @access public
 	*/
-	public function register_method($name, $method, $object, $mode = cms::METHOD_ADD, $action = 'default')
+	public static function register_method($name, $method, $object, $mode = cms::METHOD_ADD, $action = 'default')
 	{
 		// Method reachable by:
 		// For plugin_add: plugin_methods[method] = object
@@ -372,21 +372,21 @@ abstract class cms_plugin_support
 		}
 
 		// But if it exists and we try to add one, then print out an error
-		if ($mode == cms::METHOD_ADD && (method_exists($this, $method) || isset($this->plugin_methods[$method])))
+		if ($mode == cms::METHOD_ADD && (method_exists($this, $method) || isset(self::$plugin_methods[$method])))
 		{
 			trigger_error('Method ' . $method. ' in class ' . get_class($object) . ' is not able to be added, because it conflicts with the existing method ' . $method . ' in ' . get_class($this) . '.', E_USER_ERROR);
 		}
 
 		// Check if the same method name is already used for $name for overriding the method.
-		if ($mode == cms::METHOD_OVERRIDE && isset($this->plugin_methods[$name][$mode][$method]))
+		if ($mode == cms::METHOD_OVERRIDE && isset(self::$plugin_methods[$name][$mode][$method]))
 		{
-			trigger_error('Method ' . $method . ' in class ' . get_class($object) . ' is not able to override . ' . $name . ' in ' . get_class($this) . ', because it is already overridden in ' . get_class($this->plugin_methods[$name][$mode][$method]) . '.', E_USER_ERROR);
+			trigger_error('Method ' . $method . ' in class ' . get_class($object) . ' is not able to override . ' . $name . ' in ' . get_class($this) . ', because it is already overridden in ' . get_class(self::$plugin_methods[$name][$mode][$method]) . '.', E_USER_ERROR);
 		}
 
 		// Check if another method is already defined...
-		if ($mode == cms::METHOD_INJECT && isset($this->plugin_methods[$name][$mode][$action][$method]))
+		if ($mode == cms::METHOD_INJECT && isset(self::$plugin_methods[$name][$mode][$action][$method]))
 		{
-			trigger_error('Method ' . $method . ' in class ' . get_class($object) . ' for ' . $name . ' is already defined in class ' . get_class($this->plugin_methods[$name][$mode][$action][$method]), E_USER_ERROR);
+			trigger_error('Method ' . $method . ' in class ' . get_class($object) . ' for ' . $name . ' is already defined in class ' . get_class(self::$plugin_methods[$name][$mode][$action][$method]), E_USER_ERROR);
 		}
 
 		if (($function_signature = $this->valid_parameter($object, $method, $mode, $action)) !== true)
@@ -396,15 +396,15 @@ abstract class cms_plugin_support
 
 		if ($mode == cms::METHOD_ADD)
 		{
-			$this->plugin_methods[$method] = $object;
+			self::$plugin_methods[$method] = $object;
 		}
 		else if ($mode == cms::METHOD_OVERRIDE)
 		{
-			$this->plugin_methods[$name][$mode][$method] = $object;
+			self::$plugin_methods[$name][$mode][$method] = $object;
 		}
 		else
 		{
-			$this->plugin_methods[$name][$mode][$action][$method] = $object;
+			self::$plugin_methods[$name][$mode][$action][$method] = $object;
 		}
 	}
 
@@ -417,19 +417,19 @@ abstract class cms_plugin_support
 	*
 	* @access public
 	*/
-	public function register_attribute($name, $object)
+	public static function register_attribute($name, $object)
 	{
 		if (property_exists($this, $name))
 		{
 			unset($this->$name);
 		}
 
-		if (isset($this->plugin_attributes[$name]))
+		if (isset(self::$plugin_attributes[$name]))
 		{
-			trigger_error('Attribute ' . $name . ' in class ' . get_class($object) . ' already defined in class ' . get_class($this->plugin_attributes[$name]), E_USER_ERROR);
+			trigger_error('Attribute ' . $name . ' in class ' . get_class($object) . ' already defined in class ' . get_class(self::$plugin_attributes[$name]), E_USER_ERROR);
 		}
 
-		$this->plugin_attributes[$name] = $object;
+		self::$plugin_attributes[$name] = $object;
 	}
 
 	/**#@+
@@ -438,22 +438,22 @@ abstract class cms_plugin_support
 	*/
 	public function __get($name)
 	{
-		return $this->plugin_attributes[$name]->$name;
+		return self::$plugin_attributes[$name]->$name;
 	}
 
 	public function __set($name, $value)
 	{
-		return $this->plugin_attributes[$name]->$name = $value;
+		return self::$plugin_attributes[$name]->$name = $value;
 	}
 
 	public function __isset($name)
 	{
-		return isset($this->plugin_attributes[$name]->$name);
+		return isset(self::$plugin_attributes[$name]->$name);
 	}
 
 	public function __unset($name)
 	{
-		unset($this->plugin_attributes[$name]->$name);
+		unset(self::$plugin_attributes[$name]->$name);
 	}
 	/**#@-*/
 
@@ -464,7 +464,7 @@ abstract class cms_plugin_support
 	public function __call($name, $arguments)
 	{
 		array_unshift($arguments, $this);
-		return call_user_func_array(array($this->plugin_methods[$name], $name), $arguments);
+		return call_user_func_array(array(self::$plugin_methods[$name], $name), $arguments);
 	}
 
 	/**
@@ -478,7 +478,7 @@ abstract class cms_plugin_support
 	*/
 	protected function method_override($name)
 	{
-		return isset($this->plugin_methods[$name][cms::METHOD_OVERRIDE]);
+		return isset(self::$plugin_methods[$name][cms::METHOD_OVERRIDE]);
 	}
 
 	/**
@@ -493,7 +493,7 @@ abstract class cms_plugin_support
 	*/
 	protected function method_inject($name, $action = 'default')
 	{
-		return isset($this->plugin_methods[$name][cms::METHOD_INJECT][$action]);
+		return isset(self::$plugin_methods[$name][cms::METHOD_INJECT][$action]);
 	}
 
 	/**
@@ -511,7 +511,7 @@ abstract class cms_plugin_support
 		$arguments = func_get_args();
 		$name = array_shift($arguments);
 
-		list($method, $object) = each($this->plugin_methods[$name][cms::METHOD_OVERRIDE]);
+		list($method, $object) = each(self::$plugin_methods[$name][cms::METHOD_OVERRIDE]);
 		return call_user_func_array(array($object, $method), array_merge(array($this), $arguments));
 	}
 
@@ -547,7 +547,7 @@ abstract class cms_plugin_support
 		{
 			$result = array_shift($arguments);
 
-			foreach ($this->plugin_methods[$name][cms::METHOD_INJECT][$action] as $method => $object)
+			foreach (self::$plugin_methods[$name][cms::METHOD_INJECT][$action] as $method => $object)
 			{
 				$args = array_merge(array($this, $result), $arguments);
 				$result = call_user_func_array(array($object, $method), $args);
@@ -556,7 +556,7 @@ abstract class cms_plugin_support
 			return $result;
 		}
 
-		foreach ($this->plugin_methods[$name][cms::METHOD_INJECT][$action] as $method => $object)
+		foreach (self::$plugin_methods[$name][cms::METHOD_INJECT][$action] as $method => $object)
 		{
 			call_user_func_array(array($object, $method), array_merge(array($this), $arguments));
 		}

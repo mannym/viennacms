@@ -29,6 +29,24 @@ class extension_core {
 				'big_icon' => '~/blueprint/views/admin/images/icons/dynamicpage_big.png',
 				'options' => array()
 			),
+			'filesfolder' => array(
+				'extension' => 'core',
+				'title' => __('Folder'),
+				'description' => '',
+				'type' => 'none',
+				'icon' => '~/blueprint/views/admin/images/icons/dynamicpage.png',
+				'big_icon' => '~/blueprint/views/admin/images/icons/dynamicpage_big.png',
+				'options' => array()
+			),
+			'file' => array(
+				'extension' => 'core',
+				'title' => __('File'),
+				'description' => '',
+				'type' => 'none',
+				'icon' => '~/blueprint/views/admin/images/icons/dynamicpage.png',
+				'big_icon' => '~/blueprint/views/admin/images/icons/dynamicpage_big.png',
+				'options' => array()
+			),
 			'site' => array(
 				// let's not go there... for now :)
 				'icon' => '~/blueprint/views/admin/images/icons/site.png',
@@ -51,6 +69,15 @@ class extension_core {
 		);
 	}
 	
+	public function core_get_admin_tree($op, &$url, $template, $node) {
+		if ($node->type == 'filesfolder') {
+			$url->url = 'admin/controller/file/folder/' . $node->node_id;
+		}
+		
+		if ($node->type == 'file') {
+			$url->url = 'admin/controller/file/file/' . $node->node_id;
+		}
+	}
 	
 	public function module_manifest() {
 		return array(
@@ -71,6 +98,20 @@ class extension_core {
 		switch ($type) {
 			case 'this_under_other':
 				if ($node->type == 'site') {
+					return false;
+				}
+				
+				if ($node->type == 'filesfolder' || $node->type == 'file') {
+					if ($other->type != 'filesfolder') {
+						return false;
+					}
+				}
+				
+				if ($other->type == 'file') {
+					return false;
+				}
+				
+				if ($other->type == 'filesfolder' && ($node->type != 'filesfolder' && $node->type != 'file')) {
 					return false;
 				}
 			break;
@@ -125,13 +166,23 @@ class extension_core {
 					)
 				);
 			break;
+/*			case 'files':
+				return array(
+					'left' => array(
+						array(
+							'title' => __('Files'),
+							'href' => 'files'
+						),
+					)
+				);
+			break;*/
 		}
 	}
 	
 	function acp_views() {
 		return array(
 			'nodes' => __('Nodes'),
-			'files' => __('Files')
+//			'files' => __('Files')
 		);
 	}
 }
