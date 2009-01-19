@@ -41,6 +41,21 @@ class AdminThemesController extends Controller {
 		return $output;
 	}
 	
+	public function choose() {
+		if (!file_exists(ROOT_PATH . 'layouts/' . $this->arguments[0] . '/info.php')) {
+			return __('This style does not exist correctly.');
+		}
+		
+		$node = new Node();
+		$node->parent = 0;
+		$node->type = 'site';
+		$node->read(true);
+		$node->options['style'] = $this->arguments[0];
+		$node->write();
+		
+		return __('The style has been changed.');
+	}
+	
 	private function show_theme_thing($name, $theme_info, $default = false, $count = 1) {
 		if ($default) {
 			$output = '<img src="' . manager::base() . 'layouts/' . $name . '/screenshot.png" style="width: 150px; height: 128px; float: left; margin-right: 5px;" alt="' . $theme_info['name'] . '" />';
