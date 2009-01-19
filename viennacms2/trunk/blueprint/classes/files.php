@@ -18,4 +18,18 @@ class Files {
 
 		$this->fileroot = $node;
 	}
+	
+	public function get_file_widget($file) {
+		$output = new stdClass;
+		$output->output = '';
+		$output->append = '';
+		
+		manager::run_hook_all('core_file_widget', $file, $output);
+		
+		if ($output->output == '') {
+			manager::run_hook_all('core_file_default_widget', $file, $output);
+		}
+		
+		return $output->output . $output->append;
+	}
 }

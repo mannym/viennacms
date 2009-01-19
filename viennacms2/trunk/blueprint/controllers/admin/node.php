@@ -20,9 +20,14 @@ class AdminNodeController extends Controller {
 				continue;
 			}
 			
+			$url = new stdClass;
+			$url->url = 'admin/controller/node/add_do/' . $key . '/' . $parent->node_id;
+			
+			manager::run_hook_all('core_admin_node_add_url', $url, $key, $parent);
+			
 			?>
 			<li>
-			<a class="<?php echo $key ?>" href="<?php echo $this->view->url('admin/controller/node/add_do/' . $key . '/' . $parent->node_id); ?>"><?php echo $type['title'] ?></a><span><?php echo $type['description'] ?></span>
+			<a class="<?php echo $key ?>" href="<?php echo $this->view->url($url->url); ?>"><?php echo $type['title'] ?></a><span><?php echo $type['description'] ?></span>
 			</li>
 			<?php
 		}
@@ -87,7 +92,17 @@ class AdminNodeController extends Controller {
 			ob_end_clean();
 		}
 		
+		$prefix = '';
+		
+		$extras = manager::run_hook_all('node_edit_output', $node);
+		
+		foreach ($extras as $extra) {
+			$prefix .= $extra;
+		}
+		
 		//if ($this->method_override(__FUNCTION__)) return $this->call_override(__FUNCTION__, $node);
+		
+		manager::run_hook_all('node_edit_pre_load', $node);		
 		
 		$form_data = array(
 			'fields' => array(
@@ -206,7 +221,7 @@ class AdminNodeController extends Controller {
 		$form = new Form();
 		$form->callback_object = $this;
 		
-		return $form->handle_form('node_edit', $form_data) . $postfix;
+		return $prefix . $form->handle_form('node_edit', $form_data) . $postfix;
 	}
 	
 	public function edit_module() {
@@ -447,23 +462,12 @@ class AdminNodeController extends Controller {
 			$node->revision->content = base64_decode($fields['revision_content']);
 		}
 		
+		manager::run_hook_all('node_edit_pre_write', $node);
+		
 		// write it!
 		$node->write();
 
-		$path = '';
-		
-		if ($node->parent) {
-			$parents = cms::$layout->get_parents($node->get_parent());
-			array_shift($parents);
-			foreach ($parents as $parent) {
-				$path .= cms::$router->clean_title($parent->title) . '/';
-			}
-		}
-
-		$path .= cms::$router->clean_title($node->title);
-		$path .= '.html';
-		
-		cms::$router->add_url_alias($path, 'node/show/' . $node->node_id);
+		cms::$helpers->create_node_alias($node);
 		
 		return __('The node has been successfully saved.');
 	}

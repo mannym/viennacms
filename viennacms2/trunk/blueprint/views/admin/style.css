@@ -99,7 +99,7 @@ body {
 	border: 0;
 }
 
-.panes .pane h1 {
+.pane h1 {
 	margin: 0px;
 	background-color: #00a;
 	color: #fff;
@@ -298,4 +298,11 @@ ul.submenu li span
 	cursor: pointer;
 	display: inline;
 	background-image: url(images/icons/remove.png);
+}
+
+a.delete {
+	display: block;
+	color: red;
+	font-weight: bold;
+	margin-top: 12px;
 }

@@ -139,7 +139,7 @@ abstract class Model {
 		}
 	}
 	
-	public function write($relations = true) {
+	public function write($relations = true, $clear_cache = true) {
 		$this->hook_presave();
 		
 		$where = $end = '';		
@@ -187,11 +187,11 @@ abstract class Model {
 				if (!empty($this->$property)) {
 					switch ($parameters['type']) {
 						case 'one_to_one':
-							$this->$property->write();
+							$this->$property->write(false, $clear_cache);
 						break;
 						case 'one_to_many':
 							foreach ($this->$property as $thing) {
-								$thing->write();
+								$thing->write(false, $clear_cache);
 							}
 						break;
 					}
@@ -199,7 +199,10 @@ abstract class Model {
 			}
 		}
 		
-		$this->clear_cache(false);
+		if ($clear_cache) {
+			$this->clear_cache(false);
+		}
+		
 		$this->written = true;
 	}
 	
@@ -236,7 +239,6 @@ abstract class Model {
 				if (!empty($this->$property)) {
 					switch ($parameters['type']) {
 						case 'one_to_one':
-							echo '1t1';
 							$this->$property->delete();
 						break;
 						case 'one_to_many':
@@ -281,6 +283,10 @@ abstract class Model {
 		if ($row) {	
 			foreach ($row as $field => $value) {
 				if (isset($this->fields[$field])) {
+					if (substr($value, -10) == '.localized') {
+						$value = __(substr($value, 0, -10));
+					}
+					
 					$this->$field = $value;
 				}
 			}

@@ -5,6 +5,7 @@ class Form {
 	private $form;
 	public $form_id;
 	public $errors = false;
+	public $form_attributes = '';
 	/**
 	 * Only return fields, not the form tag.
 	 * @todo change the name of this property
@@ -21,6 +22,12 @@ class Form {
 		if (isset($_POST[$form_id . '_submit'])) {
 			$fields = array();
 			foreach ($_POST as $key => $value) {
+				if (strpos($key, $form_id) === 0) {
+					$fields[str_replace($form_id . '_', '', $key)] = $value;
+				}
+			}
+			
+			foreach ($_FILES as $key => $value) {
 				if (strpos($key, $form_id) === 0) {
 					$fields[str_replace($form_id . '_', '', $key)] = $value;
 				}
@@ -102,7 +109,9 @@ class Form {
 			$rendered_fields = '';
 			$error = false;
 			foreach ($rfields as $key => $value) {
-				$value['name'] = $this->form_id . '_' . $key;
+				if (!isset($value['name'])) {
+					$value['name'] = $this->form_id . '_' . $key;
+				}
 				
 				$view = new View();
 				$view->path = 'form/field_' . $value['type'] . '.php';

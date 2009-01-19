@@ -12,6 +12,10 @@ class NodeController extends Controller {
 		
 		$node->read(true);
 		
+		if ($node->typedata['display_callback'] == 'none') {
+			return cms::$manager->page_not_found();
+		}
+		
 		if ($revision !== false) {
 			$node->revision = new Node_Revision();
 			$node->revision->node = $node->node_id;
@@ -28,13 +32,26 @@ class NodeController extends Controller {
 		}
 		
 		$types = manager::run_hook_all('get_node_types');
-		if ($types[$node->type]['type'] == 'static') {
+		
+		manager::run_hook_all('node_show_alter', $node);
+		
+		if ($node->typedata['type'] == 'static') {
 			$this->view['type'] = 'static';
-		} else {
+		} else if ($node->typedata['type'] == 'dynamic') {
 			$this->modules = unserialize($node->revision->content);
 			
 			$this->view['content'] = $this->get_modules('content');
 			// TODO: make left and such
+		}
+		
+		if ($node->typedata['display_callback']) {
+			$result = call_user_func_array($node->typedata['display_callback'], array($node));
+			
+			if (!$result) {
+				return CONTROLLER_NO_LAYOUT;
+			}
+			
+			$this->view['content'] = $result;
 		}
 		
 		$this->view['node'] = $node;	

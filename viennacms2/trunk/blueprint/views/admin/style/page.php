@@ -13,6 +13,7 @@
 		<script type="text/javascript">
 			var pane_url = '<?php echo $this['pane_url'] ?>';
 		</script>
+		<?php echo $this['scripts'] ?>
 		<style type="text/css">
 			<?php
 			foreach ($this['icons'] as $key => $icon) {

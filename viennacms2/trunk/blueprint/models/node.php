@@ -78,6 +78,10 @@ class Node extends Model {
 	protected function hook_save() {
 		if (!$this->revision->written) {
 			$this->revision->node = $this->node_id;
+			
+			foreach ($this->_options as $option) {
+				$option->node_id = $this->node_id;
+			}
 		}
 		
 		$this->revision->written = false;

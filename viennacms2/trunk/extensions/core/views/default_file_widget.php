@@ -1,0 +1,1 @@
+<a href="<?php echo $this['url'] ?>"><img style="float: left; border: 0px; padding-right: 4px;" src="<?php echo manager::base() . 'extensions/core/icons/download.png' ?>" alt="File" /><span style="float: left; padding-top: 5px;"><?php echo sprintf(__('Download %s'), $this['file']->title) ?><br />(<?php echo $this['nice_size'] ?>)</span></a><br style="clear: both;" />
