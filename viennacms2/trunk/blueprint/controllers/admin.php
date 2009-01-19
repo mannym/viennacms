@@ -37,7 +37,7 @@ class AdminController extends Controller {
 			<?php
 			foreach ($data as $id => $item) {
 				?>
-				<li><a style="background-image: url(<?php echo $item['icon'] ?>);" class="<?php echo $item['type'] ?>" href="<?php echo $caller->view->url($item['callback']) ?>"><span><?php echo $id ?></span></a></li>
+				<li><a style="background-image: url(<?php echo $item['icon'] ?>);" class="<?php echo $item['type'] ?>" href="<?php echo View::url($item['callback']) ?>"><span><?php echo $id ?></span></a></li>
 				<?php
 			}
 			?>
@@ -140,8 +140,6 @@ class AdminController extends Controller {
 	}
 	
 	private function get_panes() {
-		// TODO: custom pane saving... somewhere
-		
 		return array(
 			'left' => array(
 				array(

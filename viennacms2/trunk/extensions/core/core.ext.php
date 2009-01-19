@@ -89,25 +89,35 @@ class extension_core {
 	}
 	
 	public function node_edit_output($node) {
-		if ($node->typedata['type'] != 'static') {
-			return '';
+		$output = '';
+		
+		if ($node->type == 'site') {
+			$toolbar = array(
+				__('Themes') => array(
+					'icon' => manager::base() . 'extensions/core/icons/theme.png',
+					'callback' => 'admin/controller/themes/select/' . $node->node_id
+				)
+			);
+			$output .= AdminController::add_toolbar($toolbar, $this);
 		}
 		
-		$preview_template = View::url('admin/controller/file/editor_widget/%node_id');
+		if ($node->typedata['type'] == 'static') {
+			$preview_template = View::url('admin/controller/file/editor_widget/%node_id');
 		
-		$tree_options = array(
-			'node' => cms::$files->fileroot,
-			'url' => cms::$router->query . '#',
-			'url_from' => 'admin',
-			'url_attributes' => ' onclick="file_add_to_manager(%node_id, \'%node_type\', \'' . $preview_template . '\'); return false;"'
-		);
-		
-		$output = '<div id="file-admin-pane" style="float: right; width: 200px; margin: 5px; border: 1px solid #00a;" class="pane">';
-		$output .= '<h1>' . __('Files') . '</h1>' . __('Add a file to your content by selecting it here.') . '<ul class="treeview">';
-		$output .= cms::$helpers->get_tree($tree_options);
-		$output .= '</ul></div>';
-		
-		$output .= '<script type="text/javascript" src="' . manager::base() . 'extensions/core/file-add.js"></script>';
+			$tree_options = array(
+				'node' => cms::$files->fileroot,
+				'url' => cms::$router->query . '#',
+				'url_from' => 'admin',
+				'url_attributes' => ' onclick="file_add_to_manager(%node_id, \'%node_type\', \'' . $preview_template . '\'); return false;"'
+			);
+			
+			$output .= '<div id="file-admin-pane" style="float: right; width: 200px; margin: 5px; border: 1px solid #00a;" class="pane">';
+			$output .= '<h1>' . __('Files') . '</h1>' . __('Add a file to your content by selecting it here.') . '<ul class="treeview">';
+			$output .= cms::$helpers->get_tree($tree_options);
+			$output .= '</ul></div>';
+			
+			$output .= '<script type="text/javascript" src="' . manager::base() . 'extensions/core/file-add.js"></script>';
+		}
 		
 		return $output;
 	}

@@ -59,10 +59,6 @@ class Router {
 		}
 	}
 	
-	/**
-	* @todo figure out why unique_target can be used, or some other stuff with that strangeness.......
-	*/ 
-	
 	public function add_url_alias($from, $to, $default = false, $unique_target = true) {
 		if ($default && $unique_target) {
 			throw new viennaCMSException('The parameters default and unique_target can not be both set to true.');

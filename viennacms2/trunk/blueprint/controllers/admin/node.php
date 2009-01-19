@@ -100,6 +100,12 @@ class AdminNodeController extends Controller {
 			$prefix .= $extra;
 		}
 		
+		$extras = manager::run_hook_all('node_edit_output_postfix', $node);
+		
+		foreach ($extras as $extra) {
+			$postfix .= $extra;
+		}
+		
 		//if ($this->method_override(__FUNCTION__)) return $this->call_override(__FUNCTION__, $node);
 		
 		manager::run_hook_all('node_edit_pre_load', $node);		

@@ -37,11 +37,19 @@ body {
 
 #main-content {
 	position: absolute;
-	top: 52px;
+	top: 50px;
 	bottom: 0px;
-	padding-left: 5px;
-	padding-right: 5px;
+	padding-left: 0px;
+	padding-right: 0px;
 	overflow: auto;
+}
+
+#main-content .toolbar {
+	height: 28px;
+}
+
+#main-content > * {
+	padding-left: 5px;
 }
 
 #panes-left {
@@ -49,6 +57,7 @@ body {
 	left: 0px;
 	top: 50px;
 	width: 180px;
+	margin-right: 5px;
 	border-right: 1px solid #02a;
 }
 
@@ -153,6 +162,7 @@ ul.toolbar li a {
 	width: 22px;
 	height: 22px;
 	cursor: pointer;
+	text-decoration: none;
 	display: block;
 }
 
@@ -187,6 +197,18 @@ ul.submenu li a
 
 ul.toolbar li span {
 	display: none;
+}
+
+ul.toolbar li span {
+	display: block;
+	margin-left: 25px;
+	margin-top: 4px;
+	color: #000;
+	font-size: 90%;
+}
+
+#main-content ul.toolbar li span {
+	margin-top: 5px;
 }
 
 ul.submenu li span 
@@ -305,4 +327,32 @@ a.delete {
 	color: red;
 	font-weight: bold;
 	margin-top: 12px;
+}
+
+#TB_window #TB_title a.tb-theme-preview-link,
+#TB_window #TB_title a.tb-theme-preview-link:visited {
+	font-weight: bold;
+	text-decoration: none;
+}
+
+#TB_window #TB_title a.tb-theme-preview-link,
+#TB_window #TB_title a.tb-theme-preview-link:visited {
+	color: #999;
+}
+
+#TB_window #TB_title a.tb-theme-preview-link:hover,
+#TB_window #TB_title a.tb-theme-preview-link:focus {
+	color: #ccc;
+}
+
+#TB_ajaxWindowTitle {
+	padding-right: 5px;
+}
+
+#TB_closeAjaxWindow {
+	padding-left: 5px;
+}
+
+a img {
+	border: 0;
 }

@@ -9,7 +9,7 @@ class AdminNodesPaneController extends Controller {
 		
 		if (!empty($id) && is_numeric($id)) {
 			$this->view['toolbar'] = AdminController::add_toolbar(array(
-			'add' => array(
+			__('New') => array(
 				'icon' => $this->view['images_path'] . '/icons/add.png',
 				'callback' => 'admin/controller/node/add/' . $id, // hacky way...
 				'type' => 'submenu'

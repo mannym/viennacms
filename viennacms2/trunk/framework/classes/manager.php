@@ -70,7 +70,16 @@ class Manager {
 		cms::$router->route($query);
 
 		// TODO: create selection
-		cms::$vars['style'] = 'default';
+		if (!isset($_GET['preview'])) {
+			cms::$vars['style'] = (string)cms::$vars['sitenode']->options['style'];
+			
+			if (empty(cms::$vars['style'])) {
+				cms::$vars['style'] = 'default';
+			}
+		} else {
+			cms::$vars['style'] = $_GET['preview'];
+		}
+		
 		$parts = cms::$router->parts;
 		$action = (!empty($parts['action'])) ? $parts['action'] : 'main';
 

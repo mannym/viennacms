@@ -1,6 +1,7 @@
 <html>
 	<head>
 		<base href="<?php echo manager::base() ?>" />
+		<link rel="stylesheet" href="framework/js/thickbox.css" />
 		<link rel="stylesheet" href="blueprint/views/admin/style.css" />
 		<link rel="stylesheet" href="framework/views/system/form.css" />
 		<script type="text/javascript" src="framework/js/jquery.js"></script>
@@ -8,6 +9,7 @@
 		<script type="text/javascript" src="framework/js/jquery.treeview.js"></script>
 		<script type="text/javascript" src="framework/js/jquery.cookie.js"></script>
 		<script type="text/javascript" src="framework/js/jquery.form.js"></script>
+		<script type="text/javascript" src="framework/js/thickbox.js"></script>
 		<script type="text/javascript" src="framework/js/wymeditor/jquery.wymeditor.js"></script>
 		<script type="text/javascript" src="framework/js/viennacms-acp.js"></script>
 		<script type="text/javascript">

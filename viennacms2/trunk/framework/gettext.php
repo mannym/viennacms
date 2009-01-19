@@ -34,7 +34,7 @@ LC_ALL			6
 // Simple class to wrap file streams, string streams, etc.
 // seek is essential, and it should be byte stream
 class StreamReader {
-  // should return a string [FIXME: perhaps return array of bytes?]
+  // should return a string
   function read($bytes) {
     return false;
   }
@@ -269,7 +269,6 @@ class gettext_reader {
       return false;
     }
     
-    // FIXME: Do we care about revision? We should.
     $revision = $this->readint();
     
     $this->total = $this->readint();

@@ -81,9 +81,7 @@ class Users {
 	}
 	
 	public function logout() {
-		// TODO: replace with model delete() function
-		$sql = 'DELETE FROM viennacms_sessions WHERE session_id = \'' . $this->session->session_id . '\'';
-		cms::$db->sql_query($sql);
+		$this->session->delete(false);
 		setcookie('viennacms2_id', '', (time() - 3600), '/', '');
 		$this->logged_in = false;
 	}
