@@ -24,6 +24,7 @@ class LayoutController extends Controller {
 		// assign navigation
 		if (isset(cms::$vars['node'])) {
 			$this->parents = $this->get_parents(cms::$vars['node']);
+			$this->view['description'] = cms::$vars['node']->description;
 		} else {
 			$this->parents = array();
 		}
@@ -176,6 +177,7 @@ class LayoutController extends Controller {
 		}
 		
 		$return = '';
+		$links = array();
 		
 		foreach ($nodes as $node) {
 			$text = $node->title;
@@ -188,15 +190,21 @@ class LayoutController extends Controller {
 			$class = '';
 				
 			if (in_array($node->id, $active)) {
-				$class = ' class="active"';
+				$class = 'active';
 			}
-				
-			$return .= <<<LINK
-			<li>
-				<a href="$link"$class>$text</a>
-			</li>
-LINK;
+			
+			$links[] = array(
+				'link' => $link,
+				'class' => $class,
+				'title' => $text,
+				'description' => $node->description
+			);
 		}
+		
+		$view = new View();
+		$view->path = array('style/links-nav-' . $level . '.php', 'style/links.php');
+		$view['links'] = $links;
+		$return .= $view->display();
 		
 		return $return;
 	}

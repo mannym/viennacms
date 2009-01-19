@@ -100,7 +100,13 @@ class View implements ArrayAccess {
 		
 		foreach (self::$searchpaths as $fpath => $priority) {
 			$var = 'files_' . $priority;
-			$$var = array_merge($$var, array($fpath . $path)); // PHP won't allow $$var[] :(
+			if (is_array($path)) {
+				foreach ($path as $pth) { 
+					$$var = array_merge($$var, array($fpath . $pth)); // PHP won't allow $$var[] :(
+				}
+			} else {
+				$$var = array_merge($$var, array($fpath . $path)); // PHP won't allow $$var[] :(
+			}
 		}
 		
 		$files = array_merge($files_0, $files_1, $files_2, $files_3);
