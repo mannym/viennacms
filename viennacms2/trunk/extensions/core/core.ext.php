@@ -222,7 +222,7 @@ class extension_core {
 				$height = 400;
 				
 				// Get new dimensions
-				list($width_orig, $height_orig) = getimagesize($filename);
+				list($width_orig, $height_orig) = @getimagesize($filename);
 				
 				if (!file_exists($thumbnail_name) && ($width_orig > $width || $height_orig > $height)) {
 					$ratio_orig = $width_orig/$height_orig;

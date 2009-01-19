@@ -106,6 +106,10 @@ $(function() {
 		    return false;
 	    }
 	});
+	
+	if ($('#main-content .toolbar').length > 0) {
+		$('#main-content').css('padding-top', '28px');
+	}
 });
 
 function init_rest() {

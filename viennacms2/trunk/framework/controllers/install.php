@@ -230,4 +230,157 @@ CONFIG;
 		
 		$this->view['action'] = $this->view->url('install/fresh');
 	}
+	
+	public function convert() {
+		if (!isset(cms::$vars['sitenode']) || cms::$vars['sitenode']->title == 'viennaCMS installation') {
+			trigger_error(__('viennaCMS is not yet installed.'));
+		}
+
+		$step = (!empty($this->arguments[0])) ? $this->arguments[0] : intval($_POST['step']);
+		
+		if (empty($step)) {
+			$step = 1;
+		}
+		
+		$this->view['step'] = $step;
+		// no, this does not use the form API, that one is not suited for wizards
+		
+		switch ($step) {
+			case 1:
+				// i'm getting bored... could you turn the volume down?
+				cms::$layout->view['title'] = __('Database information');
+				
+				$this->view['dbhost'] = 'localhost';
+				$this->view['table_prefix'] = 'viennacms_';
+			break;
+			case 2:
+				$error = false;
+				$dbhost = $_POST['dbhost'];
+				$dbuser = $_POST['dbuser'];
+				$dbpasswd = $_POST['dbpasswd'];
+				$dbname = $_POST['dbname'];
+				$table_prefix = $_POST['table_prefix'];
+				
+				$cdb = new database();
+				$cdb->return_on_error = true;
+				$result = $cdb->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname);
+			
+				if ($cdb->sql_error_triggered) {
+					$error = $result;
+				}
+				
+				if (!$error) {
+					$sql = 'TRUNCATE TABLE ' . cms::$vars['table_prefix'] . 'nodes';
+					cms::$db->sql_query($sql);
+					
+					$sql = 'TRUNCATE TABLE ' . cms::$vars['table_prefix'] . 'node_options';
+					cms::$db->sql_query($sql);
+					
+					$sql = 'TRUNCATE TABLE ' . cms::$vars['table_prefix'] . 'node_revisions';
+					cms::$db->sql_query($sql);
+					
+					$sql = 'TRUNCATE TABLE ' . cms::$vars['table_prefix'] . 'url_aliases';
+					cms::$db->sql_query($sql);
+					
+					$sql = 'SELECT * FROM ' . $table_prefix . 'nodes';
+					$result = $cdb->sql_query($sql);
+					$rowset = $cdb->sql_fetchrowset($result);
+					
+					foreach ($rowset as $row) {
+						$sql = 'SELECT * FROM ' . $table_prefix . 'node_revisions WHERE node_id = ' . $row['node_id'];
+						$result = $cdb->sql_query($sql);
+						$revisions = $cdb->sql_fetchrowset($result);
+						
+						foreach ($revisions as $rev) {
+							if ($rev['revision_number'] == $row['revision_number']) {
+								$current_rev = $rev;
+							}
+						}
+						
+						$sql = 'SELECT * FROM ' . $table_prefix . 'node_options WHERE node_id = ' . $row['node_id'];
+						$result = $cdb->sql_query($sql);
+						$options = $cdb->sql_fetchrowset($result);
+						
+						foreach ($options as $option) {
+							$options[$option['option_name']] = $option['option_value'];
+						}
+						
+						$node = Node::create('Node');
+						$node->node_id = $row['node_id'];
+						$node->title = $row['title'];
+						$node->description = $row['description'];
+						$node->parent = $row['parent_id'];
+						$node->revision_num = $row['revision_number'];
+						$node->created = $row['created'];
+						
+						switch ($row['type']) {
+							case 'site':
+								$node->type = 'site';
+								
+								$sitenode = $row['node_id'];
+							break;
+							case 'page':
+								$node->type = 'page';
+								
+								$data = unserialize($current_rev['node_content']);
+								$content = '';
+								foreach ($data['middle'] as $item) {
+									$content .= '<h2>' . $item['content_title'] . '</h2>' . $item['content'];
+								}
+								
+								$content = preg_replace('/\{viennafile:(.+?)\}/', '<viennacms:file node="\1">...</viennacms:file>', $content);
+								
+								$node->revision->number = $row['revision_number'];
+								$node->revision->time = $row['revision_date'];
+								$node->revision->content = $content;
+								
+								if (!isset($homenode)) {
+									$homenode = $row['node_id'];
+								}
+							break;
+							case 'newsfolder':
+								$node->type = 'page';
+								$node->revision->content = 'newsfolder';
+							break;
+							case 'news':
+								$node->type = 'page';
+								$content = preg_replace('/\{viennafile:(.+?)\}/', '<viennacms:file node="\1">...</viennacms:file>', $current_rev['node_content']);
+								
+								$node->revision->number = $row['revision_number'];
+								$node->revision->time = $row['revision_date'];
+								$node->revision->content = $content;
+							break;
+							case 'link':
+								continue 2;
+							break;
+							case 'fileroot':
+								$node->type = 'filesfolder';
+							break;
+							case 'file':
+								$node->type = 'file';
+								$node->description = 'files/' . $row['description'] . '.upload';
+								$node->options['mimetype'] = $options['mimetype'];
+								$node->options['downloads'] = $options['downloads'];
+								$node->options['size'] = filesize(ROOT_PATH . $node->description);
+							break;
+						}
+
+						$node->write();
+						$node->set_type_vars();
+						
+						cms::$helpers->create_node_alias($node);
+					}
+					
+					$node = new Node();
+					$node->node_id = $sitenode;
+					$node->read(true);
+					
+					$node->options['homepage'] = $homenode;
+					$node->write();
+				}
+			break;
+		}
+		
+		$this->view['action'] = $this->view->url('install/convert');		
+	}
 }

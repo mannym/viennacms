@@ -137,3 +137,7 @@ a:hover {
 	text-align: center;
 	font-size: 11px;
 }
+
+img a {
+	border: 0;
+}

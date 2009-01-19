@@ -332,14 +332,10 @@ class Manager {
 		{
 			$msg_text = $msg_long_text;
 		}
-		if(!function_exists('__'))
-		{
-			function __($name)
-			{
-				return $name;
-			}
+		
+		if (function_exists('__')) {
+			$msg_text = __($msg_text);
 		}
-		$msg_text = __($msg_text);
 		
 		switch ($errno)
 		{

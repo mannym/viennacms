@@ -59,7 +59,7 @@ class AdminThemesController extends Controller {
 	private function show_theme_thing($name, $theme_info, $default = false, $count = 1) {
 		if ($default) {
 			$output = '<img src="' . manager::base() . 'layouts/' . $name . '/screenshot.png" style="width: 150px; height: 128px; float: left; margin-right: 5px;" alt="' . $theme_info['name'] . '" />';
-			$output .= '<p><strong>' . $theme_info['name'] . ' ' . __('by') . ' <a href="' . $theme_info['author'] . '">' . $theme_info['author'] . '</a></strong></p>';
+			$output .= '<p><strong>' . $theme_info['name'] . ' ' . __('by') . ' <a href="' . $theme_info['url'] . '">' . $theme_info['author'] . '</a></strong></p>';
 			$output .= '<p>' . $theme_info['description'] . '</p>';
 			$output .= '<p>' . sprintf(__('All files for this theme are located in <code>%s</code>.'), '/layouts/' . $name) . '</p>';
 		} else {
