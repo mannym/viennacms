@@ -397,4 +397,38 @@ class extension_core {
 //			'files' => __('Files')
 		);
 	}
+	
+	function retrieve_sidebar($location) {
+		$content = '';
+		
+		// first, check for any 'sidebar' node modules
+		if (!empty(cms::$vars['node'])) {
+			// this is a node we're talking about... and nodes may have modules :)
+			
+			if (cms::$vars['node']->typedata['type'] == 'dynamic') {
+				// especially if they're dynamic nodes.
+				
+				$modules = unserialize(cms::$vars['node']->revision->content);
+				
+				if (!empty($modules[$location])) {
+					$content .= cms::$helpers->render_modules($modules[$location]);
+				}
+			}
+		}
+		
+		// now, check if there is a sitenode
+		// there may not be one, probably, better safe than sorry
+		if (!empty(cms::$vars['sitenode'])) {
+			// during implementation, I was thinking how to implement this...
+			// would be easier on the admin side to simply handle it the same way as dynamic nodes, so we do it that way
+			
+			$modules = unserialize(cms::$vars['sitenode']->revision->content);
+			
+			if ($modules !== false && !empty($modules[$location])) {
+				$content .= cms::$helpers->render_modules($modules[$location]);
+			}
+		}
+		
+		return $content;
+	}
 }

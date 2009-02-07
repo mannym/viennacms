@@ -81,34 +81,11 @@ class NodeController extends Controller {
 	}
 	
 	public function get_modules($location) {
-		$content = '';
-
-		$modules = array();
 		if (empty($this->modules[$location])) {
 			return __('This node doesn\'t have any modules.');
 		}
 		
-		foreach ($this->modules[$location] as $id => $module) {
-			$modules[$module['order']] = $module;
-		}
-		
-		ksort($modules);
-		
-		foreach ($modules as $module) {
-			$box = new View();
-			$box->path = 'style/box.php';
-			$controller = cms::$manager->get_controller($module['controller']);
-			$controller->view = new View();
-			$controller->view->path = $module['controller'] . '.php';
-			$controller->arguments = $module['arguments'];
-			$return = $controller->run();
-			$box['controller'] = $module['controller'];
-			$box['title'] = $return['title'];
-			$box['content'] = $return['content'];
-			$content .= $box->display();
-		}
-		
-		return $content;
+		return cms::$helpers->render_modules($this->modules[$location]);
 	}
 	
 	public function main() {

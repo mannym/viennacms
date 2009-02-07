@@ -1,5 +1,36 @@
 <?php
 class Helpers {
+	public function render_modules($source_modules) {
+		if (empty($source_modules)) {
+			return ''; // don't waste our time on this :)
+		}
+
+		$content = '';
+
+		$modules = array();
+		
+		foreach ($source_modules as $id => $module) {
+			$modules[$module['order']] = $module;
+		}
+
+		ksort($modules);
+		
+		foreach ($modules as $module) {
+			$box = new View();
+			$box->path = 'style/box.php';
+			$controller = cms::$manager->get_controller($module['controller']);
+			$controller->view = new View();
+			$controller->view->path = $module['controller'] . '.php';
+			$controller->arguments = $module['arguments'];
+			$return = $controller->run();
+			$box['controller'] = $module['controller'];
+			$box['title'] = $return['title'];
+			$box['content'] = $return['content'];
+			$content .= $box->display();
+		}
+		
+		return $content;
+	}
 		
 	/**
 	* cms::get_admin_tree()

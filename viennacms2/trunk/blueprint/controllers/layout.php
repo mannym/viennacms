@@ -73,8 +73,18 @@ class LayoutController extends Controller {
 			
 			$this->view['debug_output'] = $debug_output;
 		}
+		
+		$this->view['main_sidebar'] = $this->retrieve_sidebar('main_sidebar');
+		$this->view['sec_sidebar'] = $this->retrieve_sidebar('secondary_sidebar');
 				
 		header('Content-type: text/html; charset=utf-8');		
+	}
+	
+	public function retrieve_sidebar($location) {
+		// okay, this is going to be annoying... but we'll try :)
+		$return = manager::run_hook_all('retrieve_sidebar', $location);
+		
+		return implode("\n", $return);
 	}
 	
 	/**
