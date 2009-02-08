@@ -190,6 +190,23 @@ class AdminNodeController extends Controller {
 			);
 		}
 		
+		if ($node->type == 'site') {
+			$form_data['fields']['revision_content'] = array(
+				'label' => __('Blocks'),
+				'description' => '',
+				'required' => true,
+				'type' => 'html',
+				'value' => $this->module_editor($node),
+				'group' => 'node_revision',
+				'weight' => 5
+			);
+			
+			$form_data['groups']['node_revision'] = array(
+				'title' => __('Blocks'),
+				'expanded' => false
+			);
+		}
+		
 		if ($do == 'edit') {
 			$form_data['fields']['node_id'] = array(
 				'type' => 'hidden',
@@ -326,43 +343,58 @@ class AdminNodeController extends Controller {
 	
 	private function module_editor($node) {
 		ob_start();
-		?>
-		<ul class="modules" id="modules-content">
-			<?php
-			$rmodules = unserialize($node->revision->content);
-			if ($rmodules == false) {
-				$rmodules = array('content' => array(
-					array(
-						'controller' => 'htmlcontent',
-						'order' => 0,
-						'arguments' => array(
-							'title' => __('No content'),
-							'content' => __('This module does not have any content.')
-						),
-						'id' => md5(uniqid(time()))
-					)
-				));
-			}
-			$modules = array();
 		
-			foreach ($rmodules['content'] as $module) {
-				$modules[$module['order']] = $module;
-			}
-			
-			ksort($modules);
-			
-			foreach ($modules as $module) {
-				$controller = cms::$manager->get_controller($module['controller']);
-				$name = $controller->friendlyname();
-				echo '<li class="module-' . $module['controller'] . '" id="module-' . $module['id'] . '"><a class="module" href="' . $this->view->url('admin/controller/node/edit_module/' . intval($node->node_id) . '/content/' . $module['id']) . '">';
-				echo $name;
-				echo '</a><a class="delete-module" href="' . $this->view->url('admin/controller/node/remove_module/' . intval($node->node_id) . '/content/' . $module['id']) . '"></a></li>'; 
-			}
+		// TODO: make the theme configure these locations
+		$locations = array('content', 'main_sidebar', 'secondary_sidebar');
+		
+		if ($node->type == 'site') {
+			unset($locations[0]);
+		}
+		
+		$rmodules = unserialize($node->revision->content);
+		if ($rmodules == false) {
+			$rmodules = array('content' => array(
+				array(
+					'controller' => 'htmlcontent',
+					'order' => 0,
+					'arguments' => array(
+						'title' => __('No content'),
+						'content' => __('This module does not have any content.')
+					),
+					'id' => md5(uniqid(time()))
+				)
+			), 'main_sidebar' => array(), 'secondary_sidebar' => array());
+		}
+		
+		foreach ($locations as $location) {
 			?>
-			<li class="module-add" id="module-XX"><a class="module" href="<?php echo $this->view->url('admin/controller/node/new_module/' . $node->node_id . '/content') ?>">
-			<?php echo __('Add'); ?>
-			</a></li>
-		</ul>
+			<ul class="modules" id="modules-<?php echo $location ?>">
+				<h2><?php echo $location ?></h2>
+				
+				<?php
+				$modules = array();
+
+				foreach ($rmodules[$location] as $module) {
+					$modules[$module['order']] = $module;
+				}
+			
+				ksort($modules);
+			
+				foreach ($modules as $module) {
+					$controller = cms::$manager->get_controller($module['controller']);
+					$name = $controller->friendlyname();
+					echo '<li class="module-' . $module['controller'] . '" id="module-' . $module['id'] . '"><a class="module" href="' . $this->view->url('admin/controller/node/edit_module/' . intval($node->node_id) . '/' . $location . '/' . $module['id']) . '">';
+					echo $name;
+					echo '</a><a class="delete-module" href="' . $this->view->url('admin/controller/node/remove_module/' . intval($node->node_id) . '/' . $location . '/' . $module['id']) . '"></a></li>'; 
+				}
+				?>
+				<li class="module-add" id="module-XX"><a class="module" href="<?php echo $this->view->url('admin/controller/node/new_module/' . $node->node_id . '/' . $location) ?>">
+				<?php echo __('Add'); ?>
+				</a></li>
+			</ul>
+			<?php
+		}
+		?>
 		<input type="hidden" name="node_edit_revision_content" id="nerc" value='<?php echo base64_encode(serialize($rmodules)) ?>' />
 		<?php
 		$c = ob_get_contents();
@@ -381,7 +413,7 @@ class AdminNodeController extends Controller {
 			foreach ($types as $key => $type) {
 				?>
 				<li>
-				<a style="background-image: url(<?php echo str_replace('~/', manager::base(), $type['icon']) ?>); background-repeat: no-repeat;" href="<?php echo $this->view->url('admin/controller/node/new_module/' . $this->arguments[0] . '/content/' . $key); ?>"><?php echo $type['title'] ?></a><span><?php echo $type['description'] ?></span>
+				<a style="background-image: url(<?php echo str_replace('~/', manager::base(), $type['icon']) ?>); background-repeat: no-repeat;" href="<?php echo $this->view->url('admin/controller/node/new_module/' . $this->arguments[0] . '/' . $this->arguments[1] . '/' . $key); ?>"><?php echo $type['title'] ?></a><span><?php echo $type['description'] ?></span>
 				</li>
 				<?php
 			}
@@ -417,9 +449,12 @@ class AdminNodeController extends Controller {
 //		echo '<li class="module-' . $module['controller'] . '" id="module-' . $module['id'] . '"><a href="' . $this->view->url('admin/controller/node/edit_module/' . $node->node_id . '/content/' . $module['id'] . '/' . $module['controller']) . '">';
 //		echo $name;
 //		echo '</a></li>'; 
-		echo '<li class="module-' . $module['controller'] . '" id="module-' . $module['id'] . '"><a class="module" href="' . $this->view->url('admin/controller/node/edit_module/' . intval($node->node_id) . '/content/' . $module['id'] . '/' . $module['controller']) . '">';
+		echo '<li class="module-' . $module['controller'] . '" id="module-' . $module['id'] . '"><a class="module" href="' . $this->view->url('admin/controller/node/edit_module/' . intval($node->node_id) . '/' . $this->arguments[1] . '/' . $module['id'] . '/' . $module['controller']) . '">';
 		echo $name;
-		echo '</a><a class="delete-module" href="' . $this->view->url('admin/controller/node/remove_module/' . intval($node->node_id) . '/content/' . $module['id']) . '"></a></li>'; 
+		echo '</a><a class="delete-module" href="' . $this->view->url('admin/controller/node/remove_module/' . intval($node->node_id) . '/' . $this->arguments[1] . '/' . $module['id']) . '"></a></li>'; 
+		echo '<li class="module-add" id="module-XX"><a class="module" href="' . $this->view->url('admin/controller/node/new_module/' . $node->node_id . '/' . $this->arguments[1]) . '">
+		' . __('Add') . '
+		</a></li>';
 		?>
 		
 		<script type="text/javascript">

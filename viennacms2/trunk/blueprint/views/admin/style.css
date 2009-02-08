@@ -225,6 +225,8 @@ ul.submenu li span
 	margin: 0px;
 	padding: 0px;
 	width: 400px;
+	float: left;
+	margin-right: 10px;
 }
 
 .modules > li 

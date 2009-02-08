@@ -51,6 +51,7 @@ class extension_core {
 			'site' => array(
 				// let's not go there... for now :)
 				'icon' => '~/blueprint/views/admin/images/icons/site.png',
+				'type' => 'dynamic', // somewhat, this is a special case
 				'options' => array(
 					'404_url' => array(
 						'label' => __('"Page not found" URL'),
@@ -421,6 +422,8 @@ class extension_core {
 		if (!empty(cms::$vars['sitenode'])) {
 			// during implementation, I was thinking how to implement this...
 			// would be easier on the admin side to simply handle it the same way as dynamic nodes, so we do it that way
+			// note added later: admin-side implementation was thinking WHY I ADDED A REVISION... changed to options for more V1-ish stuff
+			// oh, wait, V1 had in a option because the site had a revision with content. rethinking
 			
 			$modules = unserialize(cms::$vars['sitenode']->revision->content);
 			
