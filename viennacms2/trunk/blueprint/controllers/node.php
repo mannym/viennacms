@@ -45,7 +45,7 @@ class NodeController extends Controller {
 		}
 		
 		if ($node->typedata['display_callback']) {
-			$result = call_user_func_array($node->typedata['display_callback'], array($node));
+			$result = call_user_func_array($node->typedata['display_callback'], array($node, $this->arguments));
 			
 			if (!$result) {
 				return CONTROLLER_NO_LAYOUT;

@@ -1,5 +1,5 @@
 <?php
-class User extends Model {
+class VUser extends Model {
 	protected $table = 'users';
 	protected $keys = array('user_id');
 	protected $fields = array(

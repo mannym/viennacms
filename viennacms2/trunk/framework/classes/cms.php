@@ -18,6 +18,7 @@ abstract class cms {
 	static $plugins;
 	static $files;
 	static $helpers;
+	static $config;
 	
 	/**#@+
 	* Constant defining plugin mode for objects
@@ -194,11 +195,15 @@ abstract class cms {
 	* @param array $array
 	* @return string First found filename to exist.
 	*/
-	static public function scan_files($array) {
+	static public function scan_files($array, $add_root = true) {
 		foreach ($array as $file) {
 			if (file_exists(ROOT_PATH . $file)) {
 				// TODO: cache the result
-				return ROOT_PATH . $file;
+				if ($add_root) {
+					return ROOT_PATH . $file;
+				} else {
+					return $file;
+				}
 			}
 		}
 		

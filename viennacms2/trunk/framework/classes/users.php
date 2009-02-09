@@ -26,7 +26,7 @@ class Users {
 		}
 		
 		if ($this->cookie['u'] && $this->cookie['s']) {
-			$this->session = new Session();
+			$this->session = new VSession();
 			$this->session->session_id = $this->cookie['s'];
 			$this->session->read(true);
 			
@@ -40,13 +40,13 @@ class Users {
 		}
 		
 		$this->logged_in = false;
-		$this->user = new User();
+		$this->user = new VUser();
 		$this->user->user_id = 0;
 		$this->user->username = 'Anonymous';
 	}
 	
 	public function login($username, $password) {
-		$user = new User();
+		$user = new VUser();
 		$user->username = $username;
 		$user->read(true);
 		
@@ -60,7 +60,7 @@ class Users {
 		
 		$sid = md5(uniqid(time()));
 		
-		$this->session = new Session();
+		$this->session = new VSession();
 		$this->session->user_id = $user->user_id;
 		$this->session->session_id = $sid;
 		$this->session->session_time = time();

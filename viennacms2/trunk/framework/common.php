@@ -13,12 +13,23 @@ define('ROOT_PATH', dirname(dirname(__FILE__)) . '/');
 
 function __autoload($class_name) {
 	// initial autoload function for initialisation
+	if ($class_name == 'VAuth') { // TODO: fix this stuff
+		$class_name = 'Auth';
+	}
 	
 	$filename = ROOT_PATH . 'framework/classes/' . strtolower($class_name) . '.php';
 	
 	if (file_exists($filename)) {
 		include_once($filename);
 		return true;
+	}
+	
+	if ($class_name == 'VUser') { // and that's a strange hack
+		$class_name = 'User';
+	}
+	
+	if ($class_name == 'VSession') { // wow
+		$class_name = 'Session';
 	}
 	
 	$filename = ROOT_PATH . 'framework/models/' . strtolower($class_name) . '.php';
@@ -205,6 +216,8 @@ spl_autoload_register(array('cms', 'autoload'));
 spl_autoload_register(array('controller', 'autoload'));
 Controller::$searchpaths[] = 'blueprint/controllers/';
 View::$searchpaths['blueprint/views/'] = VIEW_PRIORITY_STOCK;
+
+cms::register('config');
 
 //cms::$plugins->init(ROOT_PATH . 'extensions/');
 //cms::$plugins->setup();

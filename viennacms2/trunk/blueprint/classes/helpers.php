@@ -19,6 +19,11 @@ class Helpers {
 			$box = new View();
 			$box->path = 'style/box.php';
 			$controller = cms::$manager->get_controller($module['controller']);
+			
+			if (!$controller) {
+				continue;
+			}
+			
 			$controller->view = new View();
 			$controller->view->path = $module['controller'] . '.php';
 			$controller->arguments = $module['arguments'];

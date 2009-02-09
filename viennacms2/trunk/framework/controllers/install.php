@@ -203,7 +203,7 @@ CONFIG;
 					break;
 				}
 				
-				$user = User::create('User');
+				$user = VUser::create('VUser');
 				$user->username = $username;
 				$user->user_password = md5($password);
 				$user->user_active = 1;

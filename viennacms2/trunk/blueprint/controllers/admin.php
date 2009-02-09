@@ -21,7 +21,7 @@ class AdminController extends Controller {
 			trigger_error(__('You need to log in to access the ACP.'));
 		}
 		
-		$auth = new Auth();
+		$auth = new VAuth();
 		$rights = $auth->get_rights('admin:see_acp', cms::$user->user);
 		
 		if (!in_array('y', $rights)) {

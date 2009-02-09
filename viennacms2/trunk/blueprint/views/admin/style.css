@@ -213,6 +213,29 @@ ul.toolbar li span {
 	margin-top: 5px;
 }
 
+table {
+	font-size: 12px;
+	border-collapse: collapse;
+	border: 1px solid #ddd;
+}
+
+table th {
+	background-color: #e4e0d8;
+	height: 22px;
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+table td {
+	height: 26px;
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+table.extensions.activated td {
+	background-color: #95ff96;
+}
+
 ul.submenu li span 
 {
 	display: block;

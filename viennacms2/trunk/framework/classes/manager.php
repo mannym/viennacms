@@ -29,7 +29,27 @@ class Manager {
 	*/
 	public function __construct() {
 		// TODO: dynamically load this
-		self::$extpaths['core'] = 'extensions/core/core.ext.php';
+		//self::$extpaths['core'] = 'extensions/core/core.ext.php';
+		$extensions = unserialize(cms::$config['extensions']);
+		
+		if ($extensions === false) {
+			$extensions = array();
+		}
+		
+		if (!in_array('core', $extensions)) {
+			$extensions = array_merge(array('core' => array()), $extensions);
+		}
+		
+		foreach ($extensions as $extension => $data) {
+			$files = array(
+				// TODO: add site-specific directories
+				'extensions/' . $extension . '/' . $extension . '.ext.php'
+			);
+			
+			$file = cms::scan_files($files, false);
+			
+			self::$extpaths[$extension] = $file;
+		}
 	}
 	
 	/**

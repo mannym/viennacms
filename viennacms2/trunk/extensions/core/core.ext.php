@@ -379,6 +379,16 @@ class extension_core {
 					)
 				);
 			break;
+			case 'system':
+				return array(
+					'left' => array(
+						array(
+							'title' => __('System'),
+							'href' => 'system'
+						),
+					)
+				);
+			break;
 /*			case 'files':
 				return array(
 					'left' => array(
@@ -395,7 +405,18 @@ class extension_core {
 	function acp_views() {
 		return array(
 			'nodes' => __('Nodes'),
+			'system' => __('System'),
 //			'files' => __('Files')
+		);
+	}
+	
+	function acp_system_pane() {
+		return array(
+			'extensions' => array(
+				'title' => __('Extensions'),
+				'icon' => '~/blueprint/views/admin/images/icons/file.png',
+				'href' => 'admin/controller/extensions/index'
+			)
 		);
 	}
 	

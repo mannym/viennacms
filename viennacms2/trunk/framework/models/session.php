@@ -1,5 +1,5 @@
 <?php
-class Session extends Model {
+class VSession extends Model {
 	protected $table = 'sessions';
 	protected $keys = array('session_id');
 	protected $fields = array(
@@ -14,7 +14,7 @@ class Session extends Model {
 			'my_fields' => array('user_id'),
 			'table' => 'users',
 			'their_fields' => array('user_id'),
-			'object' => array('class' => 'User', 'property' => 'user')
+			'object' => array('class' => 'VUser', 'property' => 'user')
 		)
 	);
 }

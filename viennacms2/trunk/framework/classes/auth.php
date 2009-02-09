@@ -3,7 +3,7 @@ define('AUTH_USER', 1);
 define('AUTH_GROUP', 2);
 define('AUTH_ALL', 4);
 
-class Auth {
+class VAuth {
 	function parse_permission_string($string) {
 		if (empty($string)) {
 			return array(
@@ -53,7 +53,7 @@ class Auth {
 	function get_rights($resource, $object) {
 		// is the object an user, or a group?
 		switch (get_class($object)) {
-			case 'User':
+			case 'VUser':
 				$check = AUTH_USER | AUTH_GROUP | AUTH_ALL;
 			break;
 			case 'Group': // not yet implemented
