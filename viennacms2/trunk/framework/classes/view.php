@@ -47,7 +47,7 @@ class View implements ArrayAccess {
 	
 	public function url($data) {
 		$prefix = '';
-		if (!cms::$vars['config']['rewrite']) {
+		if (!cms::$config['rewrite']) {
 			$prefix .= 'index.php/';
 		}
 		
