@@ -383,3 +383,67 @@ a.delete {
 a img {
 	border: 0;
 }
+
+.form_node_edit_title
+{
+	width: 100%;
+	font-size: 170%;
+	padding: 3px 4px;
+}
+
+.node-form-left
+{
+	float: left;
+	width: 80%;
+	margin-right: 1%;
+	padding-top: 12px;
+}
+
+.node-form-right
+{
+	float: right;
+	width: 19%;
+	padding-top: 12px;
+}
+
+.node-editor
+{
+	margin-top: 16px;
+	margin-bottom: 16px;
+}
+
+.node-editor textarea
+{
+	height: 400px;
+}
+
+.node-description
+{
+	border: 1px solid #00a;
+	margin-bottom: 12px;
+}
+
+.node-description textarea
+{
+	font-family: Verdana, Arial, sans-serif;
+	width: 98%;
+	height: 4em;
+	font-size: 13px;
+	padding: 4px;
+}
+
+.node-description > *
+{
+	margin-left: 6px;
+}
+
+.node-form-right > div
+{
+	border: 1px solid #00a;
+	margin-bottom: 12px;
+}
+
+p.description
+{
+	font-size: 90%;
+}

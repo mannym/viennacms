@@ -2,9 +2,9 @@
 class AdminController extends Controller {
 	public static $panes = array();
 	
-	public static function add_pane($location, $pane, $arguments = array()) {
+	public static function add_pane($location, $pane, $name, $arguments = array()) {
 		self::$panes[$location][] = array(
-			'title' => __('todo'),
+			'title' => $name,
 			'href' => $pane,
 			'arguments' => $arguments
 		);

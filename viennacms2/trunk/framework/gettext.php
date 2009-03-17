@@ -31,6 +31,10 @@ LC_MESSAGES	5
 LC_ALL			6
 */
 
+if (!defined('LC_MESSAGES')) {
+	define('LC_MESSAGES', 5);
+}
+
 // Simple class to wrap file streams, string streams, etc.
 // seek is essential, and it should be byte stream
 class StreamReader {

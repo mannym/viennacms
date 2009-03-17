@@ -14,7 +14,7 @@ class View implements ArrayAccess {
 	private $vars;
 	public $path;
 	public static $searchpaths = array(
-		'framework/views/' => VIEW_PRIORITY_STOCK
+		'framework/views/' => VIEW_PRIORITY_LOW
 	);
 	
 	public function __construct() {
@@ -94,7 +94,18 @@ class View implements ArrayAccess {
 			trigger_error('View path ' . $this->path . ' does not exist!', E_USER_ERROR);
 		}
 		
-		include($view_path);
+		$value = include($view_path);
+
+		if ($value == false && is_array($this->path)) {
+			$path = array_shift($this->path);
+
+			if (count($this->path)) {
+				return $this->display();
+			}
+
+			$this->path[] = $path;
+		}
+
 		$contents = ob_get_contents();
 		ob_end_clean();
 		
@@ -111,7 +122,7 @@ class View implements ArrayAccess {
 		foreach (self::$searchpaths as $fpath => $priority) {
 			$var = 'files_' . $priority;
 			if (is_array($path)) {
-				foreach ($path as $pth) { 
+				foreach ($path as $pth) {
 					$$var = array_merge($$var, array($fpath . $pth)); // PHP won't allow $$var[] :(
 				}
 			} else {

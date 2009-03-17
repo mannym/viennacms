@@ -2,7 +2,7 @@
 class Form {
 	public $callback_object;
 	public $action;
-	private $form;
+	public $form;
 	public $form_id;
 	public $errors = false;
 	public $form_attributes = '';
@@ -82,6 +82,12 @@ class Form {
 	private function render_form($errors = array(), $values = array()) {
 		// sort the fields on weight, this could be more efficient?
 		$fields = array();
+		$custom_data = array(
+			'raw_fields' => array(),
+			'fields' => array(),
+			'raw_groups' => array(),
+			'groups' => array()
+		);
 		
 		foreach ($this->form['fields'] as $name => $settings) {
 			if (empty($fields[$settings['weight']])) {
@@ -123,8 +129,11 @@ class Form {
 				if (isset($values[$key])) {
 					$view['value'] = $values[$key];
 				}
+
+				$view['class'] = 'form_' . $this->form_id . '_' . $key;
 				
 				$content = $view->display();
+				$custom_data['raw_fields'][$key] = $content;
 				
 				if ($value['type'] != 'hidden') {				
 					$wrapper = new View();
@@ -140,9 +149,13 @@ class Form {
 					}
 					
 					$wrapper['rendered_field'] = $content;
-					
-					$rendered_fields .= $wrapper->display();
+
+					$field_content = $wrapper->display();
+
+					$rendered_fields .= $field_content;
+					$custom_data['fields'][$key] = $field_content;
 				} else {
+					$custom_data['fields'][$key] = $content;
 					$rendered_fields .= $content;
 				}
 			}
@@ -161,8 +174,11 @@ class Form {
 					$view['expanded'] = false;
 				}
 			}
-			
-			$final_fields .= $view->display();
+
+			$group_output = $view->display();
+			$custom_data['raw_groups'][$group_id] = $rendered_fields;
+			$custom_data['groups'][$group_id] = $group_output;
+			$final_fields .= $group_output;
 		}
 		
 		if ($this->return) {
@@ -170,10 +186,52 @@ class Form {
 		}
 		
 		$view = new View();
-		$view->path = 'form/form_wrapper.php';
+		$view->path = array(
+			'form/form_custom_' . $this->form_id . '.php',
+			'admin/simple.php'
+		);
+		$view['data'] = $final_fields;
 		$view['form'] = $this;
 		$view['action'] = $view->url($this->action);
 		$view['fields'] = $final_fields;
+		$view['custom_data'] = $custom_data;
+
+		$output = $view->display();
+
+		$view = new View();
+		$view->path = array(
+			'form/form_wrapper.php'
+		);
+		$view['form'] = $this;
+		$view['action'] = $view->url($this->action);
+		$view['fields'] = $output;
+		$view['custom_data'] = $custom_data;
 		return $view->display();
+	}
+
+	/**
+	 * Outputs all fields of a specific type from a field array.
+	 *
+	 * @param string $type field type to display
+	 * @param array $field_array custom_data[fields] style field array
+	 * @return string contents of the specific fields
+	 */
+
+	public function show_by_type($type, $field_array) {
+		if (!is_array($field_array)) {
+			return '';
+		}
+
+		$output = '';
+
+		foreach ($field_array as $id => $fields) {
+			if ($this->form['fields'][$id]['type'] != $type) {
+				continue;
+			}
+
+			$output .= $fields;
+		}
+
+		return $output;
 	}
 }

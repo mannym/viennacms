@@ -53,7 +53,7 @@ class AdminNodeController extends Controller {
 				trigger_error(__('This node does not exist!'));
 			}
 			
-			AdminController::add_pane('left', 'meta', array($node->node_id));
+			AdminController::add_pane('left', 'meta', __('Meta data'), array($node->node_id));
 		} else {
 			$node = Node::create('Node');
 			$node->type = $this->arguments[0];
@@ -108,7 +108,7 @@ class AdminNodeController extends Controller {
 		
 		//if ($this->method_override(__FUNCTION__)) return $this->call_override(__FUNCTION__, $node);
 		
-		manager::run_hook_all('node_edit_pre_load', $node);		
+		manager::run_hook_all('node_edit_pre_load', $node);
 		
 		$form_data = array(
 			'fields' => array(
@@ -240,8 +240,31 @@ class AdminNodeController extends Controller {
 			'group' => 'node_details',
 			'weight' => -10
 		);
+
+		$widgets = manager::run_hook_all('node_edit_widgets', $node);
+		$widget_output = '';
+
+		foreach ($widgets as $id => $data) {
+			$widget_view = new View();
+			$widget_view->path = 'form/node_edit_widget.php';
+			$widget_view['title'] = $data['title'];
+			$widget_view['content'] = $data['content'];
+			$widget_view['id'] = $id;
+			$widget_output .= $widget_view->display();
+		}
+
+		if ($widget_output) {
+			$form_data['fields']['widgets'] = array(
+				'type' => 'html',
+				'value' => $widget_output,
+				'group' => 'node_details',
+				'title' => __('Extra settings'),
+				'weight' => -10
+			);
+		}
 		
 		$form = new Form();
+		$form->parameter = $node;
 		$form->callback_object = $this;
 		
 		return $prefix . $form->handle_form('node_edit', $form_data) . $postfix;
