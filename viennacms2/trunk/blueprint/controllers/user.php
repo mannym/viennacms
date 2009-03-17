@@ -27,6 +27,19 @@ class UserController extends Controller {
 				)
 			)
 		);
+
+		$redirect = 'node';
+
+		if (isset($_GET['redirect'])) {
+			$redirect = $_GET['redirect'];
+		}
+
+		$form_data['fields']['redirect'] = array(
+			'type' => 'hidden',
+			'group' => 'login',
+			'weight' => 0,
+			'value' => htmlspecialchars($redirect)
+		);
 		
 		$form = new Form();
 		$form->callback_object = $this;
@@ -44,9 +57,12 @@ class UserController extends Controller {
 		}
 	}
 	
-	public function user_login_submit() {
-		header('Location: ' . $this->view->url('node'));
-		exit;
+	public function user_login_submit($fields) {
+		if ($fields['redirect']) {
+			cms::redirect($fields['redirect']);
+		}
+
+		cms::redirect('node');
 	}
 	
 	public function logout() {

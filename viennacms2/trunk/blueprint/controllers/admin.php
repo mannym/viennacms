@@ -17,8 +17,10 @@ class AdminController extends Controller {
 	
 	private function check_auth() {
 		if (!cms::$user->logged_in) {
-			cms::$vars['error_title'] = __('Authentication required');
-			trigger_error(__('You need to log in to access the ACP.'));
+			//cms::$vars['error_title'] = __('Authentication required');
+			//trigger_error(__('You need to log in to access the ACP.'));
+
+			cms::redirect('user/login', array('redirect' => 'admin'));
 		}
 		
 		$auth = new VAuth();

@@ -127,7 +127,7 @@ class Form {
 				}
 				
 				if (isset($values[$key])) {
-					$view['value'] = $values[$key];
+					$view['value'] = htmlspecialchars($values[$key]); // it's user-submitted content now, and that can be lethal
 				}
 
 				$view['class'] = 'form_' . $this->form_id . '_' . $key;

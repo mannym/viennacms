@@ -305,4 +305,15 @@ Line: <?php echo $error_data['line'] ?></p>
 		
 		return false;
 	}
+
+	static public function redirect($url, $parameters = array()) {
+		$final_url = view::url($url);
+
+		if ($parameters) {
+			$final_url .= '?' . http_build_query($parameters);
+		}
+
+		header('Location: ' . $final_url);
+		exit;
+	}
 }

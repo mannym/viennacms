@@ -30,10 +30,12 @@
 		<div id="main-menu">
 			<ul>
 				<?php
-				foreach ($this['views'] as $id => $view) {
-					?>
-					<li><a href="<?php echo $this->url('admin/view/' . $id) ?>"><?php echo $view ?></a></li>
-					<?php
+				if ($this['views']) {
+					foreach ($this['views'] as $id => $view) {
+						?>
+						<li><a href="<?php echo $this->url('admin/view/' . $id) ?>"><?php echo $view ?></a></li>
+						<?php
+					}
 				}
 				?>
 			</ul>
