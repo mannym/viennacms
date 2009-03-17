@@ -11,6 +11,14 @@ $base_memory_usage = memory_get_usage();
 
 define('ROOT_PATH', dirname(dirname(__FILE__)) . '/');
 
+if (isset($_GET['vEIMG'])) {
+	include(ROOT_PATH . 'blueprint/errordata.php');
+
+	header('Content-type: image/png');
+	echo base64_decode($images[$_GET['vEIMG']]);
+	exit;
+}
+
 function __autoload($class_name) {
 	// initial autoload function for initialisation
 	if ($class_name == 'VAuth') { // TODO: fix this stuff
@@ -53,6 +61,7 @@ function cleanup() {
 spl_autoload_register('__autoload');
 set_error_handler(array('Manager', 'handle_error'));
 set_exception_handler(array('cms', 'handle_exception'));
+
 register_shutdown_function('cleanup');
 
 if (version_compare(phpversion(), '6.0.0-dev', '<') && get_magic_quotes_gpc()) {

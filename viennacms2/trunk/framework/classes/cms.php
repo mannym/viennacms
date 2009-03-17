@@ -159,16 +159,82 @@ abstract class cms {
 			'file' => $exception->getFile(),
 			'line' => $exception->getLine()
 		);
-		
-		$string = base64_encode(str_rot13(serialize($error_data)));
-		$lines = implode("\n", str_split($string, 60));
-		
-		echo '<html><body>';
-		echo '<h1>viennaCMS: critical error</h1>';
-		echo $exception->getMessage();
-		echo '<h2>Debug information (for developers)</h2><pre>';
-		echo $lines;
-		echo '</pre></body></html>';
+		?>
+<html>
+	<head>
+		<title>Fatal error</title>
+
+		<style type="text/css">
+			body {
+				font-family: "Segoe UI", Arial, sans-serif;
+				font-size: 12px;
+			}
+
+			#header {
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				height: 150px;
+				width: 100%;
+				right: 0px;
+				background-image: url(<?php echo cms::base() ?>/index.php?vEIMG=error_background);
+			}
+
+			#error_heading {
+				position: absolute;
+				top: 28px;
+				left: 15px;
+				width: 349px;
+				height: 94px;
+				background-image: url(<?php echo cms::base() ?>/index.php?vEIMG=errorheading);
+			}
+
+			#viennacms {
+				position: absolute;
+				top: 20px;
+				right: 15px;
+				width: 274px;
+				height: 110px;
+				background-image: url(<?php echo cms::base() ?>/index.php?vEIMG=viennacmslogo);
+			}
+
+			#content {
+				position: absolute;
+				top: 160px;
+				left: 10px;
+				right: 10px;
+			}
+
+			.footer {
+				font-size: 90%;
+				text-align: center;
+				color: #333;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- no language stuff, we don't even know if __() is correctly set now! -->
+		<div id="header">
+			<div id="error_heading"></div>
+			<div id="viennacms"></div>
+
+		</div>
+
+		<div id="content">
+		<p>A fatal error occurred during the processing of this page, and therefore, this page cannot be displayed. Please try loading this page again at a later time. If this problem persists, contact the administrator of this web site.</p>
+
+<p><strong>Technical error data</strong> (for the administrator of this site):</p>
+
+<p>Error type: <?php echo get_class($exception) ?><br />
+Message: <?php echo $exception->getMessage() ?><br />
+File: <?php echo str_replace(str_replace('\\', '/', ROOT_PATH), '', str_replace('\\', '/', $error_data['file'])) ?><br />
+Line: <?php echo $error_data['line'] ?></p>
+
+	<p class="footer">Powered by <a href="http://www.viennacms.nl/">viennaCMS</a> &copy; 2008, 2009 viennaCMS Group</p>
+	</div>
+	</body>
+</html>
+		<?php
 	}
 	
 	public static function autoload($class_name) {
@@ -186,6 +252,36 @@ abstract class cms {
 			include_once($filename);
 			return true;
 		}
+	}
+
+	/**
+	* Manager::basepath()
+	* Returns the base path of the viennaCMS installation, relative to the site's document root.
+	*
+	* @return string path
+	*/
+	static function basepath() {
+		$url = dirname($_SERVER['SCRIPT_NAME']);
+		if (dirname($_SERVER['SCRIPT_NAME']) != '/') {
+			$url .= '/';
+		}
+		return $url;
+	}
+
+	/**
+	* Manager::base()
+	* Returns the base URL of the viennaCMS installation.
+	*
+	* @return string absolute base URL
+	*/
+	static function base() {
+		$url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';
+		$url .= '://' . $_SERVER['HTTP_HOST'];
+		$url .= dirname($_SERVER['SCRIPT_NAME']);
+		if (dirname($_SERVER['SCRIPT_NAME']) != '/') {
+			$url .= '/';
+		}
+		return $url;
 	}
 	
 	/**

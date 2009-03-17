@@ -75,6 +75,16 @@ class View implements ArrayAccess {
 			return manager::base() . $prefix . cms::$router->alias_url_link($url);
 		}
 	}
+
+	public function link($name, $url, $data = array()) {
+		$attributes = '';
+
+		if (isset($data['attributes'])) {
+			$attributes = $data['attributes'];
+		}
+
+		return '<a href="' . view::url($url) . '"' . $attributes . '>' . $name . '</a>';
+	}
 	
 	public function display() {
 		ob_start();

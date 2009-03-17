@@ -290,34 +290,12 @@ class Manager {
 		return $return;
 	}
 	
-	/**
-	* Manager::basepath()
-	* Returns the base path of the viennaCMS installation, relative to the site's document root.
-	* 
-	* @return string path
-	*/
-	static function basepath() {
-		$url = dirname($_SERVER['SCRIPT_NAME']);
-		if (dirname($_SERVER['SCRIPT_NAME']) != '/') {
-			$url .= '/';
-		}	
-		return $url;		
-	}
-	
-	/**
-	* Manager::base()
-	* Returns the base URL of the viennaCMS installation.
-	* 
-	* @return string absolute base URL
-	*/ 	
 	static function base() {
-		$url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';
-		$url .= '://' . $_SERVER['HTTP_HOST'];
-		$url .= dirname($_SERVER['SCRIPT_NAME']);
-		if (dirname($_SERVER['SCRIPT_NAME']) != '/') {
-			$url .= '/';
-		}
-		return $url;		
+		return cms::base();
+	}
+
+	static function basepath() {
+		return cms::basepath();
 	}
 	
 	/**

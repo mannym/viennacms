@@ -1,0 +1,179 @@
+<?php
+class extension_pictureviewer {
+	public function get_node_types() {
+		return array(
+			'gallery' => array(
+				'extension' => 'pictureviewer',
+				'title' => __('Picture gallery'),
+				'description' => __('Shows a folder with pictures in a gallery.'),
+				'type' => 'none',
+				'icon' => '~/blueprint/views/admin/images/icons/page.png',
+				'big_icon' => '~/blueprint/views/admin/images/icons/page_big.png',
+				'options' => array(
+					'folder' => array(
+						'label' => __('Folder'),
+						'description' => __('The ID of the folder to display.'),
+						'type' => 'textbox',
+						'required' => true
+					)
+				),
+				'display_callback' => array($this, 'pictureviewer'),
+			),
+		);
+	}
+	
+	public function pictureviewer($node, $arguments) {
+		$mode = ($arguments[1]) ? $arguments[1] : 'folder';
+
+		switch ($mode) {
+			case 'folder':
+				ob_start();
+
+				$folder_id = ($arguments[2]) ? $arguments[2] : $node->options['folder'];
+				
+				$getter = new Node();
+				$getter->parent = (string)$folder_id;
+				$getter->type = 'file';
+				$files = $getter->read();
+				
+				$getter->type = 'filesfolder';
+				$folders = $getter->read();
+				
+				$folder = new Node();
+				$folder->node_id = (string)$folder_id;
+				$folder->read(true);
+				
+				if ($folder_id != (string)$node->options['folder']) {
+					echo '<img src="' . manager::base() . 'blueprint/views/admin/images/icons/folder.png" alt="" /> <a href="' . view::url('node/show/' . $node->node_id . '/folder/' . $folder->get_parent()->node_id) . '">..</a><br />';
+				}
+				
+				foreach ($folders as $folder) {
+					$files_in_folder = $folder->get_children();
+					$image_count = 0;
+					
+					foreach ($files_in_folder as $file) {
+						if ($file->type == 'filesfolder' || substr($file->options['mimetype'], 0, 6) == 'image/') {
+							$image_count++;
+						}
+					}
+					
+					if ($image_count == 0) {
+						continue;
+					}
+					
+					echo '<img src="' . manager::base() . 'blueprint/views/admin/images/icons/folder.png" alt="" /> <a href="' . view::url('node/show/' . $node->node_id . '/folder/' . $folder->node_id) . '">' . $folder->title . ' (' . $image_count . ')</a><br />';
+				}
+				
+				foreach ($files as $file) {
+					if (substr($file->options['mimetype'], 0, 6) == 'image/') {
+						echo '<div style="float: left; text-align: center; width: 190px; height: 170px; margin: 5px;"><a href="' . view::url('node/show/' . $node->node_id . '/photo/' . $file->node_id) . '">';
+						echo '<img src="' . view::url('node/show/' . $node->node_id . '/image/160/' . $file->node_id) . '" alt="' . $file->title . '" /></a><br /><!--' . $file->title . '--></div>';
+					}
+				}
+
+				echo '<br style="clear: both;" />';
+				
+				$output = ob_get_contents();
+				ob_end_clean();
+				
+				return $output;
+			break;
+			case 'photo':
+				$file = new Node();
+				$file->node_id = $arguments[2];
+				$file->read(true);
+				
+				if ($file->type != 'file' || substr($file->options['mimetype'], 0, 6) != 'image/') {
+					return;
+				}
+				
+				ob_start();
+				
+				echo '<div style="text-align: center;">';
+				echo '<img src="' . view::url('node/show/' . $node->node_id . '/image/640/' . $file->node_id) . '" alt="' . $file->title . '" />';
+				
+				echo '<br /><a href="' . view::url('node/show/' . $node->node_id . '/folder/' . $file->get_parent()->node_id) . '">&laquo; ' . $file->get_parent()->title . '</a>';
+				echo '</div>';
+				
+				$output = ob_get_contents();
+				ob_end_clean();
+				
+				return $output;
+			break;
+			case 'image':
+				$max_size = $arguments[2];
+				
+				$file = new Node();
+				$file->node_id = $arguments[3];
+				$file->read(true);
+				
+				if ($file->type != 'file') {
+					return false;
+				}
+				
+				@mkdir(ROOT_PATH . 'cache/pictureviewer/', 777);
+				
+				$filename = ROOT_PATH . $file->description;
+				$thumbnail_name = ROOT_PATH . 'cache/pictureviewer/' . str_replace('.upload', '.thumb-' . intval($max_size), str_replace('files/', '', $file->description));
+				
+				if (!file_exists($thumbnail_name)) {
+					$type = substr($file->options['mimetype'], 6);
+					
+					// Set a maximum height and width
+					$width = $max_size;
+					$height = $max_size;
+					
+					// Get new dimensions
+					list($width_orig, $height_orig) = @getimagesize($filename);
+					
+					$ratio_orig = $width_orig/$height_orig;
+					
+					if ($width/$height > $ratio_orig) {
+					   $width = $height*$ratio_orig;
+					} else {
+					   $height = $width/$ratio_orig;
+					}
+					
+					// Resample
+					$image_p = imagecreatetruecolor($width, $height);
+					
+					switch ($type) {
+						case 'jpeg':
+							$image = imagecreatefromjpeg($filename);
+						break;
+						case 'png':
+							$image = imagecreatefrompng($filename);
+						break;
+						case 'gif':
+							$image = imagecreatefromgif($filename);
+						break;
+					}
+					
+					imagecopyresampled($image_p, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
+					
+					switch ($type) {
+						case 'png':
+							imagealphablending($image_p, false);
+							imagesavealpha($image_p, true);
+							imagepng($image_p, $thumbnail_name);
+						break;
+						case 'jpeg':
+							imagejpeg($image_p, $thumbnail_name, 80);
+						break;
+						case 'gif':
+							// this didn't exist in old PHP/GD versions, though you can't call 5.2 old
+							// thanks to stupid patent stuff -- though expiring is fine with me :)
+							
+							imagegif($image_p, $thumbnail_name);
+						break;
+					}
+				}
+				
+				header('Content-type: ' . $file->options['mimetype']);
+				readfile($thumbnail_name);
+				
+				return false;
+			break;
+		}
+	}	
+}

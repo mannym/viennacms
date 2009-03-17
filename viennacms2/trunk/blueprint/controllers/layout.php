@@ -21,23 +21,45 @@ class LayoutController extends Controller {
 	*/
 	public function page($content) {
 		global $starttime;
-		// assign navigation
+
+
+		// look if any extension wants to say something
+		$data = new stdClass;
+		$data->content = $content;
+		$data->header = '';
+
+		manager::run_hook_all('layout_pre_display', $data);
+
+		$content = $data->content;
+		$header = $data->header;
+
+		// do some stuff for if the page is a node
 		if (isset(cms::$vars['node'])) {
+			// get parents and the description
 			$this->parents = $this->get_parents(cms::$vars['node']);
 			$this->view['description'] = cms::$vars['node']->description;
+			// create some meta tags
+			$header .= '<meta name="copyright" content="(c) 2008, 2009 viennaCMS developers" />' . "\r\n";
+			$header .= '<meta name="description" content="' . cms::$vars['node']->description . '" />';
 		} else {
 			$this->parents = array();
 		}
-		
+
+		// assign navigation
 		$this->view['nav'] = array(
 			1 => $this->get_nav(1),
 			2 => $this->get_nav(2)
 		);
-	
+
+		// some standard templating stuff
 		$this->view['content'] = $content;
 		$this->view['styles'] = $this->get_styles();
-		
-		// user stuff
+		$this->view['head'] = $header;
+
+		$u_lilo = '';
+		$l_lilo = '';
+
+		// user links
 		if (cms::$user->logged_in) {
 			$u_lilo = 'user/logout/' . cms::$user->session->session_id;
 			$l_lilo = sprintf(__('Logout [ %s ]'), cms::$user->user->username);
@@ -45,6 +67,7 @@ class LayoutController extends Controller {
 			$u_lilo = 'user/login';
 			$l_lilo = __('Login');
 		}
+		
 		$this->view['user'] = cms::$user->user;
 		$this->view['login_logout_url'] = $this->view->url($u_lilo);
 		$this->view['login_logout'] = $l_lilo;
@@ -53,13 +76,19 @@ class LayoutController extends Controller {
 		$this->view['sitedescription'] = cms::$vars['sitenode']->description;
 		$this->view['acp_url'] = $this->view->url('admin');
 		
-		// Has user ACP auth?
+		// Can the user use the ACP?
 		$this->view['acp_auth'] = false;
 		$auth = new VAuth();
 		$rights = $auth->get_rights('admin:see_acp', cms::$user->user);
 		
 		if (in_array('y', $rights)) {
 			$this->view['acp_auth'] = true;
+		}
+
+		$this->view['admin_link'] = '';
+
+		if ($this->view['acp_auth']) {
+			$this->view['admin_link'] = view::link('admin', __('Administration Control Panel'));
 		}
 		
 		if (defined('DEBUG') || defined('DEBUG_EXTRA')) {
@@ -199,7 +228,7 @@ class LayoutController extends Controller {
 		
 			$class = '';
 				
-			if (in_array($node->id, $active)) {
+			if (in_array($node->node_id, $active)) {
 				$class = 'active';
 			}
 			

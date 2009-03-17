@@ -1,4 +1,5 @@
 <?php
+// TODO: make the auth system ACL based
 define('AUTH_USER', 1);
 define('AUTH_GROUP', 2);
 define('AUTH_ALL', 4);

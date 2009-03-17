@@ -44,6 +44,8 @@ class NodeController extends Controller {
 			// TODO: make left and such
 		}
 		
+		// TODO: shift $arguments
+		
 		if ($node->typedata['display_callback']) {
 			$result = call_user_func_array($node->typedata['display_callback'], array($node, $this->arguments));
 			
