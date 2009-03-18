@@ -31,7 +31,7 @@ $(function() {
 			tbWindow.css({'margin-left': '-' + parseInt((( W - 90 ) / 2),10) + 'px'});
 			if ( typeof document.body.style.maxWidth != 'undefined' )
 				tbWindow.css({'top':'30px','margin-top':'0'});
-		};
+		}
 
 		return $('a.thickbox').each( function() {
 			var href = $(this).parents('.available-theme').find('.previewlink').attr('href');
@@ -76,7 +76,7 @@ $(function() {
 		persist: 'cookie'
 	});
 
-	$('.pane').find('.toolbar li a').click(function() {
+	$('.toolbar li a').click(function() {
 	    url = $(this).attr('href');
 
 	    if ($(this).hasClass('submenu')) {

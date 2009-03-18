@@ -44,7 +44,7 @@ class extension_pictureviewer {
 				$folder->read(true);
 				
 				if ($folder_id != (string)$node->options['folder']) {
-					echo '<img src="' . manager::base() . 'blueprint/views/admin/images/icons/folder.png" alt="" /> <a href="' . view::url('node/show/' . $node->node_id . '/folder/' . $folder->get_parent()->node_id) . '">..</a><br />';
+					echo '<img src="' . manager::base() . 'blueprint/views/admin/images/icons/folder.png" alt="" /> <a href="' . view::url('node/show/' . $node->node_id . '/folder/' . $folder->get_parent()->node_id) . '">' . __('Up') . '</a><br />';
 				}
 				
 				foreach ($folders as $folder) {
@@ -92,8 +92,45 @@ class extension_pictureviewer {
 				echo '<div style="text-align: center;">';
 				echo '<img src="' . view::url('node/show/' . $node->node_id . '/image/640/' . $file->node_id) . '" alt="' . $file->title . '" />';
 				
-				echo '<br /><a href="' . view::url('node/show/' . $node->node_id . '/folder/' . $file->get_parent()->node_id) . '">&laquo; ' . $file->get_parent()->title . '</a>';
+				echo '<br /><a href="' . view::url('node/show/' . $node->node_id . '/folder/' . $file->get_parent()->node_id) . '">&laquo; ' . sprintf(__('Back to %s'), $file->get_parent()->title) . '</a>';
+
 				echo '</div>';
+
+				echo '<div class="photo-nav-links">';
+
+				$previous = $file->previous();
+
+				while ($previous->type != 'file' || substr($previous->options['mimetype'], 0, 6) != 'image/') {
+					if (!$previous) {
+						break;
+					}
+
+					$previous = $previous->previous();
+				}
+
+				if ($previous) {
+					echo '<div style="float: left; width: 49%">';
+					echo view::link(__('&laquo; Previous'), 'node/show/' . $node->node_id . '/photo/' . $previous->node_id);
+					echo '</div>';
+				}
+
+				$next = $file->next();
+
+				while ($next->type != 'file' || substr($next->options['mimetype'], 0, 6) != 'image/') {
+					if (!$next) {
+						break;
+					}
+
+					$next = $next->next();
+				}
+
+				if ($next) {
+					echo '<div style="float: right; text-align: right; width: 49%">';
+					echo view::link(__('Next &raquo;'), 'node/show/' . $node->node_id . '/photo/' . $next->node_id);
+					echo '</div>';
+				}
+
+				echo '<br style="clear: both;" /></div>';
 				
 				$output = ob_get_contents();
 				ob_end_clean();

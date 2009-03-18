@@ -1,3 +1,4 @@
+<?php echo $this['prefix'] ?>
 <h2><?php echo __('Preview') ?></h2>
 <p><?php echo __('This preview shows how the file widget will look like on your web site.') ?></p>
 <div style="width: 96%; max-height: 300px; overflow: auto; border: 1px dashed #0099ff; padding: 10px;">

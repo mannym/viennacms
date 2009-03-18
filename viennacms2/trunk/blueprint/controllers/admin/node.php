@@ -266,6 +266,12 @@ class AdminNodeController extends Controller {
 		$form = new Form();
 		$form->parameter = $node;
 		$form->callback_object = $this;
+
+		if ($node->node_id) {
+			$toolbars = manager::run_hook_all('node_toolbar', $node);
+			
+			$prefix = AdminController::add_toolbar($toolbars, $this) . $prefix;
+		}
 		
 		return $prefix . $form->handle_form('node_edit', $form_data) . $postfix;
 	}

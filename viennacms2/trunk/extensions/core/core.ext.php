@@ -88,21 +88,24 @@ class extension_core {
 			$url->url = 'admin/controller/file/upload/' . $parent->node_id;
 		}
 	}
-	
-	public function node_edit_output($node) {
-		$output = '';
-		
+
+	public function node_toolbar($node) {
+		$toolbar = array();
+
+		$toolbar[__('New')] = array(
+			'icon' => manager::base() . 'blueprint/views/admin/images/icons/add.png',
+			'callback' => 'admin/controller/node/add/' . $node->node_id,
+			'type' => 'submenu'
+		);
+
 		if ($node->type == 'site') {
-			$toolbar = array(
-				__('Themes') => array(
-					'icon' => manager::base() . 'extensions/core/icons/theme.png',
-					'callback' => 'admin/controller/themes/select/' . $node->node_id
-				)
+			$toolbar[__('Themes')] = array(
+				'icon' => manager::base() . 'extensions/core/icons/theme.png',
+				'callback' => 'admin/controller/themes/select/' . $node->node_id
 			);
-			$output .= AdminController::add_toolbar($toolbar, $this);
 		}
-		
-		return $output;
+
+		return $toolbar;
 	}
 
 	public function node_edit_widgets($node) {

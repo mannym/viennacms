@@ -1,9 +1,21 @@
 <?php
 class AdminFileController extends Controller {
 	public function folder() {
+		$file = new Node();
+		$file->node_id = $this->arguments[0];
+		$file->read(true);
+
 		$this->view->path = 'admin/simple.php';
-		
-		$this->view['data'] = '';
+
+		$prefix = '';
+
+		if ($file->node_id) {
+			$toolbars = manager::run_hook_all('node_toolbar', $file);
+
+			$prefix = AdminController::add_toolbar($toolbars, $this);
+		}
+
+		$this->view['data'] = $prefix;
 	}
 	
 	public function file() {
@@ -15,6 +27,16 @@ class AdminFileController extends Controller {
 		$this->view['file'] = $file;
 		
 		$this->view['delete_url'] = $this->view->url('admin/controller/file/delete/file/' . $this->arguments[0]);
+
+		$prefix = '';
+
+		if ($file->node_id) {
+			$toolbars = manager::run_hook_all('node_toolbar', $file);
+
+			$prefix = AdminController::add_toolbar($toolbars, $this);
+		}
+
+		$this->view['prefix'] = $prefix;
 	}
 	
 	public function delete() {
@@ -114,7 +136,7 @@ class AdminFileController extends Controller {
 		
 		$output = '<viennacms:file node="' . $file->node_id . '">';
 		$output .= cms::$files->get_file_widget($file);
-		$output .= '</viennacms:file>';
+		$output .= '</viennacms:file>&nbsp;';
 		
 		echo $output;
 		exit;

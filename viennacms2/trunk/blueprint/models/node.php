@@ -104,11 +104,41 @@ class Node extends Model {
 		$node->read(true);
 		return $node;
 	}
-	
+
+	private static $sibling_cache = array();
+
 	public function get_siblings_all($cache = false) {
+		if (!empty(Node::$sibling_cache[$this->parent])) {
+			return Node::$sibling_cache[$this->parent];
+		}
+
 		$node = new Node();
 		$node->parent = $this->parent;
 		$node->cache = $cache;
-		return $node->read();
+		$siblings = $node->read();
+
+		Node::$sibling_cache[$this->parent] = $siblings;
+
+		return $siblings;
+	}
+
+	public function next($cache = false) {
+		$siblings = $this->get_siblings_all($cache);
+
+		foreach ($siblings as $key => $sibling) {
+			if ($sibling->node_id == $this->node_id) {
+				return (isset($siblings[$key + 1])) ? $siblings[$key + 1] : false;
+			}
+		}
+	}
+
+	public function previous($cache = false) {
+		$siblings = $this->get_siblings_all($cache);
+
+		foreach ($siblings as $key => $sibling) {
+			if ($sibling->node_id == $this->node_id) {
+				return (isset($siblings[$key - 1])) ? $siblings[$key - 1] : false;
+			}
+		}
 	}
 }
