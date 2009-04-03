@@ -88,15 +88,31 @@ class extension_core {
 			$url->url = 'admin/controller/file/upload/' . $parent->node_id;
 		}
 	}
+	
+	public function acp_context_toolbars($data) {
+		if ($data[0] == 'node') {
+			return $this->node_toolbar($data[1]);
+		}
+	}
 
 	public function node_toolbar($node) {
 		$toolbar = array();
 
-		$toolbar[__('New')] = array(
-			'icon' => manager::base() . 'blueprint/views/admin/images/icons/add.png',
-			'callback' => 'admin/controller/node/add/' . $node->node_id,
-			'type' => 'submenu'
-		);
+		if (count($node->possible_child_types()) > 0) {
+			$toolbar[__('New')] = array(
+				'icon' => manager::base() . 'blueprint/views/admin/images/icons/add.png',
+				'callback' => 'admin/controller/node/add/' . $node->node_id,
+				'type' => 'submenu'
+			);
+		}
+		
+		if ($node->type == 'filesfolder') {
+			$toolbar[__('Upload')] = array(
+				'icon' => manager::base() . 'blueprint/views/admin/images/icons/upload.png',
+				'callback' => 'admin/controller/file/upload/' . $node->node_id,
+				'attributes' => 'id="file-upload-button"'
+			);
+		}
 
 		if ($node->type == 'site') {
 			$toolbar[__('Themes')] = array(
@@ -328,10 +344,14 @@ class extension_core {
 					return false;
 				}
 				
-				if ($node->type == 'filesfolder' || $node->type == 'file') {
+				if ($node->type == 'filesfolder') {
 					if ($other->type != 'filesfolder') {
 						return false;
 					}
+				}
+				
+				if ($node->type == 'file') {
+					return false;
 				}
 				
 				if ($other->type == 'file') {

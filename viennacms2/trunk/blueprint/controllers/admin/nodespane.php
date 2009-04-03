@@ -5,6 +5,12 @@ class AdminNodesPaneController extends Controller {
 		$id = array_pop($parts);
 		
 		$this->view['images_path'] = manager::base() . 'blueprint/views/admin/images';
+		
+		$id = false;
+		if (admincontroller::$context[0] == 'node') {
+			$id = admincontroller::$context[1]->node_id;
+		}
+		
 		$this->view['tree_data'] = cms::$helpers->get_admin_tree('admin/controller/node/edit/%node_id', $id);
 		/*
 		if (!empty($id) && is_numeric($id)) {

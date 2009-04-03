@@ -268,9 +268,9 @@ class AdminNodeController extends Controller {
 		$form->callback_object = $this;
 
 		if ($node->node_id) {
-			$toolbars = manager::run_hook_all('node_toolbar', $node);
+			AdminController::set_context('node', $node);
 			
-			$prefix = AdminController::add_toolbar($toolbars, $this) . $prefix;
+			//$prefix = AdminController::add_toolbar($toolbars, $this) . $prefix;
 		}
 		
 		return $prefix . $form->handle_form('node_edit', $form_data) . $postfix;

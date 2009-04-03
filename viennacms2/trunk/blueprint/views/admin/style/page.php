@@ -9,6 +9,7 @@
 		<script type="text/javascript" src="framework/js/jquery.treeview.js"></script>
 		<script type="text/javascript" src="framework/js/jquery.cookie.js"></script>
 		<script type="text/javascript" src="framework/js/jquery.form.js"></script>
+		<script type="text/javascript" src="framework/js/jquery.upload.js"></script>
 		<script type="text/javascript" src="framework/js/thickbox.js"></script>
 		<script type="text/javascript" src="framework/js/wymeditor/jquery.wymeditor.js"></script>
 		<script type="text/javascript" src="framework/js/viennacms-acp.js"></script>
@@ -41,6 +42,7 @@
 			</ul>
 		</div>
 		<div id="main-content">
+			<?php echo $this['toolbars'] ?>
 			<?php echo $this['content'] ?>
 		</div>
 		<?php

@@ -73,7 +73,7 @@ $(function() {
 	$(".treeview").treeview({
 		collapsed: true,
 		unique: true,
-		persist: 'cookie'
+		persist: 'class'
 	});
 
 	$('.toolbar li a').click(function() {

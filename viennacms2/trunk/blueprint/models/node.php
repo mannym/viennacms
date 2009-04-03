@@ -141,4 +141,20 @@ class Node extends Model {
 			}
 		}
 	}
+	
+	public function possible_child_types() {
+		$return = array();
+		
+		$types = manager::run_hook_all('get_node_types');
+		foreach ($types as $key => $type) {
+			$node = new Node();
+			$node->type = $key;
+			
+			if (cms::display_allowed('this_under_other', $node, $this)) {
+				$return[] = $key;
+			}
+		}	
+		
+		return $return;
+	}
 }

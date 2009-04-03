@@ -32,14 +32,14 @@ class AdminController extends Controller {
 		}		
 	}
 	
-	public static function add_toolbar($data, $caller) {
+	public static function add_toolbar($data) {
 		ob_start();
 		?>
 		<ul class="toolbar">
 			<?php
 			foreach ($data as $id => $item) {
 				?>
-				<li><a style="background-image: url(<?php echo $item['icon'] ?>);" class="<?php echo $item['type'] ?>" href="<?php echo View::url($item['callback']) ?>"><span><?php echo $id ?></span></a></li>
+				<li><a <?php echo $item['attributes'] ?> style="background-image: url(<?php echo $item['icon'] ?>);" class="<?php echo $item['type'] ?>" href="<?php echo View::url($item['callback']) ?>"><span><?php echo $id ?></span></a></li>
 				<?php
 			}
 			?>
@@ -49,6 +49,13 @@ class AdminController extends Controller {
 		ob_end_clean();
 		
 		return $c;
+	}
+	
+	static $context = array();
+	
+	public static function set_context($type, $value) {
+		self::$context[0] = $type;
+		self::$context[1] = $value;
 	}
 	
 	public function main() {
@@ -100,6 +107,14 @@ class AdminController extends Controller {
 		
 		cms::$layout->view['panes'] = $panes_output;
 		cms::$layout->view['views'] = manager::run_hook_all('acp_views');
+		
+		if (!empty(self::$context[0])) {
+			$toolbars = manager::run_hook_all('acp_context_toolbars', self::$context);
+			
+			if (!empty($toolbars)) {
+				cms::$layout->view['toolbars'] = self::add_toolbar($toolbars, $this);
+			}
+		}
 	}
 	
 	public function controller() {

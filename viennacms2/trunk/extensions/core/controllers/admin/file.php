@@ -5,17 +5,23 @@ class AdminFileController extends Controller {
 		$file->node_id = $this->arguments[0];
 		$file->read(true);
 
-		$this->view->path = 'admin/simple.php';
+		$this->view->path = 'admin/file/upload.php';
 
 		$prefix = '';
 
 		if ($file->node_id) {
-			$toolbars = manager::run_hook_all('node_toolbar', $file);
-
-			$prefix = AdminController::add_toolbar($toolbars, $this);
+			//$toolbars = manager::run_hook_all('node_toolbar', $file);
+			//$prefix = AdminController::add_toolbar($toolbars, $this);
+			
+			admincontroller::set_context('node', $file);
 		}
+		
+		$max_size = cms::$helpers->return_bytes(ini_get('upload_max_filesize')) / 1024 / 1024;
+		
+		$this->view['max_size'] = $max_size . ' MB';
+		$this->view['action'] = view::url('admin/controller/file/upload_handler/' . $this->arguments[0]);
 
-		$this->view['data'] = $prefix;
+		//$this->view['data'] = $prefix;
 	}
 	
 	public function file() {
@@ -31,9 +37,10 @@ class AdminFileController extends Controller {
 		$prefix = '';
 
 		if ($file->node_id) {
-			$toolbars = manager::run_hook_all('node_toolbar', $file);
+			//$toolbars = manager::run_hook_all('node_toolbar', $file);
 
-			$prefix = AdminController::add_toolbar($toolbars, $this);
+			//$prefix = AdminController::add_toolbar($toolbars, $this);
+			admincontroller::set_context('node', $file);
 		}
 
 		$this->view['prefix'] = $prefix;
@@ -61,7 +68,7 @@ class AdminFileController extends Controller {
 	}
 	
 	public function upload() {
-		$this->view->path = 'admin/simple.php';
+		//$this->view->path = 'admin/file/upload.php';
 		
 		$max_size = cms::$helpers->return_bytes(ini_get('upload_max_filesize')) / 1024 / 1024;
 		
@@ -70,50 +77,44 @@ class AdminFileController extends Controller {
 		$parent->read(true);
 		
 		if (!$parent->title) {
-			$this->view['data'] = __('The parent node does not exist.');
-			return;
+			return __('The parent node does not exist.');
 		}
 		
-		$form_data = array(
-			'fields' => array(
-				'file' => array(
-					'label' => __('File'),
-					'description' => sprintf(__('The file to upload to the site. Maximum size: %s MB'), $max_size),
-					'required' => true,
-					'type' => 'file',
-					'group' => 'file',
-					'weight' => 0,
-					'validate_function' => array($this, 'validate_file')
-				),
-				'parent_id' => array(
-					'type' => 'hidden',
-					'required' => true,
-					'value' => $parent->node_id,
-					'group' => 'file',
-					'validate_function' => array(cms::$helpers, 'validate_node')
-				)
-			),
-			'groups' => array(
-				'file' => array(
-					'title' => __('File data'),
-					'expanded' => true
-				)
-			)
-		);
+		admincontroller::set_context('node', $parent);
 		
-		$form = new Form();
-		$form->callback_object = $this;
-		$form->form_attributes .= ' enctype="multipart/form-data"';
-		$this->view['data'] = $form->handle_form('file_upload', $form_data);
+		$this->view['max_size'] = $max_size . ' MB';
+		$this->view['action'] = view::url('admin/controller/file/upload_handler/' . $this->arguments[0]);
 	}
 	
-	public function file_upload_submit($data) {
+	public function upload_handler() {
+		$data = array();
+		
+		if (!isset($_FILES['viennafile'])) {
+			echo base64_encode(json_encode(
+				array(
+					'message' => __('No file was uploaded.')
+				)
+			));
+			exit;
+		}
+		
+		$data['file'] = $_FILES['viennafile'];
+		
+		if ($error = $this->validate_file($data['file'])) {
+			echo base64_encode(json_encode(
+				array(
+					'message' => sprintf(__('%sERROR:%s'), '<span style="color: red;">', '</span>') . $error
+				)
+			));
+			exit;
+		}
+		
 		$target = 'files/' . md5(uniqid(time())) . '.upload';
 		
 		move_uploaded_file($data['file']['tmp_name'], ROOT_PATH . $target);
 		
 		$node = Node::create('Node');
-		$node->parent = $data['parent_id'];
+		$node->parent = $this->arguments[0];
 		$node->title = $data['file']['name'];
 		$node->description = $target;
 		$node->type = 'file';
@@ -126,7 +127,16 @@ class AdminFileController extends Controller {
 		
 		cms::$helpers->create_node_alias($node);
 		
-		return __('The file has successfully been uploaded.');
+		//return __('The file has successfully been uploaded.');
+		echo base64_encode(json_encode(
+			array(
+				'message' => sprintf(__('Successfully uploaded %s'), $node->title),
+				'addendum' => array(
+					'ux_html' => '<li class="oncontentremove"><a class="file mynewnode" href="' . view::url('admin/controller/file/' . $node->node_id) . '">' . $node->title . '</a></li>'
+				)
+			)
+		));
+		exit;
 	}
 	
 	public function editor_widget() {
