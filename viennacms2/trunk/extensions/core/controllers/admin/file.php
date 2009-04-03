@@ -132,7 +132,7 @@ class AdminFileController extends Controller {
 			array(
 				'message' => sprintf(__('Successfully uploaded %s'), $node->title),
 				'addendum' => array(
-					'ux_html' => '<li class="oncontentremove"><a class="file mynewnode" href="' . view::url('admin/controller/file/' . $node->node_id) . '">' . $node->title . '</a></li>'
+					'ux_html' => '<li class="oncontentremove"><a class="file mynewnode" href="' . view::url('admin/controller/file/file/' . $node->node_id) . '">' . $node->title . '</a></li>'
 				)
 			)
 		));
