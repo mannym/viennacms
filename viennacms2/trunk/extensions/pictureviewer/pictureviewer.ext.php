@@ -163,6 +163,11 @@ class extension_pictureviewer {
 					// Get new dimensions
 					list($width_orig, $height_orig) = @getimagesize($filename);
 					
+					if ($width_orig < $width && $height_orig < $height) {
+						$width = $width_orig;
+						$height = $height_orig;
+					}
+					
 					$ratio_orig = $width_orig/$height_orig;
 					
 					if ($width/$height > $ratio_orig) {
