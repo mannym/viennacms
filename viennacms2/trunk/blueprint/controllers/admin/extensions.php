@@ -66,7 +66,7 @@ class AdminExtensionsController extends Controller {
 		$data = include(ROOT_PATH . 'extensions/' . $id . '/' . $id . '.info.php');
 		$version = $data['version'];
 				
-		$extensions = cms::$config['extensions'];
+		$extensions = unserialize(cms::$config['extensions']);
 		$extensions[$id] = array(
 			'version' => $version
 		);
@@ -96,10 +96,10 @@ class AdminExtensionsController extends Controller {
 		
 		$data = include(ROOT_PATH . 'extensions/' . $id . '/' . $id . '.info.php');
 				
-		$extensions = cms::$config['extensions'];
+		$extensions = unserialize(cms::$config['extensions']);
 		unset($extensions[$id]);
 		cms::$config['extensions'] = serialize($extensions);
 		
-		return sprintf(__('The extension %s is successfully enabled.'), $data['name']);
+		return sprintf(__('The extension %s is successfully disabled.'), $data['name']);
 	}
 }
