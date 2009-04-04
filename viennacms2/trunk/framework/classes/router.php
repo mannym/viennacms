@@ -18,7 +18,7 @@ class Router {
 			$aliases = $alias->read();
 			
 			foreach ($aliases as $alias) {
-				$this->aliases[$alias->alias_url] = $alias->alias_target;
+				$this->aliases[$this->regexify($alias->alias_url)] = $alias->alias_target;
 				
 				if ($alias->alias_flags & ALIAS_URL_DEFAULT) {
 					$this->paths[$alias->alias_target] = $alias->alias_url;
@@ -33,12 +33,38 @@ class Router {
 		$this->match_parts();
 	}
 	
-	private function check_alias($url = '', $depth = 5) {
+	private function regexify($source) {
+		if (preg_match('/(.+?)\.(.+?)$/', $source, $regs)) {
+			// URL contains a . -- let's run it that way
+			$regex = '@^' . preg_quote($regs[1], '@') . '(/(.+?))?\.' . $regs[2] . '@';
+		} else {
+			// the simple way, no dot
+			$regex = '@^' . preg_quote($source, '@') . '(/(.+?))?@';
+		}
+		
+		return $regex;
+	}
+	
+	private $context_arguments = '';
+	
+	private function check_alias($url = '') {
 		$url = (!empty($url)) ? $url : $this->query;
-
-		if (isset($this->aliases[$url]) && $depth > 0) {
-			$depth--;
-			$url = $this->check_alias($this->aliases[$url], $depth);
+		
+		foreach ($this->aliases as $source => $target) {
+			//$source_regex = $this->regexify($source);
+			
+			//if (preg_match('@' .  . '@'))
+			if (preg_match($source, $url, $contextregs)) {
+				$url = $target;
+				
+				if (!empty($contextregs[1])) {
+					// note that we have parameters
+					
+					$this->context_arguments = substr($contextregs[1], 1); // there's a / in front of it, we don't want that here
+				}
+				
+				return $url;
+			}
 		}
 		
 		return $url;
@@ -56,6 +82,14 @@ class Router {
 				$this->parts = $parts;
 				break;
 			}
+		}
+		
+		if (!empty($this->context_arguments)) {
+			if (!empty($this->parts['params'])) {
+				$this->parts['params'] .= '/';			
+			}
+			
+			$this->parts['params'] .= $this->context_arguments;
 		}
 	}
 	
@@ -117,9 +151,25 @@ class Router {
 	/**
 	* Checks for a default alias on any URL, and returns it. If not found, it returns the original URL.
 	*/	
-	public function alias_url_link($url) {
+	public function alias_url_link($url, $arguments = '') {
 		if (!empty($this->paths[$url])) {
-			return $this->paths[$url];
+			$alias = $this->paths[$url];
+			
+			if ($arguments) {
+				if (preg_match('/(.+?)\.(.+?)$/', $alias, $regs)) {
+					// URL contains a . -- let's run it that way
+					$alias = preg_replace('/\.(.+?)$/', '/' . $arguments . '.\1', $alias);
+				} else {
+					// the simple way, no dot
+					$alias .= '/' . $arguments;
+				}
+			}
+			
+			return $alias;
+		}
+		
+		if ($arguments) {
+			$url .= '/' . $arguments;
 		}
 		
 		return $url;

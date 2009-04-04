@@ -45,15 +45,20 @@ class View implements ArrayAccess {
 		return preg_replace($search, $replace, $contents);
 	}
 	
-	public function url($data) {
+	public function url($data, $arguments = '') {
 		$prefix = '';
 		if (!cms::$config['rewrite']) {
 			$prefix .= 'index.php/';
 		}
 		
 		if (!is_array($data)) {
+			if (is_object($data) && method_exists($data, 'to_url')) {
+				$url = $data->to_url();
+				$data = $url;
+			}
+			
 			if (strpos($data, '://') === false) {
-				return manager::base() . $prefix . cms::$router->alias_url_link($data);
+				return manager::base() . $prefix . cms::$router->alias_url_link($data, $arguments);
 			} else {
 				return $data;
 			}
@@ -77,13 +82,17 @@ class View implements ArrayAccess {
 	}
 
 	public function link($name, $url, $data = array()) {
-		$attributes = '';
+		$attributes = $args = '';
 
 		if (isset($data['attributes'])) {
 			$attributes = $data['attributes'];
 		}
+		
+		if (isset($data['args'])) {
+			$args = $data['args'];
+		}
 
-		return '<a href="' . view::url($url) . '"' . $attributes . '>' . $name . '</a>';
+		return '<a href="' . view::url($url, $args) . '"' . $attributes . '>' . $name . '</a>';
 	}
 	
 	public function display() {

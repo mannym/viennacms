@@ -157,4 +157,8 @@ class Node extends Model {
 		
 		return $return;
 	}
+	
+	public function to_url() {
+		return 'node/show/' . $this->node_id;
+	}
 }

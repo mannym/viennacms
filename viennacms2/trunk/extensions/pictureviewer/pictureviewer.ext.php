@@ -44,7 +44,7 @@ class extension_pictureviewer {
 				$folder->read(true);
 				
 				if ($folder_id != (string)$node->options['folder']) {
-					echo '<img src="' . manager::base() . 'blueprint/views/admin/images/icons/folder.png" alt="" /> <a href="' . view::url('node/show/' . $node->node_id . '/folder/' . $folder->get_parent()->node_id) . '">' . __('Up') . '</a><br />';
+					echo '<img src="' . manager::base() . 'blueprint/views/admin/images/icons/folder.png" alt="" /> <a href="' . view::url($node, 'folder/' . $folder->get_parent()->node_id) . '">' . __('Up') . '</a><br />';
 				}
 				
 				foreach ($folders as $folder) {
@@ -61,13 +61,13 @@ class extension_pictureviewer {
 						continue;
 					}
 					
-					echo '<img src="' . manager::base() . 'blueprint/views/admin/images/icons/folder.png" alt="" /> <a href="' . view::url('node/show/' . $node->node_id . '/folder/' . $folder->node_id) . '">' . $folder->title . ' (' . $image_count . ')</a><br />';
+					echo '<img src="' . manager::base() . 'blueprint/views/admin/images/icons/folder.png" alt="" /> <a href="' . view::url($node, 'folder/' . $folder->node_id) . '">' . $folder->title . ' (' . $image_count . ')</a><br />';
 				}
 				
 				foreach ($files as $file) {
 					if (substr($file->options['mimetype'], 0, 6) == 'image/') {
-						echo '<div style="float: left; text-align: center; width: 190px; height: 170px; margin: 5px;"><a href="' . view::url('node/show/' . $node->node_id . '/photo/' . $file->node_id) . '">';
-						echo '<img src="' . view::url('node/show/' . $node->node_id . '/image/160/' . $file->node_id) . '" alt="' . $file->title . '" /></a><br /><!--' . $file->title . '--></div>';
+						echo '<div style="float: left; text-align: center; width: 190px; height: 170px; margin: 5px;"><a href="' . view::url($node, 'photo/' . $file->node_id) . '">';
+						echo '<img src="' . view::url($node, 'image/160/' . $file->node_id) . '" alt="' . $file->title . '" /></a><br /><!--' . $file->title . '--></div>';
 					}
 				}
 
@@ -90,9 +90,9 @@ class extension_pictureviewer {
 				ob_start();
 				
 				echo '<div style="text-align: center;">';
-				echo '<img src="' . view::url('node/show/' . $node->node_id . '/image/640/' . $file->node_id) . '" alt="' . $file->title . '" />';
+				echo '<img src="' . view::url($node, 'image/640/' . $file->node_id) . '" alt="' . $file->title . '" />';
 				
-				echo '<br /><a href="' . view::url('node/show/' . $node->node_id . '/folder/' . $file->get_parent()->node_id) . '">&laquo; ' . sprintf(__('Back to %s'), $file->get_parent()->title) . '</a>';
+				echo '<br /><a href="' . view::url($node, 'folder/' . $file->get_parent()->node_id) . '">&laquo; ' . sprintf(__('Back to %s'), $file->get_parent()->title) . '</a>';
 
 				echo '</div>';
 
@@ -110,7 +110,7 @@ class extension_pictureviewer {
 
 				if ($previous) {
 					echo '<div style="float: left; width: 49%">';
-					echo view::link(__('&laquo; Previous'), 'node/show/' . $node->node_id . '/photo/' . $previous->node_id);
+					echo view::link(__('&laquo; Previous'), $node, array('args' => 'photo/' . $previous->node_id));
 					echo '</div>';
 				}
 
@@ -126,7 +126,7 @@ class extension_pictureviewer {
 
 				if ($next) {
 					echo '<div style="float: right; text-align: right; width: 49%">';
-					echo view::link(__('Next &raquo;'), 'node/show/' . $node->node_id . '/photo/' . $next->node_id);
+					echo view::link(__('Next &raquo;'), $node, array('args' => 'photo/' . $next->node_id));
 					echo '</div>';
 				}
 
