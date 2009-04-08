@@ -80,13 +80,7 @@ class Form {
 				}
 			}
 		}
-		
-		$val_func = $this->form_id . '_validate';
-			
-		if (method_exists($this->callback_object, $val_func)) {
-			$this->callback_object->$val_func($fields, $errors);
-		}
-		
+
 		if (isset($this->form['options'])) {
 			if (!empty($this->form['options']['validate_hooks'])) {
 				$hooks = $this->form['options']['validate_hooks'];
@@ -105,8 +99,17 @@ class Form {
 			}
 		}
 		
+		// we need the hook to be checked first. workaround for captcha extension bug
 		if (empty($errors)) {
-			return false;	
+			$val_func = $this->form_id . '_validate';
+			
+			if (method_exists($this->callback_object, $val_func)) {
+				$this->callback_object->$val_func($fields, $errors);
+			}
+		
+			if (empty($errors)) {
+				return false;	
+			}
 		}
 		
 		return $errors;
