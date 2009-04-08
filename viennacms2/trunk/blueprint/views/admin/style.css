@@ -12,7 +12,7 @@ body {
 	top: 0px;
 	height: 50px;
 	background-color: #09f;
-	border-bottom: 1px solid #00a;
+	border-bottom: 1px solid #000;
 }
 
 #main-menu ul {
@@ -59,7 +59,7 @@ body {
 #panes-left {
 	position: absolute;
 	left: 0px;
-	top: 50px;
+	top: 51px;
 	width: 180px;
 	margin-right: 5px;
 	border-right: 1px solid #02a;
@@ -68,7 +68,7 @@ body {
 #panes-right {
 	position: absolute;
 	right: 0px;
-	top: 50px;
+	top: 51px;
 	width: 180px;
 	border-left: 1px solid #02a;
 }
@@ -94,6 +94,10 @@ body {
 .panes .pane {
 	width: 100%;
 	border-bottom: 1px solid #02a;
+}
+
+.panes .pane:last-child {
+	border: none;
 }
 
 .panes .pane div.content {
