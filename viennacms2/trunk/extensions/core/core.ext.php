@@ -93,6 +93,21 @@ class extension_core {
 		if ($data[0] == 'node') {
 			return $this->node_toolbar($data[1]);
 		}
+		
+		if ($data[0] == 'log') {
+			return $this->log_toolbar();
+		}
+	}
+	
+	public function log_toolbar() {
+		$toolbar = array();
+		
+		$toolbar[__('Empty')] = array(
+			'icon' => manager::base() . 'blueprint/views/admin/images/icons/upload.png',
+			'callback' => 'admin/controller/log/clear',
+		);
+		
+		return $toolbar;
 	}
 
 	public function node_toolbar($node) {
@@ -395,7 +410,13 @@ class extension_core {
 		$output = '';
 		
 		foreach ($revisions as $revision) {
-			$output .= '<li><a class="page" href="' . $caller->view->url('admin/controller/revision/view/' . $node->node_id . '/' . $revision->number) . '">' . sprintf(__('Revision %d'), $revision->number) . '</a></li>';
+			$class = '';
+			
+			if (admincontroller::$context[0] == 'node_revision' && $revision->number == admincontroller::$context[1]->revision->number) {
+				$class = ' selected';
+			}
+			
+			$output .= '<li><a class="page' . $class . '" href="' . $caller->view->url('admin/controller/revision/view/' . $node->node_id . '/' . $revision->number) . '">' . sprintf(__('Revision %d'), $revision->number) . '</a></li>';
 		}
 		
 		return $output;
@@ -438,8 +459,14 @@ class extension_core {
 	
 	function acp_views() {
 		return array(
-			'nodes' => __('Nodes'),
-			'system' => __('System'),
+			'nodes' => array(
+				'title' => __('Nodes'),
+				'icon' => '~/blueprint/views/admin/images/icons/nodes-view.png'
+			),
+			'system' => array(
+				'title' => __('System'),
+				'icon' => '~/blueprint/views/admin/images/icons/system-view.png'
+			),
 //			'files' => __('Files')
 		);
 	}
@@ -448,8 +475,13 @@ class extension_core {
 		return array(
 			'extensions' => array(
 				'title' => __('Extensions'),
-				'icon' => '~/blueprint/views/admin/images/icons/file.png',
+				'icon' => '~/blueprint/views/admin/images/icons/extensions.png',
 				'href' => 'admin/controller/extensions/index'
+			),
+			'log' => array(
+				'title' => __('Log messages'),
+				'icon' => '~/blueprint/views/admin/images/icons/log.png',
+				'href' => 'admin/controller/log/index'
 			)
 		);
 	}

@@ -12,7 +12,24 @@ class Users {
 	}
 	
 	public function __destruct() {
-		$this->user->write(); // hey, who added this line of code?
+		if ($this->user->user_id != 0) {
+			$this->user->write(); // hey, who added this line of code?
+		}
+	}
+	
+	public function cleanup() {
+		$query = new VSession();
+		$sessions = $query->read();
+		
+		if (empty(cms::$config['session_timeout'])) {
+			cms::$config['session_timeout'] = (3600 * 24); // one day, like the cookie
+		}
+		
+		foreach ($sessions as $session) {
+			if ($session->session_time < (time() - cms::$config['session_timeout'])) {
+				$session->delete(false); // note the false... we don't want to lose the user!
+			}
+		}
 	}
 	
 	public function initialize() {
@@ -20,19 +37,25 @@ class Users {
 			$this->cookie = unserialize(stripslashes($_COOKIE['viennacms2_id']));
 		} else {
 			$this->cookie = array(
-				'u' => 0,
+				'u' => false,
 				's' => ''
 			);
 		}
 		
-		if ($this->cookie['u'] && $this->cookie['s']) {
+		if ($this->cookie['u'] !== false && $this->cookie['s']) {
 			$this->session = new VSession();
 			$this->session->session_id = $this->cookie['s'];
 			$this->session->read(true);
 			
 			if ($this->session->user_id == $this->cookie['u'] && $_SERVER['REMOTE_ADDR'] == $this->session->session_ip) {
-				$this->user = $this->session->user;
-				$this->logged_in = true;
+				if ($this->session->user_id != 0) {
+					$this->user = $this->session->user;
+					$this->logged_in = true;
+				} else {
+					$this->user = $this->guest_profile();
+					$this->logged_in = false;
+				}
+				
 				$this->session->session_time = time();
 				$this->session->write(false);
 				return;
@@ -40,9 +63,15 @@ class Users {
 		}
 		
 		$this->logged_in = false;
-		$this->user = new VUser();
-		$this->user->user_id = 0;
-		$this->user->username = 'Anonymous';
+		$this->create_session($this->guest_profile());
+	}
+	
+	private function guest_profile() {
+		$user = new VUser();
+		$user->user_id = 0;
+		$user->username = __('Anonymous');
+		
+		return $user;
 	}
 	
 	public function login($username, $password) {
@@ -58,6 +87,15 @@ class Users {
 			return USER_WRONG_PASSWORD;
 		}
 		
+		$this->logout(); // end the old session
+		$this->create_session($user);
+
+		$this->logged_in = true;
+		
+		return USER_OK;
+	}
+	
+	public function create_session($user) {
 		$sid = md5(uniqid(time()));
 		
 		$this->session = new VSession();
@@ -75,9 +113,6 @@ class Users {
 		
 		$cookie = serialize($this->cookie);
 		setcookie('viennacms2_id', $cookie, (time() + (3600 * 24)), '/', '');
-		$this->logged_in = true;
-		
-		return USER_OK;
 	}
 	
 	public function logout() {

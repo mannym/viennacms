@@ -7,7 +7,7 @@ class AdminNodesPaneController extends Controller {
 		$this->view['images_path'] = manager::base() . 'blueprint/views/admin/images';
 		
 		$id = false;
-		if (admincontroller::$context[0] == 'node') {
+		if (substr(admincontroller::$context[0], 0, 4) == 'node') {
 			$id = admincontroller::$context[1]->node_id;
 		}
 		

@@ -34,11 +34,13 @@
 				if ($this['views']) {
 					foreach ($this['views'] as $id => $view) {
 						?>
-						<li><a href="<?php echo $this->url('admin/view/' . $id) ?>"><?php echo $view ?></a></li>
+						<li><a style="background-image: url(<?php echo str_replace('~/', cms::base(), $view['icon']) ?>);" href="<?php echo $this->url('admin/view/' . $id) ?>"><?php echo $view['title'] ?></a></li>
 						<?php
 					}
 				}
 				?>
+				
+				<li><a style="background-image: url(<?php echo cms::base() ?>/blueprint/views/admin/images/icons/viewsite.png);" href="<?php echo cms::base() ?>"><?php echo __('View site') ?></a></li>
 			</ul>
 		</div>
 		<div id="main-content">

@@ -305,6 +305,41 @@ Line: <?php echo $error_data['line'] ?></p>
 		
 		return false;
 	}
+	
+	static public function check_upgrade() {
+		// okay, it's time. time to check if a upgrade is needed.
+		// the config code should be initialized now
+		
+		$database_revision = 1; // if we're not upgraded enough, try this
+		
+		if (isset(cms::$config['database_revision'])) {
+			$database_revision = (int)(string)cms::$config['database_revision']; // typecasting to be sure
+		}
+		
+		include(ROOT_PATH . 'blueprint/version.php');
+		
+		if ($database_version > $database_revision) {
+			// okay, we're out of date... too bad for that problem
+			// do not initialize any further, we want the interim upgrade tool. :)
+
+			define('MINIMAL', true); // stop the rest of the manager/core to run strange tricks
+			cms::$vars['upgrade_from'] = $database_revision;
+			cms::$vars['upgrade_to'] = $database_version;
+			$manager = new Manager();
+			$manager->run('install/update');
+			exit;
+		}
+	}
+	
+	static public function log($log_source, $log_message, $log_type) {
+		$item = VLogItem::create('VLogItem');
+		$item->log_source = $log_source;
+		$item->log_type = $log_type;
+		$item->log_message = $log_message;
+		$item->log_time = time();
+		$item->log_user = (!empty(cms::$user->user->user_id)) ? cms::$user->user->user_id : 0;
+		$item->write();
+	}
 
 	static public function redirect($url, $parameters = array()) {
 		$final_url = view::url($url);

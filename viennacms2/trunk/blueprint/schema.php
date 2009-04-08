@@ -96,3 +96,19 @@ $schema_data['viennacms_users'] = array(
 		'username' => array('INDEX', 'username')
 	) 
 );
+
+$schema_data['viennacms_log'] = array(
+	'COLUMNS' => array(
+		'log_id' => array('UINT', NULL, 'auto_increment'),
+		'log_source' => array('VCHAR:160', ''),
+		'log_type' => array('VCHAR:20', ''),
+		'log_message' => array('TEXT', ''),
+		'log_time' => array('TIMESTAMP', 0),
+		'log_user' => array('UINT', 0),
+	),
+	'PRIMARY_KEY' => 'log_id',
+	'KEYS' => array(
+		'type' => array('INDEX', 'log_type'),
+		'source' => array('INDEX', 'log_source')
+	)
+);

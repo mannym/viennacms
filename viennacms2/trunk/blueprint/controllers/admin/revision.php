@@ -6,6 +6,7 @@ class AdminRevisionController extends Controller {
 		$node->read(true);
 
 		AdminController::add_pane('left', 'meta', __('Meta data'), array($node->node_id));
+		AdminController::set_context('node_revision', $node);
 		
 		$node->revision = new Node_Revision();
 		$node->revision->node = $node->node_id;

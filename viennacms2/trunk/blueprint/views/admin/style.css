@@ -12,6 +12,7 @@ body {
 	top: 0px;
 	height: 50px;
 	background-color: #09f;
+	border-bottom: 1px solid #00a;
 }
 
 #main-menu ul {
@@ -23,8 +24,9 @@ body {
 #main-menu ul li {
 	display: block;
 	float: left;
-	height: 18px;
-	padding: 16px 13px;
+	height: 20px;
+	padding: 16px 10px;
+	padding-top: 14px;
 	border-right: 1px solid #000;
 }
 
@@ -37,7 +39,7 @@ body {
 
 #main-content {
 	position: absolute;
-	top: 50px;
+	top: 51px;
 	bottom: 0px;
 	padding-left: 5px;
 	padding-right: 5px;
@@ -457,4 +459,28 @@ p.description
 	top: 28px;
 	left: 0px;
 	right: 0px;
+}
+
+#main-menu ul li a {
+	height: 22px;
+	padding-left: 25px;
+	padding-top: 3px;
+	background-repeat: no-repeat;
+	display: block;
+}
+
+.logitem {
+	border-bottom: 1px solid #e4e0d8;
+}
+
+.logitem td {
+	border-right: 1px solid #e4e0d8;
+}
+
+.log-warn {
+	background-color: #ffd;
+}
+
+.log-error {
+	background-color: #fcc;
 }

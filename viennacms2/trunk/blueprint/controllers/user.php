@@ -52,8 +52,14 @@ class UserController extends Controller {
 		$result = cms::$user->login($fields['username'], $fields['password']);
 		if ($result == USER_NOT_FOUND) {
 			$errors['username'] = __('This username does not exist.');
+			
+			cms::log('core', sprintf('Wrong username entered on login form. User name: %s', $fields['username']), 'warn');
 		} else if ($result == USER_WRONG_PASSWORD) {
 			$errors['password'] = __('The entered password is incorrect.');
+			
+			cms::log('core', sprintf('Wrong password entered on login form for user name %s!', $fields['username']), 'warn');
+		} else {
+			cms::log('core', sprintf('Session opened for %s.', $fields['username']), 'info');
 		}
 	}
 	

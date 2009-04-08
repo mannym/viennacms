@@ -539,6 +539,8 @@ class AdminNodeController extends Controller {
 
 		cms::$helpers->create_node_alias($node);
 		
+		cms::log('core', sprintf('Node %s has been %s.', $node->title, ($fields['do'] . 'ed')), 'info');
+		
 		return __('The node has been successfully saved.');
 	}
 }

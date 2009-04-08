@@ -56,6 +56,14 @@ function cleanup() {
 	if (!empty(cms::$db)) {
 		cms::$db->sql_close();
 	}
+	
+	if (!empty(cms::$user)) {
+		if ((time() - (3600 * 6)) <= cms::$config['last_session_cleanup']) {
+			cms::$user->cleanup();
+			
+			cms::$config['last_session_cleanup'] = time();
+		}
+	}
 }
 
 spl_autoload_register('__autoload');
@@ -191,6 +199,13 @@ cms::register('cache', $acm_type);
 
 unset($dbpasswd);
 
+// initialize initial required stuff. not too much, or the code will bomb out.
+spl_autoload_register(array('cms', 'autoload')); // base blueprint models
+cms::register('config');
+View::$searchpaths['blueprint/views/'] = VIEW_PRIORITY_STOCK; // we need admin/simple.php further along
+
+cms::check_upgrade();
+
 //ADOdb_Active_Record::SetDatabaseAdapter($global['db']);
 
 //var_dump(Node::create('Node', $global));
@@ -221,12 +236,8 @@ cms::register('user', 'Users');
 cms::$user->initialize();
 
 // add other auto-loading classes
-spl_autoload_register(array('cms', 'autoload'));
 spl_autoload_register(array('controller', 'autoload'));
 Controller::$searchpaths[] = 'blueprint/controllers/';
-View::$searchpaths['blueprint/views/'] = VIEW_PRIORITY_STOCK;
-
-cms::register('config');
 
 //cms::$plugins->init(ROOT_PATH . 'extensions/');
 //cms::$plugins->setup();

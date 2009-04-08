@@ -51,6 +51,10 @@ class Config implements ArrayAccess {
 	}
 	
 	public function offsetUnset($key) {
+		if (isset($this->data[$key])) {
+			$this->data[$key]->delete();
+		}
+		
 		unset($this->data[$key]);
 	}
 }

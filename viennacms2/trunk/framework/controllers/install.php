@@ -383,4 +383,100 @@ CONFIG;
 		
 		$this->view['action'] = $this->view->url('install/convert');		
 	}
+	
+	public function update() {
+		$this->view->path = 'admin/simple.php';
+		
+		$action = (!empty($_GET['action'])) ? $_GET['action'] : 'ask';
+		ob_start();
+		
+		switch ($action) {
+			case 'ask': 
+				echo '<p>' . __('The core database is out of date. No need to worry, just click the button below to upgrade, and this site will be up and running again.') . '</p>';
+				echo view::link(__('Upgrade the core'), 'install/update?action=run');
+			break;
+			case 'run':
+				// I was afraid you wouldn't choose this option. Thanks for choosing it anyway. :D
+				// annoying, upgrading.
+
+				include(ROOT_PATH . 'framework/database/db_tools.php');
+				include(ROOT_PATH . 'blueprint/updates.php');
+				include(ROOT_PATH . 'blueprint/schema.php');
+				
+				cms::$db->return_on_error = true;
+				
+				$errors = array();
+				
+				$table_prefix = cms::$vars['table_prefix'];
+			
+				$versions = array_keys($updates);
+				
+				// we must do this so that we can handle the errors
+				$db_tools = new cms_db_tools(cms::$db, true);
+			
+				foreach ($versions as $i => $version) {
+					$update_changes = $updates[$version];
+					
+					$next_version = (isset($versions[$i + 1])) ? $versions[$i + 1] : cms::$vars['upgrade_to'];
+					
+					if ($version < cms::$vars['upgrade_from'] && cms::$vars['upgrade_from'] >= $next_version) {
+						continue;
+					}
+					
+					if (!count($update_changes['change']) && !count($update_changes['add'])) {
+						continue;
+					}
+					
+					if (count($update_changes['change'])) {
+						$schema_changes = $db_tools->perform_schema_changes($update_changes['change']);
+						
+						foreach ($statements as $sqlt)
+						{
+							if (!cms::$db->sql_query($sqlt))
+							{
+								$errors[] = cms::$db->sql_error();
+							}
+						}
+					} 
+					
+					if (count($update_changes['add'])) {
+						foreach ($update_changes['add'] as $table_name) {
+							$table_data = $schema_data[$table_name];
+							
+							$table_name = preg_replace('#viennacms_#i', $table_prefix, $table_name);
+					
+							$statements = $db_tools->sql_create_table($table_name, $table_data);
+					
+							foreach ($statements as $sqlt)
+							{
+								if (!cms::$db->sql_query($sqlt))
+								{
+									$errors[] = cms::$db->sql_error();
+								}
+							}
+						}
+					}
+				}
+			
+				if (count($errors) == 0) {
+					cms::$config['database_revision'] = cms::$vars['upgrade_to'];
+					
+					cms::redirect('node');
+					// we should have exited by now
+				}
+				
+				echo __('Some errors occurred during the upgrade. These may or may not be fatal. Check out the support forums if you need help solving these errors.');
+				echo '<ul>';
+				foreach ($errors as $error) {
+					echo '<li>' . $error['message'] . '</li>';
+				}
+				echo '</ul>';
+			break;
+		}
+		
+		$contents = ob_get_contents();
+		ob_end_clean();
+		
+		$this->view['data'] = $contents;
+	}
 }

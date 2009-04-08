@@ -13,13 +13,27 @@ class Form {
 	public $return = false;
 	
 	public function handle_form($form_id, $data) {
+		if (isset($_POST[$form_id . '_submit'])) {
+			$submit = true;
+		} else {
+			$submit = false;
+		}
+		
+		$alter_params = new stdClass;
+		$alter_params->data = $data;
+		$alter_params->is_submit = $submit;
+		
+		manager::run_hook_all('form_alter', $form_id, $alter_params);
+		
+		$data = $alter_params->data;
+		
 		$this->form_id = $form_id;
 		$this->form = $data;
 		if (empty($this->action)) {
 			$this->action = cms::$router->query;
 		}
 		
-		if (isset($_POST[$form_id . '_submit'])) {
+		if ($submit) {
 			$fields = array();
 			foreach ($_POST as $key => $value) {
 				if (strpos($key, $form_id) === 0) {
@@ -59,12 +73,36 @@ class Form {
 					$errors[$key] = $result;	
 				}
 			}
+			
+			if ($data['type'] == 'select' || $data['type'] == 'radio') {
+				if (!in_array($value, $data['values'])) {
+					$errors[$key] = sprintf(__('You have submitted a wrong value for the field %s.'), $data['label']);
+				}
+			}
 		}
 		
 		$val_func = $this->form_id . '_validate';
 			
 		if (method_exists($this->callback_object, $val_func)) {
 			$this->callback_object->$val_func($fields, $errors);
+		}
+		
+		if (isset($this->form['options'])) {
+			if (!empty($this->form['options']['validate_hooks'])) {
+				$hooks = $this->form['options']['validate_hooks'];
+				
+				if (is_array($hooks)) {
+					foreach ($hooks as $hook) {
+						$object = $hook[0];
+						
+						if (method_exists($object, $hook[1])) {
+							$function = $hook[1];
+							
+							$object->$function($fields, $errors);
+						}
+					}
+				}
+			}
 		}
 		
 		if (empty($errors)) {
@@ -115,6 +153,10 @@ class Form {
 			$rendered_fields = '';
 			$error = false;
 			foreach ($rfields as $key => $value) {
+				if ($value['type'] == 'value') {
+					continue;
+				}
+				
 				if (!isset($value['name'])) {
 					$value['name'] = $this->form_id . '_' . $key;
 				}
@@ -126,7 +168,7 @@ class Form {
 					$view[$id] = $setting;
 				}
 				
-				if (isset($values[$key])) {
+				if (isset($values[$key]) && empty($value['refresh'])) {
 					$view['value'] = htmlspecialchars($values[$key]); // it's user-submitted content now, and that can be lethal
 				}
 
@@ -148,7 +190,7 @@ class Form {
 						$error = true;
 					}
 					
-					$wrapper['rendered_field'] = $content;
+					$wrapper['rendered_field'] = $value['field_prefix'] . $content;
 
 					$field_content = $wrapper->display();
 
@@ -179,6 +221,24 @@ class Form {
 			$custom_data['raw_groups'][$group_id] = $rendered_fields;
 			$custom_data['groups'][$group_id] = $group_output;
 			$final_fields .= $group_output;
+		}
+		
+		if (isset($this->form['options'])) {
+			if (!empty($this->form['options']['render_hooks'])) {
+				$hooks = $this->form['options']['render_hooks'];
+				
+				if (is_array($hooks)) {
+					foreach ($hooks as $hook) {
+						$object = $hook[0];
+						
+						if (method_exists($object, $hook[1])) {
+							$function = $hook[1];
+							
+							$object->$function($this->form);
+						}
+					}
+				}
+			}
 		}
 		
 		if ($this->return) {
