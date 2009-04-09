@@ -14,5 +14,10 @@ class extension_news {
 			),
 		);
 	}
+	
+	public function news($node, $arguments)
+	{
+		
+	}
 }
 ?>

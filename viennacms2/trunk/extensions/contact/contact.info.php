@@ -1,8 +1,8 @@
 <?php
 return array(
-	'name' => 'News',
+	'name' => 'Contact',
 	'version' => '0.0.1',
-	'description' => __('With the News extension, you can have a newsfolder and have it somewhere on your site.'),
+	'description' => __('A contact form gives users the option to email you via the website.'),
 	'author' => 'viennaCMS developers',
 	'author_url' => 'http://www.viennacms.nl/',
 	'url' => 'http://www.viennacms.nl/'

@@ -51,7 +51,7 @@ if (empty($values)) {
 			</td>
 			<td>
 				<?php echo $extension['description'] ?>
-				<?php echo sprintf(__('By %s.'), '<a href="' . $extension['author_url'] . '">' . $extension['author'] . '</a>') ?>
+				<em><?php echo sprintf(__('By %s.'), '<a href="' . $extension['author_url'] . '">' . $extension['author'] . '</a>') ?></em>
 			</td>
 			<td>
 				<?php echo $extension['actions'] ?>
