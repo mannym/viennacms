@@ -18,6 +18,19 @@ class AdminTrashController extends Controller {
 	}
 	
 	public function delete() {
+		// check for any trashed children
+		// only on the first level for simplicity, otherwise the user'll solve it.
+		$children = cms::$helpers->trashroot->get_children(3600);
+		
+		foreach ($children as $child) {
+			if (((string)$child->options['trash_old_parent']) == $this->arguments[0]) {
+				unset($child->options['trash_old_parent']);
+				$child->parent = $this->arguments[0];
+				$child->write();
+			}
+		}
+		
+		// and trash this node
 		$node = new Node();
 		$node->node_id = $this->arguments[0];
 		$node->read(true);

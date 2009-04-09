@@ -13,6 +13,7 @@ class Helpers {
 			$node = Node::create('Node');
 			$node->parent = 0;
 			$node->type = 'trashcan';
+			__('Trash'); // dummy
 			$node->title = 'Trash.localized';
 			$node->write();
 		}

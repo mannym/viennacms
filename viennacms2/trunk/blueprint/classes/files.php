@@ -12,6 +12,7 @@ class Files {
 			$node = Node::create('Node');
 			$node->parent = 0;
 			$node->type = 'filesfolder';
+			__('Files'); // dummy for poedit
 			$node->title = 'Files.localized';
 			$node->write();
 		}
