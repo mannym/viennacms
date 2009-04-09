@@ -60,6 +60,10 @@ class AdminNodeController extends Controller {
 			$node->parent = $this->arguments[1];
 			$node->set_type_vars();
 			
+			$parent = new Node();
+			$parent->node_id = $node->parent;
+			$parent->read(true);
+			
 			$ux_html = '<li class="oncontentremove"><a class="' . $node->type . ' mynewnode" href="#">' . __('New node') . '</a></li>';
 			ob_start();
 			?>
@@ -271,8 +275,10 @@ class AdminNodeController extends Controller {
 			AdminController::set_context('node', $node);
 			
 			//$prefix = AdminController::add_toolbar($toolbars, $this) . $prefix;
+		} else if ($parent->node_id) {
+			AdminController::set_context('node_add', $parent);
 		}
-		
+				
 		return $prefix . $form->handle_form('node_edit', $form_data) . $postfix;
 	}
 	
