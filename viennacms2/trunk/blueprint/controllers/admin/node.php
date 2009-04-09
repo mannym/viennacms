@@ -267,6 +267,9 @@ class AdminNodeController extends Controller {
 			);
 		}
 		
+		$form_data['options']['out_prefix'] = $prefix;
+		$form_data['options']['out_postfix'] = $postfix;
+		
 		$form = new Form();
 		$form->parameter = $node;
 		$form->callback_object = $this;
@@ -279,7 +282,7 @@ class AdminNodeController extends Controller {
 			AdminController::set_context('node_add', $parent);
 		}
 				
-		return $prefix . $form->handle_form('node_edit', $form_data) . $postfix;
+		return $form->handle_form('node_edit', $form_data);
 	}
 	
 	public function edit_module() {

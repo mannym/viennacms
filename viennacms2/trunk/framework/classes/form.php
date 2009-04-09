@@ -269,7 +269,19 @@ class Form {
 		$view['action'] = $view->url($this->action);
 		$view['fields'] = $output;
 		$view['custom_data'] = $custom_data;
-		return $view->display();
+		
+		$prefix = $postfix = '';
+		if (isset($this->form['options'])) {
+			if (!empty($this->form['options']['out_prefix'])) {
+				$prefix = $this->form['options']['out_prefix'];
+			}
+			
+		if (!empty($this->form['options']['out_postfix'])) {
+				$postfix = $this->form['options']['out_postfix'];
+			}
+		}
+		
+		return $prefix . $view->display() . $postfix;
 	}
 
 	/**
