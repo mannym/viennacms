@@ -1,5 +1,37 @@
 <?php
 class Helpers {
+	public $trashroot;
+	
+	public function init_trash() {
+		$node = new Node();
+		$node->parent = 0;
+		$node->type = 'trashcan';
+		$node->read(true);
+		
+		if (empty($node->title)) {
+			$node = Node::create('Node');
+			$node->parent = 0;
+			$node->type = 'trashcan';
+			$node->title = 'Trash.localized';
+			$node->write();
+		}
+
+		$this->trashroot = $node;
+	}
+	
+	public function remove_node_children($node) {
+		$children = $node->get_children();
+		
+		foreach ($children as $child) {
+			$this->remove_node($child);
+		}
+	}
+	
+	public function remove_node($node) {
+		$this->remove_node_children($node);
+		$node->delete();
+	}
+	
 	public function render_modules($source_modules) {
 		if (empty($source_modules)) {
 			return ''; // don't waste our time on this :)

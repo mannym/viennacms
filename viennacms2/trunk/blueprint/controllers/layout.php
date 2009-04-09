@@ -161,28 +161,7 @@ class LayoutController extends Controller {
 	* @return array $parents
 	*/
 	public function get_parents($node) {
-		$array = array($node);
-		$array = array_merge($array, $this->_get_parents($node));
-		array_pop($array); // remove the main node
-		$parents = array_reverse($array);
-		return $parents;
-	}
-	
-	/**
-	* Internal get_parents
-	* 
-	* @param Node $node
-	*/
-
-	private function _get_parents($node) {
-		$nodes = array($node->get_parent(7200));
-
-		if ($nodes[0]->node_id) {
-			$newnode = $nodes[0];
-			$nodes = array_merge($nodes, $this->_get_parents($newnode));
-		}
-		
-		return $nodes;
+		return $node->get_parents();
 	}
 	
 	/**

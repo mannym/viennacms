@@ -1,5 +1,6 @@
 <html>
 	<head>
+		<title><?php echo __('viennaCMS ACP') ?></title>
 		<base href="<?php echo manager::base() ?>" />
 		<link rel="stylesheet" href="framework/js/thickbox.css" />
 		<link rel="stylesheet" href="blueprint/views/admin/style.css" />

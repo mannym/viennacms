@@ -37,6 +37,7 @@ class Node_Options implements ArrayAccess {
 	}
 	
 	public function offsetUnset($key) {
+		$this->data[$key]->delete();
 		unset($this->data[$key]);
 	}
 }

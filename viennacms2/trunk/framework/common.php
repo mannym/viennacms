@@ -245,3 +245,4 @@ Controller::$searchpaths[] = 'blueprint/controllers/';
 cms::register('files');
 cms::$files->init();
 cms::register('helpers');
+cms::$helpers->init_trash();

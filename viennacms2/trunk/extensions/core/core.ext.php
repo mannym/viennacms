@@ -48,6 +48,15 @@ class extension_core {
 				'display_callback' => array($this, 'output_file'),
 				'path_callback' => array($this, 'file_path')
 			),
+			'trashcan' => array(
+				'extension' => 'core',
+				'title' => __('Trash can'),
+				'description' => '',
+				'type' => 'none',
+				'icon' => '~/blueprint/views/admin/images/icons/trashcan.png',
+				'options' => array(),
+				'display_callback' => 'none'
+			),
 			'site' => array(
 				// let's not go there... for now :)
 				'icon' => '~/blueprint/views/admin/images/icons/site.png',
@@ -75,6 +84,10 @@ class extension_core {
 		if ($op == 'admin_tree') {
 			if ($node->type == 'filesfolder') {
 				$url->url = 'admin/controller/file/folder/' . $node->node_id;
+			}
+			
+			if ($node->type == 'trashcan') {
+				$url->url = 'admin/controller/trash/can/' . $node->node_id;
 			}
 		
 			if ($node->type == 'file') {
@@ -135,8 +148,62 @@ class extension_core {
 				'callback' => 'admin/controller/themes/select/' . $node->node_id
 			);
 		}
+		
+		$parents = $node->get_parents(3600);
+		
+		$is_trash = false;
+				
+		foreach ($parents as $parent) {
+			if ($parent->type == 'trashcan') {
+				$is_trash = true;
+				$trash_id = $parent;
+			}
+		}
+		
+		if ($is_trash) {
+			$toolbar[__('Empty trash')] = array(
+				'icon' => manager::base() . 'blueprint/views/admin/images/icons/trash_clear.png',
+				'callback' => 'admin/controller/trash/clear/' . $trash_id->node_id
+			);
+			
+			$old_value = (string)$node->options['trash_old_parent'];
+			
+			if ($node->type != 'trashcan' && !empty($old_value)) {
+				$toolbar[__('Restore')] = array(
+					'icon' => manager::base() . 'blueprint/views/admin/images/icons/trash_restore.png',
+					'callback' => 'admin/controller/trash/restore/' . $node->node_id
+				);
+			}
+		} else if (!$node->has_references()) {
+			$toolbar[__('Delete')] = array(
+				'icon' => manager::base() . 'blueprint/views/admin/images/icons/trash_clear.png',
+				'callback' => 'admin/controller/trash/delete/' . $node->node_id
+			);
+		}
 
 		return $toolbar;
+	}
+	
+	public function node_pre_remove($node) {
+		if ($node->type == 'file') {
+			@unlink(ROOT_PATH . $node->description);
+		}
+	}
+	
+	public function node_check_references($node) {
+		// having the homepage not exist makes the node system go crazy :)
+		if (cms::$vars['sitenode']) {
+			if (((string)cms::$vars['sitenode']->options['homepage']) == $node->node_id) {
+				return true;
+			}
+		}
+		
+		// we don't want any root system nodes to bee bee gone
+		if ($node->parent == 0) {
+			return true;
+		}
+		
+		return false;
 	}
 
 	public function node_edit_widgets($node) {
@@ -361,6 +428,18 @@ class extension_core {
 				
 				if ($node->type == 'filesfolder') {
 					if ($other->type != 'filesfolder') {
+						return false;
+					}
+				}
+				
+				if ($node->type == 'trashcan') {
+					return false;
+				}
+				
+				$parents = $other->get_parents();
+				
+				foreach ($parents as $parent) {
+					if ($parent->type == 'trashcan') {
 						return false;
 					}
 				}
