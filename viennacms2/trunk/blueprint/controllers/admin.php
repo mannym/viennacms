@@ -51,6 +51,10 @@ class AdminController extends Controller {
 		return $c;
 	}
 	
+	public static function notify($message) {
+		cms::$user->session_storage['acp_notification'] = $message;
+	}
+	
 	static $context = array();
 	
 	public static function set_context($type, $value) {
@@ -114,6 +118,16 @@ class AdminController extends Controller {
 			if (!empty($toolbars)) {
 				cms::$layout->view['toolbars'] = self::add_toolbar($toolbars, $this);
 			}
+		}
+		
+		$msg = cms::$user->session_storage['acp_notification'];
+		
+		if (!empty($msg)) {
+			$notification = '<div class="notification">' . $msg . '</div>';
+			
+			$this->view['data'] = $notification . $this->view['data'];
+			
+			unset(cms::$user->session_storage['acp_notification']);
 		}
 	}
 	

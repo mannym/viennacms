@@ -9,5 +9,5 @@
 <?php
 echo sprintf(__('%sDownloads:%s %d'), '<strong>', '</strong>', (string)$this['file']->options['downloads']) . '<br />';
 
-echo '<a href="' . $this['delete_url'] . '" onclick="return confirm(\'' . __('Do you really want to delete this file? This can not be undone.') . '\');" class="delete">' . __('Delete this file') . '</a>';
+//echo '<a href="' . $this['delete_url'] . '" onclick="return confirm(\'' . __('Do you really want to delete this file? This can not be undone.') . '\');" class="delete">' . __('Delete this file') . '</a>';
 ?>

@@ -49,13 +49,7 @@ function __autoload($class_name) {
 }
 
 function cleanup() {
-	if (!empty(cms::$cache)) {
-		cms::$cache->unload();
-	}
-	
-	if (!empty(cms::$db)) {
-		cms::$db->sql_close();
-	}
+	cms::$user->exit_clean();
 	
 	if (!empty(cms::$user)) {
 		if ((time() - (3600 * 6)) <= cms::$config['last_session_cleanup']) {
@@ -63,6 +57,14 @@ function cleanup() {
 			
 			cms::$config['last_session_cleanup'] = time();
 		}
+	}
+	
+	if (!empty(cms::$cache)) {
+		cms::$cache->unload();
+	}
+	
+	if (!empty(cms::$db)) {
+		cms::$db->sql_close();
 	}
 }
 

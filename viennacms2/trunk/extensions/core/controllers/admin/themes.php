@@ -53,7 +53,8 @@ class AdminThemesController extends Controller {
 		$node->options['style'] = $this->arguments[0];
 		$node->write();
 		
-		return __('The style has been changed.');
+		admincontroller::notify(sprintf(__('The current style has been set to %s.'), $this->arguments[0]));
+		cms::redirect('admin/controller/themes/select');
 	}
 	
 	private function show_theme_thing($name, $theme_info, $default = false, $count = 1) {

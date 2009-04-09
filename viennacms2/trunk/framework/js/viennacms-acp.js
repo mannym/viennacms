@@ -67,6 +67,18 @@ $(function() {
 		}
 	);*/
 	
+	$(window).load(function() {
+		$('.notification').animate(
+				{
+					backgroundColor: '#ddffdd',
+					borderTopColor: "#00aa00",
+					borderLeftColor: "#00aa00",
+					borderRightColor: "#00aa00",
+					borderBottomColor: "#00aa00", // borderColor doesn't exist here :(
+				}, 2500
+		);
+	});
+	
 	reload_pane_containers(false);
 	update_content();
 

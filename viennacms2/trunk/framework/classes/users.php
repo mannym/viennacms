@@ -4,6 +4,8 @@ class Users {
 	public $user;
 	public $logged_in;
 	public $session;
+	public $session_storage = array();
+	public $orig_storage;
 	
 	public function __construct() {
 		@define('USER_OK', 0);
@@ -11,9 +13,24 @@ class Users {
 		@define('USER_WRONG_PASSWORD', 2);
 	}
 	
-	public function __destruct() {
+	public function exit_clean() {
 		if ($this->user->user_id != 0) {
 			$this->user->write(); // hey, who added this line of code?
+		}
+		
+		$sid = $this->session->session_id;
+		
+		if ($sid && $this->session_storage != $this->orig_storage) {
+			cms::$config['session_' . $sid] = serialize($this->session_storage);
+		}
+	}
+	
+	public function load_session_storage() {
+		$sid = $this->session->session_id;
+		
+		if (isset(cms::$config['session_' . $sid])) {
+			$this->session_storage = unserialize(cms::$config['session_' . $sid]);
+			$this->orig_storage = $this->session_storage;
 		}
 	}
 	
@@ -27,6 +44,7 @@ class Users {
 		
 		foreach ($sessions as $session) {
 			if ($session->session_time < (time() - cms::$config['session_timeout'])) {
+				unset(cms::$config['session_' . $session->session_id]);
 				$session->delete(false); // note the false... we don't want to lose the user!
 			}
 		}
@@ -58,12 +76,18 @@ class Users {
 				
 				$this->session->session_time = time();
 				$this->session->write(false);
+				
+				$cookie = serialize($this->cookie);
+				setcookie('viennacms2_id', $cookie, (time() + (3600 * 24)), '/', '');
+				
+				$this->load_session_storage();
 				return;
 			}
 		}
 		
 		$this->logged_in = false;
 		$this->create_session($this->guest_profile());
+		$this->load_session_storage();
 	}
 	
 	private function guest_profile() {

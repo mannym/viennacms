@@ -25,6 +25,8 @@ class AdminTrashController extends Controller {
 		$node->parent = cms::$helpers->trashroot->node_id;
 		$node->write();
 		
+		admincontroller::notify(sprintf(__('The node %s has been put into the trash can.'), $node->title));
+		
 		cms::redirect($node->to_admin_url());
 	}
 	
@@ -67,6 +69,7 @@ class AdminTrashController extends Controller {
 		
 		cms::$helpers->remove_node_children($can);
 		
+		admincontroller::notify(__('The trash can has been successfully emptied.'));
 		cms::redirect('admin/controller/trash/can/' . $can->node_id);
 	}
 	
@@ -79,6 +82,7 @@ class AdminTrashController extends Controller {
 		$node->parent = $parent;
 		$node->write();
 		
+		admincontroller::notify(sprintf(__('The node %s has been restored from the trash can.'), $node->title));
 		cms::redirect($node->to_admin_url());
 	}
 }

@@ -6,6 +6,7 @@ class Helpers {
 		$node = new Node();
 		$node->parent = 0;
 		$node->type = 'trashcan';
+		$node->cache = 7200;
 		$node->read(true);
 		
 		if (empty($node->title)) {

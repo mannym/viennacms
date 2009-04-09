@@ -550,6 +550,9 @@ class AdminNodeController extends Controller {
 		
 		cms::log('core', sprintf('Node %s has been %s.', $node->title, ($fields['do'] . 'ed')), 'info');
 		
+		admincontroller::notify(sprintf(__('The node %s has been successfully %s.'), $node->title, ($fields['do'] . 'ed')));
+		cms::redirect($node->to_admin_url());
+		
 		return __('The node has been successfully saved.');
 	}
 }

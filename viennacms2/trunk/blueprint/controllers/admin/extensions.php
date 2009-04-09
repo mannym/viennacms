@@ -73,7 +73,8 @@ class AdminExtensionsController extends Controller {
 		
 		cms::$config['extensions'] = serialize($extensions);
 		
-		return sprintf(__('The extension %s is successfully enabled.'), $data['name']);
+		admincontroller::notify(sprintf(__('The extension %s has been successfully enabled.'), $data['name']));
+		cms::redirect('admin/controller/extensions/index');
 	}
 	
 	public function deactivate() {
@@ -100,6 +101,7 @@ class AdminExtensionsController extends Controller {
 		unset($extensions[$id]);
 		cms::$config['extensions'] = serialize($extensions);
 		
-		return sprintf(__('The extension %s is successfully disabled.'), $data['name']);
+		admincontroller::notify(sprintf(__('The extension %s has been successfully disabled.'), $data['name']));
+		cms::redirect('admin/controller/extensions/index');
 	}
 }

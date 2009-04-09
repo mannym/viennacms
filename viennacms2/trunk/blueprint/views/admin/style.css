@@ -4,6 +4,15 @@ body {
 	margin: 0px;
 }
 
+.notification {
+	border-width: 1px;
+	border-color: #f0c020;
+	border-style: solid;
+	margin: 5px;
+	padding: 5px;
+	background-color: #ffd;
+}
+
 #main-menu {
 	position: absolute;
 	left: 0px;
