@@ -223,6 +223,9 @@ CONFIG;
 				$node->title = 'viennaCMS';
 				$node->write();
 				
+				// we need to set the database version, but we need the config system loaded
+				cms::register('config');
+				
 				include(ROOT_PATH . 'blueprint/version.php');
 				cms::$config['database_revision'] = $database_version;
 				
