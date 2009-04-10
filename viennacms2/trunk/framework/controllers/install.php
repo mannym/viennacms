@@ -223,6 +223,9 @@ CONFIG;
 				$node->title = 'viennaCMS';
 				$node->write();
 				
+				include(ROOT_PATH . 'blueprint/version.php');
+				cms::$config['database_revision'] = $database_version;
+				
 				header('Location: ' . manager::base());
 				exit;
 			break;
@@ -273,7 +276,7 @@ CONFIG;
 					$sql = 'TRUNCATE TABLE ' . cms::$vars['table_prefix'] . 'nodes';
 					cms::$db->sql_query($sql);
 					
-					$sql = 'TRUNCATE TABLE ' . cms::$vars['table_prefix'] . 'node_options';
+					$sql = 'DELETE FROM ' . cms::$vars['table_prefix'] . 'node_options WHERE node <> 0';
 					cms::$db->sql_query($sql);
 					
 					$sql = 'TRUNCATE TABLE ' . cms::$vars['table_prefix'] . 'node_revisions';
