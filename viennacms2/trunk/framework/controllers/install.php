@@ -166,6 +166,12 @@ CONFIG;
 					break;
 				}
 				
+				// we need to set the database version, but we need the config system loaded
+				cms::register('config');
+				
+				include(ROOT_PATH . 'blueprint/version.php');
+				cms::$config['database_revision'] = $database_version;
+				
 				// okay, let them enter the user information
 				// due to system strangeness, the system should be runnable by now!
 				cms::$layout->view['title'] = __('User information');
@@ -223,12 +229,6 @@ CONFIG;
 				$node->title = 'viennaCMS';
 				$node->write();
 				
-				// we need to set the database version, but we need the config system loaded
-				cms::register('config');
-				
-				include(ROOT_PATH . 'blueprint/version.php');
-				cms::$config['database_revision'] = $database_version;
-				
 				header('Location: ' . manager::base());
 				exit;
 			break;
@@ -279,7 +279,7 @@ CONFIG;
 					$sql = 'TRUNCATE TABLE ' . cms::$vars['table_prefix'] . 'nodes';
 					cms::$db->sql_query($sql);
 					
-					$sql = 'DELETE FROM ' . cms::$vars['table_prefix'] . 'node_options WHERE node <> 0';
+					$sql = 'DELETE FROM ' . cms::$vars['table_prefix'] . 'node_options WHERE node_id <> 0';
 					cms::$db->sql_query($sql);
 					
 					$sql = 'TRUNCATE TABLE ' . cms::$vars['table_prefix'] . 'node_revisions';
