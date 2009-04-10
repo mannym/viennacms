@@ -49,9 +49,9 @@ function __autoload($class_name) {
 }
 
 function cleanup() {
-	cms::$user->exit_clean();
-	
 	if (!empty(cms::$user)) {
+		cms::$user->exit_clean();
+	
 		if ((time() - (3600 * 6)) <= cms::$config['last_session_cleanup']) {
 			cms::$user->cleanup();
 			
