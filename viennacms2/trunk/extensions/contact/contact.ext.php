@@ -7,8 +7,7 @@ class extension_contact {
 				'title' => __('Contact form'),
 				'description' => __('A simple contact form allowing users to email you via the website'),
 				'type' => 'none',
-				'icon' => '~/blueprint/views/admin/images/icons/page.png',
-				'big_icon' => '~/blueprint/views/admin/images/icons/page_big.png',
+				'icon' => '~/extensions/contact/message.png',
 				'options' => array(
 					'email' => array(
 						'label' => __('E-mail address'),
