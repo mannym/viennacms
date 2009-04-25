@@ -86,6 +86,7 @@ class AdminController extends Controller {
 		
 		cms::$layout->view['pane_url'] = $this->view->url('admin/panes');
 		
+		// TODO: replace by 'node type registry'
 		$node_types = manager::run_hook_all('get_node_types');
 		$icons = array();
 		foreach ($node_types as $id => $data) {
@@ -94,7 +95,8 @@ class AdminController extends Controller {
 		
 		cms::$layout->view['icons'] = $icons;
 		
-		$panes = manager::run_hook_all('acp_get_panes', $view);
+		//$panes = manager::run_hook_all('acp_get_panes', $view);
+		$panes = VEvents::invoke('acp.get-panes', $view);
 		$panes = array_merge_recursive($panes, AdminController::$panes);
 		$panes_output = array(
 			'left' => array()
@@ -110,10 +112,12 @@ class AdminController extends Controller {
 		}
 		
 		cms::$layout->view['panes'] = $panes_output;
-		cms::$layout->view['views'] = manager::run_hook_all('acp_views');
+		//cms::$layout->view['views'] = manager::run_hook_all('acp_views');
+		cms::$layout->view['views'] = VEvents::invoke('acp.get-views');
 		
 		if (!empty(self::$context[0])) {
-			$toolbars = manager::run_hook_all('acp_context_toolbars', self::$context);
+			//$toolbars = manager::run_hook_all('acp_context_toolbars', self::$context);
+			$toolbars = VEvents::invoke('acp.get-context-toolbars', self::$context);
 			
 			if (!empty($toolbars)) {
 				cms::$layout->view['toolbars'] = self::add_toolbar($toolbars, $this);

@@ -23,7 +23,8 @@ class Form {
 		$alter_params->data = $data;
 		$alter_params->is_submit = $submit;
 		
-		manager::run_hook_all('form_alter', $form_id, $alter_params);
+		//manager::run_hook_all('form_alter', $form_id, $alter_params);
+		VEvents::invoke('form.alter', $form_id, $alter_params);
 		
 		$data = $alter_params->data;
 		

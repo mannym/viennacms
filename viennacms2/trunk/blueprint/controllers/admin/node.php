@@ -11,6 +11,7 @@ class AdminNodeController extends Controller {
 		?>
 		<ul class="types submenu">
 		<?php
+		// TODO: replace with node type registry
 		$types = manager::run_hook_all('get_node_types');
 		foreach ($types as $key => $type) {
 			$node = new Node();
@@ -23,7 +24,8 @@ class AdminNodeController extends Controller {
 			$url = new stdClass;
 			$url->url = 'admin/controller/node/add_do/' . $key . '/' . $parent->node_id;
 			
-			manager::run_hook_all('core_admin_node_add_url', $url, $key, $parent);
+			//manager::run_hook_all('core_admin_node_add_url', $url, $key, $parent);
+			VEvents::invoke('acp.alter-node-add-url', $url, $key, $parent);
 			
 			?>
 			<li>
@@ -98,13 +100,15 @@ class AdminNodeController extends Controller {
 		
 		$prefix = '';
 		
-		$extras = manager::run_hook_all('node_edit_output', $node);
+		//$extras = manager::run_hook_all('node_edit_output', $node);
+		$extras = VEvents::invoke('acp.node-edit-prefix', $node);
 		
 		foreach ($extras as $extra) {
 			$prefix .= $extra;
 		}
 		
-		$extras = manager::run_hook_all('node_edit_output_postfix', $node);
+		//$extras = manager::run_hook_all('node_edit_output_postfix', $node);
+		$extras = VEvents::invoke('acp.node-edit-postfix', $node);
 		
 		foreach ($extras as $extra) {
 			$postfix .= $extra;
@@ -112,7 +116,8 @@ class AdminNodeController extends Controller {
 		
 		//if ($this->method_override(__FUNCTION__)) return $this->call_override(__FUNCTION__, $node);
 		
-		manager::run_hook_all('node_edit_pre_load', $node);
+		//manager::run_hook_all('node_edit_pre_load', $node);
+		VEvents::invoke('node.edit-pre-load', $node);
 		
 		$form_data = array(
 			'fields' => array(
@@ -160,7 +165,7 @@ class AdminNodeController extends Controller {
 			);
 		}
 		
-		if ($node->typedata['type'] == 'static') {
+		if ($node->has_revision && !$node->has_modules) {
 			$form_data['fields']['revision_content'] = array(
 				'label' => __('Content'),
 				'description' => '',
@@ -177,7 +182,7 @@ class AdminNodeController extends Controller {
 			);
 		}
 		
-		if ($node->typedata['type'] == 'dynamic') {
+		if ($node->has_revision && $node->has_modules) {
 			$form_data['fields']['revision_content'] = array(
 				'label' => __('Content'),
 				'description' => '',
@@ -245,7 +250,8 @@ class AdminNodeController extends Controller {
 			'weight' => -10
 		);
 
-		$widgets = manager::run_hook_all('node_edit_widgets', $node);
+		//$widgets = manager::run_hook_all('node_edit_widgets', $node);
+		$widgets = VEvents::invoke('acp.get-node-widgets', $node);
 		$widget_output = '';
 
 		foreach ($widgets as $id => $data) {
@@ -447,6 +453,7 @@ class AdminNodeController extends Controller {
 			<div class="modform">
 			<ul class="types submenu" style="display: block;">
 			<?php
+			// TODO: replace with module registry
 			$types = manager::run_hook_all('module_manifest');
 			foreach ($types as $key => $type) {
 				?>
@@ -541,7 +548,8 @@ class AdminNodeController extends Controller {
 			$node->revision->content = base64_decode($fields['revision_content']);
 		}
 		
-		manager::run_hook_all('node_edit_pre_write', $node);
+		//manager::run_hook_all('node_edit_pre_write', $node);
+		VEvents::invoke('node.acp-pre-save', $node);
 		
 		// write it!
 		$node->write();

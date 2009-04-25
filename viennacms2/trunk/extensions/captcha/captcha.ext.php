@@ -1,5 +1,12 @@
 <?php
 class extension_captcha {
+	public function __construct() {
+		VEvents::register('captcha.get-implementations', array($this, 'captcha_implementations'));
+		VEvents::register('captcha.secured-forms', array($this, 'captcha_secured_forms'));
+		VEvents::register('acp.get-system-items', array($this, 'acp_system_pane'));
+		VEvents::register('form.alter', array($this, 'form_alter'));
+	}
+	
 	function acp_system_pane() {
 		return array(
 			'captcha' => array(
@@ -26,7 +33,8 @@ class extension_captcha {
 	}
 	
 	function form_alter($form_id, $params) {
-		$secured_forms = manager::run_hook_all('captcha_secured_forms');
+		//$secured_forms = manager::run_hook_all('captcha_secured_forms');
+		$secured_forms = VEvents::invoke('captcha.secured-forms');
 		
 		if (!isset($secured_forms[$form_id]) || !$secured_forms[$form_id]) {
 			return;
@@ -113,7 +121,8 @@ class extension_captcha {
 	} 
 	
 	private function get_current_extension() {
-		$implementations = manager::run_hook_all('captcha_implementations');
+		//$implementations = manager::run_hook_all('captcha_implementations');
+		$implementations = VEvents::invoke('captcha.get-implementations');
 		$ext_name = $implementations[(string)cms::$config['captcha_implementation']]['extension'];
 		
 		if (empty($ext_name)) {

@@ -5,7 +5,8 @@ class AdminSystemPaneController extends Controller
 	{
 		$this->view->path = 'admin/simple.php';
 		
-		$data = manager::run_hook_all('acp_system_pane');
+		//$data = manager::run_hook_all('acp_system_pane');
+		$data = VEvents::invoke('acp.get-system-items');
 		$output = '';
 		
 		foreach ($data as $link) {

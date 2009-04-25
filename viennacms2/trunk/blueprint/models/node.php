@@ -1,5 +1,30 @@
 <?php
 class Node extends Model {
+	static $searchpaths = array();
+	
+	static public function autoload($class_name) {
+		if (substr($class_name, -4) == 'Node' && strlen($class_name) > 5) {
+			$name = strtolower(substr($class_name, 0, -4));
+
+			$files = array();
+		
+			foreach (self::$searchpaths as $path) {
+				$files[] = $path . $name . '.php';
+			}
+			
+			$filename = cms::scan_files($files);
+			
+			if (file_exists($filename)) {
+				include_once($filename);
+				return true;
+			}
+			
+			return false;
+		}
+	}
+	
+	public $is_legacy = true;
+	
 	protected $table = 'nodes';
 	protected $keys = array('node_id');
 	protected $fields = array(
@@ -42,7 +67,8 @@ class Node extends Model {
 		
 		$this->set_type_vars();
 		
-		manager::run_hook_all('node_read', $this);
+		//manager::run_hook_all('node_read', $this);
+		VEvents::invoke('node.hook-read', $this);
 	}
 	
 	protected function hook_remove() {
@@ -54,11 +80,13 @@ class Node extends Model {
 			$revision->delete();
 		}
 		
-		manager::run_hook_all('node_remove', $this);
+		//manager::run_hook_all('node_remove', $this);
+		VEvents::invoke('node.remove', $this);
 	}
 	
 	protected function hook_preremove() {
-		manager::run_hook_all('node_pre_remove', $this);
+		//manager::run_hook_all('node_pre_remove', $this);
+		VEvents::invoke('node.pre-remove', $this);
 	}
 	
 	protected function hook_new() {
@@ -66,11 +94,35 @@ class Node extends Model {
 		$this->options->node = $this;
 		$this->_options = array();
 		
-		manager::run_hook_all('node_pre_new', $this);
+		//manager::run_hook_all('node_pre_new', $this);
+		VEvents::invoke('node.create', $this);
+	}
+	
+	// needed, as this function takes up a _lot_ of time!
+	static $typescache = array();
+	
+	protected function hook_get_type($row) {
+		if (isset(Node::$typescache[$row['type']])) {
+			return Node::$typescache[$row['type']];
+		}
+		
+		$type = $row['type'];
+		$class = ucfirst($type) . 'Node';
+		
+		if (class_exists($class)) {
+			Node::$typescache[$row['type']] = $class;
+			
+			return $class;
+		}
+		
+		Node::$typescache[$row['type']] = false;
+		
+		return false;
 	}
 	
 	public function has_references() {
-		$results = manager::run_hook_all('node_check_references', $this);
+		//$results = manager::run_hook_all('node_check_references', $this);
+		$results = VEvents::invoke('node.has-references', $this);
 		$has = false;
 		
 		foreach ($results as $result) {
@@ -84,10 +136,16 @@ class Node extends Model {
 	}
 	
 	public function set_type_vars() {
-		$typedata = manager::run_hook_all('get_node_types');
-		
-		if (isset($typedata[$this->type])) {
-			$this->typedata = $typedata[$this->type];
+		if ($this->is_legacy) {
+			$typedata = manager::run_hook_all('get_node_types');
+			
+			if (isset($typedata[$this->type])) {
+				$this->typedata = $typedata[$this->type];
+			}
+		} else {
+			$class = ucfirst($this->type) . 'Node';
+			
+			$this->typedata = call_user_func(array($class, 'get_typedata'));
 		}
 	}
 
@@ -98,7 +156,8 @@ class Node extends Model {
 			$this->created = time();
 		}
 		
-		manager::run_hook_all('node_pre_save', $this);
+		//manager::run_hook_all('node_pre_save', $this);
+		VEvents::invoke('node.pre-save', $this);
 	}
 		
 	protected function hook_save() {
@@ -115,7 +174,8 @@ class Node extends Model {
 		$this->revision->number = $this->revision_num;
 		$this->revision->time = time();
 		
-		manager::run_hook_all('node_save', $this);
+		//manager::run_hook_all('node_save', $this);
+		VEvents::invoke('node.save', $this);
 	}
 	
 	public function get_children($cache = false) {
@@ -221,7 +281,7 @@ class Node extends Model {
 		$url = new stdClass;
 		$url->url = 'admin/controller/node/edit/' . $this->node_id;
 		
-		$override = manager::run_hook_all('core_get_admin_tree', 'admin_tree', $url, '', $this);
+		$override = VEvents::invoke('core.alter-tree-url', 'admin_tree', $url, '', $this);
 		
 		return $url->url;
 	}

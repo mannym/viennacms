@@ -25,6 +25,14 @@ function __autoload($class_name) {
 		$class_name = 'Auth';
 	}
 	
+	if ($class_name == 'VEvents') { // TODO: really fix this stuff
+		$class_name = 'Events';
+	}
+	
+	if ($class_name == 'VObject') {
+		$class_name = 'Object';
+	}
+	
 	$filename = ROOT_PATH . 'framework/classes/' . strtolower($class_name) . '.php';
 	
 	if (file_exists($filename)) {
@@ -144,6 +152,8 @@ if (STRIP) {
 
 $mtime = explode(' ', microtime());
 
+include(ROOT_PATH . 'framework/classes/types.php');
+
 cms::$vars = new GlobalStore();
 cms::$vars['starttime'] = $mtime[0] + $mtime[1];
 cms::$vars['base_memory_usage'] = $base_memory_usage;
@@ -239,7 +249,9 @@ cms::$user->initialize();
 
 // add other auto-loading classes
 spl_autoload_register(array('controller', 'autoload'));
+spl_autoload_register(array('node', 'autoload'));
 Controller::$searchpaths[] = 'blueprint/controllers/';
+Node::$searchpaths[] = 'blueprint/nodes/';
 
 //cms::$plugins->init(ROOT_PATH . 'extensions/');
 //cms::$plugins->setup();

@@ -10,7 +10,8 @@ class NodeController extends Controller {
 			$node->node_id = $id;
 		}
 		
-		$node->read(true);
+		$node = $node->read();
+		$node = $node[0];
 		
 		if ($node->typedata['display_callback'] == 'none') {
 			return cms::$manager->page_not_found();
@@ -31,29 +32,41 @@ class NodeController extends Controller {
 			return cms::$manager->page_not_found();
 		}
 		
-		$types = manager::run_hook_all('get_node_types');
+		VEvents::invoke('node.pre-show', $node);
 		
-		manager::run_hook_all('node_show_alter', $node);
-		
-		if ($node->typedata['type'] == 'static') {
-			$this->view['type'] = 'static';
-		} else if ($node->typedata['type'] == 'dynamic') {
-			$this->modules = unserialize($node->revision->content);
+		if (!$node->is_legacy) {
+			array_shift($this->arguments);
 			
-			$this->view['content'] = $this->get_modules('content');
-			// TODO: make left and such
-		}
-		
-		// TODO: shift $arguments
-		
-		if ($node->typedata['display_callback']) {
-			$result = call_user_func_array($node->typedata['display_callback'], array($node, $this->arguments));
+			$result = $node->display($this->arguments);
 			
-			if (!$result) {
-				return CONTROLLER_NO_LAYOUT;
+			if (is_a($result, 'View')) {
+				$this->view['content'] = $result->display();
+			} else if ($result == CONTROLLER_NO_LAYOUT) {
+				return $result;
+			} else if (is_string($result)) {
+				$this->view['content'] = $result;
+			}
+		} else {
+			if ($node->typedata['type'] == 'static') {
+				$this->view['type'] = 'static';
+			} else if ($node->typedata['type'] == 'dynamic') {
+				$this->modules = unserialize($node->revision->content);
+				
+				$this->view['content'] = $this->get_modules('content');
+				// TODO: make left and such
 			}
 			
-			$this->view['content'] = $result;
+			// TODO: shift $arguments
+			
+			if ($node->typedata['display_callback']) {
+				$result = call_user_func_array($node->typedata['display_callback'], array($node, $this->arguments));
+				
+				if (!$result) {
+					return CONTROLLER_NO_LAYOUT;
+				}
+				
+				$this->view['content'] = $result;
+			}
 		}
 		
 		$this->view['node'] = $node;	

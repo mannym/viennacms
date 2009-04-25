@@ -10,9 +10,6 @@ class AdminFileController extends Controller {
 		$prefix = '';
 
 		if ($file->node_id) {
-			//$toolbars = manager::run_hook_all('node_toolbar', $file);
-			//$prefix = AdminController::add_toolbar($toolbars, $this);
-			
 			admincontroller::set_context('node', $file);
 		}
 		
@@ -37,9 +34,6 @@ class AdminFileController extends Controller {
 		$prefix = '';
 
 		if ($file->node_id) {
-			//$toolbars = manager::run_hook_all('node_toolbar', $file);
-
-			//$prefix = AdminController::add_toolbar($toolbars, $this);
 			admincontroller::set_context('node', $file);
 		}
 

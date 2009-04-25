@@ -247,7 +247,7 @@ class Manager {
 	/**
 	* Runs a hook on all extensions.
 	*
-	* @todo move to cms::
+	* @deprecated use VEvents instead
 	* @example
 	* <code>
 	* manager::run_hook_all('hook', 'parameter', true);
@@ -299,12 +299,22 @@ class Manager {
 	}
 	
 	/**
+	 * Contains all extension instances.
+	 */
+	
+	static $extension_instances = array();
+	
+	/**
 	* Loads a specific extension
 	*
 	* @param string $name
 	* @return extension object
 	*/
 	static function load_extension($name) {
+		if (!empty(self::$extension_instances[$name])) {
+			return self::$extension_instances[$name];
+		}
+		
 		include_once(self::$extpaths[$name]);
 		$classname = 'extension_' . $name;
 		
@@ -313,9 +323,12 @@ class Manager {
 		}
 		
 		Controller::$searchpaths[] = dirname(self::$extpaths[$name]) . '/controllers/';
+		Node::$searchpaths[] = dirname(self::$extpaths[$name]) . '/nodes/';
 		View::$searchpaths[dirname(self::$extpaths[$name]) . '/views/'] = VIEW_PRIORITY_STOCK;
 		
-		return new $classname($this->global);
+		self::$extension_instances[$name] = new $classname();
+		
+		return self::$extension_instances[$name];
 	}
 
 	/**
@@ -323,6 +336,10 @@ class Manager {
 	*/ 
 	static function handle_error($errno, $msg_text, $errfile, $errline)
 	{
+		if (TypeCheck::handle_typehinting($errno, $msg_text)) {
+			return true;
+		}
+		
 		global $msg_title, $msg_long_text;
 	
 		// Message handler is stripping text. In case we need it, we are possible to define long text...

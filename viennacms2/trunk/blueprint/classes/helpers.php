@@ -133,7 +133,7 @@ class Helpers {
 					$url = new stdClass;
 					$url->url = $pnlt;
 					
-					manager::run_hook_all('core_get_admin_tree', $options['url_from'], $url, $nlt, $node);
+					VEvents::invoke('core.alter-tree-url', $options['url_from'], $url, $nlt, $node);
 				} else if (is_callable($options['url'])) {
 					$url = new stdClass;
 					$url->url = call_user_func_array($options['url'], array($node));
@@ -169,36 +169,49 @@ class Helpers {
 			}
 		}
 			
-		$nodes = $node->get_children();
+		$can_have_child_r = VEvents::invoke('core.can-node-have-children', $node);
+		$can_have_child = true;
 
-		$my_id = $node->node_id;
-			
-		if ($nodes) {
-			$list .= '<ul>';
-			foreach ($nodes as $node) {
-				$show = true;
-				
-				if ($options['display_callback']) {
-					if (is_callable($options['display_callback'])) {
-						$show = call_user_func_array($options['display_callback'], array($node));
-					} else if (is_string($options['display_callback'])) {
-						$results = manager::run_hook_all($options['display_callback'], $node);
+		foreach ($can_have_child_r as $result) {
+			if ($result === false) {
+				$can_have_child = false;
+				break;
+			}
+		}
 		
-						foreach ($results as $result) {
-							if ($result == false) {
-								$show = false;
+		if ($can_have_child) {	
+			$nodes = $node->get_children();
+	
+			$my_id = $node->node_id;
+				
+			if ($nodes) {
+				$list .= '<ul>';
+				foreach ($nodes as $node) {
+					$show = true;
+					
+					if ($options['display_callback']) {
+						if (is_callable($options['display_callback'])) {
+							$show = call_user_func_array($options['display_callback'], array($node));
+						} else if (is_string($options['display_callback'])) {
+							// TODO: possibly clarify this?
+							$results = manager::run_hook_all($options['display_callback'], $node);
+			
+							foreach ($results as $result) {
+								if ($result == false) {
+									$show = false;
+								}
 							}
 						}
 					}
+						
+					if ($show) {
+						$list = $this->_get_tree($node, $list, $options);
+					} else {
+						$list = $list;
+					}
 				}
-					
-				if ($show) {
-					$list = $this->_get_tree($node, $list, $options);
-				} else {
-					$list = $list;
-				}
+				$list .= '</ul>';
 			}
-			$list .= '</ul>';
 		}
 		
 		$list .= '</li>';
@@ -241,8 +254,10 @@ class Helpers {
 			$hpath = new stdClass;
 			$hpath->path = $path;
 			
-			if ($node->typedata['path_callback']) {
-				call_user_func_array($node->typedata['path_callback'], array($node, $hpath));
+			if ($node->is_legacy) {
+				if ($node->typedata['path_callback']) {
+					call_user_func_array($node->typedata['path_callback'], array($node, $hpath));
+				}
 			}
 			
 			cms::$router->add_url_alias($hpath->path, 'node/show/' . $node->node_id);

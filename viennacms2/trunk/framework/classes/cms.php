@@ -139,7 +139,8 @@ abstract class cms {
 	* @return bool success value
 	*/
 	public static function display_allowed($type, $node, $other = false) {
-		$results = manager::run_hook_all('display_allowed', $type, $node, $other);
+		//$results = manager::run_hook_all('display_allowed', $type, $node, $other);
+		$results = VEvents::invoke('node.check-allowed', $type, $node, $other);
 		
 		foreach ($results as $result) {
 			if ($result == false) {

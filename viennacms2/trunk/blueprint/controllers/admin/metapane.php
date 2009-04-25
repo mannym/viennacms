@@ -10,7 +10,8 @@ class AdminMetaPaneController extends Controller {
 			return;
 		}
 		
-		$meta = manager::run_hook_all('acp_metadata', $node, $this);
+		//$meta = manager::run_hook_all('acp_metadata', $node, $this);
+		$meta = VEvents::invoke('acp.get-node-metadata', $node, $this);
 		
 		foreach ($meta as $key => $data) {
 			$output = '<li><a class="' . $key . '" href="#">' . $data['title'] . '</a><ul>';

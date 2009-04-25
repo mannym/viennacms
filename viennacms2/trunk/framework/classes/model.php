@@ -101,7 +101,14 @@ abstract class Model {
 			$return = array();
 			
 			foreach ($rowset as $i => $row) {
-				$return[$i] = new $class();
+				$other_class = $this->hook_get_type($row);
+				
+				if ($other_class) {
+					$return[$i] = new $other_class();
+				} else {
+					$return[$i] = new $class();
+				}
+				
 				$return[$i]->set_row($row);
 				$return[$i]->cache = $this->cache;
 				
@@ -265,6 +272,7 @@ abstract class Model {
 	protected function hook_remove() { }
 	protected function hook_save() { }
 	protected function hook_new() { }
+	protected function hook_get_type() { }
 	
 	public function sql_value($field) {
 		switch ($this->fields[$field]['type']) {
@@ -368,13 +376,21 @@ abstract class Model {
 		}
 	}
 	
+	static $tables_cache = array();
+	
 	public function get_table_name($table) {
+		if (!empty(self::$tables_cache[$table])) {
+			return self::$tables_cache[$table];
+		}
+		
 		$output = '';
 		$pieces = explode('_', $table);
 		
 		foreach ($pieces as $piece) {
 			$output .= substr($piece, 0, 1);
 		}
+		
+		self::$tables_cache[$table] = $output;
 		
 		return $output;
 	}

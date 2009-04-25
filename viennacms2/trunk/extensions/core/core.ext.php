@@ -9,6 +9,32 @@
 */
 
 class extension_core {
+	public function __construct() {
+		VEvents::register('files.file-widget', array($this, 'core_file_image_widget'));
+		VEvents::register('files.default-widget', array($this, 'core_file_default_widget'));
+		VEvents::register('core.alter-tree-url', array($this, 'core_get_admin_tree'));
+		VEvents::register('node.pre-show', array($this, 'node_show_alter'));
+		VEvents::register('node.check-allowed', array($this, 'display_allowed'));
+		VEvents::register('acp.get-panes', array($this, 'acp_get_panes'));
+		VEvents::register('acp.get-system-items', array($this, 'acp_system_pane'));
+		VEvents::register('acp.get-views', array($this, 'acp_views'));
+		VEvents::register('acp.get-context-toolbars', array($this, 'acp_context_toolbars'));
+		VEvents::register('acp.alter-node-add-url', array($this, 'core_admin_node_add_url'));
+		VEvents::register('node.edit-pre-load', array($this, 'node_edit_pre_load'));
+		VEvents::register('node.pre-remove', array($this, 'node_pre_remove'));
+		VEvents::register('node.has-references', array($this, 'node_check_references'));
+		VEvents::register('acp.get-node-widgets', array($this, 'node_edit_widgets'));
+		VEvents::register('core.can-node-have-children', array($this, 'disable_file_loop'));
+		VEvents::register('acp.get-node-metadata', array($this, 'acp_metadata'));
+		//VEvents::register('node.pre-save', array($this, 'node_edit_pre_write'));
+	}
+	
+	public function disable_file_loop(Node $node) {
+		if ($node->type == 'file') {
+			return false;
+		}
+	}
+	
 	public function get_node_types() {
 		return array(
 			'page' => array(
@@ -80,7 +106,7 @@ class extension_core {
 		);
 	}
 	
-	public function core_get_admin_tree($op, &$url, $template, $node) {
+	public function core_get_admin_tree(string $op, &$url, string $template, Node $node) {
 		if ($op == 'admin_tree') {
 			if ($node->type == 'filesfolder') {
 				$url->url = 'admin/controller/file/folder/' . $node->node_id;
@@ -321,7 +347,7 @@ class extension_core {
 		$path->path = 'file/' . cms::$helpers->create_node_parent_path($node) . cms::$router->clean_title($name) . $extension;
 	}
 	
-	public function core_file_widget($file, $output) {
+	public function core_file_image_widget($file, $output) {
 		if (substr($file->options['mimetype'], 0, 6) == 'image/') {
 			$type = substr($file->options['mimetype'], 6);
 			
@@ -455,6 +481,8 @@ class extension_core {
 				if ($other->type == 'filesfolder' && ($node->type != 'filesfolder' && $node->type != 'file')) {
 					return false;
 				}
+				
+				return true;
 			break;
 		}
 	}

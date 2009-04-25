@@ -25,10 +25,10 @@ class Files {
 		$output->output = '';
 		$output->append = '';
 		
-		manager::run_hook_all('core_file_widget', $file, $output);
+		VEvents::invoke('files.file-widget', $file, $output);
 		
 		if ($output->output == '') {
-			manager::run_hook_all('core_file_default_widget', $file, $output);
+			VEvents::invoke('files.default-widget', $file, $output);
 		}
 		
 		return $output->output . $output->append;

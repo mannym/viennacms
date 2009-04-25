@@ -1,5 +1,9 @@
 <?php
 class extension_contact {
+	public function __construct() {
+		VEvents::register('captcha.secured-forms', array($this, 'captcha_secured_forms'));
+	}
+	
 	public function get_node_types() {
 		return array(
 			'contact' => array(
