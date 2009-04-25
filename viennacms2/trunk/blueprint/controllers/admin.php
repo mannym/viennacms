@@ -11,7 +11,8 @@ class AdminController extends Controller {
 	}
 	
 	public function __construct() {
-		Controller::$searchpaths[] = 'blueprint/controllers/admin/';
+		//Controller::$searchpaths[] = 'blueprint/controllers/admin/';
+		cms::$registry->register_loader('blueprint/controllers/admin', 'controller');
 		View::$searchpaths['blueprint/views/admin/'] = VIEW_PRIORITY_HIGH;
 	}
 	

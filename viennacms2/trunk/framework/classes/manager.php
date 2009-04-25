@@ -322,8 +322,10 @@ class Manager {
 			throw new Exception('This extension does not exist!');
 		}
 		
-		Controller::$searchpaths[] = dirname(self::$extpaths[$name]) . '/controllers/';
-		Node::$searchpaths[] = dirname(self::$extpaths[$name]) . '/nodes/';
+		//Controller::$searchpaths[] = dirname(self::$extpaths[$name]) . '/controllers/';
+		//Node::$searchpaths[] = dirname(self::$extpaths[$name]) . '/nodes/';
+		cms::$registry->register_loader(self::$extpaths[$name] . '/controllers', 'controller');
+		cms::$registry->register_loader(self::$extpaths[$name] . '/nodes', 'node');
 		View::$searchpaths[dirname(self::$extpaths[$name]) . '/views/'] = VIEW_PRIORITY_STOCK;
 		
 		self::$extension_instances[$name] = new $classname();

@@ -1,7 +1,7 @@
 <?php
 // register PageNode with the CMS base
 
-//cms::$helpers->register_node_type('page');
+//cms::$registry->register_type('PageNode');
 
 /**
  * PageNode

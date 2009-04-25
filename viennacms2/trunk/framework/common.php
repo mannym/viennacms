@@ -158,6 +158,14 @@ cms::$vars = new GlobalStore();
 cms::$vars['starttime'] = $mtime[0] + $mtime[1];
 cms::$vars['base_memory_usage'] = $base_memory_usage;
 unset($base_memory_usage);
+
+VEvents::register('core.autoload-class-name', array('cms', 'class_alterations'));
+
+cms::register('registry');
+spl_autoload_unregister('__autoload');
+spl_autoload_register(array(cms::$registry, 'autoload'));
+cms::$registry->register_loader('framework/classes');
+cms::$registry->register_loader('framework/models');
 //$global = cms::$vars;
 
 //include(ROOT_PATH . 'framework/db/adodb-exceptions.inc.php');
@@ -212,7 +220,9 @@ cms::register('cache', $acm_type);
 unset($dbpasswd);
 
 // initialize initial required stuff. not too much, or the code will bomb out.
-spl_autoload_register(array('cms', 'autoload')); // base blueprint models
+//spl_autoload_register(array('cms', 'autoload')); // base blueprint models
+cms::$registry->register_loader('blueprint/classes');
+cms::$registry->register_loader('blueprint/models');
 cms::register('config');
 View::$searchpaths['blueprint/views/'] = VIEW_PRIORITY_STOCK; // we need admin/simple.php further along
 
@@ -248,10 +258,14 @@ cms::register('user', 'Users');
 cms::$user->initialize();
 
 // add other auto-loading classes
-spl_autoload_register(array('controller', 'autoload'));
-spl_autoload_register(array('node', 'autoload'));
-Controller::$searchpaths[] = 'blueprint/controllers/';
-Node::$searchpaths[] = 'blueprint/nodes/';
+//spl_autoload_register(array('controller', 'autoload'));
+cms::$registry->register_loader('framework/controllers', 'controller');
+cms::$registry->register_loader('blueprint/controllers', 'controller');
+cms::$registry->register_loader('blueprint/nodes', 'node');
+//spl_autoload_register(array('node', 'autoload'));
+
+//Controller::$searchpaths[] = 'blueprint/controllers/';
+//Node::$searchpaths[] = 'blueprint/nodes/';
 
 //cms::$plugins->init(ROOT_PATH . 'extensions/');
 //cms::$plugins->setup();

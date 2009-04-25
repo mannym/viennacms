@@ -19,6 +19,7 @@ abstract class cms {
 	static $files;
 	static $helpers;
 	static $config;
+	static $registry;
 	
 	/**#@+
 	* Constant defining plugin mode for objects
@@ -151,9 +152,70 @@ abstract class cms {
 		return true;
 	}
 	
-	/**
-	* @todo pretty up the error page
-	*/
+	public static function vinclude($filename) {
+		// do pre-compilation
+		
+		if (!empty(cms::$cache)) {
+			// get the cache
+			$object_cache = cms::$cache->get('compiler_results');
+			$file_hash = md5(str_replace(ROOT_PATH, '', $filename));
+			
+			if ($object_cache) {
+				// does the cache contain this file?
+				if (!empty($object_cache[$file_hash])) {
+					// check if the file is still the same...
+					$stored_mtime = $object_cache[$file_hash]['content_mtime'];
+					$file_mtime = filemtime($filename);
+					
+					if ($content_hash == $stored_hash) {
+						// and check if it's really known :)
+						if ($object_cache[$file_hash]['result'] == true) {
+							return include($filename); // note the return, we want the return value as well
+						}
+					}
+				}
+			}
+			
+			// okay, we need to do a precompilation ourselves.
+			$file_data = file_get_contents($filename);
+			
+			ob_start(); // to catch parse errors
+			$value = eval('?>' . $file_data); // eval is sometimes evil, that's the reason of the checks above. :)
+			$content = ob_get_contents();
+			ob_end_clean(); // we'll use the output later on
+			
+			$okay = true;
+			
+			if ($value === false) {
+				$pattern = '@<b>Parse error</b>:\s*(.+?) in <b>(.+?) : eval\(\)\'d code</b> on line <b>(.+?)</b><br />@i';
+				
+				if (preg_match($pattern, $content, $matches)) {
+					$okay = false;
+				}
+			}
+			
+			if (!$object_cache) {
+				$object_cache = array();
+			}
+			
+			$object_cache[$file_hash] = array(
+				'content_mtime' => filemtime($filename),
+				'result' => $okay
+			);
+			
+			cms::$cache->put('compiler_results', $object_cache);
+			
+			if ($okay) {
+				echo $content;
+				return $value;
+			} else {
+				throw new Exception(sprintf('An error occurred during parsing of source code.<br />Parse error: %s in %s on line %d', $matches[1], str_replace(ROOT_PATH, '', $filename), $matches[3]));
+			}
+		}
+				
+		return include($filename);
+	}
+
 	public static function handle_exception($exception) {
 		$error_data = array(
 			'code' => $exception->getCode(),
@@ -351,5 +413,31 @@ Line: <?php echo $error_data['line'] ?></p>
 
 		header('Location: ' . $final_url);
 		exit;
+	}
+	
+	static public function class_alterations($class) {
+		$class_name = $class->class;
+		
+		if ($class_name == 'VAuth') { // TODO: fix this stuff
+			$class_name = 'Auth';
+		}
+		
+		if ($class_name == 'VEvents') { // TODO: really fix this stuff
+			$class_name = 'Events';
+		}
+		
+		if ($class_name == 'VObject') {
+			$class_name = 'Object';
+		}
+		
+		if ($class_name == 'VUser') { // and that's a strange hack
+			$class_name = 'User';
+		}
+		
+		if ($class_name == 'VSession') { // wow
+			$class_name = 'Session';
+		}
+		
+		$class->class = $class_name;
 	}
 }

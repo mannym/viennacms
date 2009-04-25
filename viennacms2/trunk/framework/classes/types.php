@@ -7,6 +7,10 @@ class String implements DataType {
 	static function is_valid($object) {
 		return is_string($object);
 	}
+	
+	static function ends_with($string, $with) {
+		return (substr($string, -strlen($with)) == $with);
+	}
 }
 
 class Integer implements DataType {

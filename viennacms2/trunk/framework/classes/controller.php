@@ -14,26 +14,13 @@ class Controller {
 	}
 	
 	static public function load($name) {
-		$name = strtolower($name);
-
-		$files = array();
+		$classname = $name . 'Controller';
 		
-		foreach (self::$searchpaths as $path) {
-			$files[] = $path . $name . '.php';
+		if (!class_exists($classname)) {
+			return false;
 		}
 		
-		//foreach (self::$extpaths as $extension => $path) {
-		//	$files[] = dirname($path) . '/controllers/' . $name . '.php';
-		//}
-		
-		$filename = cms::scan_files($files);
-		
-		if (file_exists($filename)) {
-			include_once($filename);
-			return true;
-		}
-		
-		return false;
+		return new $classname();
 	}
 }
 ?>
