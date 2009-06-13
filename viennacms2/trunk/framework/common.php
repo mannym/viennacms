@@ -166,6 +166,7 @@ spl_autoload_unregister('__autoload');
 spl_autoload_register(array(cms::$registry, 'autoload'));
 cms::$registry->register_loader('framework/classes');
 cms::$registry->register_loader('framework/models');
+cms::$registry->register_loader('framework/controllers', 'controller');
 //$global = cms::$vars;
 
 //include(ROOT_PATH . 'framework/db/adodb-exceptions.inc.php');
@@ -259,7 +260,6 @@ cms::$user->initialize();
 
 // add other auto-loading classes
 //spl_autoload_register(array('controller', 'autoload'));
-cms::$registry->register_loader('framework/controllers', 'controller');
 cms::$registry->register_loader('blueprint/controllers', 'controller');
 cms::$registry->register_loader('blueprint/nodes', 'node');
 //spl_autoload_register(array('node', 'autoload'));
