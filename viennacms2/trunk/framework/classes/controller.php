@@ -17,6 +17,14 @@ class Controller {
 		$classname = $name . 'Controller';
 		
 		if (!class_exists($classname)) {
+			if (strpos($name, '/') !== false) {
+				$classname = str_replace('/', '', $classname);
+				
+				cms::$registry->autoload($classname);
+				
+				return new $classname();
+			}
+		
 			return false;
 		}
 		
