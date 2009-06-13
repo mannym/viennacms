@@ -315,7 +315,7 @@ class Manager {
 			return self::$extension_instances[$name];
 		}
 		
-		include_once(self::$extpaths[$name]);
+		cms::vinclude(self::$extpaths[$name], true);
 		$classname = 'extension_' . $name;
 		
 		if (!class_exists($classname)) {
@@ -325,6 +325,7 @@ class Manager {
 		//Controller::$searchpaths[] = dirname(self::$extpaths[$name]) . '/controllers/';
 		//Node::$searchpaths[] = dirname(self::$extpaths[$name]) . '/nodes/';
 		cms::$registry->register_loader(self::$extpaths[$name] . '/controllers', 'controller');
+		cms::$registry->register_loader(self::$extpaths[$name] . '/models');
 		cms::$registry->register_loader(self::$extpaths[$name] . '/nodes', 'node');
 		View::$searchpaths[dirname(self::$extpaths[$name]) . '/views/'] = VIEW_PRIORITY_STOCK;
 		

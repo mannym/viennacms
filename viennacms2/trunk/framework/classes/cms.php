@@ -40,6 +40,14 @@ abstract class cms {
 	
 	private function __construct() { } // make derivative classes impossible to instantiate
 	
+	public static function ext($extension_name) {
+		try {
+			return Manager::load_extension($extension_name);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
 	/**
 	* cms::get_instance()
 	* 
@@ -152,8 +160,20 @@ abstract class cms {
 		return true;
 	}
 	
-	public static function vinclude($filename) {
+	private static $loaded_files = array();
+	
+	public static function vinclude($filename, $once = false) {
 		// do pre-compilation
+		
+		$unique_name = str_replace("\\", '/', strtolower($filename));
+		
+		if ($once) {
+			if (in_array($unique_name, self::$loaded_files)) {
+				return;
+			}
+		}
+		
+		self::$loaded_files[] = $unique_name;
 		
 		if (!empty(cms::$cache)) {
 			// get the cache
@@ -416,6 +436,8 @@ Line: <?php echo $error_data['line'] ?></p>
 	}
 	
 	static public function class_alterations($class) {
+		return;		
+		
 		$class_name = $class->class;
 		
 		if ($class_name == 'VAuth') { // TODO: fix this stuff

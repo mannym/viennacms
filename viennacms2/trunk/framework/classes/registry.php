@@ -44,22 +44,30 @@ class Registry {
 		
 		$class = strtolower($class);
 		
-		foreach ($this->loader_paths as $item) {
-			$classname = $class;
-			
-			if ($item->class_suffix) {
-				if (!string::ends_with($class, $item->class_suffix)) {
-					continue;
+		$classes = array($class);
+		
+		if ($class{0} == 'v') {
+			$classes[] = substr($class, 1);
+		}
+		
+		foreach ($classes as $class) {		
+			foreach ($this->loader_paths as $item) {
+				$classname = $class;
+				
+				if ($item->class_suffix) {
+					if (!string::ends_with($class, $item->class_suffix)) {
+						continue;
+					}
+					
+					$classname = str_replace($item->class_suffix, '', $class);
 				}
 				
-				$classname = str_replace($item->class_suffix, '', $class);
-			}
-			
-			$filename = $item->folder . '/' . $classname . '.php';
-			
-			if (file_exists($filename)) {
-				cms::vinclude($filename);
-				return;
+				$filename = $item->folder . '/' . $classname . '.php';
+				
+				if (file_exists($filename)) {
+					cms::vinclude($filename);
+					return;
+				}
 			}
 		}
 	}
