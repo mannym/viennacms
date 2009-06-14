@@ -135,7 +135,11 @@ class Manager {
 			return $result;
 		}
 		
-		$content = $controller->view->display();
+		if (is_string($result)) {
+			$content = $result;
+		} else {
+			$content = $controller->view->display();
+		}
 		
 		// create layout
 		$output = '';

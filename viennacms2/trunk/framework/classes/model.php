@@ -275,12 +275,16 @@ abstract class Model {
 	protected function hook_get_type() { }
 	
 	public function sql_value($field) {
-		switch ($this->fields[$field]['type']) {
+		return self::sql_get_value($this->fields[$field]['type'], $this->$field);
+	}
+	
+	public static function sql_get_value($type, $value) {
+		switch ($type) {
 			case 'int':
-				$value = intval($this->$field);
+				$value = intval($value);
 			break;
 			case 'string':
-				$value = "'" . cms::$db->sql_escape($this->$field) . "'";
+				$value = "'" . cms::$db->sql_escape($value) . "'";
 			break;
 		}
 		
@@ -397,5 +401,67 @@ abstract class Model {
 	
 	public function prefix_table_name($table) {
 		return cms::$vars['table_prefix'] . $table;
+	}
+}
+
+class VCondition {
+	private $type;
+	private $value;
+	
+	const CONDITION_LT = 0;
+	const CONDITION_GT = 1;
+	const CONDITION_LTE = 2;
+	const CONDITION_GTE = 3;
+	const CONDITION_EQ = 4;
+	const CONDITION_AND = 5;
+	const CONDITION_OR = 6;
+	const CONDITION_IN = 7;
+	
+	public function __construct($type, $value) {
+		if ($type == VCondition::CONDITION_AND || $type == VCondition::CONDITION_OR) {
+			foreach ($value as $ivalue) {			
+				if (!$ivalue instanceof VCondition) {
+					throw new InvalidArgumentException('$value should be a VCondition when $type is AND/OR.');
+				}
+			}
+		}
+		
+		$this->type = $type;
+		$this->value = $value;
+	}
+	
+	public function to_sql_string($field_name, $data_type) {
+		$conditions_array = array(
+			'<', '>', '<=', '>=', '=', ' AND ', ' OR ' // this should be in line with the constant ids
+		);
+		
+		switch ($this->type) {
+			case VCondition::CONDITION_LT:
+			case VCondition::CONDITION_LTE:
+			case VCondition::CONDITION_GT:
+			case VCondition::CONDITION_GTE:
+			case VCondition::CONDITION_EQ:
+				return $field_name . ' ' . $conditions_array[$this->type] . ' ' . model::sql_get_value($data_type, $this->value);
+			break;
+			case VCondition::CONDITION_AND:
+			case VCondition::CONDITION_OR:
+				$values = array();
+				
+				foreach ($this->value as $condition) {
+					$values[] = $condition->to_sql_string($field_name, $data_type);
+				}
+				
+				return '(' . implode($conditions_array[$this->type], $values) . ')';
+			break;
+			case VCondition::CONDITION_IN:
+				$values = array();
+				
+				foreach ($this->value as $value) {
+					$values[] = model::sql_get_value($data_type, $value);
+				}
+				
+				return $field_name . ' IN (' . implode(', ', $values) . ')';
+			break;
+		}
 	}
 }

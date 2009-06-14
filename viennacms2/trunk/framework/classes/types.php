@@ -37,6 +37,9 @@ class Callback implements DataType {
 	}
 }
 
+class ViewNotFoundException extends Exception {}
+//class InvalidArgumentException extends Exception {}
+
 class TypeCheck {
 	const TYPEERROR = '/^Argument (\d)+ passed to (?:(\w+)::)?(\w+)\(\) must be an instance of (\w+), (\w+) given/';
 	
