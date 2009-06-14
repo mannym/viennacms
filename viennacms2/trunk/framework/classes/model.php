@@ -40,9 +40,13 @@ abstract class Model {
 				continue;
 			}
 			
-			$value = $this->sql_value($field);
-			
-			$wheres[] = $my_id . '.' . $field . ' = ' . $value;
+			if ($this->$field instanceof VCondition) {
+				$wheres[] = $this->$field->to_sql_string($my_id . '.' . $field, $this->fields[$field]['type']);
+			} else {		
+				$value = $this->sql_value($field);
+				
+				$wheres[] = $my_id . '.' . $field . ' = ' . $value;
+			}
 		}
 		
 		$orders = array();
@@ -428,6 +432,10 @@ class VCondition {
 		
 		$this->type = $type;
 		$this->value = $value;
+	}
+	
+	public static function from_string(string $param) {
+		
 	}
 	
 	public function to_sql_string($field_name, $data_type) {
