@@ -160,6 +160,22 @@ abstract class cms {
 		return true;
 	}
 	
+	/**
+	* Shows a page with the specified error message.
+	* 
+	* @param string $message message
+	* @param string $title page title for the message
+	* @return void
+	*/
+	public static function show_info(string $message, $title = '') {
+		if ($title) {
+			cms::$layout->view['title'] = $title;
+		}
+		$content = $message;			
+		cms::$layout->page($content);
+		echo cms::$layout->view->display();
+	}
+	
 	private static $loaded_files = array();
 	
 	public static function vinclude($filename, $once = false) {

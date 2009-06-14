@@ -221,8 +221,7 @@ class Manager {
 			$content = $controller->view->display();*/
 		}
 		
-		cms::$vars['error_title'] = __('Page not found');
-		trigger_error(__('The requested page could not be found.'));
+		cms::show_info(__('The requested page could not be found.'), __('Page not found'));
 	}
 	
 	/**
@@ -415,10 +414,7 @@ HTML;
 			
 			case E_USER_WARNING:
 			case E_USER_NOTICE:
-				cms::$layout->view['title'] = cms::$vars['error_title'];
-				$content = $msg_text;			
-				cms::$layout->page($content);
-				echo cms::$layout->view->display();
+				die('viennaCMS fatal error: This method of warnings is deprecated. Please use cms::show_info() instead of trigger_error.');
 				exit;
 			break;
 		}
