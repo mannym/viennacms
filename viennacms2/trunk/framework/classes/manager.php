@@ -125,7 +125,9 @@ class Manager {
 		$controller->view = new View();
 		
 		if (!method_exists($controller, $action)) {
-			return $this->page_not_found();
+			if (!method_exists($controller, '__call')) {
+				return $this->page_not_found();
+			}
 		}
 		
 		$result = $controller->$action();
