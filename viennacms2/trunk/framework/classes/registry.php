@@ -10,6 +10,7 @@
 
 class Registry {
 	private $loader_paths = array();
+	private $registered_types = array();
 	
 	/**
 	 * Constructor
@@ -20,6 +21,26 @@ class Registry {
 	
 	public function register_loader(string $path, $suffix = false) {
 		$this->loader_paths[] = cms::$registry->get_loader($path, $suffix);
+	}
+	
+	public function register_type(string $type_name) {
+		if (!class_exists($type_name)) {
+			throw new InvalidArgumentException("Type $type_name does not exist.");
+		}
+		
+		$this->registered_types[] = $type_name;
+	}
+	
+	public function get_types($suffix) {
+		$return = array();
+		
+		foreach ($this->registered_types as $type) {
+			if (string::ends_with(strtolower($type), strtolower($suffix))) {
+				$return[str_replace(strtolower($suffix), '', strtolower($type))] = $type;
+			}
+		}
+		
+		return $return;
 	}
 	
 	public function get_loader(string $path, $suffix = false) {

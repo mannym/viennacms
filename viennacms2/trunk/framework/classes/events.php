@@ -50,7 +50,9 @@ abstract class VEvents/* extends VObject*/ {
 				if (is_array($result)) {
 					$results = array_merge($results, $result);
 				} else {
-					$results[] = $result;
+					if ($result !== null) {
+						$results[] = $result;
+					}
 				}
 			}
 			

@@ -50,6 +50,8 @@ class Manager {
 			
 			self::$extpaths[$extension] = $file;
 		}
+		
+		self::load_all_extensions();
 	}
 	
 	/**

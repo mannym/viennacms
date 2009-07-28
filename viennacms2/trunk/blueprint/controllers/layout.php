@@ -28,7 +28,8 @@ class LayoutController extends Controller {
 		$data->content = $content;
 		$data->header = '';
 
-		manager::run_hook_all('layout_pre_display', $data);
+		//manager::run_hook_all('layout_pre_display', $data);
+		VEvents::invoke('layout.alter-content', $data);
 
 		$content = $data->content;
 		$header = $data->header;
@@ -105,13 +106,16 @@ class LayoutController extends Controller {
 		
 		$this->view['main_sidebar'] = $this->retrieve_sidebar('main_sidebar');
 		$this->view['sec_sidebar'] = $this->retrieve_sidebar('secondary_sidebar');
+		
+		VEvents::invoke('core.alter-layout-view', $this->view);
 				
 		header('Content-type: text/html; charset=utf-8');		
 	}
 	
 	public function retrieve_sidebar($location) {
 		// okay, this is going to be annoying... but we'll try :)
-		$return = manager::run_hook_all('retrieve_sidebar', $location);
+		//$return = manager::run_hook_all('retrieve_sidebar', $location);
+		$return = VEvents::invoke('layout.get-page-sidebar', $location);
 		
 		return implode("\n", $return);
 	}
@@ -161,7 +165,11 @@ class LayoutController extends Controller {
 	* @return array $parents
 	*/
 	public function get_parents($node) {
-		return $node->get_parents();
+		$old = $node->set_readonly(true);
+		$return = $node->get_parents();
+		$node->set_readonly($old);
+		
+		return $return;
 	}
 	
 	/**
@@ -176,7 +184,9 @@ class LayoutController extends Controller {
 		
 		if ($level == 1) {
 			$node = cms::$vars['sitenode'];
+			$old = $node->set_readonly(true);
 			$nodes = $node->get_children(7200);
+			$node->set_readonly($old);
 		} else if ($level > 1) {
 			if (isset($this->parents[$level])) {
 				$nodes = $this->parents[$level]->get_siblings_all(7200);
@@ -202,21 +212,26 @@ class LayoutController extends Controller {
 			if ($node->node_id == (string) cms::$vars['sitenode']->options['homepage']) {
 				$link = manager::base();
 			} else {
-				$link = $this->view->url('node/show/' . $node->node_id);
+				$link = $this->view->url($node);
 			}
-		
+			
 			$class = '';
 				
 			if (in_array($node->node_id, $active)) {
 				$class = 'active';
 			}
 			
-			$links[] = array(
+			$linkdata = new stdClass;
+			$linkdata->data = array(
 				'link' => $link,
 				'class' => $class,
 				'title' => $text,
 				'description' => $node->description
 			);
+			
+			VEvents::invoke('core.alter-menu', $linkdata);
+			
+			$links[] = $linkdata->data;
 		}
 		
 		$view = new View();

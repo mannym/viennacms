@@ -29,6 +29,14 @@ class Router {
 	
 	public function route($query) {
 		$this->query = $query;
+		
+		$queryobject = new stdClass;
+		$queryobject->query = $this->query;
+		
+		VEvents::invoke('url.preroute-url', $queryobject);
+		
+		$this->query = $queryobject->query;
+		
 		$this->query = $this->check_alias();
 		$this->match_parts();
 	}

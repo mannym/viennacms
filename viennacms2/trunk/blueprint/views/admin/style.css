@@ -497,3 +497,7 @@ p.description
 .log-error {
 	background-color: #fcc;
 }
+
+.log-ok {
+	background-color: #95ff96;
+}

@@ -58,6 +58,10 @@ class AdminController extends Controller {
 	
 	static $context = array();
 	
+	public static function get_context() {
+		return self::$context;
+	}
+	
 	public static function set_context($type, $value) {
 		self::$context[0] = $type;
 		self::$context[1] = $value;
@@ -87,8 +91,7 @@ class AdminController extends Controller {
 		
 		cms::$layout->view['pane_url'] = $this->view->url('admin/panes');
 		
-		// TODO: replace by 'node type registry'
-		$node_types = manager::run_hook_all('get_node_types');
+		$node_types = Node::get_types();
 		$icons = array();
 		foreach ($node_types as $id => $data) {
 			$icons[$id] = str_replace('~/', manager::base(), $data['icon']);

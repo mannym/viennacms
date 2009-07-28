@@ -1,5 +1,19 @@
 <?php
 class Node extends Model {
+	static public function get_types() {
+		$return = array();
+		
+		$types = cms::$registry->get_types('Node');
+		foreach ($types as $int => $type) {
+			$class = new $type();
+			$data = $class->get_typedata();
+			
+			$return[$int] = $data;
+		}
+		
+		return $return;
+	}
+	
 	static $searchpaths = array();
 	
 	static public function autoload($class_name) {
@@ -57,6 +71,22 @@ class Node extends Model {
 	);
 	public $typedata = array();
 	
+	public function __construct() {
+		$class = get_class($this);
+		
+		if ($class != 'Node') {
+			$this->type = strtolower(str_replace('Node', '', $class));
+		}
+	}
+	
+	public static function open($node_id) {
+		$node = new Node();
+		$node->node_id = $node_id;
+		$node = $node->read();
+		
+		return $node[0];
+	}
+	
 	protected function hook_read() {
 		$this->revision->node_obj = $this;
 		$this->options = new Node_Options();
@@ -69,6 +99,12 @@ class Node extends Model {
 		
 		//manager::run_hook_all('node_read', $this);
 		VEvents::invoke('node.hook-read', $this);
+	}
+	
+	protected function hook_copy_data(Model $source) {
+		if ($source->open_readonly) {
+			$this->options = $source->options;
+		}
 	}
 	
 	protected function hook_remove() {
@@ -137,7 +173,7 @@ class Node extends Model {
 	
 	public function set_type_vars() {
 		if ($this->is_legacy) {
-			$typedata = manager::run_hook_all('get_node_types');
+			$typedata = Node::get_types();
 			
 			if (isset($typedata[$this->type])) {
 				$this->typedata = $typedata[$this->type];
@@ -182,6 +218,7 @@ class Node extends Model {
 		$node = new Node();
 		$node->parent = $this->node_id;
 		$node->cache = $cache;
+		$node->open_readonly = $this->open_readonly;
 		return $node->read();
 	}
 	
@@ -189,6 +226,7 @@ class Node extends Model {
 		$node = new Node();
 		$node->node_id = $this->parent;
 		$node->cache = $cache;
+		$node->open_readonly = $this->open_readonly;
 		$node->read(true);
 		return $node;
 	}
@@ -230,6 +268,7 @@ class Node extends Model {
 		$node = new Node();
 		$node->parent = $this->parent;
 		$node->cache = $cache;
+		$node->open_readonly = $this->open_readonly;
 		$siblings = $node->read();
 
 		Node::$sibling_cache[$this->parent] = $siblings;
@@ -260,10 +299,12 @@ class Node extends Model {
 	public function possible_child_types() {
 		$return = array();
 		
-		$types = manager::run_hook_all('get_node_types');
+		$types = Node::get_types();
 		foreach ($types as $key => $type) {
-			$node = new Node();
-			$node->type = $key;
+			$classname = $key . 'Node';
+			$node = new $classname();
+			
+			//$node->type = $key;
 			
 			if (cms::display_allowed('this_under_other', $node, $this)) {
 				$return[] = $key;

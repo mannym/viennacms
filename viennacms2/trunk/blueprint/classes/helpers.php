@@ -157,7 +157,12 @@ class Helpers {
 					$class = ' selected';
 				}
 				
-				$list .= '<li id="node-' . $node->node_id . '"><a href="' . View::url($url->url) . '" class="' . $node->type . $class . '"' . $pua . '>' . $node->title . '</a>' . "\n";
+				$title = new stdClass;
+				$title->title = $node->title;
+				
+				VEvents::invoke('core.alter-tree-title', $options['url_from'], $title, $node);
+				
+				$list .= '<li id="node-' . $node->node_id . '"><a href="' . View::url($url->url) . '" class="' . $node->type . $class . '"' . $pua . '>' . $title->title . '</a>' . "\n";
 			} else {
 				$class = '';
 				
@@ -194,7 +199,7 @@ class Helpers {
 							$show = call_user_func_array($options['display_callback'], array($node));
 						} else if (is_string($options['display_callback'])) {
 							// TODO: possibly clarify this?
-							$results = manager::run_hook_all($options['display_callback'], $node);
+							$results = VEvents::invoke($options['display_callback'], $node);
 			
 							foreach ($results as $result) {
 								if ($result == false) {
@@ -202,6 +207,10 @@ class Helpers {
 								}
 							}
 						}
+					}
+					
+					if ($show) {
+						$show = cms::display_allowed('show_in_tree', $node, null);
 					}
 						
 					if ($show) {
@@ -257,6 +266,10 @@ class Helpers {
 			if ($node->is_legacy) {
 				if ($node->typedata['path_callback']) {
 					call_user_func_array($node->typedata['path_callback'], array($node, $hpath));
+				}
+			} else {
+				if (method_exists($node, 'create_path')) {
+					$node->create_path($hpath);
 				}
 			}
 			

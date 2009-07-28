@@ -12,7 +12,7 @@ class AdminNodeController extends Controller {
 		<ul class="types submenu">
 		<?php
 		// TODO: replace with node type registry
-		$types = manager::run_hook_all('get_node_types');
+		$types = Node::get_types();
 		foreach ($types as $key => $type) {
 			$node = new Node();
 			$node->type = $key;
@@ -49,7 +49,8 @@ class AdminNodeController extends Controller {
 		if ($do == 'edit') {
 			$node = new Node();
 			$node->node_id = $this->arguments[0];
-			$node->read(true);
+			$node = $node->read();
+			$node = $node[0];
 		
 			if (empty($node->title)) {
 				trigger_error(__('This node does not exist!'));
@@ -57,14 +58,17 @@ class AdminNodeController extends Controller {
 			
 			AdminController::add_pane('left', 'meta', __('Meta data'), array($node->node_id));
 		} else {
-			$node = Node::create('Node');
-			$node->type = $this->arguments[0];
+			//$node = Node::create('Node');
+			$classname = $this->arguments[0] . 'Node';
+			$node = new $classname;
+			//$node->type = $this->arguments[0];
 			$node->parent = $this->arguments[1];
 			$node->set_type_vars();
 			
 			$parent = new Node();
 			$parent->node_id = $node->parent;
-			$parent->read(true);
+			$parent = $parent->read();
+			$parent = $parent[0];
 			
 			$ux_html = '<li class="oncontentremove"><a class="' . $node->type . ' mynewnode" href="#">' . __('New node') . '</a></li>';
 			ob_start();
@@ -118,6 +122,16 @@ class AdminNodeController extends Controller {
 		
 		//manager::run_hook_all('node_edit_pre_load', $node);
 		VEvents::invoke('node.edit-pre-load', $node);
+		
+		if ($node->node_id) {
+			AdminController::set_context('node', $node);
+			
+			//$prefix = AdminController::add_toolbar($toolbars, $this) . $prefix;
+		} else if ($parent->node_id) {
+			AdminController::set_context('node_add', $parent);
+		}
+		
+		VEvents::invoke('acp.node-edit-context-hook', $node);
 		
 		$form_data = array(
 			'fields' => array(
@@ -280,14 +294,6 @@ class AdminNodeController extends Controller {
 		$form->parameter = $node;
 		$form->callback_object = $this;
 
-		if ($node->node_id) {
-			AdminController::set_context('node', $node);
-			
-			//$prefix = AdminController::add_toolbar($toolbars, $this) . $prefix;
-		} else if ($parent->node_id) {
-			AdminController::set_context('node_add', $parent);
-		}
-				
 		return $form->handle_form('node_edit', $form_data);
 	}
 	
@@ -448,6 +454,7 @@ class AdminNodeController extends Controller {
 	}
 	
 	public function new_module() {
+		return;
 		if (empty($this->arguments[2])) {
 			?>
 			<div class="modform">
@@ -514,14 +521,18 @@ class AdminNodeController extends Controller {
 			case 'edit':
 				$node = new Node();
 				$node->node_id = $fields['node_id'];
-				$node->read(true);
+				$data = $node->read();
+				$node = $data[0];
 				
 				if (empty($node->title)) {
 					trigger_error(__('This node does not exist!'));
 				}
 				break;
 			case 'add':
-				$node = Node::create('Node');
+				//$node = Node::create('Node');
+				$classname = $fields['type'] . 'Node';
+				$node = new $classname;
+				$node->initialize();
 				$node->type = $fields['type'];
 				$node->parent = $fields['parent'];
 				$node->set_type_vars();
@@ -542,10 +553,12 @@ class AdminNodeController extends Controller {
 		}
 		
 		// revision?
-		if ($node->typedata['type'] == 'static') {
-			$node->revision->content = $fields['revision_content'];
-		} else if ($node->typedata['type'] == 'dynamic') {
-			$node->revision->content = base64_decode($fields['revision_content']);
+		if ($node->has_revision) {
+			if (!$node->has_modules) {
+				$node->revision->content = $fields['revision_content'];
+			} else {
+				$node->revision->content = base64_decode($fields['revision_content']);
+			}
 		}
 		
 		//manager::run_hook_all('node_edit_pre_write', $node);

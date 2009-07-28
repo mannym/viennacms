@@ -37,7 +37,7 @@ class AdminCAPTCHAController extends Controller {
 	}
 	
 	public function get_captcha_types() {
-		$hooks = manager::run_hook_all('captcha_implementations');
+		$hooks = VEvents::invoke('captcha.get-implementations');
 		$data = array();
 		
 		foreach ($hooks as $key => $hook) {

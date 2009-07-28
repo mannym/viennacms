@@ -45,7 +45,7 @@ class View implements ArrayAccess {
 		return preg_replace($search, $replace, $contents);
 	}
 	
-	public function url($data, $arguments = '') {
+	public function url($data, $arguments = '', $ignore_hook = false) {
 		$prefix = '';
 		if (!cms::$config['rewrite']) {
 			$prefix .= 'index.php/';
@@ -58,26 +58,17 @@ class View implements ArrayAccess {
 			}
 			
 			if (strpos($data, '://') === false) {
-				return manager::base() . $prefix . cms::$router->alias_url_link($data, $arguments);
+				$obj = new stdClass;
+				$obj->url = cms::$router->alias_url_link($data, $arguments);
+				
+				if (!$ignore_hook) {
+					VEvents::invoke('url.alter-output', $obj);
+				}
+				
+				return manager::base() . $prefix . $obj->url;
 			} else {
 				return $data;
 			}
-		} else {
-			$url = '';
-			
-			if (!empty($data['controller'])) {
-				$url .= $data['controller'];
-			}
-			
-			if (!empty($data['action'])) {
-				$url .= '/' . $data['action'];
-			}
-			
-			if (!empty($data['parameters'])) {
-				$url .= '/' . implode('/', $data['parameters']);
-			}
-			
-			return manager::base() . $prefix . cms::$router->alias_url_link($url);
 		}
 	}
 

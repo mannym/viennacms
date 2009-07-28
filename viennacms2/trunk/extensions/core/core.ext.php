@@ -10,6 +10,12 @@
 
 class extension_core {
 	public function __construct() {
+		cms::$registry->register_type('PageNode');
+		cms::$registry->register_type('FilesFolderNode');
+		cms::$registry->register_type('FileNode');
+		cms::$registry->register_type('TrashCanNode');
+		cms::$registry->register_type('SiteNode');
+		
 		VEvents::register('files.file-widget', array($this, 'core_file_image_widget'));
 		VEvents::register('files.default-widget', array($this, 'core_file_default_widget'));
 		VEvents::register('core.alter-tree-url', array($this, 'core_get_admin_tree'));
@@ -26,6 +32,7 @@ class extension_core {
 		VEvents::register('acp.get-node-widgets', array($this, 'node_edit_widgets'));
 		VEvents::register('core.can-node-have-children', array($this, 'disable_file_loop'));
 		VEvents::register('acp.get-node-metadata', array($this, 'acp_metadata'));
+		VEvents::register('layout.get-page-sidebar', array($this, 'retrieve_sidebar'));
 		//VEvents::register('node.pre-save', array($this, 'node_edit_pre_write'));
 	}
 	
@@ -35,9 +42,10 @@ class extension_core {
 		}
 	}
 	
+	// TODO: make this in VEvents
 	public function get_node_types() {
-		return array(
-			'page' => array(
+		return array_merge(array(
+		/*	'page' => array(
 				'extension' => 'core',
 				'title' => __('Page'),
 				'description' => __('A page is a simple way of posting content that almost never changes.'),
@@ -45,7 +53,7 @@ class extension_core {
 				'icon' => '~/blueprint/views/admin/images/icons/page.png',
 				'big_icon' => '~/blueprint/views/admin/images/icons/page_big.png',
 				'options' => array()
-			),
+			),*/
 			'dynamicpage' => array(
 				'extension' => 'core',
 				'title' => __('Dynamic page'),
@@ -103,7 +111,7 @@ class extension_core {
 					)
 				)
 			)
-		);
+		), $return2);
 	}
 	
 	public function core_get_admin_tree(string $op, &$url, string $template, Node $node) {

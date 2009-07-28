@@ -10,6 +10,7 @@ class NodeController extends Controller {
 			$node->node_id = $id;
 		}
 		
+		$node->open_readonly = true;
 		$node = $node->read();
 		$node = $node[0];
 		

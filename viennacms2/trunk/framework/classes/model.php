@@ -3,23 +3,35 @@ abstract class Model {
 	public $written = false;
 	public $cache = false;
 	public $order = array();
+	public $open_readonly = false;
 	
 	public static function create($name) {
 		$model = new $name();
-		foreach ($model->relations as $parameters) {
+		$model->initialize();
+		
+		return $model;
+	}
+	
+	public function initialize() {
+		foreach ($this->relations as $parameters) {
 			switch ($parameters['type']) {
 				case 'one_to_one':
 					$property = $parameters['object']['property'];
 					$class = $parameters['object']['class'];
 					
-					$model->$property = new $class();
+					$this->$property = new $class();
 				break;
 			}
 		}
 		
-		$model->hook_new();
+		$this->hook_new();
+	}
+	
+	public function set_readonly($value) {
+		$old = $this->open_readonly;
+		$this->open_readonly = $value;
 		
-		return $model;
+		return $old;
 	}
 	
 	public function read($single = false) {
@@ -128,6 +140,7 @@ abstract class Model {
 			$this->handle_otm($return);
 			
 			foreach ($return as $object) {
+				$object->open_readonly = $this->open_readonly;
 				$object->hook_read();	
 			}
 			
@@ -150,7 +163,32 @@ abstract class Model {
 		}
 	}
 	
+	public static function copy_data(Model $source, Model $destination) {
+		foreach ($source->fields as $name => $field) {
+			$destination->$name = $source->$name;
+		}
+		
+		foreach ($source->relations as $data) {
+			$object = $data['object']['property'];
+			
+			if ($data['type'] != 'one_to_many') {
+				Model::copy_data($source->$object, $destination->$object);
+				
+//				echo 'translating this';
+			}
+			
+			//exit;
+			//$destination->$object = $source->$object;
+		}
+		
+		$destination->hook_copy_data($source);
+	}
+	
 	public function write($relations = true, $clear_cache = true) {
+		if ($this->open_readonly) {
+			throw new Exception("Trying to write a read-only node.");
+		}
+		
 		$this->hook_presave();
 		
 		$where = $end = '';		
@@ -277,6 +315,7 @@ abstract class Model {
 	protected function hook_save() { }
 	protected function hook_new() { }
 	protected function hook_get_type() { }
+	protected function hook_copy_data($source) { }
 	
 	public function sql_value($field) {
 		return self::sql_get_value($this->fields[$field]['type'], $this->$field);
