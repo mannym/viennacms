@@ -274,3 +274,17 @@ cms::register('files');
 cms::$files->init();
 cms::register('helpers');
 cms::$helpers->init_trash();
+
+if (!isset(cms::$config['ice_created_user'])) {
+	$user = new VUser();
+	$user->user_id = 1;
+	$users = $user->read();
+	
+	if (count($users) == 1) {
+		cms::$config['ice_created_user'] = time();
+	} else {
+		$manager = new Manager();
+		$manager->run('install/ice');
+		exit;
+	}
+}

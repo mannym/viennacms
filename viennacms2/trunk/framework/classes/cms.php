@@ -174,6 +174,7 @@ abstract class cms {
 		$content = $message;			
 		cms::$layout->page($content);
 		echo cms::$layout->view->display();
+		exit;
 	}
 	
 	private static $loaded_files = array();

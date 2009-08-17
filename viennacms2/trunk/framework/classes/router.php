@@ -9,6 +9,14 @@ class Router {
 	public $aliases = array();
 	public $paths = array();
 	
+	public function sort_length($a, $b) {
+		if ($a == $b) {
+			return 0;
+		}
+		
+		return (strlen($a) > strlen($b) ? -1 : 1);
+	}
+	
 	public function __construct() {
 		include(ROOT_PATH . 'framework/config/router.php');
 		$this->routes = $routes;
@@ -24,6 +32,8 @@ class Router {
 					$this->paths[$alias->alias_target] = $alias->alias_url;
 				}
 			}
+			
+			uasort($this->aliases, array($this, 'sort_length'));
 		}
 	}
 	
@@ -62,6 +72,7 @@ class Router {
 			//$source_regex = $this->regexify($source);
 			
 			//if (preg_match('@' .  . '@'))
+			
 			if (preg_match($source, $url, $contextregs)) {
 				$url = $target;
 				

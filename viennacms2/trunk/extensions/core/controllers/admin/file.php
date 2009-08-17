@@ -107,7 +107,8 @@ class AdminFileController extends Controller {
 		
 		move_uploaded_file($data['file']['tmp_name'], ROOT_PATH . $target);
 		
-		$node = Node::create('Node');
+		$node = new FileNode();
+		$node->initialize();
 		$node->parent = $this->arguments[0];
 		$node->title = $data['file']['name'];
 		$node->description = $target;

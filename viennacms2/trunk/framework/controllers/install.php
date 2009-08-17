@@ -45,6 +45,29 @@ class InstallController extends Controller {
 				}
 				
 				if (!$error) {
+					$config = <<<CONFIG
+<?php
+\$dbms = 'mysqli';
+\$dbhost = '$dbhost';
+\$dbuser = '$dbuser';
+\$dbpasswd = '$dbpasswd';
+\$dbname = '$dbname';
+\$table_prefix = '$table_prefix';
+
+//define('DEBUG', true);
+//define('DEBUG_EXTRA', true);
+CONFIG;
+// for buggy syntax highlighters: <?php
+					$result = @file_put_contents(ROOT_PATH . 'config.php', $config);
+					
+					if (!$result) {
+						$error = array(
+							'message' => __('Could not write the configuration file.')
+						);
+					}
+				}
+				
+				if (!$error) {
 					include(ROOT_PATH . 'framework/database/db_tools.php');
 					include(ROOT_PATH . 'blueprint/schema.php');
 				
@@ -71,12 +94,17 @@ class InstallController extends Controller {
 				}
 				
 				// enable the blueprint
-				spl_autoload_register(array('cms', 'autoload'));
+				cms::$registry->register_loader('blueprint/classes');
+				cms::$registry->register_loader('blueprint/models');
+				cms::$registry->register_loader('blueprint/controllers', 'controller');
+				cms::$registry->register_loader('blueprint/nodes', 'node');
+				//spl_autoload_register(array('cms', 'autoload'));
 				cms::$vars['table_prefix'] = $table_prefix;
 				
 				if (!$error) {
 					// okay, let's initiate the models
-					$node = Node::create('Node');
+					$node = new PageNode();
+					$node->initialize();
 					$node->title = 'viennaCMS installation'; // don't translate this string!
 					$node->description = __('A default viennaCMS web site');
 					$node->type = 'site';
@@ -93,7 +121,8 @@ class InstallController extends Controller {
 				
 				if (!$error) {
 					// that worked, next please
-					$node = Node::create('Node');
+					$node = new PageNode();
+					$node->initialize();
 					$node->title = 'Home';
 					$node->description = __('The default home page');
 					$node->type = 'page';
@@ -129,29 +158,6 @@ class InstallController extends Controller {
 				
 				cms::$db->return_on_error = false;
 				
-				if (!$error) {
-					$config = <<<CONFIG
-<?php
-\$dbms = 'mysqli';
-\$dbhost = '$dbhost';
-\$dbuser = '$dbuser';
-\$dbpasswd = '$dbpasswd';
-\$dbname = '$dbname';
-\$table_prefix = '$table_prefix';
-
-//define('DEBUG', true);
-//define('DEBUG_EXTRA', true);
-CONFIG;
-// for buggy syntax highlighters: <?php
-					$result = @file_put_contents(ROOT_PATH . 'config.php', $config);
-					
-					if (!$result) {
-						$error = array(
-							'message' => __('Could not write the configuration file.')
-						);
-					}
-				}
-				
 				if ($error) {
 					cms::$layout->view['title'] = __('Database information');
 					
@@ -172,9 +178,14 @@ CONFIG;
 				include(ROOT_PATH . 'blueprint/version.php');
 				cms::$config['database_revision'] = $database_version;
 				
-				// okay, let them enter the user information
 				// due to system strangeness, the system should be runnable by now!
-				cms::$layout->view['title'] = __('User information');
+				$node = new Node();
+				$node->node_id = 1; // we hope :D
+				$node->read(true);
+				$node->title = 'viennaCMS';
+				$node->write();
+				
+				cms::redirect('install/ice');
 			break;
 			case 4:
 				// if everything's correct, we should be in the installed system by now
@@ -222,19 +233,14 @@ CONFIG;
 				$object->write();
 				
 				cms::$user->login($username, $password);
-				
-				$node = new Node();
-				$node->node_id = 1; // we hope :D
-				$node->read(true);
-				$node->title = 'viennaCMS';
-				$node->write();
-				
-				header('Location: ' . manager::base());
-				exit;
 			break;
 		}
 		
 		$this->view['action'] = $this->view->url('install/fresh');
+	}
+	
+	public function ice() {
+			
 	}
 	
 	public function convert() {
