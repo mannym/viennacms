@@ -275,7 +275,7 @@ cms::$files->init();
 cms::register('helpers');
 cms::$helpers->init_trash();
 
-if (!isset(cms::$config['ice_created_user'])) {
+/*if (!isset(cms::$config['ice_created_user'])) {
 	$user = new VUser();
 	$user->user_id = 1;
 	$users = $user->read();
@@ -287,4 +287,4 @@ if (!isset(cms::$config['ice_created_user'])) {
 		$manager->run('install/ice');
 		exit;
 	}
-}
+}*/
