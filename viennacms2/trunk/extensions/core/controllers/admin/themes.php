@@ -64,9 +64,9 @@ class AdminThemesController extends Controller {
 			$output .= '<p>' . $theme_info['description'] . '</p>';
 			$output .= '<p>' . sprintf(__('All files for this theme are located in <code>%s</code>.'), '/layouts/' . $name) . '</p>';
 		} else {
-			$percentage = floor(99 / (min($count, 3)));
+			$percentage = floor(98 / (min($count, 3)));
 			
-			$output = '<div class="available-theme" style="margin-right: 5px; float: left; width: ' . $percentage . '%; border-right: 1px solid #ccc;">';
+			$output = '<div class="available-theme" style="padding-right: 5px; padding-left: 5px; float: left; width: ' . $percentage . '%;">';
 			$output .= '<a class="thickbox" href="' . View::url('admin/controller/themes/choose/' . $name) . '">';
 			$output .= '<img src="' . manager::base() . 'layouts/' . $name . '/screenshot.png" style="margin-bottom: 6px; border: 0px;" alt="' . $theme_info['name'] . '" />';
 			$output .= '</a>';
