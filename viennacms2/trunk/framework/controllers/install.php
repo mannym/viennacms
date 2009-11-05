@@ -179,13 +179,8 @@ CONFIG;
 				cms::$config['database_revision'] = $database_version;
 				
 				// due to system strangeness, the system should be runnable by now!
-				$node = new Node();
-				$node->node_id = 1; // we hope :D
-				$node->read(true);
-				$node->title = 'viennaCMS';
-				$node->write();
 				
-				cms::redirect('install/ice');
+//				cms::redirect('install/ice');
 			break;
 			case 4:
 				// if everything's correct, we should be in the installed system by now
@@ -233,6 +228,14 @@ CONFIG;
 				$object->write();
 				
 				cms::$user->login($username, $password);
+				
+				$node = new Node();
+				$node->node_id = 1; // we hope :D
+				$node->read(true);
+				$node->title = 'viennaCMS';
+				$node->write();
+				
+				cms::redirect('node');
 			break;
 		}
 		
