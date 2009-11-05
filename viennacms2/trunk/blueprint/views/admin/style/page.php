@@ -13,7 +13,7 @@
 		<script type="text/javascript" src="framework/js/jquery.upload.js"></script>
 		<script type="text/javascript" src="framework/js/thickbox.js"></script>
 		<script type="text/javascript" src="framework/js/wymeditor/jquery.wymeditor.min.js"></script>
-		<script type="text/javascript" src="framework/js/wymeditor/plugins/embed/jquery.wymeditor.embed.js"></script>
+		<!--<script type="text/javascript" src="framework/js/wymeditor/plugins/embed/jquery.wymeditor.embed.js"></script>-->
 		<script type="text/javascript" src="framework/js/viennacms-acp.js"></script>
 		<script type="text/javascript">
 			var pane_url = '<?php echo $this['pane_url'] ?>';
