@@ -1,0 +1,848 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: viennaCMS2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-04-09 19:09+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Bas <bas@dotbas.net>\n"
+"Language-Team: viennaCMS developers\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Dutch\n"
+"X-Poedit-KeywordsList: __\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: C:\\xampplite\\htdocs\\viennacms2\n"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/classes/files.php:15
+msgid "Files"
+msgstr "Bestanden"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/classes/helpers.php:16
+msgid "Trash"
+msgstr "Prullenbak"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/classes/helpers.php:230
+msgid "The node does not exist."
+msgstr "De node bestaat niet."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin.php:30
+msgid "Information"
+msgstr "Informatie"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin.php:31
+msgid "You are not allowed to access the Administration Control Panel."
+msgstr "Je hebt geen toestemming om bij het beheerderspaneel te komen."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin.php:177
+msgid "Nodes"
+msgstr "Nodes"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/layout.php:65
+#, php-format
+msgid "Logout [ %s ]"
+msgstr "Uitloggen [ %s ]"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/layout.php:68
+msgid "Login"
+msgstr "Inloggen"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/layout.php:91
+msgid "Administration Control Panel"
+msgstr "Beheerderspaneel"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/node.php:87
+msgid "This node doesn't have any modules."
+msgstr "Deze node heeft geen modules."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/user.php:7
+msgid "Username"
+msgstr "Gebruikersnaam"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/user.php:8
+msgid "The username that belongs to your user account."
+msgstr "De gebruikersnaam die bij je account hoort."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/user.php:15
+msgid "Password"
+msgstr "Wachtwoord"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/user.php:16
+msgid "The (case sensitive) password for your user account."
+msgstr "Het (hoofdlettergevoelige) wachtwoord van je gebruikersaccount."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/user.php:25
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/user.php:48
+msgid "User login"
+msgstr "Inloggen"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/user.php:54
+msgid "This username does not exist."
+msgstr "Deze gebruikersnaam bestaat niet."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/user.php:58
+msgid "The entered password is incorrect."
+msgstr "Het ingevoerde wachtwoord is incorrect."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/extensions.php:26
+msgid "Deactivate"
+msgstr "Deactiveer"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/extensions.php:28
+msgid "Locked"
+msgstr "Vastgezet"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/extensions.php:33
+msgid "Activate"
+msgstr "Activeer"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/extensions.php:48
+msgid "This extension does not exist!"
+msgstr "Deze extensie bestaat niet!"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/extensions.php:52
+msgid "This extension is already activated."
+msgstr "Deze extensie is al geactiveerd."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/extensions.php:76
+#, php-format
+msgid "The extension %s has been successfully enabled."
+msgstr "De extensie %s is succesvol ingeschakeld."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/extensions.php:84
+msgid "This extension is not activated."
+msgstr "Deze extensie is nog niet geactiveerd."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/extensions.php:104
+#, php-format
+msgid "The extension %s has been successfully disabled."
+msgstr "De extensie %s is succesvol uitgeschakeld."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/metapane.php:9
+msgid "Please select a node before showing meta data."
+msgstr "Selecteer een node voordat je metadata bekijkt."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:8
+msgid "Please select a node before adding a sub node."
+msgstr "Selecteer een node voordat je een subnode wilt toevoegen."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:53
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:513
+msgid "This node does not exist!"
+msgstr "Deze node bestaat niet!"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:56
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/revision.php:8
+msgid "Meta data"
+msgstr "Extra gegevens"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:67
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:87
+msgid "New node"
+msgstr "Nieuwe node"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:120
+msgid "Title"
+msgstr "Titel"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:121
+msgid "The title of this node, which will be displayed for example in the menu."
+msgstr "De titel van deze node, die onder andere weergegeven wordt in het menu."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:129
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/extensions/index.php:35
+msgid "Description"
+msgstr "Beschrijving"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:130
+msgid "The description of this node, which you can see in themes and modules that support this feature."
+msgstr "De beschrijving van deze node, welke zichtbaar is in themas en modules die deze mogelijkheid ondersteunen."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:140
+msgid "Node details"
+msgstr "Node-details"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:158
+msgid "Node options"
+msgstr "Node-opties"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:165
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:175
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:182
+msgid "Content"
+msgstr "Inhoud"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:192
+msgid "Modules"
+msgstr "Modules"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:199
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:209
+msgid "Blocks"
+msgstr "Blokken"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:265
+msgid "Extra settings"
+msgstr "Extra instellingen"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:399
+msgid "No content"
+msgstr "Geen inhoud"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:400
+msgid "This module does not have any content."
+msgstr "Deze module heeft geen inhoud."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:430
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:494
+msgid "Add"
+msgstr "Toevoegen"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:553
+#, php-format
+msgid "The node %s has been successfully %s."
+msgstr "De node %s is succesvol opgeslagen. <!-- %s -->"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/node.php:556
+msgid "The node has been successfully saved."
+msgstr "De node is succesvol opgeslagen."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/trash.php:28
+#, php-format
+msgid "The node %s has been put into the trash can."
+msgstr "De node %s is in de prullenbak gestopt."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/trash.php:39
+msgid "That's not a trash can!"
+msgstr "Dat is geen vuilnisbak!"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/trash.php:48
+msgid "Do you really want to empty the trash can? The content of the can will be removed without any chance of getting the data back."
+msgstr "Wil je echt de prullenbak legen? De inhoud van de bak zal verwijderd worden, en de gegevens daarin zul je niet terug kunnen krijgen."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/trash.php:54
+msgid "Confirm"
+msgstr "Confirm"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/trash.php:72
+msgid "The trash can has been successfully emptied."
+msgstr "De prullenbak is succesvol geleegd."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/controllers/admin/trash.php:85
+#, php-format
+msgid "The node %s has been restored from the trash can."
+msgstr "De node %s is uit de prullenbak gehaald."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/layouts/minimal/page.php:5
+msgid "viennaCMS installation"
+msgstr "viennaCMS-installatie"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/extensions/index.php:3
+msgid "Installed extensions"
+msgstr "Geinstalleerde extensies"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/extensions/index.php:3
+msgid "Disabled extensions"
+msgstr "Gedeactiveerde extensies"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/extensions/index.php:17
+msgid "No extensions are installed."
+msgstr "Er zijn geen extensies geinstalleerd."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/extensions/index.php:19
+msgid "There are no disabled extensions."
+msgstr "Er zijn geen gedeactiveerde extensies."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/extensions/index.php:29
+msgid "Extension"
+msgstr "Extensie"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/extensions/index.php:32
+msgid "Version"
+msgstr "Versie"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/extensions/index.php:38
+msgid "Actions"
+msgstr "Taken"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/extensions/index.php:54
+#, php-format
+msgid "By %s."
+msgstr "Gemaakt door %s."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/file/upload.php:1
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/file/upload.php:32
+msgid "Upload"
+msgstr "Upload"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/file/upload.php:13
+msgid "Uploading..."
+msgstr "Uploaden..."
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/log/index.php:5
+msgid "Source"
+msgstr "Bron"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/log/index.php:8
+msgid "Message"
+msgstr "Bericht"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/log/index.php:11
+msgid "User"
+msgstr "Gebruikersnaam"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/log/index.php:14
+msgid "Type"
+msgstr "Soort"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/log/index.php:33
+msgid "Anonymous"
+msgstr "Anoniem"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/log/index.php:40
+msgid "Warning"
+msgstr "Waarschuwing"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/log/index.php:46
+msgid "Error"
+msgstr "Fout"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/revision/view.php:2
+#, php-format
+msgid "%s, revision %d"
+msgstr "%s, revisie %d"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/revision/view.php:3
+#, php-format
+msgid "Created on %s"
+msgstr "Gemaakt op %s"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/style/page.php:3
+msgid "viennaCMS ACP"
+msgstr "viennaCMS-beheerderspaneel"
+
+#: C:\xampplite\htdocs\viennacms2/blueprint/views/admin/style/page.php:44
+msgid "View site"
+msgstr "Bekijk site"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/captcha/captcha.ext.php:6
+msgid "CAPTCHA settings"
+msgstr "CAPTCHA-instellingen"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/captcha/captcha.ext.php:16
+msgid "Math CAPTCHA"
+msgstr "Rekensom-CAPTCHA"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/captcha/captcha.ext.php:54
+msgid "Verification"
+msgstr "Verificatie"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/captcha/captcha.ext.php:83
+msgid "The entered solution to the verification question is incorrect."
+msgstr "De ingevoerde oplossing voor de verificatievraag klopt niet."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/captcha/captcha.ext.php:107
+msgid "Math question"
+msgstr "Rekensom"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/captcha/captcha.ext.php:108
+msgid "Solve this simple math question, and enter the result below. For example, for 1 + 3, enter 4."
+msgstr "Los deze simpele rekensom op en vul het antwoord hieronder in. Bijvoorbeeld, voor 1 + 3, voer 4 in."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/captcha/captcha.info.php:5
+msgid "This extension implements a CAPTCHA verification for specific forms."
+msgstr "Deze extensie implementeert een CAPTCHA-verificatie voor bepaalde formulieren."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/captcha/controllers/admin/captcha.php:7
+msgid "CAPTCHA implementation"
+msgstr "CAPTCHA-implementatie"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/captcha/controllers/admin/captcha.php:8
+msgid "The implementation to use for displaying the CAPTCHA. It's usually safe to leave this at the default value."
+msgstr "De implementatie om te gebruiken voor het weergeven van de CAPTCHA. Normaal kun je deze op de standaardinstelling laten staan."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/captcha/controllers/admin/captcha.php:19
+msgid "Main settings"
+msgstr "Hoofdinstellingen"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/captcha/controllers/admin/captcha.php:36
+msgid "CAPTCHA settings are saved."
+msgstr "De CAPTCHA-instellingen zijn opgeslagen."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:16
+msgid "Page"
+msgstr "Pagina"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:17
+msgid "A page is a simple way of posting content that almost never changes."
+msgstr "Een pagina is een simpele manier van inhoud plaatsen die bijna nooit wijzigt."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:25
+msgid "Dynamic page"
+msgstr "Dynamische pagina"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:26
+msgid "A dynamic page is used for placing modules on a site. These modules can be used for all kinds of dynamic content."
+msgstr "Een dynamische pagina wordt gebruikt om modules op een site te plaatsen. Deze modules worden gebruikt voor verschillende soorten dynamische inhoud."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:34
+msgid "Folder"
+msgstr "Map"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:43
+msgid "File"
+msgstr "Bestand"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:53
+msgid "Trash can"
+msgstr "Prullenbak"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:66
+msgid "\"Page not found\" URL"
+msgstr "\"Pagina-niet-gevonden\" URL"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:67
+msgid "The URL on the site, which will be redirected to when a page can not be found."
+msgstr "De URL op de website die gebruikt wordt als een pagina niet gevonden kan worden."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:73
+msgid "Home page"
+msgstr "Homepagina"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:74
+msgid "The ID of the node, which will be set as the home page for this site."
+msgstr "Het ID van de node welke gebruikt wordt als homepagina voor deze site."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:118
+msgid "Empty"
+msgstr "Leeg"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:130
+msgid "New"
+msgstr "Nieuw"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:146
+msgid "Themes"
+msgstr "Thema's"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:164
+msgid "Empty trash"
+msgstr "Leeg prullenbak"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:172
+msgid "Restore"
+msgstr "Zet terug"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:178
+msgid "Delete"
+msgstr "Verwijder"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:223
+msgid "Add a file to your content by selecting it here."
+msgstr "Voeg een bestand toe aan je inhoud door het hier te selecteren."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:389
+msgid "The image has been resized to fit, click the image to view full size."
+msgstr "De afbeeldingsgrootte is veranderd om te passen, klik op de afbeelding om de volledige grootte te bekijken."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:411
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/htmlcontent.php:11
+msgid "HTML content"
+msgstr "HTML-inhoud"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:412
+msgid "A module which provides a content box which renders HTML."
+msgstr "Een module die inhoud weergeeft met HTML."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:416
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/nicenav.php:32
+msgid "Nice sub-navigation"
+msgstr "Mooie sub-navigatie"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:417
+msgid "Nice 2-column sub-navigation with descriptions."
+msgstr "Een mooie 2-koloms sub-navigatie met beschrijvingen."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:467
+msgid "The entered URL does not exist, or is not accessible."
+msgstr "De ingevoerde URL bestaat niet, of is niet toegankelijk."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:477
+msgid "Revisions"
+msgstr "Revisies"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:498
+#, php-format
+msgid "Revision %d"
+msgstr "Revisie %d"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:520
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:546
+msgid "System"
+msgstr "Systeem"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:556
+msgid "Extensions"
+msgstr "Extensies"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.ext.php:561
+msgid "Log messages"
+msgstr "Logberichten"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/core.info.php:5
+msgid "The core of the viennaCMS content management system. This extension contains various hooks used for the core."
+msgstr "De kern van het viennaCMS-systeem. Deze extensie bevat verschillende belangrijke 'hooks'."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/htmlcontent.php:19
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/nicenav.php:40
+msgid "The title of this module."
+msgstr "De titel van deze module."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/htmlcontent.php:38
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/nicenav.php:50
+msgid "Module"
+msgstr "Module"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/admin/file.php:58
+msgid "The file does not exist!"
+msgstr "Dit bestand bestaat niet."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/admin/file.php:66
+msgid "The file has been successfully deleted."
+msgstr "Het bestand is succesvol verwijderd."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/admin/file.php:80
+msgid "The parent node does not exist."
+msgstr "De bovenliggende node bestaat niet."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/admin/file.php:95
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/admin/file.php:171
+msgid "No file was uploaded."
+msgstr "Er is geen bestand geupload."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/admin/file.php:106
+#, php-format
+msgid "%sERROR:%s"
+msgstr "%sFOUT:%s"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/admin/file.php:133
+#, php-format
+msgid "Successfully uploaded %s"
+msgstr "%s is succesvol geupload."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/admin/file.php:157
+msgid "The file is invalid."
+msgstr "Het bestand is ongeldig."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/admin/file.php:165
+msgid "The file exceeds the maximum file size."
+msgstr "Het bestand is te groot."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/admin/file.php:168
+msgid "The file upload was aborted."
+msgstr "De upload is onderbroken."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/admin/file.php:174
+#, php-format
+msgid "The file upload failed for an unknown reason. Error code: %d"
+msgstr "De upload is mislukt om een onbekende reden. Foutcode: %d"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/admin/themes.php:28
+msgid "Current theme"
+msgstr "Huidig thema"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/admin/themes.php:31
+msgid "Available themes"
+msgstr "Beschikbare thema's"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/admin/themes.php:46
+msgid "This style does not exist correctly."
+msgstr "Deze stijl bestaat niet."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/admin/themes.php:56
+#, php-format
+msgid "The current style has been set to %s."
+msgstr "Het huidige thema is ingesteld op %s."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/admin/themes.php:63
+msgid "by"
+msgstr "door"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/admin/themes.php:65
+#, php-format
+msgid "All files for this theme are located in <code>%s</code>."
+msgstr "De bestanden voor dit thema vallen te vinden in <code>%s</code>."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/controllers/admin/themes.php:77
+#, php-format
+msgid "Activate \"%s\""
+msgstr "Activeer \"%s\""
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/views/default_file_widget.php:1
+#, php-format
+msgid "Download %s"
+msgstr "Download %s"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/views/admin/file/file.php:2
+msgid "Preview"
+msgstr "Voorbeeld"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/views/admin/file/file.php:3
+msgid "This preview shows how the file widget will look like on your web site."
+msgstr "Dit voorbeeld laat zien hoe de bestandswidget er uit zal zien op je web site."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/core/views/admin/file/file.php:10
+#, php-format
+msgid "%sDownloads:%s %d"
+msgstr "%sDownloads:%s %d"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/news/news.ext.php:7
+msgid "News folder"
+msgstr "Nieuwsmap"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/news/news.ext.php:8
+msgid "A folder under which you can store the news items"
+msgstr "Een map waarin je nieuwsitems kan bewaren"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/news/news.info.php:5
+msgid "With the News extension, you can have a newsfolder and have it somewhere on your site"
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/extensions/pictureviewer/pictureviewer.ext.php:7
+msgid "Picture gallery"
+msgstr "Fotogalerij"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/pictureviewer/pictureviewer.ext.php:8
+msgid "Shows a folder with pictures in a gallery."
+msgstr "Laat een map met afbeeldingen in een galerij zien."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/pictureviewer/pictureviewer.ext.php:15
+msgid "The ID of the folder to display."
+msgstr "Het ID van de map die weergegeven moet worden."
+
+#: C:\xampplite\htdocs\viennacms2/extensions/pictureviewer/pictureviewer.ext.php:47
+msgid "Up"
+msgstr "Omhoog"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/pictureviewer/pictureviewer.ext.php:95
+#, php-format
+msgid "Back to %s"
+msgstr "Terug naar %s"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/pictureviewer/pictureviewer.ext.php:113
+msgid "&laquo; Previous"
+msgstr "&laquo; Vorige"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/pictureviewer/pictureviewer.ext.php:129
+msgid "Next &raquo;"
+msgstr "Volgende &raquo;"
+
+#: C:\xampplite\htdocs\viennacms2/extensions/pictureviewer/pictureviewer.info.php:5
+msgid "Provides a node type which allows users to browse through pictures in a file folder."
+msgstr "Biedt een node-type wat gebruikers door afbeeldingen in een bestandsmap laat bladeren."
+
+#: C:\xampplite\htdocs\viennacms2/framework/classes/form.php:67
+#, php-format
+msgid "The field %s is required."
+msgstr "Het veld %s is verplicht."
+
+#: C:\xampplite\htdocs\viennacms2/framework/classes/form.php:79
+#, php-format
+msgid "You have submitted a wrong value for the field %s."
+msgstr "Je hebt een verkeerde waarde voor het veld %s opgegeven."
+
+#: C:\xampplite\htdocs\viennacms2/framework/classes/manager.php:224
+msgid "Page not found"
+msgstr "Pagina niet gevonden"
+
+#: C:\xampplite\htdocs\viennacms2/framework/classes/manager.php:225
+msgid "The requested page could not be found."
+msgstr "De opgevraagde pagina kon niet gevonden worden."
+
+#: C:\xampplite\htdocs\viennacms2/framework/classes/manager.php:362
+msgid "General Error"
+msgstr "Algemene fout"
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:5
+msgid "viennaCMS is already installed!"
+msgstr "viennaCMS is al geinstalleerd!"
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:19
+msgid "Welcome"
+msgstr "Welkom"
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:25
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:156
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:251
+msgid "Database information"
+msgstr "Databaseinformatie"
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:81
+msgid "A default viennaCMS web site"
+msgstr "Een nieuwe viennaCMS-website"
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:98
+msgid "The default home page"
+msgstr "De standaard homepagina"
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:101
+msgid "viennaCMS2 has been successfully installed. Go to your ACP, and add some pages! :-D"
+msgstr "viennaCMS2 is succesvol geinstalleerd. Ga naar je beheerderspaneel, en voeg pagina's toe! :-D"
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:119
+msgid "Node system self-test failed. Now stop squirming and error out!"
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:150
+msgid "Could not write the configuration file."
+msgstr "Kon het configuratiebestand niet schrijven."
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:171
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:196
+msgid "User information"
+msgstr "Gebruikersinformatie"
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:184
+msgid "You need to enter a user name."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:188
+msgid "You need to enter a password."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:192
+msgid "The passwords do not match."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:236
+msgid "viennaCMS is not yet installed."
+msgstr "viennaCMS is nog niet geinstalleerd!"
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:395
+msgid "The core database is out of date. No need to worry, just click the button below to upgrade, and this site will be up and running again."
+msgstr "De hoofddatabase is verouderd. Je hoeft je geen zorgen te maken, klik gewoon op de knop hieronder om te upgraden, en de site zal meteen weer werken."
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:396
+msgid "Upgrade the core"
+msgstr "Update de database"
+
+#: C:\xampplite\htdocs\viennacms2/framework/controllers/install.php:468
+msgid "Some errors occurred during the upgrade. These may or may not be fatal. Check out the support forums if you need help solving these errors."
+msgstr "Er is een fout gebeurd tijdens de upgrade. These may or may not be fatal. Check out the support forums if you need help solving these errors."
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/form/form_wrapper.php:4
+msgid "Submit"
+msgstr "Bevestig"
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/convert.php:5
+msgid "Welcome to the viennaCMS2 conversion wizard. Enter the data from your viennaCMS1 installation here. This WILL damage one of the installations. Use with care."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/convert.php:11
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:12
+msgid "Database host"
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/convert.php:13
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:14
+msgid "The database host, usually localhost. If you don't know this, contact your hosting provider."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/convert.php:14
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:15
+msgid "Database user name"
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/convert.php:16
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:17
+msgid "The database user name to access your database. You can usually find this in your host's control panel."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/convert.php:17
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:18
+msgid "Database password"
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/convert.php:19
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:20
+msgid "The password which belongs to the database user name."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/convert.php:20
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:21
+msgid "Database name"
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/convert.php:22
+msgid "The name of the database to convert viennaCMS from."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/convert.php:23
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:24
+msgid "Table prefix"
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/convert.php:25
+msgid "The prefix of the viennaCMS tables."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:5
+msgid "Welcome to the viennaCMS2 installation wizard! viennaCMS2 is a rewritten version of the original viennaCMS, and includes a lot of new features.<br />Please note this is a development version, which will mean that critical bugs will occur. For your own safety, and the safety of others, please refrain from using viennaCMS2 on a live site."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:23
+msgid "The name of the database to install viennaCMS in."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:26
+msgid "The prefix of the viennaCMS tables. If you don't have other viennaCMS installations in the same database, you can keep this at the default setting."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:34
+msgid "User name"
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:36
+msgid "The user name you want to use to log in to the administration panel."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:39
+msgid "The password you want to use. Don't forget this."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:40
+msgid "Password (confirm)"
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/framework/views/install/fresh.php:42
+msgid "Type the password again, so we can check for typing mistakes."
+msgstr ""
+
+#: C:\xampplite\htdocs\viennacms2/layouts/default/style/page.php:14
+#: C:\xampplite\htdocs\viennacms2/layouts/viennacms/style/page.php:32
+msgid "ACP"
+msgstr "Beheerderspaneel"
+
+#: C:\xampplite\htdocs\viennacms2/layouts/default/style/page.php:34
+#: C:\xampplite\htdocs\viennacms2/layouts/viennacms/style/page.php:37
+msgid "Sub-navigation"
+msgstr "Subnavigatie"
+
+#: C:\xampplite\htdocs\viennacms2/layouts/viennacms/index.php:28
+msgid "Navigation"
+msgstr "Navigatie"
+
+#~ msgid "Do you really want to delete this file? This can not be undone."
+#~ msgstr ""
+#~ "Wil je dit bestand echt verwijderen? Dit kan niet ongedaan gemaakt worden."
+#~ msgid "Delete this file"
+#~ msgstr "Verwijder dit bestand"
+#~ msgid "todo"
+#~ msgstr "te doen"
+#~ msgid "Authentication required"
+#~ msgstr "Authentificatie vereist"
+#~ msgid "You need to log in to access the ACP."
+#~ msgstr "Je moet inloggen om toegang te krijgen tot het beheerderspaneel."
+#~ msgid "The file to upload to the site. Maximum size: %s MB"
+#~ msgstr "Het bestand om te uploaden naar de site. Maximale grootte: %s MB"
+

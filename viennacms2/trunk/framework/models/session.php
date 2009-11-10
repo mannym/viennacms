@@ -1,5 +1,7 @@
 <?php
 class VSession extends Model {
+	public $may_not_cache = true;
+	
 	protected $table = 'sessions';
 	protected $keys = array('session_id');
 	protected $fields = array(

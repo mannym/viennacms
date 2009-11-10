@@ -204,7 +204,7 @@ abstract class cms {
 					$stored_mtime = $object_cache[$file_hash]['content_mtime'];
 					$file_mtime = filemtime($filename);
 					
-					if ($content_hash == $stored_hash) {
+					if ($file_mtime == $stored_mtime) {
 						// and check if it's really known :)
 						if ($object_cache[$file_hash]['result'] == true) {
 							return include($filename); // note the return, we want the return value as well

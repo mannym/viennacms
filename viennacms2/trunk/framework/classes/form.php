@@ -194,7 +194,13 @@ class Form {
 						$error = true;
 					}
 					
-					$wrapper['rendered_field'] = $value['field_prefix'] . $content;
+					$field_prefix = '';
+					
+					if (isset($value['field_prefix'])) {
+						$field_prefix = $value['field_prefix'];
+					}
+					
+					$wrapper['rendered_field'] = $field_prefix . $content;
 
 					$field_content = $wrapper->display();
 

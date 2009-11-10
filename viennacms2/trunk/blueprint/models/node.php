@@ -181,7 +181,7 @@ class Node extends Model {
 		} else {
 			$class = ucfirst($this->type) . 'Node';
 			
-			$this->typedata = call_user_func(array($class, 'get_typedata'));
+			$this->typedata = call_user_func(array(new $class(), 'get_typedata'));
 		}
 	}
 

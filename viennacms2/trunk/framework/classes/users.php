@@ -15,7 +15,7 @@ class Users {
 	
 	public function exit_clean() {
 		if ($this->user->user_id != 0) {
-			$this->user->write(); // hey, who added this line of code?
+			$this->user->write(true, false); // hey, who added this line of code?
 		}
 		
 		$sid = $this->session->session_id;
@@ -43,7 +43,7 @@ class Users {
 		}
 		
 		foreach ($sessions as $session) {
-			if ($session->session_time < (time() - cms::$config['session_timeout'])) {
+			if ($session->session_time < (time() - (string)cms::$config['session_timeout'])) {
 				unset(cms::$config['session_' . $session->session_id]);
 				$session->delete(false); // note the false... we don't want to lose the user!
 			}

@@ -21,6 +21,10 @@ class Node_Options implements ArrayAccess {
 	}
 	
 	public function get($key) {
+		if (!isset($this->data[$key])) {
+			return '';	
+		}
+		
 		return $this->data[$key];
 	}
 	

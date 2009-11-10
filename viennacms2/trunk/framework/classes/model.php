@@ -1,6 +1,7 @@
 <?php
 abstract class Model {
 	public $written = false;
+	public $may_not_cache = false;
 	public $cache = false;
 	public $order = array();
 	public $open_readonly = false;
@@ -35,6 +36,10 @@ abstract class Model {
 	}
 	
 	public function read($single = false) {
+		if ($this->may_not_cache) {
+			$this->cache = false;	
+		}
+		
 		$my_id = $this->get_table_name($this->table);
 		$this->tables = array($this->get_table_name($this->table) => $this->table);
 		$where = array();
@@ -248,7 +253,7 @@ abstract class Model {
 			}
 		}
 		
-		if ($clear_cache) {
+		if ($clear_cache && !$this->may_not_cache) {
 			$this->clear_cache(false);
 		}
 		
@@ -367,11 +372,11 @@ abstract class Model {
 								$values[] = $object->$field;
 							}
 							$values = implode(', ', $values);
-							$this->sql_value($field);
+
 							$mywheres[] = $parameters['their_fields'][$i] . ' IN (' . $values . ')';
 						}
 					}
-					$where .= implode(' AND ', $mywheres);
+					$where = implode(' AND ', $mywheres);
 					
 					$sql = 'SELECT * FROM ' . $this->prefix_table_name($parameters['table']) . ' WHERE ' . $where;
 					$result = cms::$db->sql_query($sql, $this->cache);

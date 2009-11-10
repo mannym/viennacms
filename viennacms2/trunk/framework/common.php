@@ -59,8 +59,8 @@ function __autoload($class_name) {
 function cleanup() {
 	if (!empty(cms::$user)) {
 		cms::$user->exit_clean();
-	
-		if ((time() - (3600 * 6)) <= cms::$config['last_session_cleanup']) {
+		
+		if ((string)cms::$config['last_session_cleanup'] <= (time() - (3600 * 6))) {
 			cms::$user->cleanup();
 			
 			cms::$config['last_session_cleanup'] = time();
@@ -177,22 +177,33 @@ cms::$registry->register_loader('blueprint/nodes', 'node');
 //include(ROOT_PATH . 'framework/db/adodb.inc.php');
 //include(ROOT_PATH . 'framework/db/adodb-active-record.inc.php');
 @include(ROOT_PATH . 'config.php');
-include(ROOT_PATH . 'framework/gettext.php');
+//include(ROOT_PATH . 'framework/gettext.php');
 
 // initial language coding
 // won't do anything to developers debugging :)
 
+cms::$vars['gettext'] = new VGetText();
+
 if (!defined('DEBUG')) {
+	cms::$vars['gettext']->add_searchfolder('locale');
+	
 	$languages = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
 	
 	foreach ($languages as $language) {
 		$lang = substr($language, 0, 2);
 		
-		if (file_exists(ROOT_PATH . 'locale/' . $lang) && is_dir(ROOT_PATH . 'locale/' . $lang)) {
-			_setlocale(LC_ALL, $lang);
-			_bindtextdomain('viennacms2', ROOT_PATH . 'locale/');
-			_textdomain('viennacms2');
+		if (cms::$vars['gettext']->load_language($lang)) {
+			break;	
 		}
+		
+		/*if (function_exists("_textdomain")) {
+			if (file_exists(ROOT_PATH . 'locale/' . $lang) && is_dir(ROOT_PATH . 'locale/' . $lang)) {
+				_setlocale(LC_ALL, $lang);
+				_bindtextdomain('viennacms2', ROOT_PATH . 'locale/');
+				_textdomain('viennacms2');
+				break;
+			}
+		}*/
 	}
 }
 

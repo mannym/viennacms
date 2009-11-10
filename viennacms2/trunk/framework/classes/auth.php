@@ -66,9 +66,11 @@ class VAuth {
 		}
 		
 		if (($check & AUTH_USER) && $object->user_id == cms::$user->user->user_id) {
-			$usercache = unserialize(cms::$user->user->user_permissions);
-			if ($usercache !== false && isset($usercache[$resource])) {
-				return $usercache[$resource];
+			if (isset(cms::$user->user->user_permissions)) {
+				$usercache = unserialize(cms::$user->user->user_permissions);
+				if ($usercache !== false && isset($usercache[$resource])) {
+					return $usercache[$resource];
+				}
 			}
 		}
 		
@@ -102,7 +104,11 @@ class VAuth {
 		}
 		
 		if (($check & AUTH_USER) && $object->user_id == cms::$user->user->user_id) {
-			$usercache = unserialize(cms::$user->user->user_permissions);
+			$usercache = array();
+			
+			if (isset(cms::$user->user->user_permissions)) {
+				$usercache = unserialize(cms::$user->user->user_permissions);
+			}
 			$usercache[$resource] = $results;
 			cms::$user->user->user_permissions = serialize($usercache);
 		}

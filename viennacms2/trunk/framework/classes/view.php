@@ -140,6 +140,10 @@ class View implements ArrayAccess {
 	}
 	
 	public function offsetGet($key) {
+		if (!isset($this->vars[$key])) {
+			return '';	
+		}
+		
 		return $this->vars[$key];
 	}
 

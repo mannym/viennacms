@@ -278,12 +278,8 @@ class extension_translation {
 		foreach ($languages as $language) {
 			$lang = substr($language, 0, 2);
 				
-			if (file_exists(ROOT_PATH . 'locale/' . $lang) && is_dir(ROOT_PATH . 'locale/' . $lang)) {
-				$this->language = $lang;
-				_setlocale(LC_ALL, $lang);
-				_bindtextdomain('viennacms2', ROOT_PATH . 'locale/');
-				_textdomain('viennacms2');
-				break;
+			if (cms::$vars['gettext']->load_language($lang)) {
+				break;	
 			}
 		}
 		

@@ -103,6 +103,10 @@ class Router {
 			}
 		}
 		
+		if (!isset($this->parts['params'])) {
+			$this->parts['params'] = '';
+		}
+		
 		if (!empty($this->context_arguments)) {
 			if (!empty($this->parts['params'])) {
 				$this->parts['params'] .= '/';			

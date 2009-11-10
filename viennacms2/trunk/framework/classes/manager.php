@@ -338,6 +338,8 @@ class Manager {
 		
 		self::$extension_instances[$name] = new $classname();
 		
+		cms::$vars['gettext']->add_searchfolder(dirname(self::$extpaths[$name]) . '/locale');
+		
 		return self::$extension_instances[$name];
 	}
 

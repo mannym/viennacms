@@ -10,6 +10,7 @@
 class LayoutController extends Controller {
 	public function __construct() {
 		View::$searchpaths['layouts/' . cms::$vars['style'] . '/'] = VIEW_PRIORITY_USER;
+		cms::$vars['gettext']->add_searchfolder('layouts/' . cms::$vars['style'] . '/locale');
 	}
 	
 	/**

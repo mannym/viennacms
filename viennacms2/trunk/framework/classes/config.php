@@ -30,11 +30,15 @@ class Config implements ArrayAccess {
 				$this->data[$key] = $value;
 			}
 			
-			$this->data[$key]->write();
+			$this->data[$key]->write(true, false);
 		}
 	}
 	
 	public function get($key) {
+		if (!isset($this->data[$key])) {
+			return '';	
+		}
+				
 		return $this->data[$key];
 	}
 	

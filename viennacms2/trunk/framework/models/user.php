@@ -1,5 +1,7 @@
 <?php
 class VUser extends Model {
+	public $may_not_cache = true;
+	
 	protected $table = 'users';
 	protected $keys = array('user_id');
 	protected $fields = array(
