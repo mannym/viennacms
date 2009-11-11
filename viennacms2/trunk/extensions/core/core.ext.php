@@ -130,7 +130,7 @@ class extension_core {
 		}
 	}
 	
-	public function core_admin_node_add_url(&$url, $type, $parent) {
+	public function core_admin_node_add_url($url, $type, $parent) {
 		if ($type == 'file') {
 			$url->url = 'admin/controller/file/upload/' . $parent->node_id;
 		}
