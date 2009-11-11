@@ -114,7 +114,7 @@ class extension_core {
 		), $return2);
 	}
 	
-	public function core_get_admin_tree(string $op, &$url, string $template, Node $node) {
+	public function core_get_admin_tree(string $op, $url, string $template, Node $node) {
 		if ($op == 'admin_tree') {
 			if ($node->type == 'filesfolder') {
 				$url->url = 'admin/controller/file/folder/' . $node->node_id;
