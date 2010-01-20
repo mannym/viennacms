@@ -25,13 +25,13 @@ class GalleryNode extends Node {
 	}
 	
 	public function display($arguments) {
-		$mode = ($arguments[1]) ? $arguments[1] : 'folder';
+		$mode = ($arguments[0]) ? $arguments[0] : 'folder';
 
 		switch ($mode) {
 			case 'folder':
 				ob_start();
 
-				$folder_id = ($arguments[2]) ? $arguments[2] : $this->options['folder'];
+				$folder_id = ($arguments[1]) ? $arguments[1] : $this->options['folder'];
 				
 				$getter = new Node();
 				$getter->parent = (string)$folder_id;
@@ -82,7 +82,7 @@ class GalleryNode extends Node {
 			break;
 			case 'photo':
 				$file = new Node();
-				$file->node_id = $arguments[2];
+				$file->node_id = $arguments[1];
 				$file->read(true);
 				
 				if ($file->type != 'file' || substr($file->options['mimetype'], 0, 6) != 'image/') {
@@ -92,7 +92,9 @@ class GalleryNode extends Node {
 				ob_start();
 				
 				echo '<div style="text-align: center;">';
+				echo '<a href="' . view::url($file->to_url()) . '">';
 				echo '<img src="' . view::url($this, 'image/640/' . $file->node_id) . '" alt="' . $file->title . '" />';
+				echo '</a>';
 				
 				echo '<br /><a href="' . view::url($this, 'folder/' . $file->get_parent()->node_id) . '">&laquo; ' . sprintf(__('Back to %s'), $file->get_parent()->title) . '</a>';
 
@@ -140,10 +142,10 @@ class GalleryNode extends Node {
 				return $output;
 			break;
 			case 'image':
-				$max_size = $arguments[2];
+				$max_size = $arguments[1];
 				
 				$file = new Node();
-				$file->node_id = $arguments[3];
+				$file->node_id = $arguments[2];
 				$file->read(true);
 				
 				if ($file->type != 'file') {
