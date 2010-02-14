@@ -32,16 +32,16 @@
 		swapClass: function(c1, c2) {
 			return this.each(function() {
 				var $this = $(this);
-				if ( $.className.has(this, c1) )
+				if ( $this.hasClass(c1) )
 					$this.removeClass(c1).addClass(c2);
-				else if ( $.className.has(this, c2) )
+				else if ( $this.hasClass(c2) )
 					$this.removeClass(c2).addClass(c1);
 			});
 		},
 		replaceClass: function(c1, c2) {
 			return this.each(function() {
 				var $this = $(this);
-				if ( $.className.has(this, c1) )
+				if ( $this.hasClass(c1) )
 					$this.removeClass(c1).addClass(c2);
 			});
 		},
