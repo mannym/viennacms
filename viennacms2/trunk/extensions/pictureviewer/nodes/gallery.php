@@ -152,10 +152,10 @@ class GalleryNode extends Node {
 					return false;
 				}
 				
-				@mkdir(ROOT_PATH . 'cache/pictureviewer/', 777);
+				@mkdir(VIENNACMS_PATH . 'cache/pictureviewer/', 777);
 				
-				$filename = ROOT_PATH . $file->description;
-				$thumbnail_name = ROOT_PATH . 'cache/pictureviewer/' . str_replace('.upload', '.thumb-' . intval($max_size), str_replace('files/', '', $file->description));
+				$filename = VIENNACMS_PATH . $file->description;
+				$thumbnail_name = VIENNACMS_PATH . 'cache/pictureviewer/' . str_replace('.upload', '.thumb-' . intval($max_size), str_replace('files/', '', $file->description));
 				
 				if (!file_exists($thumbnail_name)) {
 					$type = substr($file->options['mimetype'], 6);

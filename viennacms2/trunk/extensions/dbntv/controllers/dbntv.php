@@ -1,12 +1,10 @@
 <?php
 class dbntvController extends Controller {
 	public function importGuide() {
-		$doc = new SimpleXMLElement(file_get_contents(ROOT_PATH . 'files/xmltv-g.xml'));
+		$doc = new SimpleXMLElement(file_get_contents(VIENNACMS_PATH . 'files/xmltv-g.xml'));
 		
 		cms::$db->sql_query('TRUNCATE TABLE viennacms_dbntv_channels'); // TODO: make this use models
 		cms::$db->sql_query('TRUNCATE TABLE viennacms_dbntv_programs');
-		
-		// TODO: controller loading should vinclude
 		
 		$chI = 0;
 		foreach ($doc->channel as $ch) {

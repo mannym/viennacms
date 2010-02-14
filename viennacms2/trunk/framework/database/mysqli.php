@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-include_once(ROOT_PATH . 'framework/database/dbal.php');
+include_once(VIENNACMS_PATH . 'framework/database/dbal.php');
 
 /**
 * MySQLi Database Abstraction Layer
@@ -19,7 +19,7 @@ include_once(ROOT_PATH . 'framework/database/dbal.php');
 * @copyright (c) 2005 phpBB Group
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 */
-class database extends dblayer_base
+class database extends VBaseDBLayer
 {
 	var $multi_insert = true;
 

@@ -14,7 +14,7 @@ new AjaxUpload('#file-upload-button', {
 		$('#main-content').append('<img class="loading" style="float: right; margin: 5px;" src="extensions/core/icons/file-loading.gif" />');
 	  },
 	  onComplete: function(file, response) {
-			var object = eval("(" + $.base64Decode(response) + ")");
+			var object = eval("(" + response + ")");
 
 			$('#uploads').append('<li>' + object.message + '</li>');
 

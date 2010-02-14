@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-
+// FIXME: this class is useless?
 /**
  * Exception class
  * Handling exceptions
@@ -19,8 +19,6 @@
 class viennaCMSException extends Exception {
 	public function __construct($message, $code = 0)
 	{
-		// @TODO: Do something usefull, such as storing it
-		
 		// Make sure everything goes the way it has to
 		parent::__construct($message, $code);
 	}

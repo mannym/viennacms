@@ -13,9 +13,8 @@
 * Currently not supported is returning SQL for creating tables.
 *
 * @package dbal
-* @note currently not used within phpBB3, but may be utilized later.
 */
-class cms_db_tools
+class VDBTools
 {
 	public $db = NULL;
 

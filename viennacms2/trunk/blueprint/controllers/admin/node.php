@@ -11,7 +11,6 @@ class AdminNodeController extends Controller {
 		?>
 		<ul class="types submenu">
 		<?php
-		// TODO: replace with node type registry
 		$types = Node::get_types();
 		foreach ($types as $key => $type) {
 			$node = new Node();
@@ -394,6 +393,7 @@ class AdminNodeController extends Controller {
 	private function module_editor($node) {
 		ob_start();
 		
+		// FIXME: replace with moduleeditor-NG
 		// TODO: make the theme configure these locations
 		$locations = array('content', 'main_sidebar', 'secondary_sidebar');
 		
@@ -418,9 +418,8 @@ class AdminNodeController extends Controller {
 		
 		foreach ($locations as $location) {
 			?>
+			<h2><?php echo $location ?></h2>
 			<ul class="modules" id="modules-<?php echo $location ?>">
-				<h2><?php echo $location ?></h2>
-				
 				<?php
 				$modules = array();
 

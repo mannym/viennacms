@@ -30,7 +30,7 @@ class acm_xcache
 	*/
 	function __construct()
 	{
-		$this->cache_dir = ROOT_PATH . 'cache/';
+		$this->cache_dir = VIENNACMS_PATH . 'cache/';
 	}
 	
 	/**
@@ -82,8 +82,6 @@ class acm_xcache
 	public function tidy()
 	{
 		// cache has auto GC, no need to have any code here :)
-		
-		set_config('cache_last_gc', time(), true);
 	}
 	
 	/**

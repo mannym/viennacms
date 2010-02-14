@@ -5,10 +5,10 @@ class AdminThemesController extends Controller {
 		$node->node_id = $this->arguments[0];
 		$node->read(true);
 		
-		$themes = scandir(ROOT_PATH . 'layouts');
+		$themes = scandir(VIENNACMS_PATH . 'layouts');
 		
 		foreach ($themes as $theme) {
-			$dir = ROOT_PATH . 'layouts/' . $theme;
+			$dir = VIENNACMS_PATH . 'layouts/' . $theme;
 			
 			if (file_exists($dir . '/info.php')) {
 				include($dir . '/info.php');
@@ -42,7 +42,7 @@ class AdminThemesController extends Controller {
 	}
 	
 	public function choose() {
-		if (!file_exists(ROOT_PATH . 'layouts/' . $this->arguments[0] . '/info.php')) {
+		if (!file_exists(VIENNACMS_PATH . 'layouts/' . $this->arguments[0] . '/info.php')) {
 			return __('This style does not exist correctly.');
 		}
 		

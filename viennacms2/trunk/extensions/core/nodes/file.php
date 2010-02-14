@@ -30,7 +30,7 @@ class FileNode extends Node {
 		
 		$original_mime = $this->options['mimetype'];
 		$mimetype = $original_mime;
-		$filename = ROOT_PATH . $this->description;
+		$filename = VIENNACMS_PATH . $this->description;
 		
 		if (isset($_GET['thumbnail'])) {
 			$filename = str_replace('.upload', '.thumb', $filename);
@@ -62,15 +62,45 @@ class FileNode extends Node {
 		
 		// TODO: make mime hooking modular :)
 		
-		header('Content-type: ' . $mimetype);
-		if (substr($mimetype, 0, 6) != 'image/') {
-			header('Content-Disposition: attachment; filename="' . $this->title . '"');
+		if (file_exists($filename)) {
+			header('Content-type: ' . $mimetype);
+			if (substr($mimetype, 0, 6) != 'image/') {
+				header('Content-Disposition: attachment; filename="' . $this->title . '"');
+			}
+			
+			readfile($filename);
+			
+			$this->options['downloads'] = ((int)((string)$this->options['downloads'])) + 1;
+			$this->write(true, false);
+		} else {
+			if (substr($mimetype, 0, 6) == 'image/' && extension_loaded('gd')) {
+				header('Content-type: image/png');
+
+				$char_width = imagefontwidth(2);
+				$char_height = imagefontheight(2);
+				$msg = __('The image does not exist. This might be an oversight');
+				$msg_2 = __('by the site administrator. (check the files directory)');
+				
+				$width = 384;
+				$height = 32;
+				$x = ceil(($width - ($char_width * strlen($msg))) / 2);
+				$y = ceil(($height - $char_height) / 2) - ($char_height / 2);
+				
+				$x2 = ceil(($width - ($char_width * strlen($msg_2))) / 2);
+				$y2 = ceil(($height - $char_height) / 2) + ($char_height / 2);
+				
+				$image = imagecreatetruecolor($width, $height);
+				$color = imagecolorallocate($image, 0, 0, 0);
+				$bgcolor = imagecolorallocate($image, 255, 255, 255);
+				imagefill($image, 0, 0, $bgcolor);
+				imagestring($image, 2, $x, $y, $msg, $color);
+				imagestring($image, 2, $x2, $y2, $msg_2, $color);
+				imagepng($image);
+				imagedestroy($image);
+			} else {
+				cms::$manager->page_not_found();
+			}
 		}
-		
-		readfile($filename);
-		
-		$this->options['downloads'] = ((int)((string)$this->options['downloads'])) + 1;
-		$this->write(true, false);
 		
 		return false;
 	}

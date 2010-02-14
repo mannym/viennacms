@@ -53,7 +53,7 @@ class AdminFileController extends Controller {
 				return;
 			}
 			 			
-			unlink(ROOT_PATH . $file->description);
+			unlink(VIENNACMS_PATH . $file->description);
 			$file->delete();
 			
 			// it was a fun test, and we're all impressed
@@ -84,28 +84,28 @@ class AdminFileController extends Controller {
 		$data = array();
 		
 		if (!isset($_FILES['viennafile'])) {
-			echo base64_encode(json_encode(
+			echo json_encode(
 				array(
 					'message' => __('No file was uploaded.')
 				)
-			));
+			);
 			exit;
 		}
 		
 		$data['file'] = $_FILES['viennafile'];
 		
 		if ($error = $this->validate_file($data['file'])) {
-			echo base64_encode(json_encode(
+			echo json_encode(
 				array(
 					'message' => sprintf(__('%sERROR:%s'), '<span style="color: red;">', '</span>') . $error
 				)
-			));
+			);
 			exit;
 		}
 		
 		$target = 'files/' . md5(uniqid(time())) . '.upload';
 		
-		move_uploaded_file($data['file']['tmp_name'], ROOT_PATH . $target);
+		move_uploaded_file($data['file']['tmp_name'], VIENNACMS_PATH . $target);
 		
 		$node = new FileNode();
 		$node->initialize();
@@ -123,14 +123,14 @@ class AdminFileController extends Controller {
 		cms::$helpers->create_node_alias($node);
 		
 		//return __('The file has successfully been uploaded.');
-		echo base64_encode(json_encode(
+		echo json_encode(
 			array(
 				'message' => sprintf(__('Successfully uploaded %s'), $node->title),
 				'addendum' => array(
 					'ux_html' => '<li class="oncontentremove"><a class="file mynewnode" href="' . view::url('admin/controller/file/file/' . $node->node_id) . '">' . $node->title . '</a></li>'
 				)
 			)
-		));
+		);
 		exit;
 	}
 	

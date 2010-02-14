@@ -35,7 +35,7 @@ class InstallController extends Controller {
 				$dbname = $_POST['dbname'];
 				$table_prefix = $_POST['table_prefix'];
 				
-				include(ROOT_PATH . 'framework/database/mysqli.php');
+				include(VIENNACMS_PATH . 'framework/database/mysqli.php');
 				cms::$db = new database();
 				cms::$db->return_on_error = true;
 				$result = cms::$db->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname);
@@ -58,7 +58,7 @@ class InstallController extends Controller {
 //define('DEBUG_EXTRA', true);
 CONFIG;
 // for buggy syntax highlighters: <?php
-					$result = @file_put_contents(ROOT_PATH . 'config.php', $config);
+					$result = @file_put_contents(VIENNACMS_PATH . 'config.php', $config);
 					
 					if (!$result) {
 						$error = array(
@@ -68,11 +68,11 @@ CONFIG;
 				}
 				
 				if (!$error) {
-					include(ROOT_PATH . 'framework/database/db_tools.php');
-					include(ROOT_PATH . 'blueprint/schema.php');
+					include(VIENNACMS_PATH . 'framework/database/db_tools.php');
+					include(VIENNACMS_PATH . 'blueprint/schema.php');
 				
 					// we must do this so that we can handle the errors
-					$db_tools = new cms_db_tools(cms::$db, true);
+					$db_tools = new VDBTools(cms::$db, true);
 				
 					foreach ($schema_data as $table_name => $table_data)
 					{
@@ -175,7 +175,9 @@ CONFIG;
 				// we need to set the database version, but we need the config system loaded
 				cms::register('config');
 				
-				include(ROOT_PATH . 'blueprint/version.php');
+				$database_version = 0; // if it won't be replaced, it will mess up.
+				
+				include(VIENNACMS_PATH . 'blueprint/version.php');
 				cms::$config['database_revision'] = $database_version;
 				
 				// due to system strangeness, the system should be runnable by now!
@@ -376,7 +378,7 @@ CONFIG;
 								$node->description = 'files/' . $row['description'] . '.upload';
 								$node->options['mimetype'] = $options['mimetype'];
 								$node->options['downloads'] = $options['downloads'];
-								$node->options['size'] = filesize(ROOT_PATH . $node->description);
+								$node->options['size'] = filesize(VIENNACMS_PATH . $node->description);
 							break;
 						}
 
@@ -413,10 +415,13 @@ CONFIG;
 			case 'run':
 				// I was afraid you wouldn't choose this option. Thanks for choosing it anyway. :D
 				// annoying, upgrading.
+				
+				$updates = array();
+				$schema_data = array();
 
-				include(ROOT_PATH . 'framework/database/db_tools.php');
-				include(ROOT_PATH . 'blueprint/updates.php');
-				include(ROOT_PATH . 'blueprint/schema.php');
+				include(VIENNACMS_PATH . 'framework/database/db_tools.php');
+				include(VIENNACMS_PATH . 'blueprint/updates.php');
+				include(VIENNACMS_PATH . 'blueprint/schema.php');
 				
 				cms::$db->return_on_error = true;
 				
@@ -427,7 +432,7 @@ CONFIG;
 				$versions = array_keys($updates);
 				
 				// we must do this so that we can handle the errors
-				$db_tools = new cms_db_tools(cms::$db, true);
+				$db_tools = new VDBTools(cms::$db, true);
 			
 				foreach ($versions as $i => $version) {
 					$update_changes = $updates[$version];
@@ -445,7 +450,7 @@ CONFIG;
 					if (count($update_changes['change'])) {
 						$schema_changes = $db_tools->perform_schema_changes($update_changes['change']);
 						
-						foreach ($statements as $sqlt)
+						foreach ($schema_changes as $sqlt)
 						{
 							if (!cms::$db->sql_query($sqlt))
 							{

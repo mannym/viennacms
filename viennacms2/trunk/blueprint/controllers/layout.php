@@ -36,7 +36,7 @@ class LayoutController extends Controller {
 		$header = $data->header;
 
 		// do some stuff for if the page is a node
-		if (isset(cms::$vars['node'])) {
+		if (isset(cms::$vars['node']) && !isset(cms::$vars['in_error'])) {
 			// get parents and the description
 			$this->parents = $this->get_parents(cms::$vars['node']);
 			$this->view['description'] = cms::$vars['node']->description;

@@ -2,12 +2,12 @@
 class AdminExtensionsController extends Controller {
 	public function index() {
 		// finally, some extension stuff :)
-		$files = scandir(ROOT_PATH . 'extensions');
+		$files = scandir(VIENNACMS_PATH . 'extensions');
 		$extensions = array();
 		
 		foreach ($files as $extension) {
 			if ($extension{0} != '.') {
-				$directory = ROOT_PATH . 'extensions/' . $extension . '/';
+				$directory = VIENNACMS_PATH . 'extensions/' . $extension . '/';
 				
 				if (file_exists($directory . $extension . '.info.php')) {
 					$data = include($directory . $extension . '.info.php');
@@ -44,7 +44,7 @@ class AdminExtensionsController extends Controller {
 	public function activate() {
 		$id = $this->arguments[0];
 		
-		if (!file_exists(ROOT_PATH . 'extensions/' . $id . '/' . $id . '.ext.php')) {
+		if (!file_exists(VIENNACMS_PATH . 'extensions/' . $id . '/' . $id . '.ext.php')) {
 			return __('This extension does not exist!');
 		}
 		
@@ -52,8 +52,8 @@ class AdminExtensionsController extends Controller {
 			return __('This extension is already activated.');
 		}
 		
-		if (file_exists(ROOT_PATH . 'extensions/' . $id . '/' . $id . '.install.php')) {
-			include(ROOT_PATH . 'extensions/' . $id . '/' . $id . '.install.php');
+		if (file_exists(VIENNACMS_PATH . 'extensions/' . $id . '/' . $id . '.install.php')) {
+			include(VIENNACMS_PATH . 'extensions/' . $id . '/' . $id . '.install.php');
 			
 			$class = 'extension_install_' . $id;
 			$install = new $class;
@@ -63,7 +63,7 @@ class AdminExtensionsController extends Controller {
 			}
 		}
 		
-		$data = include(ROOT_PATH . 'extensions/' . $id . '/' . $id . '.info.php');
+		$data = include(VIENNACMS_PATH . 'extensions/' . $id . '/' . $id . '.info.php');
 		$version = $data['version'];
 				
 		$extensions = unserialize(cms::$config['extensions']);
@@ -84,8 +84,8 @@ class AdminExtensionsController extends Controller {
 			return __('This extension is not activated.');
 		}
 		
-		if (file_exists(ROOT_PATH . 'extensions/' . $id . '/' . $id . '.install.php')) {
-			include(ROOT_PATH . 'extensions/' . $id . '/' . $id . '.install.php');
+		if (file_exists(VIENNACMS_PATH . 'extensions/' . $id . '/' . $id . '.install.php')) {
+			include(VIENNACMS_PATH . 'extensions/' . $id . '/' . $id . '.install.php');
 			
 			$class = 'extension_install_' . $id;
 			$install = new $class;
@@ -95,7 +95,7 @@ class AdminExtensionsController extends Controller {
 			}
 		}
 		
-		$data = include(ROOT_PATH . 'extensions/' . $id . '/' . $id . '.info.php');
+		$data = include(VIENNACMS_PATH . 'extensions/' . $id . '/' . $id . '.info.php');
 				
 		$extensions = unserialize(cms::$config['extensions']);
 		unset($extensions[$id]);

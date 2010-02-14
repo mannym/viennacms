@@ -45,7 +45,7 @@ class Registry {
 	
 	public function get_loader(string $path, $suffix = false) {
 		$class = new stdClass;
-		$class->folder = ROOT_PATH . $path;
+		$class->folder = VIENNACMS_PATH . $path;
 		$class->class_suffix = $suffix;
 		
 		return $class;

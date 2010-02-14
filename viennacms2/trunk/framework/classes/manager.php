@@ -28,8 +28,6 @@ class Manager {
 	* Constructor of Manager
 	*/
 	public function __construct() {
-		// TODO: dynamically load this
-		//self::$extpaths['core'] = 'extensions/core/core.ext.php';
 		$extensions = unserialize(cms::$config['extensions']);
 		
 		if ($extensions === false) {
@@ -52,6 +50,8 @@ class Manager {
 		}
 		
 		self::load_all_extensions();
+		
+		VEvents::register('url.alter-output', array($this, 'persist_style'));
 	}
 	
 	/**
@@ -82,16 +82,19 @@ class Manager {
 			cms::$vars['sitenode'] = $this->get_sitenode();
 		}
 				
-		// TODO: change this to configable in acp
+		// TODO: change this to be configurable in acp
 		if (empty($query)) {
 			$query = 'node';
+			
+			if (isset(cms::$config['homepage'])) {
+				$query = (string)cms::$config['homepage'];
+			}
 		}
 		
 		$query = (string) $query;
 		
 		cms::$router->route($query);
 
-		// TODO: create selection
 		if (!isset($_GET['preview'])) {
 			cms::$vars['style'] = (string)cms::$vars['sitenode']->options['style'];
 			
@@ -100,6 +103,7 @@ class Manager {
 			}
 		} else {
 			cms::$vars['style'] = $_GET['preview'];
+			cms::$vars['style_override'] = true;
 		}
 		
 		$parts = cms::$router->parts;
@@ -214,6 +218,10 @@ class Manager {
 		if ($this->check) {
 			return CONTROLLER_ERROR;	
 		}
+		
+		header('HTTP/1.1 404 Not Found');
+		
+		cms::$vars['in_error'] = true;
 
 		if (!isset(cms::$vars['404_done']) && isset(cms::$vars['sitenode']->options['404_url'])) {
 			cms::$vars['404_done'] = true;
@@ -378,8 +386,8 @@ class Manager {
 				}
 	
 				// remove complete path to installation, with the risk of changing backslashes meant to be there
-				$errfile = str_replace(array(ROOT_PATH, '\\'), array('', '/'), $errfile);
-				$msg_text = str_replace(array(ROOT_PATH, '\\'), array('', '/'), $msg_text);
+				$errfile = str_replace(array(VIENNACMS_PATH, '\\'), array('', '/'), $errfile);
+				$msg_text = str_replace(array(VIENNACMS_PATH, '\\'), array('', '/'), $msg_text);
 
 				echo '<strong>[viennaCMS] PHP Notice</strong>: in file <b>' . $errfile . '</b> on line <b>' . $errline . '</b>: <b>' . $msg_text . '</b><br />' . "\n";
 				return;
@@ -432,5 +440,11 @@ HTML;
 		// If we notice an error not handled here we pass this back to PHP by returning false
 		// This may not work for all php versions
 		return false;
+	}
+	
+	public function persist_style($obj) {
+		if (isset(cms::$vars['style_override']) && cms::$vars['style_override']) {
+			$obj->url .= '&preview=' . cms::$vars['style'];
+		}
 	}
 }

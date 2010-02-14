@@ -4,7 +4,7 @@
  * 
  * @package framework
  * @version $Id$
- * @copyright (c) 2008 viennaCMS group
+ * @copyright (c) 2008 phpBB Group
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -31,7 +31,7 @@ class acm_file
 	*/
 	function __construct()
 	{
-		$this->cache_dir = ROOT_PATH . 'cache/';
+		$this->cache_dir = VIENNACMS_PATH . 'cache/';
 	}
 	
 	/**
@@ -74,7 +74,9 @@ class acm_file
 			return;
 		}
 		
-		if ($fp = @fopen($this->cache_dir . 'data_global.php', 'wb'))
+		$fp = @fopen($this->cache_dir . 'data_global.php', 'wb');
+		
+		if ($fp)
 		{
 			@flock($fp, LOCK_EX);
 			fwrite($fp, "<?php\n\$this->vars = unserialize(" . var_export(serialize($this->vars), true) . ");\n\$this->var_expires = unserialize(" . var_export(serialize($this->var_expires), true) . ");");
@@ -88,10 +90,10 @@ class acm_file
 			// Now, this occurred how often? ... phew, just tell the user then...
 			if (!@is_writable($this->cache_dir))
 			{
-				throw new viennaCMSException($this->cache_dir . ' is NOT writable.');
+				throw new RuntimeException($this->cache_dir . ' is NOT writable.');
 			}
 			
-			throw new viennaCMSException('Not able to open ' . $this->cache_dir . 'data_global.php');
+			throw new RuntimeException('Not able to open ' . $this->cache_dir . 'data_global.php');
 		}
 		
 		$this->is_modified = false;
@@ -170,7 +172,9 @@ class acm_file
 	{
 		if ($var_name[0] === '_')
 		{
-			if ($fp = @fopen($this->cache_dir . "data{$var_name}.php", 'wb'))
+			$fp = @fopen($this->cache_dir . "data{$var_name}.php", 'wb');
+			
+			if ($fp)
 			{
 				@flock($fp, LOCK_EX);
 				fwrite($fp, "<?php\n\$expired = (time() > " . (time() + $ttl) . ") ? true : false;\nif (\$expired) { return; }\n\$data =  " . (sizeof($var) ? "unserialize(" . var_export(serialize($var), true) . ");" : 'array();'));
@@ -364,8 +368,9 @@ class acm_file
 		// Remove extra spaces and tabs
 		$query = preg_replace('/[\n\r\s\t]+/', ' ', $query);
 		$filename = $this->cache_dir . 'sql_' . md5($query) . '.php';
+		$fp = @fopen($filename, 'wb');
 		
-		if ($fp = @fopen($filename, 'wb'))
+		if ($fp)
 		{
 			@flock($fp, LOCK_EX);
 			

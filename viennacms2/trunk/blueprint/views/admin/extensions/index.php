@@ -28,13 +28,13 @@ if (empty($values)) {
 		<th style="width: 15%;">
 			<?php echo __('Extension') ?>
 		</th>
-		<th>
+		<th style="width: 8%">
 			<?php echo __('Version') ?>
 		</th>
 		<th>
 			<?php echo __('Description') ?>
 		</th>
-		<th>
+		<th style="width: 9%">
 			<?php echo __('Actions') ?>
 		</th>
 	</tr>

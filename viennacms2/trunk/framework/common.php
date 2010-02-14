@@ -9,16 +9,17 @@
 
 $base_memory_usage = memory_get_usage();
 
-define('ROOT_PATH', dirname(dirname(__FILE__)) . '/');
+define('VIENNACMS_PATH', dirname(dirname(__FILE__)) . '/');
 
 if (isset($_GET['vEIMG'])) {
-	include(ROOT_PATH . 'blueprint/errordata.php');
+	include(VIENNACMS_PATH . 'blueprint/errordata.php');
 
 	header('Content-type: image/png');
 	echo base64_decode($images[$_GET['vEIMG']]);
 	exit;
 }
 
+// FIXME: kill this function
 function __autoload($class_name) {
 	// initial autoload function for initialisation
 	if ($class_name == 'VAuth') { // TODO: fix this stuff
@@ -33,7 +34,7 @@ function __autoload($class_name) {
 		$class_name = 'Object';
 	}
 	
-	$filename = ROOT_PATH . 'framework/classes/' . strtolower($class_name) . '.php';
+	$filename = VIENNACMS_PATH . 'framework/classes/' . strtolower($class_name) . '.php';
 	
 	if (file_exists($filename)) {
 		include_once($filename);
@@ -48,7 +49,7 @@ function __autoload($class_name) {
 		$class_name = 'Session';
 	}
 	
-	$filename = ROOT_PATH . 'framework/models/' . strtolower($class_name) . '.php';
+	$filename = VIENNACMS_PATH . 'framework/models/' . strtolower($class_name) . '.php';
 	
 	if (file_exists($filename)) {
 		include_once($filename);
@@ -91,31 +92,29 @@ if (version_compare(phpversion(), '6.0.0-dev', '<') && get_magic_quotes_gpc()) {
 if (STRIP) {
 	if( is_array($_GET) )
 	{
-		while( list($k, $v) = each($_GET) )
+		foreach ($_GET as $k => $v)
 		{
 			if( is_array($_GET[$k]) )
 			{
-				while( list($k2, $v2) = each($_GET[$k]) )
+				foreach ($_GET[$k] as $k2 => $v2)
 				{
 					$_GET[$k][$k2] = stripslashes($v2);
 				}
-				@reset($_GET[$k]);
 			}
 			else
 			{
 				$_GET[$k] = stripslashes($v);
 			}
 		}
-		@reset($_GET);
 	}
 	
 	if( is_array($_POST) )
 	{
-		while( list($k, $v) = each($_POST) )
+		Foreach ($_POST as $k => $v)
 		{
 			if( is_array($_POST[$k]) )
 			{
-				while( list($k2, $v2) = each($_POST[$k]) )
+				foreach ($_POST[$k] as $k2 => $v2)
 				{
 					$_POST[$k][$k2] = stripslashes($v2);
 				}
@@ -131,11 +130,11 @@ if (STRIP) {
 	
 	if( is_array($_COOKIE) )
 	{
-		while( list($k, $v) = each($_COOKIE) )
+		foreach ($_COOKIE as $k => $v)
 		{
 			if( is_array($_COOKIE[$k]) )
 			{
-				while( list($k2, $v2) = each($_COOKIE[$k]) )
+				foreach ($_COOKIE[$k] as $k2 => $v2)
 				{
 					$_COOKIE[$k][$k2] = stripslashes($v2);
 				}
@@ -152,7 +151,7 @@ if (STRIP) {
 
 $mtime = explode(' ', microtime());
 
-include(ROOT_PATH . 'framework/classes/types.php');
+include(VIENNACMS_PATH . 'framework/classes/types.php');
 
 cms::$vars = new GlobalStore();
 cms::$vars['starttime'] = $mtime[0] + $mtime[1];
@@ -171,13 +170,18 @@ cms::$registry->register_loader('blueprint/classes');
 cms::$registry->register_loader('blueprint/models');
 cms::$registry->register_loader('blueprint/controllers', 'controller');
 cms::$registry->register_loader('blueprint/nodes', 'node');
-//$global = cms::$vars;
 
-//include(ROOT_PATH . 'framework/db/adodb-exceptions.inc.php');
-//include(ROOT_PATH . 'framework/db/adodb.inc.php');
-//include(ROOT_PATH . 'framework/db/adodb-active-record.inc.php');
-@include(ROOT_PATH . 'config.php');
-//include(ROOT_PATH . 'framework/gettext.php');
+$dbms = '';
+$table_prefix = 'viennacms_';
+$dbhost = '';
+$dbuser = '';
+$dbpasswd = '';
+$dbname = '';
+$acm_type = 'acm_file';
+
+if (file_exists('config.php')) {
+	@include(VIENNACMS_PATH . 'config.php');
+}
 
 // initial language coding
 // won't do anything to developers debugging :)
@@ -195,19 +199,10 @@ if (!defined('DEBUG')) {
 		if (cms::$vars['gettext']->load_language($lang)) {
 			break;	
 		}
-		
-		/*if (function_exists("_textdomain")) {
-			if (file_exists(ROOT_PATH . 'locale/' . $lang) && is_dir(ROOT_PATH . 'locale/' . $lang)) {
-				_setlocale(LC_ALL, $lang);
-				_bindtextdomain('viennacms2', ROOT_PATH . 'locale/');
-				_textdomain('viennacms2');
-				break;
-			}
-		}*/
 	}
 }
 
-if (empty($dbms)) {
+if (!file_exists('config.php') || empty($dbms)) {
 	define('MINIMAL', true);
 	
 	$manager = new Manager();
@@ -215,11 +210,7 @@ if (empty($dbms)) {
 	exit;
 }
 
-include(ROOT_PATH . 'framework/database/' . $dbms . '.php');
-
-if (empty($acm_type)) {
-	$acm_type = 'acm_file';
-}
+include(VIENNACMS_PATH . 'framework/database/' . $dbms . '.php');
 
 cms::$vars['table_prefix'] = $table_prefix;
 cms::register('db', 'database');
@@ -242,50 +233,15 @@ View::$searchpaths['blueprint/views/'] = VIEW_PRIORITY_STOCK; // we need admin/s
 
 cms::check_upgrade();
 
-//ADOdb_Active_Record::SetDatabaseAdapter($global['db']);
-
-//var_dump(Node::create('Node', $global));
-
-/*
-$node = new Node($global);
-$node->node_id = 2;
-$node->type = 'page';
-$node->read(true);
-$node->options['wef'] = 'aef';
-$node->write();
-*/
-
-/*
-$node = Node::create('Node', $global);
-$node->parent = 1;
-$node->title = 'Barks';
-$node->description = 'Woof';
-$node->type = 'page';
-$node->options['wef'] = 'aef';
-$node->write();
-echo $node->node_id;
-var_dump($global['db']->num_queries);
-*/
-
 cms::register('user', 'Users');
-//cms::register('plugins');
 cms::$user->initialize();
-
-// add other auto-loading classes
-//spl_autoload_register(array('controller', 'autoload'));
-//spl_autoload_register(array('node', 'autoload'));
-
-//Controller::$searchpaths[] = 'blueprint/controllers/';
-//Node::$searchpaths[] = 'blueprint/nodes/';
-
-//cms::$plugins->init(ROOT_PATH . 'extensions/');
-//cms::$plugins->setup();
 
 cms::register('files');
 cms::$files->init();
 cms::register('helpers');
 cms::$helpers->init_trash();
 
+// FIXME: enable when ICE is done.
 /*if (!isset(cms::$config['ice_created_user'])) {
 	$user = new VUser();
 	$user->user_id = 1;

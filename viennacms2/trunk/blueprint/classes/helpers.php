@@ -215,8 +215,6 @@ class Helpers {
 						
 					if ($show) {
 						$list = $this->_get_tree($node, $list, $options);
-					} else {
-						$list = $list;
 					}
 				}
 				$list .= '</ul>';

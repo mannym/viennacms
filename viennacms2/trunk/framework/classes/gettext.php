@@ -57,7 +57,7 @@ class VGetText {
 	}
 	
 	public function add_searchfolder($folder) {
-		$this->folders[] = ROOT_PATH . $folder;
+		$this->folders[] = VIENNACMS_PATH . $folder;
 		
 		if (!empty($this->last_lang)) {
 			$this->load_language($this->last_lang);	
@@ -87,7 +87,7 @@ class VGetText {
 				
 				// is this a little-endian gettext file? if not, continue on.
 				// TODO: allow differing endianness
-				if (dechex($reader->read_uint32()) != '950412de') {
+				if ($reader->read_uint32() != 0x950412de) {
 					continue;
 				}
 				

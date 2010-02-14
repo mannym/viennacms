@@ -86,7 +86,7 @@ class ContactNode extends Node {
 		$message = $fields['message'];
 		
 		// TODO: improve this
-		$send_msg = sprintf("%s\nMessage sender: %s <%s>\nUser IP: %s", $message, $from_name, $from_email, $_SERVER['REMOTE_ADDR']);
+		$send_msg = sprintf("%s\nMessage sender: %s <%s>", $message, $from_name, $from_email);
 		
 		mail($email, $subject, $send_msg, 'From: ' . $from_email);
 		
@@ -96,7 +96,7 @@ class ContactNode extends Node {
 	}
 	
 	public function validate_email($email) {
-		if (!preg_match("/^[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i", $email)) {
+		if (!preg_match("/^[a-z0-9!#$%&'*+\\/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+\\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i", $email)) {
 			return __('This e-mail address is not correct.');
 		}
 	}

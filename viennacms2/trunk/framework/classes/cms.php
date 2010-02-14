@@ -195,7 +195,7 @@ abstract class cms {
 		if (!empty(cms::$cache)) {
 			// get the cache
 			$object_cache = cms::$cache->get('compiler_results');
-			$file_hash = md5(str_replace(ROOT_PATH, '', $filename));
+			$file_hash = md5(str_replace(VIENNACMS_PATH, '', $filename));
 			
 			if ($object_cache) {
 				// does the cache contain this file?
@@ -224,6 +224,7 @@ abstract class cms {
 			$okay = true;
 			
 			if ($value === false) {
+				// gotta love implementation details
 				$pattern = '@<b>Parse error</b>:\s*(.+?) in <b>(.+?) : eval\(\)\'d code</b> on line <b>(.+?)</b><br />@i';
 				
 				if (preg_match($pattern, $content, $matches)) {
@@ -246,7 +247,7 @@ abstract class cms {
 				echo $content;
 				return $value;
 			} else {
-				throw new Exception(sprintf('An error occurred during parsing of source code.<br />Parse error: %s in %s on line %d', $matches[1], str_replace(ROOT_PATH, '', $filename), $matches[3]));
+				throw new Exception(sprintf('An error occurred during parsing of source code.<br />Parse error: %s in %s on line %d', $matches[1], str_replace(VIENNACMS_PATH, '', $filename), $matches[3]));
 			}
 		}
 				
@@ -254,6 +255,8 @@ abstract class cms {
 	}
 
 	public static function handle_exception($exception) {
+		header('HTTP/1.1 503 Service Unavailable');
+		
 		$error_data = array(
 			'code' => $exception->getCode(),
 			'file' => $exception->getFile(),
@@ -327,7 +330,7 @@ abstract class cms {
 
 <p>Error type: <?php echo get_class($exception) ?><br />
 Message: <?php echo $exception->getMessage() ?><br />
-File: <?php echo str_replace(str_replace('\\', '/', ROOT_PATH), '', str_replace('\\', '/', $error_data['file'])) ?><br />
+File: <?php echo str_replace(str_replace('\\', '/', VIENNACMS_PATH), '', str_replace('\\', '/', $error_data['file'])) ?><br />
 Line: <?php echo $error_data['line'] ?></p>
 
 	<p class="footer">Powered by <a href="http://www.viennacms.nl/">viennaCMS</a> &copy; 2008, 2009 viennaCMS Group</p>
@@ -339,14 +342,14 @@ Line: <?php echo $error_data['line'] ?></p>
 	
 	public static function autoload($class_name) {
 		// enable the blueprint
-		$filename = ROOT_PATH . 'blueprint/classes/' . strtolower($class_name) . '.php';
+		$filename = VIENNACMS_PATH . 'blueprint/classes/' . strtolower($class_name) . '.php';
 	
 		if (file_exists($filename)) {
 			include_once($filename);
 			return true;
 		}
 		
-		$filename = ROOT_PATH . 'blueprint/models/' . strtolower($class_name) . '.php';
+		$filename = VIENNACMS_PATH . 'blueprint/models/' . strtolower($class_name) . '.php';
 		
 		if (file_exists($filename)) {
 			include_once($filename);
@@ -393,10 +396,10 @@ Line: <?php echo $error_data['line'] ?></p>
 	*/
 	static public function scan_files($array, $add_root = true) {
 		foreach ($array as $file) {
-			if (file_exists(ROOT_PATH . $file)) {
+			if (file_exists(VIENNACMS_PATH . $file)) {
 				// TODO: cache the result
 				if ($add_root) {
-					return ROOT_PATH . $file;
+					return VIENNACMS_PATH . $file;
 				} else {
 					return $file;
 				}
@@ -416,7 +419,9 @@ Line: <?php echo $error_data['line'] ?></p>
 			$database_revision = (int)(string)cms::$config['database_revision']; // typecasting to be sure
 		}
 		
-		include(ROOT_PATH . 'blueprint/version.php');
+		$database_version = 0;
+		
+		include(VIENNACMS_PATH . 'blueprint/version.php');
 		
 		if ($database_version > $database_revision) {
 			// okay, we're out of date... too bad for that problem
@@ -432,6 +437,7 @@ Line: <?php echo $error_data['line'] ?></p>
 	}
 	
 	static public function log($log_source, $log_message, $log_type) {
+		// TODO: figure out something for localization
 		$item = VLogItem::create('VLogItem');
 		$item->log_source = $log_source;
 		$item->log_type = $log_type;
@@ -452,31 +458,12 @@ Line: <?php echo $error_data['line'] ?></p>
 		exit;
 	}
 	
+	static public function format_date($timestamp) {
+		// FIXME: actually allow preferences
+		return date('Y-m-d G:i', $timestamp);	
+	}
+	
 	static public function class_alterations($class) {
-		return;		
-		
-		$class_name = $class->class;
-		
-		if ($class_name == 'VAuth') { // TODO: fix this stuff
-			$class_name = 'Auth';
-		}
-		
-		if ($class_name == 'VEvents') { // TODO: really fix this stuff
-			$class_name = 'Events';
-		}
-		
-		if ($class_name == 'VObject') {
-			$class_name = 'Object';
-		}
-		
-		if ($class_name == 'VUser') { // and that's a strange hack
-			$class_name = 'User';
-		}
-		
-		if ($class_name == 'VSession') { // wow
-			$class_name = 'Session';
-		}
-		
-		$class->class = $class_name;
+
 	}
 }

@@ -14,7 +14,7 @@
 * @copyright (c) 2005 phpBB Group
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 */
-class dblayer_base
+class VBaseDBLayer
 {
 	var $db_connect_id;
 	var $query_result;
@@ -230,8 +230,8 @@ class dblayer_base
 	*/
 	function sql_like_expression($expression)
 	{
-		$expression = str_replace(array('_', '%'), array("\_", "\%"), $expression);
-		$expression = str_replace(array(chr(0) . "\_", chr(0) . "\%"), array('_', '%'), $expression);
+		$expression = str_replace(array('_', '%'), array("\\_", "\\%"), $expression);
+		$expression = str_replace(array(chr(0) . "\\_", chr(0) . "\\%"), array('_', '%'), $expression);
 
 		return $this->_sql_like_expression('LIKE \'' . $this->sql_escape($expression) . '\'');
 	}

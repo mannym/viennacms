@@ -42,78 +42,6 @@ class extension_core {
 		}
 	}
 	
-	// TODO: make this in VEvents
-	public function get_node_types() {
-		return array_merge(array(
-		/*	'page' => array(
-				'extension' => 'core',
-				'title' => __('Page'),
-				'description' => __('A page is a simple way of posting content that almost never changes.'),
-				'type' => 'static',
-				'icon' => '~/blueprint/views/admin/images/icons/page.png',
-				'big_icon' => '~/blueprint/views/admin/images/icons/page_big.png',
-				'options' => array()
-			),*/
-			'dynamicpage' => array(
-				'extension' => 'core',
-				'title' => __('Dynamic page'),
-				'description' => __('A dynamic page is used for placing modules on a site. These modules can be used for all kinds of dynamic content.'),
-				'type' => 'dynamic',
-				'icon' => '~/blueprint/views/admin/images/icons/dynamicpage.png',
-				'big_icon' => '~/blueprint/views/admin/images/icons/dynamicpage_big.png',
-				'options' => array()
-			),
-			'filesfolder' => array(
-				'extension' => 'core',
-				'title' => __('Folder'),
-				'description' => '',
-				'type' => 'none',
-				'icon' => '~/blueprint/views/admin/images/icons/folder.png',
-				'options' => array(),
-				'display_callback' => 'none'
-			),
-			'file' => array(
-				'extension' => 'core',
-				'title' => __('File'),
-				'description' => '',
-				'type' => 'none',
-				'icon' => '~/blueprint/views/admin/images/icons/file.png',
-				'options' => array(),
-				'display_callback' => array($this, 'output_file'),
-				'path_callback' => array($this, 'file_path')
-			),
-			'trashcan' => array(
-				'extension' => 'core',
-				'title' => __('Trash can'),
-				'description' => '',
-				'type' => 'none',
-				'icon' => '~/blueprint/views/admin/images/icons/trashcan.png',
-				'options' => array(),
-				'display_callback' => 'none'
-			),
-			'site' => array(
-				// let's not go there... for now :)
-				'icon' => '~/blueprint/views/admin/images/icons/site.png',
-				'type' => 'dynamic', // somewhat, this is a special case
-				'options' => array(
-					'404_url' => array(
-						'label' => __('"Page not found" URL'),
-						'description' => __('The URL on the site, which will be redirected to when a page can not be found.'),
-						'type' => 'textbox',
-						'required' => false,
-						'validate_function' => array($this, 'validate_url')
-					),
-					'homepage' => array(
-						'label' => __('Home page'),
-						'description' => __('The ID of the node, which will be set as the home page for this site.'),
-						'type' => 'textbox',
-						'required' => true
-					)
-				)
-			)
-		), $return2);
-	}
-	
 	public function core_get_admin_tree(string $op, $url, string $template, Node $node) {
 		if ($op == 'admin_tree') {
 			if ($node->type == 'filesfolder') {
@@ -220,7 +148,7 @@ class extension_core {
 	
 	public function node_pre_remove($node) {
 		if ($node->type == 'file') {
-			@unlink(ROOT_PATH . $node->description);
+			@unlink(VIENNACMS_PATH . $node->description);
 		}
 	}
 	
@@ -302,7 +230,7 @@ class extension_core {
 	public function output_file($node) {
 		$original_mime = $node->options['mimetype'];
 		$mimetype = $original_mime;
-		$filename = ROOT_PATH . $node->description;
+		$filename = VIENNACMS_PATH . $node->description;
 		
 		if (isset($_GET['thumbnail'])) {
 			$filename = str_replace('.upload', '.thumb', $filename);
@@ -360,11 +288,11 @@ class extension_core {
 			$type = substr($file->options['mimetype'], 6);
 			
 			if (extension_loaded('gd') && function_exists('imagecreatetruecolor')) {
-				$filename = ROOT_PATH . $file->description;
+				$filename = VIENNACMS_PATH . $file->description;
 				$thumbnail_name = str_replace('.upload', '.thumb', $filename);
 
 				// Set a maximum height and width
-				// TODO: make this configurable
+				// TODO: make this configurable by theme
 				$width = 600;
 				$height = 400;
 				

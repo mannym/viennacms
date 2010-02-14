@@ -11,6 +11,9 @@
 			<?php echo __('User') ?>
 		</th>
 		<th>
+			<?php echo __('Date') ?>
+		</th>
+		<th>
 			<?php echo __('Type') ?>
 		</th>
 	</tr>
@@ -32,6 +35,9 @@
 				$user->read(true); 
 				echo (!empty($user->username)) ? $user->username : __('Anonymous');
 				?>
+			</td>
+			<td>
+				<?php echo cms::format_date($item->log_time) ?>
 			</td>
 			<td>
 				<?php 
