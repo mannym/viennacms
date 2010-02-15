@@ -20,6 +20,7 @@ abstract class cms {
 	static $helpers;
 	static $config;
 	static $registry;
+	static $auth;
 	
 	/**#@+
 	* Constant defining plugin mode for objects

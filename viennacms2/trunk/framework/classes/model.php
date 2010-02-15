@@ -478,6 +478,16 @@ class VCondition {
 		$this->value = $value;
 	}
 	
+	public static function list_to_equals(array $list) {
+		$retval = array();
+		
+		foreach ($list as $item) {
+			$retval[] = new VCondition(VCondition::CONDITION_EQ, $item);
+		}
+		
+		return $retval;
+	}
+	
 	public static function from_string(string $param) {
 		
 	}

@@ -1,118 +1,126 @@
 <?php
-// FIXME: make the auth system ACL based
-define('AUTH_USER', 1);
-define('AUTH_GROUP', 2);
-define('AUTH_ALL', 4);
+define('ACL_SETTING_UNSET', 0);
+define('ACL_SETTING_ALLOW', 1);
+define('ACL_SETTING_DENY', 2);
 
 class VAuth {
-	function parse_permission_string($string) {
-		if (empty($string)) {
-			return array(
-				'owner' => array(),
-				'group' => array(),
-				'other' => array()
-			);
-		}
-		
-		// determine length of every part of the string, and split the string in 3 parts
-		$partlen = strlen($string) / 3;
-		$parts = str_split($string, $partlen);
-		
-		// rename the parts, and create an array
-		$return = array();
-		foreach ($parts as $i => $part) {
-			$part = str_split($part, 1); // every character needs to be its own array element
+	public function __construct() {
+		if (!isset(cms::$config['admin_auth_upgraded'])) {
+			$acl_entry = new VACLEntry();
+			$acl_entry->initialize();
+			$acl_entry->person = 'user:1';
+			$acl_entry->resource = 'admin:all';
+			$acl_entry->setting = ACL_SETTING_ALLOW;
+			$acl_entry->write();
 			
-			switch ($i) {
-				case 0: // owner, first
-					$return['owner'] = $part;
-				break;
-				case 1: // second is group
-					$return['group'] = $part;
-				break;
-				case 2: // and third 'world'
-					$return['other'] = $part;
-				break;
-			}
+			cms::$config['admin_auth_upgraded'] = true;
 		}
-		
-		return $return;
 	}
 	
-	function make_permission_string($array) {
-		$return = '';
+	public function parse_acl_id($id) {
+		$data = explode(':', $id, 2);
 		
-		foreach ($array as $parts) {
-			foreach ($parts as $part) {
-				$return .= $part;
-			}
-		}
-		
-		return $return;
+		return array(
+			'context' => $data[0],
+			'id' => $data[1]
+		);
 	}
 	
-	function get_rights($resource, $object) {
-		// is the object an user, or a group?
-		switch (get_class($object)) {
-			case 'VUser':
-				$check = AUTH_USER | AUTH_GROUP | AUTH_ALL;
-			break;
-			case 'Group': // not yet implemented
-				$check = AUTH_GROUP | AUTH_ALL;
-			break;
-			default: // in case of null, break glass
-				$check = AUTH_ALL;
-			break;
-		}
+	public function get_acl($resource, $person) {
+		// we NEED the values to be in order. luckily person objects should only be handled by one function :)
+		$person = $person->to_acl_id();
+		$person_data = $this->parse_acl_id($person);
+		$is_user = false;
 		
-		if (($check & AUTH_USER) && $object->user_id == cms::$user->user->user_id) {
-			if (isset(cms::$user->user->user_permissions)) {
+		if ($person_data['context'] == 'user') {
+			$is_user = true;
+			
+			if (!empty(cms::$user->user->user_permissions)) {
 				$usercache = unserialize(cms::$user->user->user_permissions);
 				if ($usercache !== false && isset($usercache[$resource])) {
-					return $usercache[$resource];
+					return ($usercache[$resource] == ACL_SETTING_ALLOW);
 				}
 			}
 		}
 		
-		// read the database
-		$data = new Permission_Object();
-		$data->resource = $resource;
-		$data->read(true);
+		$people = VEvents::invoke('acl.person-parents', $person);
+		$people[] = $person;
+		$people = array_reverse($people);
 		
-		// get the keys to check
-		$array_keys = array();
+		$resource_data = $this->parse_acl_id($resource);
 		
-		if (($check & AUTH_USER) && $data->owner_id == $object->user_id) { // if this is user-specific, and it's this user...
-			$array_keys[] = 'owner'; // we'll check the 'owner' key first.
+		$resource_handler = cms::$registry->get_type($resource_data['context'], 'ResourceHandler');
+		$resources = array($resource);
+		
+		if ($resource_handler) {
+			$resources = $resource_handler->get_parents();
+			$resources[] = $resource;
+			$resources = array_reverse($resources);
 		}
-			
-		//if (($check & AUTH_GROUP)) {
-			
-		//}
 		
-		$array_keys[] = 'other';
+		$resource_conditions = VCondition::list_to_equals($resources);
+		$person_conditions = VCondition::list_to_equals($people);
 		
-		// parse the string
-		$rights = $this->parse_permission_string($data->permission_mask);
-		$results = array();
-		foreach ($array_keys as $key) {
-			foreach ($rights[$key] as $right) { // read the rights for this key
-				if ($right != '-' && !in_array($right, $results)) { // if it's allowed, and not alredy in the list...
-					$results[] = $right; // add it!
+		$query = new VACLEntry();
+		$query->person = new VCondition(VCondition::CONDITION_OR, $person_conditions);
+		$query->resource = new VCondition(VCondition::CONDITION_OR, $resource_conditions);
+		$entries = $query->read();
+		
+		$sorted_entries = array();
+		
+		foreach ($entries as $entry) {
+			$entry_resource = $entry->resource;
+			$entry_person = $entry->person;
+			
+			if (!isset($sorted_entries[$entry_resource])) {
+				$sorted_entries[$entry_resource] = array();
+			}
+			
+			$sorted_entries[$entry_resource][$entry_person] = $entry->setting;
+		}
+		
+		$setting = ACL_SETTING_UNSET;
+		
+		foreach ($resources as $resource) {
+			if (empty($sorted_entries[$resource])) {
+				continue;
+			}
+			
+			foreach ($people as $person) {
+				if (empty($sorted_entries[$resource][$person])) {
+					continue;
+				}
+				
+				$current_setting = $sorted_entries[$resource][$person];
+				
+				switch ($current_setting) {
+					case ACL_SETTING_ALLOW:
+						if ($setting == ACL_SETTING_UNSET) { // if already allowed, there's no sense. if denied, so as well
+							$setting = $current_setting;
+						}
+						break;
+					case ACL_SETTING_DENY:
+						$setting = $current_setting;
+						break;
 				}
 			}
 		}
 		
-		if (($check & AUTH_USER) && $object->user_id == cms::$user->user->user_id) {
+		if ($is_user) {
 			$usercache = array();
 			
-			if (isset(cms::$user->user->user_permissions)) {
+			if (!empty(cms::$user->user->user_permissions)) {
 				$usercache = unserialize(cms::$user->user->user_permissions);
+				
+				if (!$usercache) {
+					$usercache = array();	
+				}
 			}
-			$usercache[$resource] = $results;
+			
+			$usercache[$resource] = $setting;
 			cms::$user->user->user_permissions = serialize($usercache);
 		}
 		
-		return $results;
+		return ($setting == ACL_SETTING_ALLOW);
 	}
 }

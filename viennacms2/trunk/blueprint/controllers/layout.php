@@ -79,14 +79,7 @@ class LayoutController extends Controller {
 		$this->view['acp_url'] = $this->view->url('admin');
 		
 		// Can the user use the ACP?
-		$this->view['acp_auth'] = false;
-		$auth = new VAuth();
-		$rights = $auth->get_rights('admin:see_acp', cms::$user->user);
-		
-		if (in_array('y', $rights)) {
-			$this->view['acp_auth'] = true;
-		}
-
+		$this->view['acp_auth'] = cms::$auth->get_acl('admin:all', cms::$user->user);
 		$this->view['admin_link'] = '';
 
 		if ($this->view['acp_auth']) {

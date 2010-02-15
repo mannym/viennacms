@@ -24,12 +24,13 @@ class AdminController extends Controller {
 			cms::redirect('user/login', array('redirect' => 'admin'));
 		}
 		
-		$auth = new VAuth();
-		$rights = $auth->get_rights('admin:see_acp', cms::$user->user);
+		// TODO: make meta-directive 'admin:'
+		$allowed = cms::$auth->get_acl('admin:all', cms::$user->user);
 		
-		if (!in_array('y', $rights)) {
-			cms::$vars['error_title'] = __('Information');
-			trigger_error(__('You are not allowed to access the Administration Control Panel.'));
+		if (!$allowed) {
+			//cms::$vars['error_title'] = __('Information');
+			//trigger_error(__('You are not allowed to access the Administration Control Panel.'));
+			cms::show_info(__('You are not allowed to access the Administration Control Panel.'), __('Access denied'));
 		}		
 	}
 	

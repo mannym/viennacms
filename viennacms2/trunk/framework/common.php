@@ -239,6 +239,7 @@ cms::$user->initialize();
 cms::register('files');
 cms::$files->init();
 cms::register('helpers');
+cms::register('auth', 'VAuth');
 cms::$helpers->init_trash();
 
 // FIXME: enable when ICE is done.

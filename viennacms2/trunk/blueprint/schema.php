@@ -45,6 +45,20 @@ $schema_data['viennacms_node_revisions'] = array(
 	) 
 );
 
+$schema_data['viennacms_acl_entries'] = array(
+	'COLUMNS' => array(
+		'id' => array('UINT', NULL, 'auto_increment'),
+		'resource' => array('VCHAR:40', ''),
+		'person' => array('VCHAR:40', ''),
+		'setting' => array('TINT:1', 0)
+	),
+	'PRIMARY_KEY' => 'id',
+	'keys' => array(
+		'object' => array('INDEX', 'resource')
+	)
+);
+
+// TODO: remove this when ACL transition is completed
 $schema_data['viennacms_permission_objects'] = array(
 	'COLUMNS' => array(
 		'id' => array('UINT', NULL, 'auto_increment'),

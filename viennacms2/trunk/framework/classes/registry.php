@@ -31,6 +31,20 @@ class Registry {
 		$this->registered_types[] = $type_name;
 	}
 	
+	public function get_type($name, $suffix) {
+		$full_name = strtolower($name . $suffix);
+		
+		foreach ($this->registered_types as $type) {
+			$type = strtolower($type);
+			
+			if ($full_name == $type) {
+				return new $type;
+			}
+		}
+		
+		return false;
+	}
+	
 	public function get_types($suffix) {
 		$return = array();
 		

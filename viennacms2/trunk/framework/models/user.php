@@ -13,4 +13,8 @@ class VUser extends Model {
 		'user_permissions' => array('type' => 'string')
 	);
 	protected $relations = array();
+	
+	public function to_acl_id() {
+		return 'user:' . $this->user_id;
+	}
 }
