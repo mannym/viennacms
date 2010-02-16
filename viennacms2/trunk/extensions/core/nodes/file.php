@@ -36,33 +36,34 @@ class FileNode extends Node {
 			$filename = str_replace('.upload', '.thumb', $filename);
 		}
 		
-		$magic = false;
-		
-		if (function_exists('finfo_open')) { // PHP 5.3/PECL fileinfo
-			$finfo = @finfo_open(FILEINFO_MIME);
-			
-			if ($finfo) {
-				$mimetype = finfo_file($finfo, $filename);
-				finfo_close($finfo);
-				
-				$magic = true;
-			}
-		}
-		
-		if ($magic == false && function_exists('mime_content_type')) { // PHP 5.2 with default and mime file
-			if (ini_get('mime_magic.magicfile')) {
-				$mimetype = mime_content_type($filename);
-				$magic = true;
-			}
-		}
-		
-		if ($mimetype === false) {
-			$mimetype = $original_mime;
-		}
-		
+	
 		// TODO: make mime hooking modular :)
 		
 		if (file_exists($filename)) {
+			$magic = false;
+		
+			if (function_exists('finfo_open')) { // PHP 5.3/PECL fileinfo
+				$finfo = @finfo_open(FILEINFO_MIME);
+			
+				if ($finfo) {
+					$mimetype = finfo_file($finfo, $filename);
+					finfo_close($finfo);
+				
+					$magic = true;
+				}
+			}
+		
+			if ($magic == false && function_exists('mime_content_type')) { // PHP 5.2 with default and mime file
+				if (ini_get('mime_magic.magicfile')) {
+					$mimetype = mime_content_type($filename);
+					$magic = true;
+				}
+			}
+		
+			if ($mimetype === false) {
+				$mimetype = $original_mime;
+			}
+
 			header('Content-type: ' . $mimetype);
 			if (substr($mimetype, 0, 6) != 'image/') {
 				header('Content-Disposition: attachment; filename="' . $this->title . '"');
