@@ -262,7 +262,7 @@ class VDBTools
 	*
 	* For more information have a look at /install/schemas/schema_data.php (only available through CVS)
 	*/
-	public function perform_schema_changes($schema_changes)
+	public function perform_schema_changes($schema_changes, $tables_done = array())
 	{
 		if (empty($schema_changes))
 		{
@@ -276,6 +276,10 @@ class VDBTools
 		{
 			foreach ($schema_changes['change_columns'] as $table => $columns)
 			{
+				if (in_array($table, $tables_done)) {
+					continue;
+				}
+				
 				foreach ($columns as $column_name => $column_data)
 				{
 					$result = $this->sql_column_change($table, $column_name, $column_data);
@@ -293,6 +297,10 @@ class VDBTools
 		{
 			foreach ($schema_changes['add_columns'] as $table => $columns)
 			{
+				if (in_array($table, $tables_done)) {
+					continue;
+				}
+				
 				foreach ($columns as $column_name => $column_data)
 				{
 					// Only add the column if it does not exist yet
@@ -314,6 +322,10 @@ class VDBTools
 		{
 			foreach ($schema_changes['drop_keys'] as $table => $indexes)
 			{
+				if (in_array($table, $tables_done)) {
+					continue;
+				}
+				
 				foreach ($indexes as $index_name)
 				{
 					$result = $this->sql_index_drop($table, $index_name);
@@ -331,6 +343,10 @@ class VDBTools
 		{
 			foreach ($schema_changes['drop_columns'] as $table => $columns)
 			{
+				if (in_array($table, $tables_done)) {
+					continue;
+				}
+				
 				foreach ($columns as $column)
 				{
 					$result = $this->sql_column_remove($table, $column);
@@ -348,6 +364,10 @@ class VDBTools
 		{
 			foreach ($schema_changes['add_primary_keys'] as $table => $columns)
 			{
+				if (in_array($table, $tables_done)) {
+					continue;
+				}
+				
 				$result = $this->sql_create_primary_key($table, $columns);
 
 				if ($this->return_statements)
@@ -362,6 +382,10 @@ class VDBTools
 		{
 			foreach ($schema_changes['add_unique_index'] as $table => $index_array)
 			{
+				if (in_array($table, $tables_done)) {
+					continue;
+				}
+				
 				foreach ($index_array as $index_name => $column)
 				{
 					$result = $this->sql_create_unique_index($table, $index_name, $column);
@@ -379,6 +403,10 @@ class VDBTools
 		{
 			foreach ($schema_changes['add_index'] as $table => $index_array)
 			{
+				if (in_array($table, $tables_done)) {
+					continue;
+				}
+				
 				foreach ($index_array as $index_name => $column)
 				{
 					$result = $this->sql_create_unique_index($table, $index_name, $column);

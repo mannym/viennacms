@@ -418,6 +418,7 @@ CONFIG;
 				
 				$updates = array();
 				$schema_data = array();
+				$table_prefix = cms::$vars['table_prefix'];
 
 				include(VIENNACMS_PATH . 'framework/database/db_tools.php');
 				include(VIENNACMS_PATH . 'blueprint/updates.php');
@@ -427,12 +428,13 @@ CONFIG;
 				
 				$errors = array();
 				
-				$table_prefix = cms::$vars['table_prefix'];
-			
 				$versions = array_keys($updates);
 				
 				// we must do this so that we can handle the errors
 				$db_tools = new VDBTools(cms::$db, true);
+				
+				// to not modify tables which we've already created
+				$tables_done = array();
 			
 				foreach ($versions as $i => $version) {
 					$update_changes = $updates[$version];
@@ -446,18 +448,6 @@ CONFIG;
 					if (!count($update_changes['change']) && !count($update_changes['add'])) {
 						continue;
 					}
-					
-					if (count($update_changes['change'])) {
-						$schema_changes = $db_tools->perform_schema_changes($update_changes['change']);
-						
-						foreach ($schema_changes as $sqlt)
-						{
-							if (!cms::$db->sql_query($sqlt))
-							{
-								$errors[] = cms::$db->sql_error();
-							}
-						}
-					} 
 					
 					if (count($update_changes['add'])) {
 						foreach ($update_changes['add'] as $table_name) {
@@ -474,8 +464,22 @@ CONFIG;
 									$errors[] = cms::$db->sql_error();
 								}
 							}
+							
+							$tables_done[] = $table_name;
 						}
 					}
+					
+					if (count($update_changes['change'])) {
+						$schema_changes = $db_tools->perform_schema_changes($update_changes['change']);
+						
+						foreach ($schema_changes as $sqlt)
+						{
+							if (!cms::$db->sql_query($sqlt))
+							{
+								$errors[] = cms::$db->sql_error();
+							}
+						}
+					} 
 				}
 			
 				if (count($errors) == 0) {

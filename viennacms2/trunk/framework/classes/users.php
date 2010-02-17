@@ -11,6 +11,8 @@ class Users {
 		@define('USER_OK', 0);
 		@define('USER_NOT_FOUND', 1);
 		@define('USER_WRONG_PASSWORD', 2);
+		
+		VEvents::register('acl.person-parents', array($this, 'acl_parents'));
 	}
 	
 	public function exit_clean() {
@@ -143,5 +145,9 @@ class Users {
 		$this->session->delete(false);
 		setcookie('viennacms2_id', '', (time() - 3600), '/', '');
 		$this->logged_in = false;
+	}
+	
+	public function acl_parents($user_id) {
+		return array('group:meta-everyone');
 	}
 }

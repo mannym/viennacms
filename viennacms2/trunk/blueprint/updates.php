@@ -7,6 +7,16 @@ $updates = array(
 	2 => array(
 		'change' => array(),
 		'add' => array('viennacms_acl_entries')
+	),
+	3 => array(
+		'change' => array(
+			'add_columns' => array(
+				$table_prefix . 'acl_entries' => array(
+					'operation' => array('VCHAR:40', ''),
+				)
+			)
+		),
+		'add' => array()
 	)
 );
 ?>

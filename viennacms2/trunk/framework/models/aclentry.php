@@ -6,6 +6,7 @@ class VACLEntry extends Model {
 		'id' => array('type' => 'int'),
 		'resource' => array('type' => 'string'),
 		'person' => array('type' => 'string'),
+		'operation' => array('type' => 'string'),
 		'setting' => array('type' => 'int')
 	);
 	protected $relations = array();

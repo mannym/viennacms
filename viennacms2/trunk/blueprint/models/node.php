@@ -326,4 +326,52 @@ class Node extends Model {
 		
 		return $url->url;
 	}
+	
+	public function to_acl_id() {
+		return 'node:' . $this->node_id;
+	}
+}
+
+class NodeResourceHandler implements IResourceHandler {
+	private function get_node($acl_id) {
+		$data = cms::$auth->parse_acl_id($acl_id);
+		
+		$node = new Node();
+		$node->node_id = $data['id'];
+		$nodes = $node->read();
+
+		return $nodes[0];
+	}
+	
+	public function get_parents($resource) {
+		$node = $this->get_node($resource);
+		$parents = $node->get_parents(3600);
+		
+		$return = array();
+		foreach ($parents as $parent) {
+			$return[] = $parent->to_acl_id();
+		}
+		
+		return $return;
+	}
+	
+	public function get_default_rights($resource) {
+		return array(
+			'group:meta-everyone' => array(
+				'list' => ACL_SETTING_ALLOW,
+				'read' => ACL_SETTING_ALLOW,
+				'create' => ACL_SETTING_UNSET,
+				'modify' => ACL_SETTING_UNSET,
+				'modify_essential' => ACL_SETTING_UNSET
+			),
+			// TODO: this is placeholder
+			'user:1' => array(
+				'list' => ACL_SETTING_ALLOW,
+				'read' => ACL_SETTING_ALLOW,
+				'create' => ACL_SETTING_ALLOW,
+				'modify' => ACL_SETTING_ALLOW,
+				'modify_essential' => ACL_SETTING_ALLOW
+			),
+		);
+	}
 }

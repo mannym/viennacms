@@ -50,6 +50,7 @@ $schema_data['viennacms_acl_entries'] = array(
 		'id' => array('UINT', NULL, 'auto_increment'),
 		'resource' => array('VCHAR:40', ''),
 		'person' => array('VCHAR:40', ''),
+		'operation' => array('VCHAR:40', ''),
 		'setting' => array('TINT:1', 0)
 	),
 	'PRIMARY_KEY' => 'id',
