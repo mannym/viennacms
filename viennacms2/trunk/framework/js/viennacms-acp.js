@@ -1,5 +1,4 @@
 WYMeditor.XhtmlLexer.prototype.addTokens = function() {
-  // These tokens are for Radiant CMS radius tags  
   this.addEntryPattern("</?viennacms:", 'Text', 'Text');
   this.addExitPattern(">", 'Text');
 

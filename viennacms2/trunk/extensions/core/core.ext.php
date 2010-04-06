@@ -203,7 +203,8 @@ class extension_core {
 	}
 	
 	public function node_show_alter($node) {
-		$content = preg_replace_callback('@<viennacms:file node="(.+?)">.*?</viennacms:file>@', array($this, 'file_tag_replace'), $node->revision->content);
+		$content = preg_replace_callback('@<viennacms:file node="(.+?)">.*?</viennacms:file>@is', array($this, 'file_tag_replace'), $node->revision->content);
+		$content = preg_replace_callback('@<viennacms:module type="(.+?)">(.*?)</viennacms:module>@is', array($this, 'module_tag_replace'), $content);
 		$node->revision->content = $content;
 	}
 	
@@ -225,6 +226,28 @@ class extension_core {
 		$file->read(true);
 		
 		return cms::$files->get_file_widget($file);
+	}
+	
+	public function module_tag_replace($regs) {
+		$module = $regs[1];
+		$arguments = array();
+		
+		preg_match_all('@<viennacms:module-argument name="(.+?)" value="(.*?)" ?/?>(?:</viennacms:module-argument>)?@', $regs[2], $argument_regs);
+		
+		foreach ($argument_regs[1] as $id => $name) {
+			$value = $argument_regs[2][$id];
+			
+			$arguments[$name] = $value;
+		}
+		
+		$modules = array();
+		$modules[] = array(
+			'order' => 0,
+			'controller' => $module,
+			'arguments' => $arguments
+		);
+		
+		return cms::$helpers->render_modules($modules);
 	}
 	
 	public function output_file($node) {

@@ -36,7 +36,9 @@ class NodeController extends Controller {
 		VEvents::invoke('node.pre-show', $node);
 		
 		if (!$node->is_legacy) {
-			array_shift($this->arguments);
+			if (!empty($this->arguments)) {
+				array_shift($this->arguments);
+			}
 			
 			$result = $node->display($this->arguments);
 			
