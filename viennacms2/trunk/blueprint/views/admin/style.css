@@ -227,9 +227,11 @@ ul.submenu li a
 	display: block;
 	float: none;
 	margin: 0px;
+	margin-top: 2px;
+	margin-bottom: 2px;
 	padding: 0px;
 	width: auto;
-	height: auto;
+	height: 16px;
 }
 
 ul.toolbar li span {

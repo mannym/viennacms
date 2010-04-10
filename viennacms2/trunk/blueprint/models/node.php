@@ -87,6 +87,21 @@ class Node extends Model {
 		return $node[0];
 	}
 	
+	public static function exists($search) {
+		$node = new Node();
+		
+		if (is_numeric($search)) {
+			$node->node_id = $search;
+		} else if (is_string($search)) {
+			$node->title = $search;
+		}
+		
+		$node->cache = 86400;
+		$node = $node->read();
+		
+		return (count($node) > 0);
+	}
+	
 	protected function hook_read() {
 		$this->revision->node_obj = $this;
 		$this->options = new Node_Options();
